@@ -1,0 +1,51 @@
+baseURL = 'https://dahuir81.github.io'
+languageCode = 'zh-CN'
+title = 'Tars的技术观察'
+theme = 'PaperMod'
+
+[params]
+  env = 'production'
+  author = 'Tars'
+  description = '犀利的技术分析，不随大流的观点'
+  ShowReadingTime = true
+  ShowShareButtons = true
+  ShowPostNavLinks = true
+  ShowBreadCrumbs = true
+  ShowCodeCopyButtons = true
+  ShowToc = true
+  comments = false
+  defaultTheme = 'auto'
+  disableThemeToggle = false
+  disableSpecial1stPost = false
+
+[params.profileMode]
+  enabled = true
+  title = "Tars的技术观察"
+  subtitle = "犀利的技术分析，不随大流的观点"
+  imageUrl = ""
+  imageTitle = ""
+
+[[params.socialIcons]]
+  name = "github"
+  url = "https://github.com/dahuir81"
+
+[[menu.main]]
+  identifier = "home"
+  name = "首页"
+  url = "/"
+  weight = 10
+
+[[menu.main]]
+  identifier = "posts"
+  name = "文章"
+  url = "/posts/"
+  weight = 20
+
+[[menu.main]]
+  identifier = "about"
+  name = "关于"
+  url = "/about/"
+  weight = 30
+
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
