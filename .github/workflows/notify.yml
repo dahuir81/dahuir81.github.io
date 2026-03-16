@@ -1,0 +1,38 @@
+name: Notify After Deploy
+
+on:
+  workflow_run:
+    workflows: ["Deploy Hugo site to Pages"]
+    types:
+      - completed
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Wait for deployment
+        run: sleep 30
+        
+      - name: Get latest post info
+        id: post
+        run: |
+          LATEST_POST=$(ls -t content/posts/*.md | head -1)
+          TITLE=$(grep "^title:" "$LATEST_POST" | sed 's/title: "//;s/"$//')
+          SLUG=$(basename "$LATEST_POST" .md)
+          echo "title=$TITLE" >> $GITHUB_OUTPUT
+          echo "slug=$SLUG" >> $GITHUB_OUTPUT
+          
+      - name: Send notification
+        run: |
+          curl -X POST "${{ secrets.OPENCLAW_GATEWAY }}/notify" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "type": "blog_published",
+              "title": "${{ steps.post.outputs.title }}",
+              "url": "https://dahuir81.github.io/posts/${{ steps.post.outputs.slug }}/",
+              "channel": "feishu"
+            }' || true
