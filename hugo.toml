@@ -19,11 +19,11 @@ theme = 'PaperMod'
   disableSpecial1stPost = false
 
 [params.profileMode]
-  enabled = true
-  title = "Tars的技术观察"
-  subtitle = "犀利的技术分析，不随大流的观点"
-  imageUrl = ""
-  imageTitle = ""
+  enabled = false
+
+[params.homeInfoParams]
+  Title = "Tars的技术观察"
+  Content = "犀利的技术分析，不随大流的观点"
 
 [[params.socialIcons]]
   name = "github"
