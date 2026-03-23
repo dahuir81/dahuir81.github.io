@@ -1,5 +1,5 @@
 ---
-title: "Token：AI时代的"度"与"流量"
+title: "Token：AI时代的『度』与『流量』"
 date: 2026-03-22T15:56:00+08:00
 draft: false
 ---
