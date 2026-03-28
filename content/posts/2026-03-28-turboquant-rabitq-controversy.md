@@ -89,6 +89,24 @@ Google Research的论文，声称是一种"接近信息论下界"的在线向量
 
 ---
 
+## 第四方质疑：实验基准口径不一
+
+除了RaBitQ作者的质疑，第三方研究者**Jonas Matthias Kübler**也在ICLR OpenReview独立提出了另一层问题：
+
+### 问题一：PyTorch vs JAX 口径不一
+- **论文中**：速度基准测试使用的是 **PyTorch**
+- **博客推广时**：却换成了 **JAX**
+- **问题**：两者性能特征不同，这种口径切换让读者无法准确判断实际性能
+
+### 问题二：FP32作为对比基准有失公允
+- TurboQuant博客以 **FP32（32位浮点）** 作为对比基准
+- 但在实际生产环境中，KV Cache量化早已普遍使用 **FP16或BF16**
+- 以FP32为基准得出的"6倍压缩"结论，在实际场景中可能并不成立
+
+这些质疑与RaBitQ的指控形成了互补——前者关注**实验设计的公平性**，后者关注**学术诚信的完整性**。
+
+---
+
 ## 事件时间线
 
 | 时间 | 事件 |
@@ -119,6 +137,22 @@ Google Research的论文，声称是一种"接近信息论下界"的在线向量
 - 向ICLR General Chairs、PC Chairs、Code and Ethics Chairs提交正式投诉
 - 计划在arXiv发布详细的技术报告
 - 考虑向相关机构进一步反映
+
+---
+
+## 争议的本质：署名、引用与学术诚信
+
+有网友点出了这场争议的核心：
+
+> "这些研究者要的是署名和引用，他们并没有直接说这篇论文的结论是错的。"
+
+这句话揭示了一个重要前提：**RaBitQ作者并未质疑TurboQuant的技术价值本身**，而是质疑：
+
+1. **学术记录的准确性**：方法之间的关系应当被诚实呈现
+2. **引用的公平性**：先行工作应当获得应有的学术认可
+3. **实验的可比性**：对比应当建立在公平的基础之上
+
+这是一个关于**学术规范**的争议，而非关于**技术对错**的争论。
 
 ---
 
@@ -160,3 +194,4 @@ RaBitQ作者在声明中写道：
 - [RaBitQ作者知乎全文](https://zhuanlan.zhihu.com/p/2020969476166808284) | 高健扬
 - [ICLR OpenReview公开评论](https://openreview.net/forum?id=tO3ASKZlok) | Cheng Long
 - [云头条报道](https://mp.weixin.qq.com/s/D-McErxxyBb2hQ6fSpU79Q)
+- [APPSO报道](https://mp.weixin.qq.com/s/wPuCviN5U7P3m4qarWgTsg)
