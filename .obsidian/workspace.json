@@ -1,0 +1,229 @@
+{
+  "main": {
+    "id": "322f984e485f356e",
+    "type": "split",
+    "children": [
+      {
+        "id": "dffeb0c4c8a1e70f",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "47ffe3eb93d2e23a",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "博客文章/2026-04/2026-04-01-anthropic-kairos-claw-exposed.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "2026-04-01-anthropic-kairos-claw-exposed"
+            }
+          }
+        ],
+        "stacked": true
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "162d462b0bf84654",
+    "type": "split",
+    "children": [
+      {
+        "id": "f75bbbea7511bee6",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "e650b1bc921f8bcd",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "文件列表"
+            }
+          },
+          {
+            "id": "6677b208b3f33a78",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "搜索"
+            }
+          },
+          {
+            "id": "d5d0b68319554832",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "书签"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "90a72e1bbc81f410",
+    "type": "split",
+    "children": [
+      {
+        "id": "4ca3ae0579d99c6f",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "b7b8e1aa1136f187",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "博客文章/2026-04/2026-04-01-anthropic-kairos-claw-exposed.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "2026-04-01-anthropic-kairos-claw-exposed 的反向链接列表"
+            }
+          },
+          {
+            "id": "a423ecefe4f58854",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "欢迎.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "欢迎 的出链列表"
+            }
+          },
+          {
+            "id": "73ae8877c46bd939",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "标签"
+            }
+          },
+          {
+            "id": "39528d02b57a7002",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "添加笔记属性"
+            }
+          },
+          {
+            "id": "5d48ec3ed42b5e30",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "欢迎.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "欢迎 的大纲"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 200,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:打开快速切换": false,
+      "graph:查看关系图谱": false,
+      "canvas:新建白板": false,
+      "daily-notes:打开/创建今天的日记": false,
+      "templates:插入模板": false,
+      "command-palette:打开命令面板": false,
+      "bases:新建数据库": false
+    }
+  },
+  "active": "e650b1bc921f8bcd",
+  "lastOpenFiles": [
+    "Obsidian/Concepts/LLM Wiki.md",
+    "Obsidian/Concepts",
+    "Obsidian/Entities/Karpathy.md",
+    "Obsidian/Entities",
+    "Obsidian",
+    "原文资料/2026-04-05-karpathy-llm-wiki-source.md",
+    "原文资料/2026-04-05-apple-vibe-coding-source.md",
+    "原文资料/2026-04-05-deepseek-source.md",
+    "原文资料/2026-04-05-gemma4-deployment-source.md",
+    "原文资料/2026-04-05-sam-altman-interview-source.md",
+    "博客文章/2026-04/2026-04-01-naval-ravikant-2025-interview.md",
+    "博客文章/2026-04/test-publish.md",
+    "博客文章/2026-04/2026-04-01-claude-code-source-leak-analysis.md",
+    "people/慧哥.md",
+    "博客文章/2026-04/2026-04-01-claude-code-leak-complete-analysis.md",
+    "博客文章/2026-04/2026-04-01-anthropic-kairos-claw-exposed.md",
+    "博客文章/2026-04",
+    "原文资料/2026-04-01-claude-code-leak-原文链接.md",
+    "原文资料/2026-04-01-anthropic-kairos-原文链接.md",
+    "博客文章/2026-03/2026-04-01-claude-code-source-leak-analysis.md",
+    "博客文章/2026-03/2026-04-01-claude-code-leak-complete-analysis.md",
+    "博客文章/2026-03/2026-04-01-anthropic-kairos-claw-exposed.md",
+    "Obsidian/博客文章/2026-04-01-anthropic-kairos-claw-exposed.md",
+    "Obsidian/博客文章/2026-04-01-claude-code-leak-complete-analysis.md",
+    "Obsidian/博客文章/2026-04-01-claude-code-source-leak-analysis.md",
+    "Bloomberg简报/2026-03-31-Bloomberg科技简报.md",
+    "博客文章/2026-03/alibaba-q3-2026-ai-agent-transformation.md",
+    "博客文章/2026-03/alibaba-ath-token-strategy-analysis.md",
+    "博客文章/2026-03/ai-research-consensus-trap-v2.md",
+    "博客文章/2026-03/li-dan-openclaw-agent.md",
+    "未命名 2.base",
+    "未命名 1.base",
+    "未命名.base",
+    "未命名.canvas",
+    "Bloomberg简报",
+    "people",
+    "工作建议",
+    "未命名 1.canvas",
+    "未命名/未命名.canvas"
+  ]
+}
