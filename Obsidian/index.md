@@ -16,12 +16,14 @@
 - [[Dylan Patel]] - SemiAnalysis CEO，七层供应链模型
 - [[Sam Altman]] - OpenAI CEO
 - [[黄仁勋]] - Nvidia CEO
+- [[Liu Fayao]] - Claw AI Lab联合创始人
 
 ### 公司/组织
 - [[亚马逊]] - 三年裁员57000，AI替代策略
 - [[SemiAnalysis]] - Dylan Patel的半导体分析机构
 - [[OpenAI]] - GPT开发者
 - [[Nvidia]] - GPU/AI芯片领导者
+- [[Claw AI Lab]] - 多Agent协同科研系统
 
 ---
 
@@ -43,6 +45,8 @@
 - [[AI安全]] - AGI对齐与风险
 - [[开源]] - 开放权重模型
 - [[七层供应链模型]] - Dylan Patel的供应链框架
+- [[Claw AI Lab]] - 多Agent协同科研系统
+- [[多Agent协作]] - 多个AI Agent协同工作
 
 ### 社会/职场
 - [[AI替代]] - AI对工作岗位的替代
