@@ -7,7 +7,7 @@ categories: ['AI工程']
 description: '深度解析投机解码技术演进：传统SD的串行瓶颈、SSD的并行突破，以及MTP、EAGLE、昇腾EAGLE的技术关系与协同可能'
 ---
 
-## TL;DR
+## 一句话总结
 
 投机解码（Speculative Decoding）正在经历从**串行到并行**的范式转变：
 - **传统SD**：小模型预测→大模型验证→等待→再预测，串行依赖是瓶颈

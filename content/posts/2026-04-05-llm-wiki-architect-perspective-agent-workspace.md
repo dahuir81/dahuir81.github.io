@@ -7,7 +7,7 @@ categories: ['AI工程']
 description: '架构师若飞深度解读Karpathy LLM Wiki：从"临时检索"到"先编译再查询"，从"给人看"到"给Agent用"的范式转变'
 ---
 
-## TL;DR
+## 一句话总结
 
 Karpathy的LLM Wiki不是又一个笔记工具，而是一个**给Agent用的长期工作底座**：
 - 传统RAG：查询时临时检索，问完即走，知识不沉淀

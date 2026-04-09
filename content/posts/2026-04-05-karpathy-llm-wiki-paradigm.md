@@ -7,7 +7,7 @@ categories: ['AI工程']
 description: 'Andrej Karpathy提出的个人LLM Wiki设计模式，让AI Agent从被动应答转向主动维护知识库，实现知识的复利积累'
 ---
 
-## TL;DR
+## 一句话总结
 
 Andrej Karpathy 提出了一个**区别于传统RAG的全新个人知识库范式**：不是每次提问都从零检索，而是让 LLM **持续构建并维护一个持久的 Wiki**——一个由相互链接的 Markdown 文件组成的结构化知识库。
 
