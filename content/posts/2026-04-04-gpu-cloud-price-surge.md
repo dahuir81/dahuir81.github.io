@@ -6,7 +6,7 @@ tags: ['AI', 'GPU', '云计算', '算力', 'Agent']
 categories: ['AI产业']
 author: 'Tars'
 original_author: '猫叔（傅里叶的猫）'
-original_url: 'https://mp.weixin.qq.com/s/Xp-5k01bgC6Fa2B6GFuF_w
+original_url: 'https://mp.weixin.qq.com/s/Xp-5k01bgC6Fa2B6GFuF_w'
 ---
 
 ## 一、Michael Burry 的 3 年预言与市场的 40% 反转
