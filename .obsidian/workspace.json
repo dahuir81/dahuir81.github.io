@@ -4,21 +4,49 @@
     "type": "split",
     "children": [
       {
-        "id": "dffeb0c4c8a1e70f",
+        "id": "3573266cc7c3060b",
         "type": "tabs",
         "children": [
           {
-            "id": "47ffe3eb93d2e23a",
+            "id": "86739794f8b6b4cc",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "博客文章/2026-04/2026-04-01-anthropic-kairos-claw-exposed.md",
+                "file": "TARS-WORKFLOW.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "2026-04-01-anthropic-kairos-claw-exposed"
+              "title": "TARS-WORKFLOW"
+            }
+          },
+          {
+            "id": "2909f4ffc31211d4",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Entities/郑波.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "郑波"
+            }
+          },
+          {
+            "id": "dfe23c3892adf55d",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "原文资料/2026-04-10-阿里AI战略与HappyHorse深度分析-source.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "2026-04-10-阿里AI战略与HappyHorse深度分析-source"
             }
           }
         ],
@@ -54,7 +82,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "tag:梁文锋",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -79,7 +107,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 200
   },
   "right": {
     "id": "90a72e1bbc81f410",
@@ -95,7 +123,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "博客文章/2026-04/2026-04-01-anthropic-kairos-claw-exposed.md",
+                "file": "Clippings/Hermes Agent 架构拆解：会复盘、可成长的 Agent，到底怎么实现的? 1.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -105,7 +133,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "2026-04-01-anthropic-kairos-claw-exposed 的反向链接列表"
+              "title": "Hermes Agent 架构拆解：会复盘、可成长的 Agent，到底怎么实现的? 1 的反向链接列表"
             }
           },
           {
@@ -165,13 +193,23 @@
               "icon": "lucide-list",
               "title": "欢迎 的大纲"
             }
+          },
+          {
+            "id": "a6ac650407a617ad",
+            "type": "leaf",
+            "state": {
+              "type": "claudian-view",
+              "state": {},
+              "icon": "bot",
+              "title": "Claudian"
+            }
           }
-        ]
+        ],
+        "currentTab": 5
       }
     ],
     "direction": "horizontal",
-    "width": 200,
-    "collapsed": true
+    "width": 438.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -181,48 +219,50 @@
       "daily-notes:打开/创建今天的日记": false,
       "templates:插入模板": false,
       "command-palette:打开命令面板": false,
-      "bases:新建数据库": false
+      "bases:新建数据库": false,
+      "obsidian42-brat:BRAT": false,
+      "claudian:Open Claudian": false
     }
   },
-  "active": "e650b1bc921f8bcd",
+  "active": "a6ac650407a617ad",
   "lastOpenFiles": [
-    "Obsidian/Concepts/LLM Wiki.md",
-    "Obsidian/Concepts",
-    "Obsidian/Entities/Karpathy.md",
-    "Obsidian/Entities",
-    "Obsidian",
-    "原文资料/2026-04-05-karpathy-llm-wiki-source.md",
-    "原文资料/2026-04-05-apple-vibe-coding-source.md",
-    "原文资料/2026-04-05-deepseek-source.md",
-    "原文资料/2026-04-05-gemma4-deployment-source.md",
-    "原文资料/2026-04-05-sam-altman-interview-source.md",
-    "博客文章/2026-04/2026-04-01-naval-ravikant-2025-interview.md",
-    "博客文章/2026-04/test-publish.md",
-    "博客文章/2026-04/2026-04-01-claude-code-source-leak-analysis.md",
-    "people/慧哥.md",
-    "博客文章/2026-04/2026-04-01-claude-code-leak-complete-analysis.md",
-    "博客文章/2026-04/2026-04-01-anthropic-kairos-claw-exposed.md",
-    "博客文章/2026-04",
-    "原文资料/2026-04-01-claude-code-leak-原文链接.md",
-    "原文资料/2026-04-01-anthropic-kairos-原文链接.md",
-    "博客文章/2026-03/2026-04-01-claude-code-source-leak-analysis.md",
-    "博客文章/2026-03/2026-04-01-claude-code-leak-complete-analysis.md",
-    "博客文章/2026-03/2026-04-01-anthropic-kairos-claw-exposed.md",
-    "Obsidian/博客文章/2026-04-01-anthropic-kairos-claw-exposed.md",
-    "Obsidian/博客文章/2026-04-01-claude-code-leak-complete-analysis.md",
-    "Obsidian/博客文章/2026-04-01-claude-code-source-leak-analysis.md",
-    "Bloomberg简报/2026-03-31-Bloomberg科技简报.md",
-    "博客文章/2026-03/alibaba-q3-2026-ai-agent-transformation.md",
-    "博客文章/2026-03/alibaba-ath-token-strategy-analysis.md",
-    "博客文章/2026-03/ai-research-consensus-trap-v2.md",
-    "博客文章/2026-03/li-dan-openclaw-agent.md",
+    "Obsidian/Entities/藏狐.md",
+    "Obsidian/Entities/邓小闲.md",
+    "Obsidian/Entities/花叔.md",
+    "Obsidian/Entities/脑极体.md",
+    "原文资料/2026-04-10-同事.skill恐慌-被蒸馏的职场-source.md",
     "未命名 2.base",
-    "未命名 1.base",
+    "原文资料/2026-04-10-阿里AI战略与HappyHorse深度分析-source.md",
+    "Entities/郑波.md",
+    "未命名 1.md",
     "未命名.base",
+    "未命名 1.base",
     "未命名.canvas",
-    "Bloomberg简报",
-    "people",
-    "工作建议",
+    "未命名.md",
+    "博客文章/2026-04/2026-04-05-sam-altman-interview-power-ai-future.md",
+    "index.md",
+    "log.md",
+    "原文资料/英伟达Groq-3-LPU-Token经济学-未尽研究.md",
+    "原文资料/Sebastian-Raschka-LLM注意力机制变体-查思屋.md",
+    "原文资料/2026-04-07-华为2025财报ICT最赚钱-source.md",
+    "原文资料/2026-04-10-HappyHorse官方确认郑波团队-source.md",
+    "Concepts/前沿模型论坛.md",
+    "Concepts/蒸馏攻击.md",
+    "Concepts/AI安全叙事.md",
+    "Entities/Anthropic.md",
+    "原文资料/2026-04-10-Anthropic炒作大辞典-source.md",
+    "原文资料/2026-04-10-Anthropic自研芯片深度分析-source.md",
+    "原文资料/2026-04-10-科技早报-source.md",
+    "Entities/HappyHorse.md",
+    "Entities/张迪.md",
+    "每日记录/2026-04-10-work-advice.md",
+    "博客",
+    "项目笔记/平头哥半导体研究",
+    "Concepts",
+    "Entities",
+    "Clippings",
+    "Obsidian/Concepts",
+    "Obsidian/Entities",
     "未命名 1.canvas",
     "未命名/未命名.canvas"
   ]

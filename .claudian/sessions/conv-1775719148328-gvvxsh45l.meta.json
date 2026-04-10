@@ -1,0 +1,24 @@
+{
+  "id": "conv-1775719148328-gvvxsh45l",
+  "providerId": "claude",
+  "title": "总结一下这篇晨报的要点",
+  "titleGenerationStatus": "failed",
+  "createdAt": 1775719148328,
+  "updatedAt": 1775738084857,
+  "lastResponseAt": 1775719629618,
+  "sessionId": "2df24b98-70c5-4c11-9fa9-da539ec65657",
+  "providerState": {
+    "providerSessionId": "2df24b98-70c5-4c11-9fa9-da539ec65657"
+  },
+  "currentNote": "未命名 1.md",
+  "usage": {
+    "model": "qwen3.6-plus",
+    "inputTokens": 19162,
+    "cacheCreationInputTokens": 0,
+    "cacheReadInputTokens": 0,
+    "contextWindow": 200000,
+    "contextTokens": 19162,
+    "percentage": 10,
+    "contextWindowIsAuthoritative": true
+  }
+}

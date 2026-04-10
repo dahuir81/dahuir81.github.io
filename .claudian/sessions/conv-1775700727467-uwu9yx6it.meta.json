@@ -1,0 +1,42 @@
+{
+  "id": "conv-1775700727467-uwu9yx6it",
+  "providerId": "claude",
+  "title": "你现在用的什么模型",
+  "titleGenerationStatus": "failed",
+  "createdAt": 1775700727478,
+  "updatedAt": 1775714735275,
+  "lastResponseAt": 1775712958396,
+  "sessionId": "2ff5f9f1-f57b-4ef8-987a-35a449aabc84",
+  "providerState": {
+    "providerSessionId": "2ff5f9f1-f57b-4ef8-987a-35a449aabc84",
+    "previousProviderSessionIds": [
+      "daa3d4f5-ebc4-4037-9438-4fa249e45050",
+      "4b513e49-c5f6-48c6-b4fc-5f5db7ab14c0"
+    ],
+    "subagentData": {
+      "toolu_00110502afaa47929162c81b": {
+        "id": "toolu_00110502afaa47929162c81b",
+        "description": "Find related vault documents",
+        "prompt": "Search the vault at /Users/dahuir/Documents/Tars/KnowledgeBase for documents related to these topics. Search for files that might relate to:\n\n1. OpenClaw / Clawdbot / OpenClaw architecture\n2. Harness / Codex / Claude Code\n3. Memento-Skills / Agent design\n4. Anthropic Skills\n5. Agent architecture / Agent patterns\n6. Context management / prompt engineering\n7. AI/LLM related notes\n\nUse broad searches - try Glob patterns like `**/*.md`, and grep for keywords like \"OpenClaw\", \"claw\", \"harness\", \"Claude Code\", \"Codex\", \"Memento\", \"Skill\", \"agent\", \"prompt\", \"context\", \"Anthropic\", \"LLM\", \"AI\" etc.\n\nAlso look in the `Clippings/` folder since this is a clipping file, there may be other clippings by the same author \"[[若飞]]\".\n\nReport back a list of relevant files with their paths, and note which specific topics each file relates to. Be thorough - check multiple naming conventions.",
+        "mode": "async",
+        "isExpanded": false,
+        "status": "running",
+        "toolCalls": [],
+        "asyncStatus": "running",
+        "agentId": "a4749df443c54c236",
+        "startedAt": 1775706322328,
+        "result": "API Error: 400 {\"error\":{\"code\":\"invalid_parameter_error\",\"message\":\"model `claude-haiku-4-5-20251001` is not supported.\",\"param\":null,\"type\":\"invalid_request_error\"},\"request_id\":\"71249746-0d80-9acf-a12a-8a83da6a3100\"}"
+      }
+    }
+  },
+  "usage": {
+    "model": "qwen3.6-plus",
+    "inputTokens": 30731,
+    "cacheCreationInputTokens": 0,
+    "cacheReadInputTokens": 0,
+    "contextWindow": 200000,
+    "contextTokens": 30731,
+    "percentage": 15,
+    "contextWindowIsAuthoritative": true
+  }
+}

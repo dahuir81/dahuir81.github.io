@@ -1,0 +1,24 @@
+{
+  "id": "conv-1775714785429-3fhd4q00m",
+  "providerId": "claude",
+  "title": "这篇文章里，有什么信息值得重点关注",
+  "titleGenerationStatus": "failed",
+  "createdAt": 1775714785430,
+  "updatedAt": 1775719105677,
+  "lastResponseAt": 1775714808561,
+  "sessionId": "6f9dbd2f-1827-4d0a-98c4-d8bc32e76af4",
+  "providerState": {
+    "providerSessionId": "6f9dbd2f-1827-4d0a-98c4-d8bc32e76af4"
+  },
+  "currentNote": "原文资料/2026-04-09-UBS-SK-Hynix-Key-Call.md",
+  "usage": {
+    "model": "qwen3.6-plus",
+    "inputTokens": 16996,
+    "cacheCreationInputTokens": 0,
+    "cacheReadInputTokens": 0,
+    "contextWindow": 200000,
+    "contextTokens": 16996,
+    "percentage": 8,
+    "contextWindowIsAuthoritative": true
+  }
+}
