@@ -68,6 +68,9 @@
 - [[知识管理]] - 知识组织方法论
 - [[端侧AI]] - 本地运行大模型
 - [[Token经济]] - AI商业模式
+- [[Managed Agents]] - Anthropic的AI原生架构（2026-04-09）
+- [[Hermes Agent]] - Nous Research开源Agent（4万星）
+- [[AI操作系统]] - 从"工具嫁接"到"AI原生系统"的架构范式
 
 ### 社会/职场
 - [[AI替代]] - AI对工作岗位的替代
@@ -84,6 +87,7 @@
 - [[2026-04-06-iphone-gemma4-local-llm-source|iPhone本地跑Gemma 4]]
 - [[2026-04-06-hermes-agent-openclaw-alternative-source|Hermes Agent介绍]]
 - [[2026-04-10-同事.skill恐慌-被蒸馏的职场-source|同事.skill恐慌：被蒸馏的职场赛博招魂]]
+- [[2026-04-10-OpenClaw升维-Managed-Agents-Hermes-source|OpenClaw升维：Managed Agents与Hermes Agent的降维打击]]
 
 ---
 
