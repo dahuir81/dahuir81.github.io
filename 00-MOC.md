@@ -32,7 +32,10 @@ status: active
 [[07-项目/]] — 工作建议、项目文档、专题研究
 
 ## 📚 参考资料
-[[08-参考/Bloomberg/]] — Bloomberg 简报
+[[08-参考/]] — 简报/研报摘要/数据表分析（非博客类）
+- [[08-参考/Bloomberg/]] — Bloomberg 简报
+- [[08-参考/AI芯片/]] — 国产芯片技术对比、市场研判
+- [[08-参考/HBM/]] — 高带宽内存产能、供应链
 
 ## 📎 Clippings
 [[Clippings/]] — Obsidian Web Clipper 默认保存
