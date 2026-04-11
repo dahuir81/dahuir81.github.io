@@ -5,7 +5,7 @@
 # summary: 摘要文本
 
 KB_DIR="$HOME/Documents/Tars/KnowledgeBase"
-DAILY_DIR="$KB_DIR/01-Daily"
+DAILY_DIR="$KB_DIR/每日记录"
 DATE=$(date +%Y-%m-%d)
 TIME=$(date '+%H:%M')
 CHANNEL="${1:-unknown}"
@@ -37,4 +37,4 @@ tags: [daily]
 - [ ]
 EOF
 
-echo "✅ 已归档到: 01-Daily/$(basename $FILE)"
+echo "✅ 已归档到: 每日记录/$(basename $FILE)"
