@@ -37,4 +37,4 @@ tags: [daily]
 - [ ]
 EOF
 
-echo "✅ 已归档到: 每日记录/$(basename $FILE)"
+echo "✅ 已归档到: 01-每日记录/$(basename $FILE)"
