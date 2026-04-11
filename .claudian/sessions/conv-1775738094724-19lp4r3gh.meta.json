@@ -4,8 +4,8 @@
   "title": "分析个摘要",
   "titleGenerationStatus": "failed",
   "createdAt": 1775738094724,
-  "updatedAt": 1775807027336,
-  "lastResponseAt": 1775807027336,
+  "updatedAt": 1775829290809,
+  "lastResponseAt": 1775829229034,
   "sessionId": "9a500ce8-394d-4a92-8302-cc378649c93c",
   "providerState": {
     "providerSessionId": "9a500ce8-394d-4a92-8302-cc378649c93c"
@@ -13,12 +13,12 @@
   "currentNote": "原文资料/2026-03-31-DeepMind之父惊人自白-Hassabis-AI安全.md",
   "usage": {
     "model": "qwen3.6-plus",
-    "inputTokens": 18146,
+    "inputTokens": 22088,
     "cacheCreationInputTokens": 0,
     "cacheReadInputTokens": 0,
     "contextWindow": 200000,
-    "contextTokens": 18146,
-    "percentage": 9,
+    "contextTokens": 22088,
+    "percentage": 11,
     "contextWindowIsAuthoritative": true
   }
 }
