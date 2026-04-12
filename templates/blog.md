@@ -17,7 +17,7 @@ status: published
 - **ECS**: https://openclawmy.work/posts/{{slug}}/
 
 ## 原文资料
-[[04-Sources/{{source_file}}]]
+[[04-原文资料/{{source_file}}]]
 
 ## 关联实体和概念
 -
