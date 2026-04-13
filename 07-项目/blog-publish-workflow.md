@@ -126,14 +126,13 @@ GitHub Commit → Actions 触发 → Hugo 构建 → GitHub Pages 部署 → 通
 
 | 方式 | 配置 | 状态 |
 |------|------|------|
-| 邮件 | notify.sh 脚本 | ✅ 自动发送 |
-| 飞书 | message 工具 | ✅ 自动发送 |
+| 飞书 | GitHub Actions → OpenClaw Gateway | ✅ 自动发送 |
 
 ### 通知触发
 
 - GitHub Actions `notify.yml` 在部署成功后自动触发
-- 发送邮件到: 5283728@qq.com
-- 发送飞书消息到当前对话
+- 通过 OpenClaw Gateway 发送飞书消息
+- **已移除邮件通知**（原 notify.sh 含硬编码 SMTP 授权码，已迁移至 GitHub Secrets 管理）
 
 ---
 
@@ -205,19 +204,19 @@ GitHub Commit → Actions 触发 → Hugo 构建 → GitHub Pages 部署 → 通
 | 2026-03-16 | 首次成功发布文章，验证全流程 |
 | 2026-03-17 | 发布 GTC 2026 分析文章，确认 Web 界面方案为主 |
 | 2026-03-29 | 统一 Obsidian 文件命名规范，全部加上日期前缀 |
+| 2026-04-13 | 安全修复：移除 notify.sh（SMTP 授权码泄露），迁移至 GitHub Secrets |
 
 ---
 
 ## 九、相关文件
 
 - `~/.openclaw/workspace/blog/PUBLISH_WORKFLOW.md` - 发布流程文档
-- `~/.openclaw/workspace/blog/notify.sh` - 通知脚本
 - `~/.openclaw/workspace/blog/hugo.toml` - Hugo 配置
 - `~/.openclaw/workspace/blog/.github/workflows/hugo.yml` - Actions 配置
 - `~/.openclaw/workspace/blog/.github/workflows/notify.yml` - 通知配置
 
 ---
 
-**记忆锚点**: 博客发布 → Hugo → GitHub Pages → Web界面 → Actions自动部署 → 邮件+飞书通知
+**记忆锚点**: 博客发布 → Hugo → GitHub Pages → Web界面 → Actions自动部署 → 飞书通知
 
 *维护者: Tars | 更新频率: 每次发布时验证*
