@@ -13,10 +13,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        
+
       - name: Wait for deployment
         run: sleep 30
-        
+
       - name: Get latest post info
         id: post
         run: |
@@ -25,8 +25,26 @@ jobs:
           SLUG=$(basename "$LATEST_POST" .md)
           echo "title=$TITLE" >> $GITHUB_OUTPUT
           echo "slug=$SLUG" >> $GITHUB_OUTPUT
-          
-      - name: Send notification
+          echo "date=$(grep "^date:" "$LATEST_POST" | sed 's/date: //' | head -1)" >> $GITHUB_OUTPUT
+
+      - name: Send email notification
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.qq.com
+          server_port: 465
+          username: 5283728@qq.com
+          password: ${{ secrets.QQ_SMTP_PASSWORD }}
+          subject: "[博客发布] ${{ steps.post.outputs.title }}"
+          body: |
+            📝 博客文章已发布
+
+            标题：${{ steps.post.outputs.title }}
+            链接：https://dahuir81.github.io/posts/${{ steps.post.outputs.slug }}/
+            时间：${{ steps.post.outputs.date }}
+          to: 5283728@qq.com
+          from: 5283728@qq.com
+
+      - name: Send Feishu notification
         run: |
           curl -X POST "${{ secrets.OPENCLAW_GATEWAY }}/notify" \
             -H "Content-Type: application/json" \
