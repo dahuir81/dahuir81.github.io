@@ -42,6 +42,12 @@ Session（append-only events）
 - [[上下文治理]]
 - [[SessionMemory]]
 - [[Agent Loop]]
+- [[Hermes Agent]]
+- [[Kimi K2.6]]
+
+## 来源文章
+
+- [[2026-04-14-Hermes接入KimiK2.6实测-source|Hermes 接入 Kimi K2.6 实测]] — 23 个 Agent 并发底座实测
 
 ## 商业影响
 

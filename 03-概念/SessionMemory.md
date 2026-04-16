@@ -1,45 +1,17 @@
 # SessionMemory
 
-> **类型**：Concept
-> **创建**：2026-04-09
-> **来源**：Claude Code 长任务 Runtime 源码分析
+## 核心定义
 
-## 定义
+AI Agent会话记忆机制，用于在对话上下文中保持状态和上下文信息。
 
-SessionMemory 是 Claude Code 中专门用于维护**当前任务运行状态**的机制，不是摘要，而是一份结构化的交接文档。
+## 关键特征
 
-## 与 Compact 的区别
+- 维护单次会话内的上下文连贯性
+- 与长期记忆系统协同工作
+- 是Agent多步推理和任务执行的基础设施
 
-| 维度 | Compact | SessionMemory |
-|------|---------|---------------|
-| 目的 | 缩短历史 | 续住工作 |
-| 内容 | 历史摘要 | 当前状态、待办、已踩坑 |
-| 触发 | 上下文接近上限 | 10k token 初始化，每增 5k token 更新 |
-| 性质 | 被动压缩 | 主动维护 |
+## 关联
 
-## SessionMemory 模板结构
-
-- `Current State` — 最新进度（必须反映最新状态）
-- `Task specification` — 任务定义
-- `Files and Functions` — 关键文件和函数
-- `Workflow` — 工作流
-- `Errors & Corrections` — 踩坑记录（单独章节，防重复犯错）
-- `Codebase and System Documentation` — 文档
-- `Learnings` — 学到的经验
-- `Key results` — 关键结果
-- `Worklog` — 工作日志
-
-## 触发条件
-
-1. 上下文 token 数超过 10,000 → 初始化
-2. 之后至少再增长 5,000 token → 考虑更新
-3. 同时看工具调用数（默认 3 次）
-4. 到达自然停顿点也可能触发
-
-## 关联概念
-
-- [[Claude Code]]
 - [[上下文治理]]
-- [[Agent运行底座]]
-- [[Harness]]
 - [[长期记忆系统]]
+- [[Claude Code]]

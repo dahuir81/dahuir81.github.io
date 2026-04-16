@@ -40,6 +40,6 @@ Agent 赛道两个矛盾观点同时成立：
 从"补模型能力"转向"删冗余功能"——Harness 越来越精简高效。
 
 ## 关联
-- 相关文章: [[2026-04-09-Hermes Agent架构拆解]]
+- 相关文章: [[2026-04-09-Hermes Agent架构拆解-source]]
 - 相关文章: [[2026-04-06-huawei-chasiwu-ai-weekly-agent-harness-2nm-chip-source|万字解读Agentic Harness | 茶思周一见]]
 - 参见: [[闭环学习循环]]、[[七层纵深防御]]、[[记忆分层存储]]、[[Context工程]]
