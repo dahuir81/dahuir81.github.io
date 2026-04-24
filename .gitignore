@@ -1,0 +1,47 @@
+# Sensitive files
+.env
+*.secret
+*.key
+credentials.json
+
+# Local overrides
+config.local.toml
+hugo.local.toml
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Hugo
+resources/
+public/
+
+# Notify script (contains secrets, use GitHub Actions secrets instead)
+notify.sh
+
+# Obsidian UI state (auto-generated, no need to commit)
+.obsidian/workspace.json
+.obsidian/graph.json
+
+# Claudian session files
+.claudian/
+
+# 阻止知识库文件混入
+01-每日记录/
+02-实体/
+03-概念/
+04-原文资料/
+06-人物/
+07-项目/
+08-参考/
+09-归档/
+Clippings/
+scripts/
+templates/
+.obsidian/
+.claudian/
+copilot/
+00-MOC*.md
+MEMORY*.md
+AGENTS*.md
+
