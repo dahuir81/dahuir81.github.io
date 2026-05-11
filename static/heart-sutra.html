@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="zh-Hans" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>般若波罗蜜多心经</title>
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --bg-card: rgba(255,255,255,.03);
+    --text: #d4d0c8;
+    --text-dim: #7a7a7a;
+    --accent: #c9a84c;
+    --accent-dim: rgba(201,168,76,.15);
+    --border: rgba(201,168,76,.1);
+    --max-width: 680px;
+  }
+  [data-theme="light"] {
+    --bg: #f7f4ef;
+    --bg-card: rgba(0,0,0,.02);
+    --text: #3a3530;
+    --text-dim: #8a8580;
+    --accent: #8a6d30;
+    --accent-dim: rgba(138,109,48,.08);
+    --border: rgba(138,109,48,.12);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Noto Serif SC", "Source Han Serif SC", "STSong", "SimSun", "Songti SC", serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.9;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .theme-toggle {
+    position: fixed; top: 20px; right: 24px; z-index: 100;
+    background: transparent; border: 1px solid var(--border);
+    color: var(--text-dim); width: 40px; height: 40px; border-radius: 50%;
+    cursor: pointer; font-size: 1.1rem;
+    display: flex; align-items: center; justify-content: center;
+    transition: all .3s;
+  }
+  .theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
+
+  .container {
+    max-width: var(--max-width);
+    margin: 60px auto 80px;
+    padding: 0 28px;
+    text-align: center;
+  }
+
+  /* 开经偈 */
+  .gatha {
+    margin-bottom: 60px;
+    opacity: .7;
+  }
+  .gatha p {
+    font-size: .88rem;
+    line-height: 2;
+    color: var(--text-dim);
+    letter-spacing: .05em;
+  }
+  .gatha p:first-child {
+    margin-bottom: 4px;
+  }
+
+  /* 标题 */
+  .sutra-title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: .3em;
+    color: var(--accent);
+    margin-bottom: 48px;
+    position: relative;
+    display: inline-block;
+  }
+  .sutra-title::after {
+    content: '';
+    display: block;
+    width: 40%;
+    height: 1px;
+    background: var(--accent);
+    margin: 20px auto 0;
+    opacity: .4;
+  }
+
+  /* 经文 */
+  .sutra-text {
+    max-width: var(--max-width);
+  }
+  .sutra-text p {
+    font-size: 1.05rem;
+    line-height: 2.2;
+    letter-spacing: .08em;
+    margin-bottom: 28px;
+    text-align: justify;
+    text-justify: inter-ideograph;
+    transition: opacity .3s;
+  }
+
+  /* 重点段落：色即是空 */
+  .sutra-text p.em {
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  /* 咒语 */
+  .mantra {
+    margin-top: 40px;
+    padding-top: 32px;
+    border-top: 1px solid var(--border);
+  }
+  .mantra p {
+    font-size: 1.15rem;
+    letter-spacing: .12em;
+    color: var(--accent);
+    font-weight: 500;
+    line-height: 2.4;
+  }
+  .mantra .label {
+    font-size: .8rem;
+    color: var(--text-dim);
+    letter-spacing: .1em;
+    margin-bottom: 16px;
+    font-weight: 400;
+  }
+
+  /* 回向偈 */
+  .dedication {
+    margin-top: 60px;
+    opacity: .5;
+    font-size: .82rem;
+    color: var(--text-dim);
+    line-height: 2;
+    letter-spacing: .05em;
+  }
+
+  .footer {
+    text-align: center;
+    padding: 20px 0 40px;
+    color: var(--text-dim);
+    font-size: .78rem;
+    opacity: .4;
+  }
+
+  /* 分隔装饰 */
+  .ornament {
+    color: var(--accent);
+    opacity: .25;
+    font-size: 1.4rem;
+    margin: 12px 0 32px;
+    letter-spacing: .5em;
+  }
+
+  @media (max-width: 640px) {
+    .container { margin: 40px auto; padding: 0 20px; }
+    .sutra-title { font-size: 1.3rem; letter-spacing: .2em; }
+    .sutra-text p { font-size: .95rem; line-height: 2; letter-spacing: .06em; }
+    .mantra p { font-size: 1rem; }
+  }
+
+  /* 加载时的淡入 */
+  .container { opacity: 0; animation: fadeIn 1.2s ease forwards; }
+  @keyframes fadeIn { to { opacity: 1; } }
+</style>
+</head>
+<body>
+
+<button class="theme-toggle" onclick="toggleTheme()" aria-label="切换主题">☀</button>
+
+<div class="container">
+  <!-- 开经偈 -->
+  <div class="gatha">
+    <p>无上甚深微妙法，百千万劫难遭遇。</p>
+    <p>我今见闻得受持，愿解如来真实义。</p>
+  </div>
+
+  <!-- 标题 -->
+  <h1 class="sutra-title">般若波罗蜜多心经</h1>
+
+  <!-- 经文 -->
+  <div class="sutra-text">
+    <p>观自在菩萨，行深般若波罗蜜多时，照见五蕴皆空，度一切苦厄。</p>
+
+    <p>舍利子，色不异空，空不异色，色即是空，空即是色，受想行识亦复如是。</p>
+
+    <p>舍利子，是诸法空相，不生不灭，不垢不净，不增不减。</p>
+
+    <p>是故空中无色，无受想行识，无眼耳鼻舌身意，无色声香味触法，无眼界乃至无意识界。</p>
+
+    <p>无无明，亦无无明尽，乃至无老死，亦无老死尽。无苦集灭道，无智亦无得。</p>
+
+    <p>以无所得故，菩提萨埵，依般若波罗蜜多故，心无挂碍，无挂碍故，无有恐怖，远离颠倒梦想，究竟涅槃。</p>
+
+    <p>三世诸佛，依般若波罗蜜多故，得阿耨多罗三藐三菩提。</p>
+
+    <p>故知般若波罗蜜多，是大神咒，是大明咒，是无上咒，是无等等咒，能除一切苦，真实不虚。</p>
+  </div>
+
+  <div class="ornament">◇ ◇ ◇</div>
+
+  <!-- 咒语 -->
+  <div class="mantra">
+    <p class="label">般若波罗蜜多咒</p>
+    <p>揭谛揭谛，波罗揭谛，<br>波罗僧揭谛，菩提萨婆诃。</p>
+  </div>
+
+  <!-- 回向 -->
+  <div class="dedication">
+    <p>愿以此功德，庄严佛净土。</p>
+    <p>上报四重恩，下济三途苦。</p>
+    <p>若有见闻者，悉发菩提心。</p>
+    <p>尽此一报身，同生极乐国。</p>
+  </div>
+
+  <div class="footer">南无阿弥陀佛</div>
+</div>
+
+<script>
+function toggleTheme() {
+  const html = document.documentElement;
+  const btn = document.querySelector('.theme-toggle');
+  if (html.getAttribute('data-theme') === 'dark') {
+    html.setAttribute('data-theme', 'light');
+    btn.textContent = '🌙';
+  } else {
+    html.setAttribute('data-theme', 'dark');
+    btn.textContent = '☀';
+  }
+}
+</script>
+
+</body>
+</html>
