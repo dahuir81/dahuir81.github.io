@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Trainium vs TPU：AWS与Google自研AI芯片全代际对比（2026版）</title>
+<title>三强争霸：Trainium vs TPU vs NVIDIA — AI芯片全代际对比（2026版）</title>
 <style>
   :root {
     --bg: #0f1117;
@@ -16,11 +16,15 @@
     --accent-orange: #f59e0b;
     --accent-purple: #a78bfa;
     --accent-pink: #f472b6;
+    --accent-red: #f87171;
     --border: #2a2e3e;
-    --tag-trainium: #2563eb;
-    --tag-tpu: #7c3aed;
+    --tag-aws: #2563eb;
+    --tag-gcp: #7c3aed;
     --tag-nvidia: #059669;
-    --max-width: 960px;
+    --max-width: 1024px;
+    --header-aws: linear-gradient(135deg, rgba(37,99,235,.15), transparent);
+    --header-gcp: linear-gradient(135deg, rgba(124,58,237,.15), transparent);
+    --header-nvidia: linear-gradient(135deg, rgba(5,150,105,.15), transparent);
   }
   [data-theme="light"] {
     --bg: #f5f7fa;
@@ -36,15 +40,14 @@
     background: var(--bg);
     color: var(--text);
     line-height: 1.7;
-    padding: 0;
     -webkit-font-smoothing: antialiased;
   }
   .container { max-width: var(--max-width); margin: 0 auto; padding: 0 20px; }
 
-  /* Header */
+  /* Hero */
   .hero {
-    background: linear-gradient(135deg, #1e3a5f 0%, #1a1d28 50%, #2d1b4e 100%);
-    padding: 60px 0 40px;
+    background: linear-gradient(135deg, #0a1628 0%, #1a1d28 40%, #1a0a2e 70%, #0a1a18 100%);
+    padding: 50px 0 36px;
     text-align: center;
     border-bottom: 1px solid var(--border);
     position: relative;
@@ -52,313 +55,210 @@
   }
   .hero::before {
     content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(ellipse at 30% 50%, rgba(37,99,235,.15) 0%, transparent 60%),
-                radial-gradient(ellipse at 70% 50%, rgba(124,58,237,.12) 0%, transparent 60%);
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 20% 50%, rgba(37,99,235,.12) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(124,58,237,.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 50%, rgba(5,150,105,.1) 0%, transparent 50%);
     pointer-events: none;
   }
   .hero h1 {
-    font-size: 2rem;
-    font-weight: 700;
-    background: linear-gradient(135deg, #60a5fa, #a78bfa);
+    font-size: 1.9rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #60a5fa, #a78bfa, #34d399);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     position: relative;
   }
-  .hero .subtitle {
-    color: var(--text-secondary);
-    font-size: .95rem;
-    margin-top: 10px;
-    position: relative;
-  }
+  .hero .subtitle { color: var(--text-secondary); font-size: .92rem; margin-top: 8px; position: relative; }
   .meta-bar {
-    display: flex;
-    justify-content: center;
-    gap: 12px;
-    margin-top: 16px;
-    flex-wrap: wrap;
-    position: relative;
+    display: flex; justify-content: center; gap: 10px; margin-top: 14px; flex-wrap: wrap; position: relative;
   }
   .meta-bar .badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    font-size: .78rem;
-    padding: 4px 12px;
-    border-radius: 20px;
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    color: var(--text-secondary);
+    display: inline-flex; align-items: center; gap: 4px; font-size: .75rem;
+    padding: 4px 12px; border-radius: 20px; background: var(--bg-card);
+    border: 1px solid var(--border); color: var(--text-secondary);
   }
 
-  /* Theme Toggle */
   .theme-toggle {
-    position: fixed;
-    top: 16px;
-    right: 20px;
-    z-index: 100;
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    color: var(--text);
-    width: 40px;
-    height: 40px;
-    border-radius: 10px;
-    cursor: pointer;
-    font-size: 1.2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: .2s;
+    position: fixed; top: 16px; right: 20px; z-index: 100;
+    background: var(--bg-card); border: 1px solid var(--border);
+    color: var(--text); width: 40px; height: 40px; border-radius: 10px;
+    cursor: pointer; font-size: 1.2rem;
+    display: flex; align-items: center; justify-content: center; transition: .2s;
   }
   .theme-toggle:hover { border-color: var(--accent-blue); }
 
-  /* Sections */
-  section { padding: 40px 0; }
-  .section-title {
-    font-size: 1.35rem;
-    font-weight: 700;
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .section-title .icon { font-size: 1.4rem; }
-
-  /* Cards */
-  .card-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-  }
-  .card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 20px;
-    transition: .2s;
-  }
-  .card:hover { border-color: var(--accent-blue); }
-  .card h3 {
-    font-size: 1rem;
-    margin-bottom: 10px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .card .tag {
-    display: inline-block;
-    font-size: .7rem;
-    font-weight: 600;
-    padding: 2px 10px;
-    border-radius: 12px;
-    letter-spacing: .3px;
-  }
-  .tag-trainium { background: rgba(37,99,235,.2); color: #60a5fa; }
-  .tag-tpu { background: rgba(124,58,237,.2); color: #a78bfa; }
-  .tag-nvidia { background: rgba(5,150,105,.2); color: #34d399; }
-
-  /* Timeline */
-  .timeline {
+  /* Logo Bar */
+  .logo-bar {
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    gap: 0; max-width: 600px; margin: 20px auto 0;
     position: relative;
-    padding-left: 36px;
   }
+  .logo-item {
+    text-align: center; padding: 8px 0;
+    font-weight: 700; font-size: 1.1rem; letter-spacing: 1px;
+  }
+  .logo-item.aws { color: #60a5fa; }
+  .logo-item.gcp { color: #a78bfa; }
+  .logo-item.nvidia { color: #34d399; }
+
+  section { padding: 32px 0; }
+  .section-title {
+    font-size: 1.25rem; font-weight: 700; margin-bottom: 16px;
+    display: flex; align-items: center; gap: 8px;
+  }
+
+  /* Current Gen Cards */
+  .cmp-grid {
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;
+  }
+  .cmp-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 12px; overflow: hidden; transition: .2s;
+  }
+  .cmp-card:hover { border-color: var(--accent-blue); transform: translateY(-2px); }
+  .cmp-card .cmp-head {
+    padding: 12px 16px; font-weight: 700; font-size: .95rem;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .cmp-card.aws .cmp-head { background: var(--header-aws); }
+  .cmp-card.gcp .cmp-head { background: var(--header-gcp); }
+  .cmp-card.nvidia .cmp-head { background: var(--header-nvidia); }
+
+  .cmp-card .cmp-body { padding: 12px 16px; }
+  .cmp-card .cmp-body .spec-row {
+    display: flex; justify-content: space-between;
+    padding: 5px 0; font-size: .82rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .cmp-card .cmp-body .spec-row:last-child { border-bottom: none; }
+  .cmp-card .cmp-body .spec-row .label { color: var(--text-secondary); }
+  .cmp-card .cmp-body .spec-row .value { font-weight: 600; }
+  .cmp-card .cmp-body .spec-row .value.green { color: var(--accent-green); }
+  .cmp-card .cmp-body .spec-row .value.orange { color: var(--accent-orange); }
+
+  .tag-sm {
+    display: inline-block; font-size: .6rem; font-weight: 700;
+    padding: 1px 8px; border-radius: 10px; letter-spacing: .5px;
+    vertical-align: middle; margin-left: 4px;
+  }
+  .tag-sm.aws-t { background: rgba(37,99,235,.2); color: #60a5fa; }
+  .tag-sm.gcp-t { background: rgba(124,58,237,.2); color: #a78bfa; }
+  .tag-sm.nv-t { background: rgba(5,150,105,.2); color: #34d399; }
+
+  /* Timeline (3-tone) */
+  .timeline { position: relative; padding-left: 36px; }
   .timeline::before {
-    content: '';
-    position: absolute;
-    left: 14px;
-    top: 0;
-    bottom: 0;
-    width: 2px;
-    background: var(--border);
+    content: ''; position: absolute; left: 14px; top: 0; bottom: 0;
+    width: 2px; background: var(--border);
   }
   .timeline-item {
-    position: relative;
-    margin-bottom: 28px;
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 16px 20px;
+    position: relative; margin-bottom: 20px;
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 10px; padding: 14px 16px;
   }
   .timeline-item::before {
-    content: '';
-    position: absolute;
-    left: -26px;
-    top: 22px;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    border: 2px solid var(--accent-blue);
+    content: ''; position: absolute; left: -26px; top: 18px;
+    width: 11px; height: 11px; border-radius: 50%;
     background: var(--bg);
   }
-  .timeline-item.tpu::before { border-color: var(--accent-purple); }
+  .timeline-item.aws-line::before { border: 2px solid var(--accent-blue); }
+  .timeline-item.gcp-line::before { border: 2px solid var(--accent-purple); }
+  .timeline-item.nv-line::before { border: 2px solid var(--accent-green); }
   .timeline-item.now::before {
-    background: var(--accent-green);
-    border-color: var(--accent-green);
+    background: var(--accent-green); border-color: var(--accent-green);
     box-shadow: 0 0 8px rgba(52,211,153,.5);
   }
-  .timeline-item .t-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 6px;
-    flex-wrap: wrap;
-    gap: 6px;
+  .timeline-item .th {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 4px; flex-wrap: wrap; gap: 4px;
   }
-  .timeline-item .t-header .name {
-    font-weight: 700;
-    font-size: 1rem;
+  .timeline-item .th .name { font-weight: 700; font-size: .95rem; }
+  .timeline-item .th .year { font-size: .78rem; color: var(--text-secondary); }
+  .timeline-item .td {
+    font-size: .84rem; color: var(--text-secondary); line-height: 1.6;
   }
-  .timeline-item .t-header .year {
-    font-size: .8rem;
-    color: var(--text-secondary);
-  }
-  .timeline-item .t-detail {
-    font-size: .88rem;
-    color: var(--text-secondary);
-    line-height: 1.6;
-  }
-  .timeline-item .t-detail strong {
-    color: var(--text);
-    font-weight: 600;
-  }
+  .timeline-item .td strong { color: var(--text); font-weight: 600; }
 
-  /* Table */
+  /* Big Comparison Table */
   .table-wrap {
-    overflow-x: auto;
-    border-radius: 12px;
-    border: 1px solid var(--border);
+    overflow-x: auto; border-radius: 10px; border: 1px solid var(--border);
   }
   table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: .88rem;
-    min-width: 640px;
+    width: 100%; border-collapse: collapse; font-size: .84rem; min-width: 700px;
   }
   thead th {
-    background: var(--bg-card-alt);
-    padding: 12px 14px;
-    text-align: left;
-    font-weight: 600;
-    white-space: nowrap;
+    padding: 11px 12px; text-align: left; font-weight: 600; white-space: nowrap;
     border-bottom: 1px solid var(--border);
+    position: sticky; top: 0;
   }
-  tbody td {
-    padding: 11px 14px;
-    border-bottom: 1px solid var(--border);
-    vertical-align: top;
+  thead th.col-aws { background: linear-gradient(180deg, #1a2640, var(--bg-card-alt)); }
+  thead th.col-gcp { background: linear-gradient(180deg, #251a40, var(--bg-card-alt)); }
+  thead th.col-nvidia { background: linear-gradient(180deg, #0a2a20, var(--bg-card-alt)); }
+  thead th.col-mid { border-left: 1px solid var(--border); border-right: 1px solid var(--border); }
+  tbody td { padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+  tbody td.col-mid { border-left: 1px solid var(--border); border-right: 1px solid var(--border); }
+  tbody tr { background: var(--bg-card); }
+  tbody tr:hover { filter: brightness(1.08); }
+  td.best { color: var(--accent-green); font-weight: 700; }
+  td.new { position: relative; }
+  td.new::after {
+    content: 'NEW'; display: inline-block; font-size: .55rem; font-weight: 700;
+    background: var(--accent-green); color: #000; padding: 1px 5px; border-radius: 5px;
+    margin-left: 4px; vertical-align: middle;
   }
-  tbody tr:last-child td { border-bottom: none; }
-  tbody tr:hover { background: var(--bg-card-alt); }
-  .cell-em { color: var(--accent-green); font-weight: 600; }
-  .cell-new { position: relative; }
-  .cell-new::after {
-    content: 'NEW';
-    display: inline-block;
-    font-size: .6rem;
-    font-weight: 700;
-    background: var(--accent-green);
-    color: #000;
-    padding: 1px 6px;
-    border-radius: 6px;
-    margin-left: 5px;
-    vertical-align: middle;
-  }
-  .cell-future { color: var(--accent-orange); }
+  td.future { color: var(--accent-orange); }
+  td.sold-out { color: var(--accent-red); font-size: .72rem; font-weight: 600; }
 
-  /* Insight Cards */
+  /* Insights */
   .insight-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 14px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
   }
   .insight-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 18px;
-    position: relative;
-    overflow: hidden;
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 10px; padding: 16px; position: relative; overflow: hidden;
   }
   .insight-card .num {
-    font-size: 1.6rem;
-    font-weight: 800;
-    color: var(--accent-blue);
-    opacity: .25;
-    position: absolute;
-    top: 8px;
-    right: 14px;
+    font-size: 1.5rem; font-weight: 800; color: var(--accent-blue);
+    opacity: .2; position: absolute; top: 6px; right: 12px;
   }
-  .insight-card h4 { font-size: .95rem; margin-bottom: 6px; }
-  .insight-card p { font-size: .84rem; color: var(--text-secondary); line-height: 1.6; }
+  .insight-card h4 { font-size: .9rem; margin-bottom: 4px; }
+  .insight-card p { font-size: .82rem; color: var(--text-secondary); line-height: 1.6; }
 
-  /* Architecture Comparison */
-  .arch-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-  }
-  .arch-box {
-    border-radius: 14px;
-    border: 1px solid var(--border);
-    overflow: hidden;
-  }
-  .arch-box .arch-header {
-    padding: 14px 18px;
-    font-weight: 700;
-    font-size: 1rem;
-  }
-  .arch-box.aws .arch-header { background: linear-gradient(135deg, rgba(37,99,235,.2), transparent); border-bottom: 1px solid var(--border); }
-  .arch-box.google .arch-header { background: linear-gradient(135deg, rgba(124,58,237,.2), transparent); border-bottom: 1px solid var(--border); }
-  .arch-box .arch-body { padding: 14px 18px; }
-  .arch-box .arch-body p { font-size: .84rem; color: var(--text-secondary); margin-bottom: 6px; }
+  /* Compare strip */
+  .strip { font-size: .38rem; }
 
-  .arch-list { list-style: none; }
-  .arch-list li {
-    padding: 6px 0;
-    font-size: .84rem;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .arch-list li:last-child { border-bottom: none; }
-  .arch-list .key { color: var(--text-secondary); }
-  .arch-list .val { font-weight: 600; }
-
-  /* Footer */
   .footer {
-    text-align: center;
-    padding: 30px 0 50px;
-    color: var(--text-secondary);
-    font-size: .82rem;
-    border-top: 1px solid var(--border);
-    margin-top: 20px;
+    text-align: center; padding: 24px 0 40px;
+    color: var(--text-secondary); font-size: .8rem;
+    border-top: 1px solid var(--border); margin-top: 20px;
   }
   .footer a { color: var(--accent-blue); text-decoration: none; }
 
-  /* Responsive */
-  @media (max-width: 720px) {
-    .card-grid, .insight-grid, .arch-container { grid-template-columns: 1fr; }
-    .hero h1 { font-size: 1.5rem; }
-    section { padding: 28px 0; }
+  /* Architecture boxes */
+  .arch-grid {
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;
   }
+  .arch-box {
+    border-radius: 10px; border: 1px solid var(--border); overflow: hidden;
+  }
+  .arch-box .arch-head {
+    padding: 10px 14px; font-weight: 700; font-size: .9rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .arch-box.aws .arch-head { background: var(--header-aws); }
+  .arch-box.gcp .arch-head { background: var(--header-gcp); }
+  .arch-box.nvidia .arch-head { background: var(--header-nvidia); }
+  .arch-box .arch-body { padding: 12px 14px; }
+  .arch-box .arch-body p { font-size: .82rem; color: var(--text-secondary); margin-bottom: 6px; line-height: 1.6; }
 
-  /* Animations */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(12px); }
-    to { opacity: 1; transform: translateY(0); }
+  @media (max-width: 820px) {
+    .cmp-grid, .arch-grid { grid-template-columns: 1fr; }
+    .insight-grid { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 1.4rem; }
   }
-  .card, .timeline-item, .insight-card { animation: fadeUp .5s ease both; }
-  .card:nth-child(2) { animation-delay: .1s; }
-  .card:nth-child(3) { animation-delay: .15s; }
-  .card:nth-child(4) { animation-delay: .2s; }
-  .timeline-item:nth-child(1) { animation-delay: 0s; }
-  .timeline-item:nth-child(2) { animation-delay: .1s; }
-  .timeline-item:nth-child(3) { animation-delay: .15s; }
-  .timeline-item:nth-child(4) { animation-delay: .2s; }
-  .timeline-item:nth-child(5) { animation-delay: .25s; }
 </style>
 </head>
 <body>
@@ -367,233 +267,229 @@
 
 <div class="hero">
   <div class="container">
-    <h1>🚀 Trainium vs TPU</h1>
-    <p class="subtitle">AWS与Google自研AI芯片全代际对比 · 2026年5月版</p>
+    <h1>三强争霸：Trainium vs TPU vs NVIDIA</h1>
+    <p class="subtitle">AWS与Google自研AI芯片 vs NVIDIA GPU 全代际对比 · 2026年5月版</p>
+    <div class="logo-bar">
+      <div class="logo-item aws">☁️ AWS</div>
+      <div class="logo-item gcp">🔷 Google</div>
+      <div class="logo-item nvidia">🟢 NVIDIA</div>
+    </div>
     <div class="meta-bar">
       <span class="badge">📅 2026-05-11</span>
-      <span class="badge">⚡ Trainium 第3代已GA</span>
-      <span class="badge">🔮 TPU 第8代已发布</span>
-      <span class="badge">📊 数据源自AWS/Google官方+MS研报</span>
+      <span class="badge">⚡ B300 在售 · Trn3 GA · Ironwood GA</span>
+      <span class="badge">🔮 Rubin 2027 · TPU v8 2026</span>
     </div>
   </div>
 </div>
 
 <div class="container">
 
-<!-- 快速概览 -->
+<!-- 当前最强代际速览 -->
 <section>
-  <h2 class="section-title"><span class="icon">⚡</span> 当前最新代际</h2>
-  <div class="card-grid">
-    <div class="card">
-      <h3><span class="tag tag-trainium">AWS</span> Trainium3 ✅ GA</h3>
-      <div class="arch-list">
-        <li><span class="key">制程</span><span class="val">3nm（台积电N3）</span></li>
-        <li><span class="key">算力/芯片</span><span class="val">2.52 FP8 PFLOPs</span></li>
-        <li><span class="key">内存</span><span class="val">144GB HBM3e</span></li>
-        <li><span class="key">带宽/芯片</span><span class="val">4.9 TB/s</span></li>
-        <li><span class="key">集群规模</span><span class="val">144芯片/UltraServer</span></li>
-        <li><span class="key">集群总算力</span><span class="val cell-em">362 MXFP8 PFLOPs</span></li>
-        <li><span class="key">价格优势</span><span class="val">比Blackwell NVL72便宜50%</span></li>
+  <h2 class="section-title">⚡ 当前最高代际规格</h2>
+  <div class="cmp-grid">
+    <!-- AWS -->
+    <div class="cmp-card aws">
+      <div class="cmp-head">☁️ AWS Trainium3 <span class="tag-sm aws-t">GA</span></div>
+      <div class="cmp-body">
+        <div class="spec-row"><span class="label">制程</span><span class="value">3nm (台积电N3)</span></div>
+        <div class="spec-row"><span class="label">算力/芯片</span><span class="value">2.52 FP8 PFLOPs</span></div>
+        <div class="spec-row"><span class="label">内存</span><span class="value">144GB HBM3e</span></div>
+        <div class="spec-row"><span class="label">带宽/芯片</span><span class="value">4.9 TB/s</span></div>
+        <div class="spec-row"><span class="label">集群形态</span><span class="value">Trn3 UltraServer ×144芯片</span></div>
+        <div class="spec-row"><span class="label">集群算力</span><span class="value green">362 MXFP8 PFLOPs</span></div>
+        <div class="spec-row"><span class="label">集群内存</span><span class="value">20.7TB HBM3e</span></div>
+        <div class="spec-row"><span class="label">能效提升</span><span class="value">4x vs Trn2 US</span></div>
+        <div class="spec-row"><span class="label">价格优势</span><span class="value green">比NVL72便宜~50%</span></div>
       </div>
     </div>
-    <div class="card">
-      <h3><span class="tag tag-tpu">Google</span> TPU v7 Ironwood ✅ GA</h3>
-      <div class="arch-list">
-        <li><span class="key">制程</span><span class="val">3nm</span></li>
-        <li><span class="key">算力/芯片</span><span class="val">4,614 FP8 TFLOPS</span></li>
-        <li><span class="key">内存</span><span class="val">192GB HBM3E</span></li>
-        <li><span class="key">带宽/芯片</span><span class="val">7.37 TB/s</span></li>
-        <li><span class="key">集群规模</span><span class="val">9,216芯片/Superpod</span></li>
-        <li><span class="key">集群总算力</span><span class="val cell-em">42.5 ExaFLOPs</span></li>
-        <li><span class="key">ICI互连</span><span class="val">9.6 Tb/s</span></li>
+    <!-- GCP -->
+    <div class="cmp-card gcp">
+      <div class="cmp-head">🔷 Google TPU v7 Ironwood <span class="tag-sm gcp-t">GA</span></div>
+      <div class="cmp-body">
+        <div class="spec-row"><span class="label">制程</span><span class="value">3nm (台积电)</span></div>
+        <div class="spec-row"><span class="label">算力/芯片</span><span class="value green">4,614 FP8 TFLOPS</span></div>
+        <div class="spec-row"><span class="label">内存</span><span class="value">192GB HBM3E</span></div>
+        <div class="spec-row"><span class="label">带宽/芯片</span><span class="value">7.37 TB/s</span></div>
+        <div class="spec-row"><span class="label">集群形态</span><span class="value">Superpod ×9,216芯片</span></div>
+        <div class="spec-row"><span class="label">集群算力</span><span class="value green">42.5 ExaFLOPs</span></div>
+        <div class="spec-row"><span class="label">ICI互连</span><span class="value">9.6 Tb/s</span></div>
+        <div class="spec-row"><span class="label">能效提升</span><span class="value">2x vs Trillium</span></div>
+        <div class="spec-row"><span class="label">最新进展</span><span class="value">已开始对外卖整柜</span></div>
       </div>
     </div>
-    <div class="card">
-      <h3><span class="tag tag-tpu">Google</span> TPU v8t/8i 🆕 已发布</h3>
-      <div class="arch-list">
-        <li><span class="key">制程</span><span class="val cell-em">2nm（台积电N2）</span></li>
-        <li><span class="key">设计方</span><span class="val">8t=Broadcom · 8i=MediaTek</span></li>
-        <li><span class="key">架构创新</span><span class="val">首次拆分为训练/推理两芯</span></li>
-        <li><span class="key">8t算力</span><span class="val">12.6 FP4 PFLOPs</span></li>
-        <li><span class="key">8i SRAM</span><span class="val">384MB（上代3倍）</span></li>
-        <li><span class="key">Virgo网络</span><span class="val">134K芯片/47 PBs对分带宽</span></li>
-        <li><span class="key">可用时间</span><span class="cell-future">2026年内上线</span></li>
-      </div>
-    </div>
-    <div class="card">
-      <h3><span class="tag tag-tpu">Google</span> TPU v10 🔮 已规划</h3>
-      <div class="arch-list">
-        <li><span class="key">制程</span><span class="val">TSMC A16 (1.6nm级)</span></li>
-        <li><span class="key">代工厂</span><span class="val">台积电 + Intel 18A预备</span></li>
-        <li><span class="key">设计方</span><span class="val">MediaTek</span></li>
-        <li><span class="key">规划量</span><span class="val">500k颗</span></li>
-        <li><span class="key">目标年份</span><span class="cell-future">2028年</span></li>
+    <!-- NVIDIA -->
+    <div class="cmp-card nvidia">
+      <div class="cmp-head">🟢 NVIDIA B300 Blackwell Ultra <span class="tag-sm nv-t">在售</span></div>
+      <div class="cmp-body">
+        <div class="spec-row"><span class="label">制程</span><span class="value">4NP (台积电4nm改良)</span></div>
+        <div class="spec-row"><span class="label">算力/芯片</span><span class="value green">15 FP4 PFLOPs</span></div>
+        <div class="spec-row"><span class="label">晶体管</span><span class="value">208B</span></div>
+        <div class="spec-row"><span class="label">内存</span><span class="value">288GB HBM3e</span></div>
+        <div class="spec-row"><span class="label">带宽/芯片</span><span class="value">8 TB/s</span></div>
+        <div class="spec-row"><span class="label">集群形态</span><span class="value">DGX B300 / NVL72 ×72 GPU</span></div>
+        <div class="spec-row"><span class="label">DGX B300算力</span><span class="value green">192 FP4 PFLOPs（推理）</span></div>
+        <div class="spec-row"><span class="label">DGX B300训练</span><span class="value">70 PFLOPs（训练）</span></div>
+        <div class="spec-row"><span class="label">市场状态</span><span class="value sold-out">🔴 已排期到2026年中</span></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- 代际演进时间线 -->
+<!-- 三家演进时间线 -->
 <section>
-  <h2 class="section-title"><span class="icon">📜</span> 代际演进时间线</h2>
+  <h2 class="section-title">📜 三家代际演进时间线</h2>
 
-  <h3 style="margin-bottom:12px;font-size:.95rem;display:flex;align-items:center;gap:8px;">
-    <span style="color:var(--accent-blue)">■</span> AWS Trainium
-  </h3>
+  <h3 style="font-size:.88rem;margin-bottom:8px;color:var(--accent-blue);">■ AWS Trainium</h3>
   <div class="timeline">
-    <div class="timeline-item">
-      <div class="t-header">
-        <span class="name">Trainium1</span>
-        <span class="year">2023</span>
-      </div>
-      <div class="t-detail">
-        首代自研AI训练芯片 · <strong>3 FP8 PFLOPs</strong> · 512GB HBM · 9.8 TB/s带宽 · Trn1 ×16芯片实例 · 成本比GPU低50%
-      </div>
+    <div class="timeline-item aws-line">
+      <div class="th"><span class="name">Trainium1</span><span class="year">2023</span></div>
+      <div class="td">首代自研AI芯片 · <strong>3 FP8 PFLOPs</strong> · 512GB HBM · 9.8 TB/s · Trn1 ×16 · 比GPU便宜50%</div>
     </div>
-    <div class="timeline-item">
-      <div class="t-header">
-        <span class="name">Trainium2</span>
-        <span class="year">2024-2025</span>
-      </div>
-      <div class="t-detail">
-        性能<Trainium1的<strong>4倍</strong> · <strong>1.5TB HBM3</strong> · 46 TB/s带宽 · Trn2 ×16芯片 + Trn2 UltraServer ×64芯片 · 3.2Tbps EFA v3 · GPU价格性能比提升<strong>30-40%</strong> · <strong>全部售罄</strong>
-      </div>
+    <div class="timeline-item aws-line">
+      <div class="th"><span class="name">Trainium2</span><span class="year">2024-2025</span></div>
+      <div class="td"><strong>4x T1</strong> · <strong>1.5TB HBM3</strong> · 46 TB/s · Trn2 ×16 + UltraServer ×64 · 3.2Tbps EFA · 全部售罄</div>
     </div>
-    <div class="timeline-item now">
-      <div class="t-header">
-        <span class="name" style="color:var(--accent-green)">Trainium3 ⏺ 当前</span>
-        <span class="year">2025-2026 GA</span>
-      </div>
-      <div class="t-detail">
-        AWS首颗<strong>3nm</strong> AI芯片 · <strong>2.52 MXFP8 PFLOPs/片</strong> · 144GB HBM3e · 4.9 TB/s带宽 · Trn3 UltraServer <strong>×144芯片</strong> · 362 MXFP8 PFLOPs · 20.7TB HBM3e · 706 TB/s带宽 · <strong>4.4x T2性能</strong> · 4x能效 · 比NVIDIA Blackwell NVL72便宜<strong>50%</strong> · 同样几乎售罄
-      </div>
+    <div class="timeline-item aws-line now">
+      <div class="th"><span class="name" style="color:var(--accent-green)">Trainium3 ⏺ 当前</span><span class="year">2025-2026 GA</span></div>
+      <div class="td">AWS首颗<strong>3nm</strong> · 2.52 FP8 PFLOPs/片 · 144GB HBM3e · Trn3 UltraServer <strong>×144芯片</strong> · 362 MXFP8 PFLOPs · 706 TB/s · <strong>4.4x T2</strong> · 4x能效 · 比NVL72便宜50% · 接近售罄</div>
     </div>
-    <div class="timeline-item tpu">
-      <div class="t-header">
-        <span class="name" style="color:var(--accent-orange)">Trainium4 🔮</span>
-        <span class="year">2027-2028e (规划)</span>
-      </div>
-      <div class="t-detail">
-        Anthropic <strong>5GW</strong>协议已锁定（协议期限10年、$1000亿+） · 规格未公布 · 涵盖至Trainium4及后续代际 · 2026年底前预计上线近1GW T2+T3
-      </div>
+    <div class="timeline-item aws-line">
+      <div class="th"><span class="name" style="color:var(--accent-orange)">Trainium4 🔮</span><span class="year">2027-2028e</span></div>
+      <div class="td">Anthropic 5GW锁定（$1000亿+/10年）· 规格未公布 · T2+T3 2026年底前上线近1GW</div>
     </div>
   </div>
 
-  <h3 style="margin:28px 0 12px;font-size:.95rem;display:flex;align-items:center;gap:8px;">
-    <span style="color:var(--accent-purple)">■</span> Google TPU
-  </h3>
+  <h3 style="font-size:.88rem;margin:22px 0 8px;color:var(--accent-purple);">■ Google TPU</h3>
   <div class="timeline">
-    <div class="timeline-item">
-      <div class="t-header"><span class="name">v1</span><span class="year">2016</span></div>
-      <div class="t-detail">首代TPU · 仅推理 · 180 TFLOPS (INT8) · 28nm</div>
+    <div class="timeline-item gcp-line"><div class="th"><span class="name">v1</span><span class="year">2016</span></div><div class="td">首代 · 仅推理 · 180 TFLOPS INT8 · 28nm</div></div>
+    <div class="timeline-item gcp-line"><div class="th"><span class="name">v2</span><span class="year">2017</span></div><div class="td">首次训练支持 · 64芯片/pod</div></div>
+    <div class="timeline-item gcp-line"><div class="th"><span class="name">v3</span><span class="year">2018</span></div><div class="td">~420 TFLOPS · 1024芯片 · 2D torus</div></div>
+    <div class="timeline-item gcp-line"><div class="th"><span class="name">v4</span><span class="year">2021</span></div><div class="td">~275 BF16 TFLOPS · 液冷 · 4096芯片 · 3D torus · 10 ExaFLOPs/pod</div></div>
+    <div class="timeline-item gcp-line"><div class="th"><span class="name">v5e / v5p</span><span class="year">2023-2024</span></div><div class="td">v5e性价比 · v5p性能: 918 BF16 TFLOPS, 8960芯片, 100+ ExaFLOPs</div></div>
+    <div class="timeline-item gcp-line"><div class="th"><span class="name">v6e Trillium</span><span class="year">2024-2025</span></div><div class="td">256×256 MXU（翻倍） · 4.7x v5e · 67%能效 · 256芯片 · 2D torus</div></div>
+    <div class="timeline-item gcp-line now">
+      <div class="th"><span class="name" style="color:var(--accent-green)">v7 Ironwood ⏺ 当前</span><span class="year">2025-2026 GA</span></div>
+      <div class="td"><strong>TPU7x</strong> · 3nm · <strong>4,614 FP8 TFLOPS/片</strong> · 192GB HBM3E · 7.37 TB/s · 9.6Tb/s ICI · <strong>9,216芯片/Superpod</strong> · <strong>42.5 ExaFLOPs/pod</strong> · 4x Trillium</div>
     </div>
-    <div class="timeline-item">
-      <div class="t-header"><span class="name">v2</span><span class="year">2017</span></div>
-      <div class="t-detail">首次支持训练 · 180 TFLOPS · 64芯片/pod</div>
+    <div class="timeline-item gcp-line">
+      <div class="th"><span class="name" style="color:var(--accent-blue)">v8t/8i 🆕 2026.04发布</span><span class="year">2026年内上线</span></div>
+      <div class="td"><strong>2nm</strong> · 首次训练/推理分体 · <strong>8t</strong>: 12.6 FP4 PFLOPs, 216GB HBM3E, SuperPod 9,600芯片, 121 ExaFLOPs · <strong>8i</strong>: 10.1 FP4 PFLOPs, 288GB HBM3E, 8,601GB/s, 384MB SRAM, CAE, Boardfly · Virgo单网134K芯片</div>
     </div>
-    <div class="timeline-item">
-      <div class="t-header"><span class="name">v3</span><span class="year">2018</span></div>
-      <div class="t-detail">~420 TFLOPS · 1024芯片/pod · 2D torus</div>
+    <div class="timeline-item gcp-line">
+      <div class="th"><span class="name" style="color:var(--accent-orange)">v10 Humufish 🔮</span><span class="year">2028e</span></div>
+      <div class="td">MediaTek设计 · <strong>TSMC A16 (1.6nm级)</strong> + Intel 18A备选 · 规划500k颗</div>
     </div>
-    <div class="timeline-item">
-      <div class="t-header"><span class="name">v4</span><span class="year">2021</span></div>
-      <div class="t-detail">~275 TFLOPS BF16 · 液冷 · 4096芯片/pod · 3D torus · 10 ExaFLOPs/pod</div>
+  </div>
+
+  <h3 style="font-size:.88rem;margin:22px 0 8px;color:var(--accent-green);">■ NVIDIA GPU</h3>
+  <div class="timeline">
+    <div class="timeline-item nv-line"><div class="th"><span class="name">Hopper H100</span><span class="year">2023</span></div><div class="td">AI时代的标志性芯片 · 4nm · ~2 FP8 PFLOPs · 80GB HBM3 · 3.35 TB/s · NVLink · 全球供不应求</div></div>
+    <div class="timeline-item nv-line"><div class="th"><span class="name">H200 / GH200</span><span class="year">2024</span></div><div class="td">H100升级：<strong>141GB HBM3e</strong> · 4.8 TB/s · 1.4x内存带宽 · Grace Hopper Superchip</div></div>
+    <div class="timeline-item nv-line"><div class="th"><span class="name">Blackwell B200</span><span class="year">2024-2025</span></div><div class="td"><strong>208B晶体管</strong> · 4NP · 20 FP4 PFLOPs · 288GB HBM3e · 8 TB/s · NVLink 5 1.8 TB/s · NVL72系统</div></div>
+    <div class="timeline-item nv-line now">
+      <div class="th"><span class="name" style="color:var(--accent-green)">B300 Blackwell Ultra ⏺ 当前</span><span class="year">2026.01出货</span></div>
+      <div class="td"><strong>15 FP4 PFLOPs/片</strong> · 288GB HBM3e · 8 TB/s · DGX B300: 192 FP4 PFLOPs推理/70 PFLOPs训练 · <strong>B200→B300 1.67x</strong> · 2025年全球AI芯片产量367万B300当量 · <strong>排期到2026年中</strong></div>
     </div>
-    <div class="timeline-item">
-      <div class="t-header"><span class="name">v5e / v5p</span><span class="year">2023-2024</span></div>
-      <div class="t-detail">v5e: 性价比导向 · v5p: 性能导向, 918 TFLOPS BF16, 8960芯片/pod, 100+ ExaFLOPs</div>
+    <div class="timeline-item nv-line">
+      <div class="th"><span class="name" style="color:var(--accent-purple)">Rubin R100 🚀 GTC 2026宣布</span><span class="year">2027e</span></div>
+      <div class="td"><strong>336B晶体管</strong> · TSMC 3nm · <strong>50 FP4 PFLOPs/片</strong> · 288GB <strong>HBM4</strong> · <strong>22 TB/s</strong> · Vera 88核Arm CPU · NVL72 3.6 ExaFLOPs/机柜 · <strong>5x Blackwell推理性能</strong> · 10倍低每token成本 · 从底到顶Agent设计</div>
     </div>
-    <div class="timeline-item">
-      <div class="t-header"><span class="name">v6e Trillium</span><span class="year">2024-2025</span></div>
-      <div class="t-detail">256×256 MXU（翻倍） · 4.7x v5e峰值算力 · 67%能效提升 · 256芯片/pod · 2D torus</div>
-    </div>
-    <div class="timeline-item now">
-      <div class="t-header"><span class="name" style="color:var(--accent-green)">v7 Ironwood ⏺</span><span class="year">2025-2026 GA</span></div>
-      <div class="t-detail"><strong>TPU7x</strong> · 3nm · <strong>4,614 FP8 TFLOPS/片</strong> · 192GB HBM3E · 7.37 TB/s · 9.6Tb/s ICI · <strong>9,216芯片/Superpod</strong> · <strong>42.5 ExaFLOPs/pod</strong> · 4x Trillium · 液冷</div>
-    </div>
-    <div class="timeline-item tpu">
-      <div class="t-header"><span class="name" style="color:var(--accent-blue)">v8t/8i 🆕 刚刚发布</span><span class="year">2026.04</span></div>
-      <div class="t-detail">
-        <strong>2nm</strong> · 首次拆分为训练(8t)和推理(8i)专用芯片 · <strong>8t</strong>: 12.6 FP4 PFLOPs, 216GB HBM3E, 6,528GB/s, 9,600芯片SuperPod, <strong>121 ExaFLOPs</strong> · <strong>8i</strong>: 10.1 FP4 PFLOPS, 288GB HBM3E, 8,601GB/s, 384MB SRAM, CAE加速引擎, Boardfly拓扑 · Virgo单网134K芯片 · 2026年内上线
-      </div>
-    </div>
-    <div class="timeline-item tpu">
-      <div class="t-header"><span class="name" style="color:var(--accent-orange)">v10 Humufish 🔮</span><span class="year">2028e</span></div>
-      <div class="t-detail">MediaTek设计 · TSMC <strong>A16 (1.6nm级)</strong> + Intel 18A备用 · 规划500k颗 · 规格未公布</div>
+    <div class="timeline-item nv-line">
+      <div class="th"><span class="name" style="color:var(--accent-orange)">Rubin Ultra 🔮</span><span class="year">2028e</span></div>
+      <div class="td"><strong>~500B晶体管</strong> · 384GB <strong>HBM4E</strong> · 32 TB/s · 3.5x B300推理每瓦 · 双die设计 · 最高端配置</div>
     </div>
   </div>
 </section>
 
 <!-- 全面对比表 -->
 <section>
-  <h2 class="section-title"><span class="icon">📊</span> 全面规格对比</h2>
+  <h2 class="section-title">📊 当前主力代际全面对比</h2>
   <div class="table-wrap">
     <table>
       <thead>
         <tr>
           <th>规格</th>
-          <th>Trainium3</th>
-          <th>TPU v7 Ironwood</th>
-          <th>TPU v8t (训练)</th>
-          <th>TPU v8i (推理)</th>
+          <th class="col-aws">Trainium3</th>
+          <th class="col-mid col-gcp">TPU v7 Ironwood</th>
+          <th class="col-mid col-gcp">TPU v8t (训练)</th>
+          <th class="col-mid col-gcp">TPU v8i (推理)</th>
+          <th class="col-nvidia">B300 Ultra</th>
+          <th class="col-nvidia">Rubin R100 🚀</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td><strong>状态</strong></td>
-          <td class="cell-em">✅ 已GA</td>
-          <td class="cell-em">✅ 已GA</td>
-          <td>🔄 2026年内</td>
-          <td>🔄 2026年内</td>
+          <td class="best">✅ GA</td>
+          <td class="best">✅ GA</td>
+          <td>🔄 2026内</td>
+          <td>🔄 2026内</td>
+          <td class="best">✅ 在售</td>
+          <td class="future">🔮 2027e</td>
         </tr>
         <tr>
           <td><strong>制程</strong></td>
-          <td>3nm (N3)</td>
           <td>3nm</td>
-          <td class="cell-new">2nm (N2)</td>
-          <td class="cell-new">2nm (N2)</td>
+          <td>3nm</td>
+          <td class="new">2nm</td>
+          <td class="new">2nm</td>
+          <td>4NP (4nm)</td>
+          <td>3nm (N3E/P)</td>
         </tr>
         <tr>
-          <td><strong>设计方</strong></td>
-          <td>AWS (Annapurna)</td>
-          <td>Google</td>
-          <td>Broadcom</td>
-          <td>MediaTek</td>
+          <td><strong>晶体管</strong></td>
+          <td>—</td>
+          <td>—</td>
+          <td>—</td>
+          <td>—</td>
+          <td>208B</td>
+          <td class="best">336B</td>
         </tr>
         <tr>
-          <td><strong>FP8算力/芯片</strong></td>
+          <td><strong>FP8算力/片</strong></td>
           <td>2.52 PFLOPs</td>
-          <td>4.61 PFLOPs</td>
-          <td class="cell-em">~4.6 PFLOPs</td>
+          <td class="best">4.61 PFLOPs</td>
           <td>~4.6 PFLOPs</td>
+          <td>~4.6 PFLOPs</td>
+          <td>~5 PFLOPs</td>
+          <td class="future">~12 PFLOPs</td>
         </tr>
         <tr>
-          <td><strong>FP4算力/芯片</strong></td>
+          <td><strong>FP4算力/片</strong></td>
+          <td>~5 PFLOPs</td>
           <td>—</td>
-          <td>—</td>
-          <td class="cell-new">12.6 PFLOPs</td>
-          <td class="cell-new">10.1 PFLOPs</td>
+          <td>12.6 PFLOPs</td>
+          <td>10.1 PFLOPs</td>
+          <td class="best">15 PFLOPs</td>
+          <td class="future best">50 PFLOPs</td>
         </tr>
         <tr>
-          <td><strong>HBM容量</strong></td>
-          <td>144GB</td>
-          <td>192GB</td>
-          <td>216GB</td>
-          <td class="cell-em">288GB</td>
+          <td><strong>HBM</strong></td>
+          <td>144GB HBM3e</td>
+          <td>192GB HBM3E</td>
+          <td>216GB HBM3E</td>
+          <td class="best">288GB HBM3E</td>
+          <td class="best">288GB HBM3e</td>
+          <td class="future">288GB HBM4</td>
         </tr>
         <tr>
-          <td><strong>HBM带宽</strong></td>
+          <td><strong>带宽/片</strong></td>
           <td>4.9 TB/s</td>
           <td>7.37 TB/s</td>
           <td>6.5 TB/s</td>
-          <td class="cell-em">8.6 TB/s</td>
+          <td class="best">8.6 TB/s</td>
+          <td>8 TB/s</td>
+          <td class="future best">22 TB/s</td>
         </tr>
         <tr>
           <td><strong>片上SRAM</strong></td>
           <td>—</td>
           <td>—</td>
           <td>128MB</td>
-          <td class="cell-new">384MB</td>
+          <td class="new best">384MB</td>
+          <td>—</td>
+          <td class="future">—</td>
         </tr>
         <tr>
           <td><strong>芯片互连</strong></td>
@@ -601,48 +497,70 @@
           <td>ICI 9.6Tb/s</td>
           <td>ICI 2×v7</td>
           <td>Boardfly</td>
+          <td class="best">NVLink5 1.8TB/s</td>
+          <td class="future">NVLink-C2C</td>
         </tr>
         <tr>
           <td><strong>最大集群</strong></td>
           <td>144芯片</td>
-          <td class="cell-em">9,216芯片</td>
-          <td class="cell-em">9,600芯片</td>
+          <td class="best">9,216芯片</td>
+          <td class="best">9,600芯片</td>
           <td>1,024芯片</td>
+          <td>72芯片 (NVL72)</td>
+          <td class="future">72芯片 (NVL72)</td>
         </tr>
         <tr>
-          <td><strong>集群总算力</strong></td>
+          <td><strong>集群算力</strong></td>
           <td>362 PFLOPs</td>
           <td>42.5 ExaFLOPs</td>
-          <td class="cell-em">121 ExaFLOPs</td>
+          <td class="best">121 ExaFLOPs</td>
           <td>—</td>
+          <td>192 PFLOPs (DGX)</td>
+          <td class="future best">3.6 ExaFLOPs (NVL72)</td>
         </tr>
         <tr>
           <td><strong>能效提升</strong></td>
-          <td>4x (vs T2 US)</td>
-          <td>2x (vs Trillium)</td>
-          <td>2x (vs Ironwood)</td>
-          <td>2x (vs Ironwood)</td>
+          <td>4x vs T2 US</td>
+          <td>2x vs Trillium</td>
+          <td>2x vs v7</td>
+          <td>2x vs v7</td>
+          <td>1.67x vs B200</td>
+          <td class="future">3.5x vs B300/W</td>
+        </tr>
+        <tr>
+          <td><strong>CPU搭档</strong></td>
+          <td>Graviton</td>
+          <td>Arm Axion</td>
+          <td>Arm Axion</td>
+          <td>Arm Axion</td>
+          <td>Grace / x86</td>
+          <td class="future">Vera 88核Arm</td>
         </tr>
         <tr>
           <td><strong>软件栈</strong></td>
           <td>Neuron SDK</td>
-          <td>XLA + TorchTPU</td>
-          <td>XLA + TorchTPU</td>
-          <td>XLA + TorchTPU</td>
+          <td>XLA+TorchTPU</td>
+          <td>XLA+TorchTPU</td>
+          <td>XLA+TorchTPU</td>
+          <td class="best">CUDA生态</td>
+          <td class="future">CUDA生态</td>
         </tr>
         <tr>
-          <td><strong>PyTorch支持</strong></td>
-          <td>✅ 原生集成</td>
+          <td><strong>PyTorch</strong></td>
+          <td>✅ 原生</td>
           <td>✅ TorchTPU</td>
           <td>✅ TorchTPU</td>
           <td>✅ TorchTPU</td>
+          <td class="best">✅ 最成熟</td>
+          <td>✅</td>
         </tr>
         <tr>
-          <td><strong>主要客户</strong></td>
+          <td><strong>核心客户</strong></td>
           <td>Anthropic, OpenAI, Databricks</td>
-          <td>Google内+Anthropic</td>
+          <td>Gemini内+Anthropic</td>
           <td>Anthropic等</td>
           <td>Anthropic等</td>
+          <td colspan=2">全行业（几乎所有人）</td>
         </tr>
       </tbody>
     </table>
@@ -651,80 +569,101 @@
 
 <!-- 架构策略对比 -->
 <section>
-  <h2 class="section-title"><span class="icon">🏗️</span> 架构策略差异</h2>
-  <div class="arch-container">
+  <h2 class="section-title">🏗️ 三家架构策略</h2>
+  <div class="arch-grid">
     <div class="arch-box aws">
-      <div class="arch-header">AWS 策略：统一芯片 + 规模扩展</div>
+      <div class="arch-head">☁️ AWS：统一芯片 + 规模扩展 + 价格战</div>
       <div class="arch-body">
-        <p>Trainium 各代际都是<strong>训练+推理统一</strong>芯片设计，靠NeuronLink堆芯片数扩展算力。Trn3 UltraServer ×144芯片匹配NVIDIA NVL72的集群算力。</p>
-        <p style="margin-top:8px;">优势：客户不必区分训练/推理节点，同一集群灵活切换负载。</p>
-        <p>短板：单芯片算力密度远低于TPU（2.52 vs 4.61 PFLOPs），靠集群规模和成本优势弥补。</p>
+        <p>Trainium统一训练/推理芯片设计，靠NeuronLink堆芯片数扩展。Trn3 UltraServer ×144芯片≈NVL72但便宜<strong>50%</strong>。</p>
+        <p><strong>优势</strong>：客户不用区分训练/推理节点，成本优势明显。</p>
+        <p><strong>短板</strong>：单芯片算力密度最低（2.52 FP8 PFLOPs vs 4.6/15），生态远不如CUDA成熟。</p>
+        <p><strong>策略</strong>：用"够用+便宜"撬开大客户，锁定Anthropic/OpenAI后形成势能。</p>
       </div>
     </div>
-    <div class="arch-box google">
-      <div class="arch-header">Google 策略：专用化 + 超大集群</div>
+    <div class="arch-box gcp">
+      <div class="arch-head">🔷 Google：专用化 + 超大集群 + 系统工程</div>
       <div class="arch-body">
-        <p>从v8代开始<strong>拆分训练(8t)和推理(8i)</strong>两颗独立芯片——训练芯片重算力密度，推理芯片重内存带宽和低延迟。这是Google基于Gemini数万芯片运营经验做出的判断。</p>
-        <p style="margin-top:8px;">优势：每类负载获得最优化设计，8i的384MB SRAM和CAE引擎专为推理/Agent优化。</p>
-        <p>短板：客户需要规划不同的集群配置，增加运维复杂度。</p>
+        <p>从v8代开始<strong>训练/推理分体</strong>芯片。8t重算力密度（2nm, 121 ExaFLOPs/pod），8i重推理效率（384MB SRAM, CAE）。</p>
+        <p><strong>优势</strong>：每类负载最优设计，集群规模最大（9,600芯片/pod），Virgo单网134K芯片。</p>
+        <p><strong>短板</strong>：客户需规划不同集群，对外销售刚起步。</p>
+        <p><strong>策略</strong>：Gemini内部养猪→对外卖肉，利用超大规模运营经验降维打击。</p>
+      </div>
+    </div>
+    <div class="arch-box nvidia">
+      <div class="arch-head">🟢 NVIDIA：统一架构 + 完整生态 + 迭代碾压</div>
+      <div class="arch-body">
+        <p>B200→B300→R100保持统一CUDA架构，单芯片算力一路碾压（15→50 FP4 PFLOPs），靠NVL72整机柜交付。</p>
+        <p><strong>优势</strong>：最成熟的CUDA生态、最全的软件栈、最强的单芯片性能、排期到2026年中。</p>
+        <p><strong>短板</strong>：贵（比Trainium3贵50%）、4nm制程落后（vs 3nm/2nm）、供不应求。</p>
+        <p><strong>策略</strong>：靠生态锁定+性能代差维持定价权，同时自己做CPU(Vera)+网络，从GPU公司变系统公司。</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- 10条核心洞察 -->
+<!-- 12条洞察 -->
 <section>
-  <h2 class="section-title"><span class="icon">💡</span> 10条核心洞察</h2>
+  <h2 class="section-title">💡 12条核心洞察</h2>
   <div class="insight-grid">
     <div class="insight-card">
       <div class="num">1</div>
-      <h4>代际编号≠实力差距</h4>
-      <p>Trainium只到第3代但投入极猛（AWS芯片业务年化$200亿+），TPU到第8代但迭代节奏放慢。不要被编号骗了。</p>
+      <h4>三家的代际编号各说各话</h4>
+      <p>Trainium刚到第3代、TPU到第8代、NVIDIA不按代际命名。编号差距不代表代差——AWS投了$200亿+/年，效果不比任何人差。</p>
     </div>
     <div class="insight-card">
       <div class="num">2</div>
-      <h4>TPU v8首次拆分训练/推理芯片</h4>
-      <p>跟NVIDIA B200/B300统一架构思路相反。推理负载已大到值得单独流片——Agent时代推理量将爆炸性增长。</p>
+      <h4>TPU v8首次分体：训练+推理两颗芯片</h4>
+      <p>跟NVIDIA统一架构路线相反。推理负载已大到值得单独流片——Agent时代推理量会爆炸（8i的384MB SRAM专为此设计）。</p>
     </div>
     <div class="insight-card">
       <div class="num">3</div>
-      <h4>Trainium3已直接对标Blackwell</h4>
-      <p>Trn3 UltraServer 362 PFLOPs ≈ NVL72集群算力，但<strong>便宜50%</strong>。这就是Anthropic签5GW协议的原因。</p>
+      <h4>Trainium3对标Blackwell，便宜50%</h4>
+      <p>Trn3 US 362 PFLOPs ≈ NVL72，价格低一半。Anthropic签5GW就是被这个性价比打动的。</p>
     </div>
     <div class="insight-card">
       <div class="num">4</div>
-      <h4>两家都卖完了</h4>
-      <p>Trainium2全面售罄，Trainium3几乎全部被预订。AI算力需求远超过供给——这也是GPU荒的镜像。</p>
+      <h4>三家芯片全部卖光了</h4>
+      <p>Trainium2全面售罄，Trainium3几乎订完，B300排期到2026年中，TPU用量过去一年涨8倍。不是有没有需求的问题，是供不上。</p>
     </div>
     <div class="insight-card">
       <div class="num">5</div>
       <h4>Google开始对外卖TPU整机</h4>
-      <p>Sundar Pichai在Q1 2026财报电话会上官宣：TPU将像NVIDIA卖GPU一样对外出售整柜。这是对NVIDIA生态的直接打击。</p>
+      <p>Sundar Pichai Q1财报会上官宣。TPU从内部秘密武器变成商用产品——直接对标NVIDIA的GPU整柜生意。</p>
     </div>
     <div class="insight-card">
       <div class="num">6</div>
       <h4>2nm时代从TPU v8开始</h4>
-      <p>TPU v8是首个<strong>2nm</strong> AI芯片，2026年内上线。NVIDIA Rubin预计也是2nm但2027年。Google在先进制程上领先了一代。</p>
+      <p>TPU v8是首个2nm AI芯片，2026年内上线。NVIDIA Rubin还是3nm（2027），AWS Trainium3也是3nm。Google在制程上领先一整个世代。</p>
     </div>
     <div class="insight-card">
       <div class="num">7</div>
-      <h4>TPU v8集群规模惊人</h4>
-      <p>Virgo单网支持134K颗TPU，47 PBs对分带宽。理论上可构建近<strong>1.6 ZettaFLOPs</strong>集群——这是超算级别的规模。</p>
+      <h4>Rubin是NVIDIA的下一个碾压级产品</h4>
+      <p>336B晶体管、50 FP4 PFLOPs（B300的3.3倍）、HBM4 22TB/s带宽、3.6 ExaFLOPs/机柜。如果按时2027出货，又将拉开代差。</p>
     </div>
     <div class="insight-card">
       <div class="num">8</div>
-      <h4>Trainium4已锁定大客户</h4>
-      <p>Anthropic协议明确覆盖T2→T4及后续。这意味着AWS的AI芯片路线图至少已经规划到2028-2030年。</p>
+      <h4>三家都在"去CPU瓶颈化"</h4>
+      <p>AWS有Graviton+NeuronLink，Google有Arm Axion+ICI，NVIDIA做了Vera 88核Arm+NVLink-C2C 1.8TB/s。CPU-GPU瓶颈的时代在结束。</p>
     </div>
     <div class="insight-card">
       <div class="num">9</div>
-      <h4>软件栈差距已基本抹平</h4>
-      <p>Neuron SDK原生PyTorch，TorchTPU 3行代码迁移TPU。H100最大的护城河CUDA正被两家同时填平。</p>
+      <h4>CUDA护城河正在被填平</h4>
+      <p>Neuron SDK原生PyTorch、TorchTPU 3行代码迁移TPU。虽然CUDA生态仍然最完整，但"离开CUDA没法用"的时代在结束。</p>
     </div>
     <div class="insight-card">
       <div class="num">10</div>
       <h4>真正的赢家是台积电</h4>
-      <p>Trainium3 (3nm) + TPU v7 (3nm) + TPU v8 (2nm) + NVIDIA (4NP→3nm) 全部在台积电流片。不管谁赢，台积电通吃。</p>
+      <p>Trainium(3nm)+TPU v7(3nm)+TPU v8(2nm)+B300(4NP)+Rubin(3nm) 全是台积电。每年ASML只造70台EUV——物理瓶颈比芯片竞争更致命。</p>
+    </div>
+    <div class="insight-card">
+      <div class="num">11</div>
+      <h4>2027年格局：三家各有所长</h4>
+      <p>训练性价比：Trainium胜 · 集群规模：TPU胜 · 单卡性能+生态：NVIDIA胜。大客户不会只选一家。</p>
+    </div>
+    <div class="insight-card">
+      <div class="num">12</div>
+      <h4>Agentic AI是新战场</h4>
+      <p>TPU v8i的CAE引擎、Rubin的端到端Agent设计、Trainium的高性价比推理——三家都在为Agent时代重新设计芯片。</p>
     </div>
   </div>
 </section>
@@ -733,8 +672,8 @@
 
 <div class="footer">
   <div class="container">
-    <p>数据来源: AWS官方 · Google Cloud官方 · Morgan Stanley(2026-05-08) · Anthropic/Amazon联合公告(2026-04) · Tom's Hardware · Tars知识库</p>
-    <p style="margin-top:6px;">由Tars自动生成 · 数据截止2026-05-11 · <a href="https://dahuir81.github.io" target="_blank">慧哥的博客</a></p>
+    <p>数据来源: AWS官方 · Google Cloud官方 · NVIDIA GTC 2026 · Morgan Stanley(2026-05-08) · Anthropic/Amazon联合公告(2026-04) · Tom's Hardware · Tars知识库</p>
+    <p style="margin-top:4px;">由Tars自动生成 · 数据截止2026-05-11 · <a href="https://dahuir81.github.io" target="_blank">慧哥的博客</a></p>
   </div>
 </div>
 
