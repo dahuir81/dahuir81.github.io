@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Token经济学 | 2026算力市场全景透视 — 运营商VS云厂商VS中转站，谁在定价AI时代的石油</title>
+<style>
+  :root {
+    --bg: #08080e;
+    --bg-card: #0d0d1a;
+    --bg-card-alt: #12122a;
+    --text: #c8c4d0;
+    --text-dim: #6a6a8a;
+    --neon-blue: #3b82f6;
+    --neon-purple: #8b5cf6;
+    --neon-amber: #f59e0b;
+    --neon-rose: #f43f5e;
+    --neon-teal: #14b8a6;
+    --border: rgba(59,130,246,.12);
+    --glow-blue: 0 0 10px rgba(59,130,246,.25);
+    --glow-amber: 0 0 10px rgba(245,158,11,.25);
+    --max-width: 840px;
+    --font-mono: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Noto Sans SC", "PingFang SC", system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container { max-width: var(--max-width); margin: 0 auto; padding: 0 24px; }
+
+  /* === HERO === */
+  .hero {
+    padding: 80px 0 56px; text-align: center;
+    border-bottom: 1px solid var(--border);
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 30%, rgba(59,130,246,.06) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 70%, rgba(139,92,246,.04) 0%, transparent 50%);
+    pointer-events: none;
+  }
+  .hero::after {
+    content: ''; position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(59,130,246,.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(59,130,246,.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+  }
+
+  .hero h1 {
+    font-size: 2rem; font-weight: 800; line-height: 1.3;
+    position: relative; z-index: 1;
+    text-shadow: 0 0 20px rgba(59,130,246,.25);
+  }
+  .hero h1 .gradient {
+    background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero h1 .sub-highlight {
+    color: var(--neon-amber);
+    -webkit-text-fill-color: var(--neon-amber);
+  }
+
+  .hero .subtitle {
+    color: var(--text-dim); font-size: .95rem; margin-top: 14px;
+    position: relative; z-index: 1;
+    letter-spacing: .04em;
+  }
+
+  .hero .meta {
+    display: flex; justify-content: center; gap: 12px; margin-top: 18px;
+    flex-wrap: wrap; position: relative; z-index: 1;
+  }
+  .hero .meta span {
+    font-size: .75rem; padding: 5px 16px;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+  }
+
+  section { padding: 48px 0; }
+
+  .section-title {
+    font-size: 1.2rem; font-weight: 700; margin-bottom: 24px;
+    display: flex; align-items: center; gap: 10px;
+    font-family: var(--font-mono);
+    letter-spacing: .05em;
+  }
+  .section-title .bracket { color: var(--neon-blue); opacity: .7; }
+  .section-title .em { color: var(--neon-amber); }
+  .section-title .tag {
+    font-size: .62rem; font-weight: 700; padding: 2px 10px;
+    border: 1px solid var(--neon-blue);
+    color: var(--neon-blue); margin-left: 8px;
+    font-family: var(--font-mono);
+  }
+
+  /* === HIGHLIGHT === */
+  .highlight-box {
+    border: 1px solid var(--border);
+    padding: 28px 32px; margin: 24px 0;
+    position: relative;
+    box-shadow: var(--glow-blue);
+  }
+  .highlight-box p {
+    font-size: 1rem; font-weight: 500; line-height: 1.7;
+    color: var(--text);
+  }
+  .highlight-box .source {
+    margin-top: 8px; font-size: .8rem; color: var(--text-dim);
+    font-family: var(--font-mono);
+  }
+
+  /* === TIMELINE / LIST === */
+  .tl-item {
+    background: var(--bg-card); border: 1px solid var(--border);
+    padding: 20px 24px;
+    margin-bottom: 12px;
+    display: flex; gap: 16px; align-items: flex-start;
+    transition: all .3s;
+    position: relative; overflow: hidden;
+  }
+  .tl-item::before {
+    content: ''; position: absolute; top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: var(--neon-blue);
+    opacity: 0; transition: opacity .3s;
+  }
+  .tl-item:hover { border-color: rgba(59,130,246,.3); box-shadow: 0 0 20px rgba(59,130,246,.08); transform: translateX(4px); }
+  .tl-item:hover::before { opacity: 1; }
+
+  .tl-item .num {
+    width: 30px; height: 30px;
+    border: 1px solid var(--neon-blue);
+    color: var(--neon-blue);
+    display: flex; align-items: center; justify-content: center;
+    font-size: .78rem; font-weight: 700; flex-shrink: 0;
+    margin-top: 2px;
+    font-family: var(--font-mono);
+  }
+  .tl-item .num.purple { border-color: var(--neon-purple); color: var(--neon-purple); }
+  .tl-item .num.amber { border-color: var(--neon-amber); color: var(--neon-amber); }
+  .tl-item .num.rose { border-color: var(--neon-rose); color: var(--neon-rose); }
+  .tl-item .num.teal { border-color: var(--neon-teal); color: var(--neon-teal); }
+
+  .tl-item .content h4 { font-size: .95rem; margin-bottom: 6px; }
+  .tl-item .content p { font-size: .85rem; color: var(--text-dim); line-height: 1.7; }
+
+  /* === CARD GRID === */
+  .card-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+  }
+  .card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    padding: 22px;
+    transition: all .3s;
+    position: relative; overflow: hidden;
+  }
+  .card:hover {
+    border-color: rgba(139,92,246,.25);
+    box-shadow: 0 0 15px rgba(139,92,246,.08);
+    transform: translateY(-2px);
+  }
+  .card h4 {
+    font-size: .95rem; margin-bottom: 10px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .card h4 .badge {
+    font-size: .62rem; font-weight: 700; padding: 2px 10px;
+    border: 1px solid var(--neon-teal);
+    color: var(--neon-teal);
+    font-family: var(--font-mono);
+  }
+  .card p { font-size: .85rem; color: var(--text-dim); line-height: 1.7; }
+
+  /* === PRICING TABLE === */
+  .pricing-table {
+    width: 100%; border-collapse: collapse; margin-bottom: 24px;
+    font-size: .82rem;
+  }
+  .pricing-table th {
+    background: var(--bg-card-alt); color: var(--text-dim);
+    padding: 12px 14px; text-align: left; font-weight: 600;
+    border-bottom: 1px solid var(--border);
+    font-family: var(--font-mono); font-size: .75rem;
+    letter-spacing: .05em;
+  }
+  .pricing-table td {
+    padding: 12px 14px; border-bottom: 1px solid var(--border);
+    color: var(--text-dim);
+  }
+  .pricing-table tr:hover td { background: rgba(59,130,246,.03); }
+  .pricing-table .highlight-row td { color: var(--text); }
+  .pricing-table .price { color: var(--neon-amber); font-family: var(--font-mono); }
+  .pricing-table .price-low { color: var(--neon-teal); font-family: var(--font-mono); }
+
+  /* === PULL QUOTE === */
+  .pull-quote {
+    border-left: 3px solid var(--neon-amber);
+    padding: 18px 24px; margin: 24px 0;
+    background: var(--bg-card);
+    font-size: .9rem; color: var(--text-dim); font-style: italic;
+    line-height: 1.7;
+  }
+
+  /* === FOOTER === */
+  .footer {
+    text-align: center; padding: 40px 0 56px;
+    color: var(--text-dim); font-size: .78rem;
+    border-top: 1px solid var(--border); margin-top: 20px;
+    opacity: .6;
+  }
+
+  @media (max-width: 640px) {
+    .card-grid { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 1.4rem; }
+    section { padding: 32px 0; }
+    .pricing-table { font-size: .72rem; }
+    .pricing-table th, .pricing-table td { padding: 8px 6px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="container">
+    <h1><span class="gradient">Token 经济学</span><br>2026 算力市场全景透视</h1>
+    <p class="subtitle">运营商 VS 云厂商 VS 中转站——谁在定义 AI 时代的"石油"定价权</p>
+    <div class="meta">
+      <span>#[ 2026-05-12 ]</span>
+      <span>#[ 深度分析 ]</span>
+      <span>#[ 算力市场 ]</span>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- 引言 -->
+<section>
+  <h2 class="section-title"><span class="bracket">[</span><span class="em">引言</span><span class="bracket">]</span> <span class="tag">THESIS</span></h2>
+  <p style="color:var(--text-dim);font-size:.9rem;line-height:1.9;margin-bottom:16px;">
+    2026 年春天，算力市场发生了一件微妙的事：Token 从技术指标变成了商品标签。中国移动和中国电信在同一个月内发布了明确的 Token 战略；傅盛推出 Easy Router 入局 API 中转，孙宇晨的 B.AI 用户破百万，特朗普家族推出 WorldClaw 聚合 300+ 模型；与此同时，DeepSeek V4 Flash 把推理成本打到了 $0.14/百万 token，小米 MiMo 跟进，云厂商集体推出 Coding Plan 套餐。
+  </p>
+  <p style="color:var(--text-dim);font-size:.9rem;line-height:1.9;margin-bottom:16px;">
+    三股力量同时涌向 Token 市场——<strong style="color:var(--neon-blue)">运营商</strong>、<strong style="color:var(--neon-amber)">API 中转站</strong>、<strong style="color:var(--neon-purple)">云厂与模型厂</strong>——各自的打法、宿命和终局完全不同。本文试图拼出 2026 年算力市场的完整图景，并推演未来两到三年的走向。
+  </p>
+
+  <div class="highlight-box">
+    <p>三路资本同时在赌同一件事——Token 是 AI 时代的石油。但通往定价权的路，至少有三条。</p>
+  </div>
+</section>
+
+<!-- 第一部分：运营商内战 -->
+<section>
+  <h2 class="section-title"><span class="bracket">[</span><span class="em">01</span><span class="bracket">]</span> 运营商内战：同一张 Token 牌，两种完全不同的打法</h2>
+
+  <p style="color:var(--text-dim);font-size:.9rem;line-height:1.9;margin-bottom:16px;">
+    2026 年一季度，三大运营商净利润全线下滑——中国电信 -17.08%、中国联通 -18%、中国移动 -4.2%。传统通信业务失速已成不可逆趋势。Token 经营，是这三家公司共同的救命稻草。但战略路径的分歧远超想象。
+  </p>
+
+  <div class="card-grid" style="margin-bottom:24px;">
+    <div class="card">
+      <h4><span class="badge">TELECOM</span> 中国电信：服务打天下</h4>
+      <p><strong style="color:var(--neon-amber)">核心逻辑</strong>：Token 只是新的计量单位，客户买的是 AI 服务。<br><br>
+      <strong style="color:var(--neon-teal)">关键布局</strong>：星辰 TokenHub（模型聚合路由）、AI STORE（智能体商店）、天翼智铃/智屏/智看（硬件入口）。<br><br>
+      <strong style="color:var(--neon-blue)">核心资产</strong>：3.7 万家行业客户、80+ 央企合作、FDE 前沿部署工程师队伍驻扎客户现场。<br><br>
+      <strong style="color:var(--neon-rose)">盈利模式</strong>：端到端行业解决方案，卖的是服务而非 API 调用量。将 Token 嵌入月费，追求高毛利项目型收入。
+      </p>
+    </div>
+    <div class="card">
+      <h4><span class="badge">MOBILE</span> 中国移动：基础设施为王</h4>
+      <p><strong style="color:var(--neon-amber)">核心逻辑</strong>：搭好算网底座和模型平台，让应用在上面跑，赚 Token 调度费。<br><br>
+      <strong style="color:var(--neon-teal)">关键布局</strong>：算网大脑（百万亿级 Token 调度、800GB 超高吞吐）、MoMA 平台（300+ 模型聚合）、MobileClaw 智能体框架（150+ 行业 Skills）。<br><br>
+      <strong style="color:var(--neon-blue)">关键武器</strong>：AI-eSIM——将智能大脑植入 SIM 卡芯片，终端每次自主思考都在消耗移动的 Token。<br><br>
+      <strong style="color:var(--neon-rose)">盈利模式</strong>：规模化调度，算电协同降成本，边际成本随规模递减。
+      </p>
+    </div>
+  </div>
+
+  <div class="tl-item">
+    <div class="num">1</div>
+    <div class="content">
+      <h4>两家的模型聚合，本质都是 API 中转站</h4>
+      <p>电信的星辰 TokenHub 和移动的 MoMA，都在做同一类生意：模型聚合。往前半步就是 API 中转站。这个第一层价值——帮客户降低选择成本和集成成本——本质上是信息差的辛苦钱，护城河很浅。</p>
+    </div>
+  </div>
+  <div class="tl-item">
+    <div class="num purple">2</div>
+    <div class="content">
+      <h4>移动的抬升路径：算力网 + AI-eSIM</h4>
+      <p>纯中转站只能做云端分发。移动的算网大脑能在全国范围内调度 Token——在正确的时间、以正确的成本和延迟、路由到正确的算力节点。AI-eSIM 把入口焊死在终端硬件层，每一次自主思考都在计费。两端的夹击，把中转站做成了基础设施。</p>
+    </div>
+  </div>
+  <div class="tl-item">
+    <div class="num amber">3</div>
+    <div class="content">
+      <h4>电信的抬升路径：服务层加厚</h4>
+      <p>星辰 TokenHub 只做聚合分发利润薄。但把聚合来的模型连同智能体、行业数据集、安全合规方案、FDE 部署服务打包，做成行业解决方案交付出给央企和政企客户——这时候卖的不是 API 调用量，是端到端服务能力，毛利率完全不同。</p>
+    </div>
+  </div>
+
+  <div class="pull-quote">
+    电信的模式短期收入确定性更强；移动的模式长期边际成本更低。两家的共同软肋是：Token 如果始终停留在客户无感知的底层计量单位，那 Token 经营就永远停在 PPT 上。
+  </div>
+</section>
+
+<!-- 第二部分：中转站狂欢 -->
+<section>
+  <h2 class="section-title"><span class="bracket">[</span><span class="em">02</span><span class="bracket">]</span> 中转站狂欢：傅盛、孙宇晨、特朗普，暴利与灰产</h2>
+
+  <p style="color:var(--text-dim);font-size:.9rem;line-height:1.9;margin-bottom:16px;">
+    2026 年，API 中转站成了 AI 圈最暴力的造富故事。傅盛的 Easy Router 打出 DeepSeek-V4 定价低至官方四分之一的招牌；孙宇晨的 B.AI 宣称突破 100 万用户；特朗普家族的 WorldClaw 项目聚合 300+ AI 模型。灰色地带的代购生意，突然站到了聚光灯下。
+  </p>
+
+  <div class="card-grid" style="margin-bottom:24px;">
+    <div class="card">
+      <h4><span class="badge" style="border-color:var(--neon-blue);color:var(--neon-blue);">TIER 1</span> 正规军：赚辛苦钱</h4>
+      <p>代表：OpenRouter（300+ 模型，500 万+用户，月处理 70 万亿 token），傅盛的 Easy Router。<br><br>
+      盈利方式：充值时收 5.5% 手续费，不在 Token 单价上溢价。<br><br>
+      毛利率：5-15%。靠上市公司主体公信力做合规中转，微利但走得稳。
+      </p>
+    </div>
+    <div class="card">
+      <h4><span class="badge" style="border-color:var(--neon-amber);color:var(--neon-amber);">TIER 2</span> 暴利区：号池 + 超售</h4>
+      <p>运作方式：批量注册海外账号，薅免费额度；Sub2API 把网页端逆向成标准 API。<br><br>
+      暴利公式：一个 Claude Code Max 账号（$200/月）切给 20 人用，产出 $2000-5000 收入。10-25 倍。<br><br>
+      毛利率可达 70%。月流水 500 万的头部玩家很常见。
+      </p>
+    </div>
+    <div class="card">
+      <h4><span class="badge" style="border-color:var(--neon-rose);color:var(--neon-rose);">TIER 3</span> 黑产线：无底线</h4>
+      <p>模型掉包：声称 Claude Opus，后台跑开源小模型，成本差几十倍。<br><br>
+      Token 虚标：实际消耗 100 个 Token，后台记 200-300 个。<br><br>
+      "三头吃"：收充值费 + 白嫖上游额度 + 卖对话数据。学术论文发现 45.83% 的影子 API 节点通不过模型身份验证。
+      </p>
+    </div>
+    <div class="card">
+      <h4><span class="badge" style="border-color:var(--neon-purple);color:var(--neon-purple);">DATA</span> 安全黑洞</h4>
+      <p>CISPA 审计发现：428 个被测中转站中，9 个向用户注入恶意代码，17 个触发 AWS 密钥盗用，1 个直接抽走私钥钱包资金。<br><br>
+      多跳路由链条往往经过 4 个以上节点，最弱的环节决定安全性。LiteLLM 事件曾波及 4.6 万个开发环境。
+      </p>
+    </div>
+  </div>
+
+  <div class="pull-quote">
+    当国产大模型价格被打到海外厂商的几十分之一，当 DeepSeek V4 Flash 的百万 token 输出只要 0.28 美元——拧开水龙头就能喝到便宜的水时，暗巷里倒卖高价水的生意必然萎缩。
+  </div>
+</section>
+
+<!-- 第三部分：云厂与模型厂的价格战 -->
+<section>
+  <h2 class="section-title"><span class="bracket">[</span><span class="em">03</span><span class="bracket">]</span> 云厂与模型厂：一场没有底线的价格战</h2>
+
+  <p style="color:var(--text-dim);font-size:.9rem;line-height:1.9;margin-bottom:16px;">
+    2026 年 5 月，全球 AI API 价格地图已经面目全非。旗舰模型的价格在 $5-30/百万 token 区间，但预算型模型已杀到 $0.10-0.30。中国市场尤为惨烈。
+  </p>
+
+  <h3 style="font-size:.9rem;color:var(--neon-amber);margin-bottom:12px;font-family:var(--font-mono);">// 全球主要模型 API 定价（单位：美元/百万 token）</h3>
+
+  <div class="pricing-table-wrapper" style="overflow-x:auto;">
+  <table class="pricing-table">
+    <thead>
+      <tr><th>阵营</th><th>模型</th><th>输入</th><th>输出</th><th>备注</th></tr>
+    </thead>
+    <tbody>
+      <tr><td rowspan="2" style="vertical-align:middle;">🚀 旗舰</td><td>GPT-5.5 (OpenAI)</td><td class="price">$5.00</td><td class="price">$30.00</td><td>复杂编码/专业工作</td></tr>
+      <tr><td>Claude Opus 4.6 (Anthropic)</td><td class="price">$5.00</td><td class="price">$25.00</td><td>最大能力选项</td></tr>
+      <tr><td rowspan="2" style="vertical-align:middle;">💎 中端</td><td>Claude Sonnet 4.6</td><td class="price">$3.00</td><td class="price">$15.00</td><td>最佳性价比旗舰</td></tr>
+      <tr><td>Gemini 3.1 Pro (Google)</td><td class="price">$2.00</td><td class="price">$12.00</td><td>2M 上下文窗口</td></tr>
+      <tr><td rowspan="2" style="vertical-align:middle;">🔥 平价</td><td>DeepSeek V4 Flash</td><td class="price-low">$0.14</td><td class="price-low">$0.28</td><td>缓存命中低至 $0.003</td></tr>
+      <tr><td>小米 MiMo-V2.5-Flash</td><td class="price-low">$0.10</td><td class="price-low">$0.30</td><td>256K 上下文</td></tr>
+      <tr><td rowspan="2" style="vertical-align:middle;">🍃 超低价</td><td>Gemini 2.5 Flash-Lite</td><td class="price-low">$0.10</td><td class="price-low">$0.40</td><td>1M 上下文</td></tr>
+      <tr><td>Grok 4 Fast (xAI)</td><td class="price-low">$0.20</td><td class="price-low">$0.50</td><td>-</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p style="color:var(--text-dim);font-size:.9rem;line-height:1.9;margin-bottom:16px;">
+    DeepSeek V4 Flash 的定价——$0.14 输入 / $0.28 输出——彻底撕碎了行业的定价地板。缓存命中场景低至 $0.003/百万 token，几乎等于免费。小米 MiMo-V2.5-Flash 用 $0.10/0.30 跟进。中美的推理成本差距已从 3-5 倍缩小到 10-15 倍（在场景对模型能力不敏感时，性价比差距甚至倒挂）。
+  </p>
+
+  <h3 style="font-size:.9rem;color:var(--neon-amber);margin-bottom:12px;font-family:var(--font-mono);">// 中国 Token 套餐竞争地图</h3>
+
+  <div class="pricing-table-wrapper" style="overflow-x:auto;">
+  <table class="pricing-table">
+    <thead>
+      <tr><th>厂商</th><th>起步价</th><th>核心套餐</th><th>支持模型</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>江苏移动</td><td>5 元/月</td><td>Lite 体验: 250 万 Token</td><td>千问、DeepSeek、MiniMax 等</td></tr>
+      <tr><td>北京移动</td><td>5.99 元/次</td><td>月包 24.99 元: 1000 万 Token</td><td>DeepSeek-v3.2、qwen3-max 等</td></tr>
+      <tr><td>中国电信</td><td>10 元/月</td><td>融合包: 5GB 流量+250 万 Token</td><td>星辰 + 第三方模型</td></tr>
+      <tr><td>腾讯云</td><td>39 元/月</td><td>最高 599 元: 6.5 亿 Token</td><td>混元、Kimi、MiniMax 等</td></tr>
+      <tr><td>阿里云百炼</td><td>200 元/月</td><td>Coding Plan: 9 万次请求</td><td>千问、Kimi 等 8 款</td></tr>
+      <tr><td>火山引擎</td><td>40 元/月</td><td>Coding Plan 双档</td><td>豆包、DeepSeek、MiniMax 等</td></tr>
+      <tr><td>小米 MiMo</td><td>39 元/月</td><td>6000 万 Credits 起步</td><td>MiMo 系列 3 款</td></tr>
+      <tr><td>MiniMax</td><td>29 元/月</td><td>六档套餐，最高 899 元</td><td>多模态，支持视频/音频</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="pull-quote">
+    云厂商依赖自研模型，每笔 Token 收入不需要分润。运营商调用第三方模型，每笔 Token 都要给模型厂商分成。这是运营商在 Token 价值链中面临的核心结构性劣势。
+  </div>
+</section>
+
+<!-- 第四部分：未来走向 -->
+<section>
+  <h2 class="section-title"><span class="bracket">[</span><span class="em">04</span><span class="bracket">]</span> 算力市场未来走向推演</h2>
+
+  <div class="tl-item">
+    <div class="num teal">A</div>
+    <div class="content">
+      <h4>中转站的宿命：潮水退去，裸泳者现</h4>
+      <p>纯 API 中转站的毛利会越来越薄，这是确定性很高的事。Anthropic 加速收紧政策（4 月 5 日宣布 Claude 订阅不再支持第三方 harness 平台），监管端《生成式人工智能服务管理暂行办法》持续施压。国产模型价格已触底，信息差和渠道差正在消失。第一档（正规企业级）还能靠合规和服务生存，第二档和第三档面临持续缩窄的套利空间。</p>
+    </div>
+  </div>
+
+  <div class="tl-item">
+    <div class="num teal">B</div>
+    <div class="content">
+      <h4>运营商的胜负手：算力调度 vs 服务厚度</h4>
+      <p>移动的算网大脑和 AI-eSIM 提供了从"管道"升级为"平台"的可能性——如果 Token 能在移动的算力网内闭环流转，且 AI-eSIM 成为行业标配，移动就拿到了智能终端的"每一次思考"的计费权。电信的 FDE 队伍和政企关系网提供了项目制高毛利的确定性，但天花板取决于能不能跑出爆款 AI 产品。</p>
+    </div>
+  </div>
+
+  <div class="tl-item">
+    <div class="num teal">C</div>
+    <div class="content">
+      <h4>云厂商的终极优势：模型层自有 + 生态锁定</h4>
+      <p>阿里云百炼（千问）、火山引擎（豆包）、腾讯云（混元）——云厂商在模型层完全自有，每笔 Token 的收入 100% 归自己。叠加各自的 AI 入口：Coze 开发者平台（100 万+活跃开发者）、通义 App（MAU 破亿）、微信智能体（小程序+支付闭环）。运营商"云、网、边"的基础设施优势，正在被云厂商的"模型、平台、生态"组合拳抵消。</p>
+    </div>
+  </div>
+
+  <div class="tl-item">
+    <div class="num teal">D</div>
+    <div class="content">
+      <h4>定价权的三条路径</h4>
+      <p><strong style="color:var(--neon-amber)">路径一</strong>：Token 成为标准化的底层计量单位，算力像电力一样按度计费。运营商的基础设施优势最大化，但利润率被压缩到公共事业级别。<br>
+      <strong style="color:var(--neon-blue)">路径二</strong>：Token 始终封装在应用和服务中，客户只感知结果。云厂商和模型厂通过生态锁定获取超额利润，运营商被挤回管道角色。<br>
+      <strong style="color:var(--neon-purple)">路径三</strong>：AI-eSIM 和端侧智能让运营商重新获得终端入口，移动的芯片级嵌入策略开辟新战场——但这需要 eSIM 硬件生态在机器人、智能汽车、AIoT 领域的渗透率达到临界点。</p>
+    </div>
+  </div>
+
+  <div class="highlight-box">
+    <p>2026 年的算力市场，三路资本同时在赌 Token 是 AI 时代的石油。但石油时代的赢家不是采油厂，是标准制定者和基础设施拥有者。谁能在 Token 的世界里成为那个制定规则的人，谁才算拿到了未来的船票。</p>
+  </div>
+
+  <p style="color:var(--text-dim);font-size:.9rem;line-height:1.9;margin-top:24px;">
+    数据来源说明：本文分析综合以下信息渠道——中国电信智能云生态大会、中国移动"智能新空间"苏州大会公开资料、DevTk.AI 全球模型定价追踪（2026 年 5 月）、虎嗅对 AI 中转站产业链调查、网易订阅对 Token 套餐市场竞争格局报道、CISPA《Real Money, Fake Models》学术论文（2603.01919）。运营商 Token 套餐定价来自新华网、工联网等公开报道。
+  </p>
+</section>
+
+<div class="footer">
+  <p>数据截止 2026-05-12</p>
+</div>
+
+</div>
+</body>
+</html>
