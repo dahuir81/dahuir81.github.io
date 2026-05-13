@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>阿里巴巴 2026 财年 Q4 业绩全景解读</title>
+<title>阿里巴巴 2026 财年 Q4 业绩全景</title>
 <style>
   :root {
     --bg: #f8f9fa;
@@ -61,7 +61,7 @@
     border-radius: 999px;
     margin-top: 0.75rem;
   }
-  .section { margin: 2rem 0; }
+  .section { margin: 2.5rem 0; }
   .section h2 {
     font-size: 1.25rem;
     font-weight: 600;
@@ -74,6 +74,7 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
     gap: 0.75rem;
+    margin-bottom: 1rem;
   }
   .kpi-card {
     background: var(--card);
@@ -174,6 +175,38 @@
     margin-bottom: 1rem;
   }
   .highlight-box p { font-size: 0.9rem; margin-bottom: 0.25rem; }
+  .quote-box {
+    background: rgba(16, 185, 129, 0.08);
+    border-left: 3px solid var(--green);
+    border-radius: 0 8px 8px 0;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1rem;
+  }
+  .quote-box p { font-size: 0.9rem; font-style: italic; }
+  .quote-box .source { font-size: 0.8rem; color: var(--muted); margin-top: 0.3rem; font-style: normal; }
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+  @media (max-width: 600px) {
+    .two-col { grid-template-columns: 1fr; }
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    .header h1 { font-size: 1.3rem; }
+  }
+  .chip-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0.5rem 0;
+  }
+  .chip {
+    background: rgba(249,115,22,0.1);
+    color: var(--accent);
+    font-size: 0.75rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+  }
   .footer {
     text-align: center;
     color: var(--muted);
@@ -182,10 +215,6 @@
     padding: 1rem 0;
     border-top: 1px solid var(--border);
   }
-  @media (max-width: 480px) {
-    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
-    .header h1 { font-size: 1.3rem; }
-  }
 </style>
 </head>
 <body>
@@ -193,8 +222,8 @@
 
 <div class="header">
   <h1>阿里巴巴 2026 财年 Q4 业绩全景</h1>
-  <div class="meta">财报发布日期：2026-05-13（美东时间盘前）</div>
-  <div class="badge">AI 相关收入连续第 11 个季度三位数增长</div>
+  <div class="meta">财报发布：2026-05-13（美东盘前）· 业绩电话会：同日 20:00</div>
+  <div class="badge">AI 收入占比首破 30% · 云收入增速提升至 38%</div>
 </div>
 
 <!-- 核心指标 -->
@@ -225,6 +254,32 @@
       <div class="change up">加速↑</div>
       <div class="label" style="font-size:0.7rem">同比增长</div>
     </div>
+    <div class="kpi-card">
+      <div class="label">股息总额</div>
+      <div class="value">~25亿</div>
+      <div class="change">$0.13125/股</div>
+      <div class="label" style="font-size:0.7rem">美元，年度定期现金</div>
+    </div>
+  </div>
+</div>
+
+<!-- 电话会金句 -->
+<div class="section">
+  <h2>🎙️ 业绩电话会核心信息</h2>
+
+  <div class="quote-box">
+    <p>"AI发展的趋势更像制造业，要获得更多收入必须去建两个核心工厂：AI的训练工厂和AI的推理工厂，背后都是AI数据中心的建设。"</p>
+    <p class="source">— 吴泳铭，阿里巴巴 CEO，财报电话会</p>
+  </div>
+
+  <div class="quote-box">
+    <p>"现在阿里的服务器内几乎没有一张卡是空的，考虑未来3-5年的需求情况，我认为阿里大量投入AI数据中心的投资回报非常确定。"</p>
+    <p class="source">— 吴泳铭，财报电话会</p>
+  </div>
+
+  <div class="quote-box">
+    <p>"阿里全栈AI技术投入已正式跨越初期培育阶段，进入正向的规模商业化回报周期。"</p>
+    <p class="source">— 吴泳铭，财报电话会</p>
   </div>
 </div>
 
@@ -233,74 +288,105 @@
   <h2>🏢 业务板块表现</h2>
   <table>
     <thead>
-      <tr><th>业务线</th><th>收入</th><th>同比</th><th>备注</th></tr>
+      <tr><th>业务线</th><th>收入</th><th>同比</th><th>关键信息</th></tr>
     </thead>
     <tbody>
-      <tr><td>云智能集团</td><td>416.3 亿</td><td style="color:var(--green)">+38%</td><td>外部商业化 +40%</td></tr>
-      <tr><td>中国电商</td><td>1,222.2 亿</td><td>—</td><td>淘天集团</td></tr>
-      <tr><td>国际数字商业</td><td>354.3 亿</td><td>—</td><td>速卖通/Lazada等</td></tr>
-      <tr><td>即时零售</td><td>199.88 亿</td><td style="color:var(--green)">+57%</td><td>淘宝闪购驱动</td></tr>
+      <tr><td>云智能集团</td><td>416.3亿</td><td style="color:var(--green)">+38%</td><td>外部商业化+40%；AI收入占比首破30%</td></tr>
+      <tr><td>中国电商</td><td>1,222.2亿</td><td>—</td><td>CMR可比+8%；淘天集团</td></tr>
+      <tr><td>国际数字商业</td><td>354.3亿</td><td>—</td><td>速卖通/Lazada等</td></tr>
+      <tr><td>即时零售</td><td>199.88亿</td><td style="color:var(--green)">+57%</td><td>淘宝闪购驱动；UE和笔单价双双改善</td></tr>
     </tbody>
   </table>
 </div>
 
-<!-- AI 核心 -->
+<!-- AI 核心亮点 -->
 <div class="section">
   <h2>🤖 AI 核心亮点</h2>
   <div class="kpi-grid">
     <div class="kpi-card" style="background:rgba(249,115,22,0.08);border-color:var(--accent)">
       <div class="label">AI 相关产品收入</div>
-      <div class="value">89.71 亿</div>
-      <div class="change up">三位数↑</div>
+      <div class="value">89.71亿</div>
+      <div class="change up">+三位数</div>
       <div class="label" style="font-size:0.7rem">连续第 11 个季度</div>
     </div>
     <div class="kpi-card" style="background:rgba(249,115,22,0.08);border-color:var(--accent)">
       <div class="label">AI 年化收入</div>
-      <div class="value">358 亿</div>
+      <div class="value">358亿</div>
       <div class="change up">↗</div>
-      <div class="label" style="font-size:0.7rem">AI 收入 / 云占比首破 30%</div>
+      <div class="label" style="font-size:0.7rem">AI / 云收入占比首破 30%</div>
+    </div>
+    <div class="kpi-card" style="background:rgba(249,115,22,0.08);border-color:var(--accent)">
+      <div class="label">阿里云市场份额</div>
+      <div class="value">32.8%</div>
+      <div class="change up">中国 IaaS 第一</div>
+      <div class="label" style="font-size:0.7rem">Gartner 2025 报告</div>
     </div>
     <div class="kpi-card">
       <div class="label">平头哥 GPU</div>
       <div class="value">47万片</div>
       <div class="change up">规模化量产</div>
-      <div class="label" style="font-size:0.7rem">截至 2026 年 2 月累计</div>
+      <div class="label" style="font-size:0.7rem">截至 2026年2月累计</div>
+    </div>
+    <div class="kpi-card">
+      <div class="label">真武 PPU</div>
+      <div class="value">10万+卡</div>
+      <div class="change up">部署于公共云</div>
+      <div class="label" style="font-size:0.7rem">30+车企自动驾驶</div>
+    </div>
+    <div class="kpi-card">
+      <div class="label">千问 App</div>
+      <div class="value">3亿+</div>
+      <div class="change up">月活跃用户</div>
+      <div class="label" style="font-size:0.7rem">接入淘宝/天猫/高德等</div>
     </div>
   </div>
 
-  <div class="highlight-box">
-    <p><strong>AI 相关产品收入占比首次突破云收入的 30%</strong> — 这标志着阿里云的内生增长引擎从"上云"切换为"用AI"，模型推理需求正在替代单纯的计算资源消耗，成为云增长的核心驱动力。</p>
+  <div class="card">
+    <h3>AI 生态全景 & 商业化进展</h3>
+    <table>
+      <tr><td>百炼 MaaS 平台</td><td>客户数量同比 <strong>增长 8 倍</strong>（Q4）</td></tr>
+      <tr><td>平头哥芯片外部客户</td><td><strong>60%+</strong> 服务于外部商业化客户，覆盖 <strong>400+</strong> 家企业</td></tr>
+      <tr><td>AI 应用层</td><td>企业级智能体「悟空」推出；千问 App 全面接通电商服务能力</td></tr>
+      <tr><td>悟空首个外部合作</td><td>与中国东方航空达成合作，AI 延伸至出行场景</td></tr>
+      <tr><td>AI 购物助手</td><td>淘宝 App 推出千问 AI 购物助手，覆盖种草/发现/售后全流程</td></tr>
+      <tr><td>Token Hub 事业群</td><td>2026年3月成立，吴泳铭亲自挂帅，统筹 AI to B + to C</td></tr>
+      <tr><td>开放世界模型</td><td>HappyOyster（实时交互）+ HappyHorse（视频生成）分阶段推出</td></tr>
+    </table>
   </div>
 
-  <div class="card">
-    <h3>AI 生态全景</h3>
-    <table>
-      <tr><td>千问 App 月活跃</td><td><strong>3 亿+</strong> 用户</td></tr>
-      <tr><td>百炼 MaaS 平台</td><td>Token 消耗规模过去 3 个月 <strong>提升 6 倍</strong></td></tr>
-      <tr><td>平头哥芯片</td><td>60%+ 服务于外部客户，支持 <strong>400+</strong> 家企业 AI 任务</td></tr>
-      <tr><td>Token Hub 事业群</td><td>2026 年 3 月成立，统筹 AI 战略落地</td></tr>
-      <tr><td>悟空 AI 工作平台</td><td>企业级 AI 原生平台，内置钉钉</td></tr>
-    </table>
+  <div class="highlight-box">
+    <p><strong>「两张卡都不是空的」—— 产能利用率 100% 的信号</strong></p>
+    <p>吴泳铭在电话会上透露，阿里服务器内几乎没有一张卡是空闲的。这意味着阿里云的 AI 推理负载已经填满了所有算力，继续扩张的唯一约束是数据中心建设速度。3-5 年的投资回报预期非常确定。</p>
+  </div>
+
+  <div class="highlight-box">
+    <p><strong>AI 工厂论：训练工厂 + 推理工厂</strong></p>
+    <p>吴泳铭将 AI 发展趋势类比制造业——AI 数据中心的建设会消耗较多现金流，但在回报路径上清晰。这一表述将 AI 投入从「研发费用」重新定义为「产能投资」，逻辑上与 AWS 当年建设数据中心的资本开支叙事一脉相承。</p>
   </div>
 </div>
 
-<!-- 增长轨迹 -->
+<!-- 云增长 -->
 <div class="section">
-  <h2>📈 AI 云增长轨迹</h2>
+  <h2>📈 AI 云加速增长轨迹</h2>
   <div class="card">
-    <p style="margin-bottom:0.75rem;font-size:0.9rem">阿里云近三个季度增速持续加速：</p>
+    <p style="margin-bottom:0.75rem;font-size:0.9rem">阿里云近四个季度增速持续攀升：</p>
     <div style="display:flex;gap:0.75rem;flex-wrap:wrap">
-      <div style="flex:1;min-width:120px;background:var(--bg);border-radius:8px;padding:0.75rem;text-align:center">
+      <div style="flex:1;min-width:100px;background:var(--bg);border-radius:8px;padding:0.75rem;text-align:center">
+        <div style="font-size:0.75rem;color:var(--muted)">Q2 FY26</div>
+        <div style="font-size:1.1rem;font-weight:700;color:var(--green)">~34%</div>
+        <div style="font-size:0.7rem;color:var(--muted)">9季三位数AI</div>
+      </div>
+      <div style="flex:1;min-width:100px;background:var(--bg);border-radius:8px;padding:0.75rem;text-align:center">
         <div style="font-size:0.75rem;color:var(--muted)">Q3 FY26</div>
         <div style="font-size:1.1rem;font-weight:700;color:var(--green)">36%</div>
         <div style="font-size:0.7rem;color:var(--muted)">10季三位数AI</div>
       </div>
-      <div style="flex:1;min-width:120px;background:var(--bg);border-radius:8px;padding:0.75rem;text-align:center">
+      <div style="flex:1;min-width:100px;background:var(--bg);border-radius:8px;padding:0.75rem;text-align:center">
         <div style="font-size:0.75rem;color:var(--muted)">Q4 FY26</div>
         <div style="font-size:1.1rem;font-weight:700;color:var(--green)">38%</div>
         <div style="font-size:0.7rem;color:var(--muted)">11季三位数AI</div>
       </div>
-      <div style="flex:1;min-width:120px;background:var(--accent);border-radius:8px;padding:0.75rem;text-align:center;color:#fff">
+      <div style="flex:1;min-width:100px;background:var(--accent);border-radius:8px;padding:0.75rem;text-align:center;color:#fff">
         <div style="font-size:0.75rem;opacity:0.85">目标（~2029）</div>
         <div style="font-size:1.1rem;font-weight:700">$1,000亿+</div>
         <div style="font-size:0.7rem;opacity:0.85">云+AI商业化</div>
@@ -308,8 +394,26 @@
     </div>
   </div>
 
-  <div class="highlight-box">
-    <p><strong>CEO 吴泳铭此前设定的目标：未来五年云和 AI 商业化收入突破 1,000 亿美元。</strong> 本季度云收入 +38% 的增速正在验证这个目标的可行性。算一笔账：如果保持当前增速，阿里云年化收入约为 <strong>1,665 亿人民币（≈230 亿美元）</strong>，距千亿美元目标还有约 4 倍的成长空间。</p>
+  <div class="card">
+    <h3>增长驱动引擎</h3>
+    <div class="two-col">
+      <div>
+        <p><strong>🔹 公共云</strong></p>
+        <p>AI推理负载驱动，训练工厂+推理工厂双轮</p>
+      </div>
+      <div>
+        <p><strong>🔹 MaaS 百炼</strong></p>
+        <p>客户数同比+800%，Token消耗加速膨胀</p>
+      </div>
+      <div>
+        <p><strong>🔹 平头哥</strong></p>
+        <p>自研GPU规模化量产，60%外部商业化</p>
+      </div>
+      <div>
+        <p><strong>🔹 千问+悟空</strong></p>
+        <p>3亿月活+企业级Agent入口，C/B两端突破</p>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -318,61 +422,104 @@
   <h2>🕐 阿里 AI 战略关键节点</h2>
   <div class="timeline">
     <div class="timeline-item">
-      <div class="date">2023 年初</div>
-      <p>发布文心一言，开启 AI 大模型竞跑</p>
+      <div class="date">2010</div>
+      <p>成立自然语言处理部，开启系统性 AI 布局</p>
     </div>
     <div class="timeline-item">
-      <div class="date">2024 年</div>
+      <div class="date">2013</div>
+      <p>成立深度学习研究院（IDL），李彦宏亲任院长</p>
+    </div>
+    <div class="timeline-item">
+      <div class="date">2023 年初</div>
+      <p>发布通义千问，加入大模型竞赛</p>
+    </div>
+    <div class="timeline-item">
+      <div class="date">2024</div>
       <p>AI 相关产品收入开始三位数增长</p>
     </div>
     <div class="timeline-item">
-      <div class="date">2025 年 4 月</div>
+      <div class="date">2025-04</div>
       <p>淘宝闪购上线，即时零售业务爆发</p>
     </div>
     <div class="timeline-item">
-      <div class="date">2025 年 12 月 (Q3 FY26)</div>
+      <div class="date">2025-12 (Q3 FY26)</div>
       <p>阿里云收入+36%，平头哥 GPU 首次财报亮相，累计交付 47 万片</p>
     </div>
     <div class="timeline-item">
-      <div class="date">2026 年 1 月</div>
+      <div class="date">2026-01</div>
       <p>千问 App 重大升级，打通淘宝/天猫/高德/飞猪/支付宝生态</p>
     </div>
     <div class="timeline-item">
-      <div class="date">2026 年 2 月</div>
+      <div class="date">2026-02</div>
       <p>Qwen3.5-Plus 发布，千问月活突破 3 亿</p>
     </div>
     <div class="timeline-item">
-      <div class="date">2026 年 3 月 16 日</div>
+      <div class="date">2026-03-16</div>
       <p>成立 Alibaba Token Hub（ATH）事业群，吴泳铭亲自挂帅</p>
     </div>
     <div class="timeline-item">
-      <div class="date">2026 年 3 月 17 日</div>
-      <p>发布 "悟空" 企业级 AI 原生工作平台，嵌入钉钉 2000 万+ 企业组织</p>
+      <div class="date">2026-03-17</div>
+      <p>发布「悟空」企业级 AI 原生平台，嵌入钉钉 2000 万+ 企业</p>
     </div>
     <div class="timeline-item">
-      <div class="date">2026 年 3 月 19 日</div>
-      <p>吴泳铭宣布目标：未来五年云+AI 商业化收入突破 1,000 亿美元</p>
+      <div class="date">2026-03-19</div>
+      <p>吴泳铭宣布：未来五年云+AI 商业化收入突破 1,000 亿美元</p>
     </div>
-    <div class="timeline-item">
+    <div class="timeline-item" style="border-left:3px solid var(--accent);padding-left:1.5rem;margin-left:-1px">
       <div class="date" style="color:var(--accent);font-weight:600">2026-05-13</div>
-      <p><strong>Q4 FY26 财报公布：</strong>云收入 +38%，AI 收入 89.71 亿（年化 358 亿），占比首破 30%</p>
+      <p><strong>Q4 FY26 财报 + 电话会</strong></p>
+      <p>• 云收入 +38%（外部商业化 +40%）</p>
+      <p>• AI 收入 89.71 亿，占比破 30%，连续 11 季三位数</p>
+      <p>• 服务器内卡利用率 100%，未来 3-5 年投入回报确定</p>
+      <p>• 百炼 MaaS 客户同比 +800%</p>
+      <p>• 千问 App 全面打通电商服务，AI 购物助手上线</p>
+      <p>• 10 万+ 卡真武 PPU 部署公共云，30+ 车企自动驾驶</p>
+      <p>• Gartner: 阿里云中国 IaaS 份额 32.8%（提升）</p>
     </div>
   </div>
 </div>
 
-<!-- 战略解读 -->
+<!-- 财报细节 -->
+<div class="section">
+  <h2>🔢 财报关键细节</h2>
+  <div class="card">
+    <h3>全年对比参考</h3>
+    <table>
+      <tr><th>指标</th><th>Q3 FY26</th><th>Q4 FY26</th><th>趋势</th></tr>
+      <tr><td>云收入增速</td><td>+36%</td><td style="color:var(--green)">+38%</td><td>↑ 加速</td></tr>
+      <tr><td>云外部商业化</td><td>+35%</td><td style="color:var(--green)">+40%</td><td>↑ 加速</td></tr>
+      <tr><td>AI 季度收入</td><td>—</td><td>89.71 亿</td><td>— 首次披露</td></tr>
+      <tr><td>AI 收入占比</td><td>—</td><td>首破 30%</td><td>— 首次披露</td></tr>
+      <tr><td>AI 连续季度</td><td>10 季</td><td style="color:var(--green)">11 季</td><td>↑ 继续</td></tr>
+      <tr><td>即时零售增速</td><td>+56%</td><td style="color:var(--green)">+57%</td><td>↑ 微加速</td></tr>
+      <tr><td>Gartner 份额</td><td>—</td><td>32.8%</td><td>— 新数据</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>核心管理层判断</h3>
+    <p><strong>吴泳铭（CEO）：</strong></p>
+    <p>• "AI 发展趋势更像制造业"——训练工厂 + 推理工厂的双工厂模型</p>
+    <p>• 服务器内几乎无空闲算力卡，3-5 年投资回报非常确定</p>
+    <p>• AI 数据中心建设会消耗较大现金流，但回报路径清晰</p>
+    <p style="margin-top:0.5rem"><strong>沈抖（集团执行副总裁）：</strong></p>
+    <p>• 百度智能云全面升级为"面向大规模智能体应用的新全栈AI云"</p>
+  </div>
+</div>
+
+<!-- 视角分析 -->
 <div class="section">
   <h2>🔍 视角分析</h2>
   <div class="card">
     <h3>为什么这份财报值得关注</h3>
     <p><strong>1. AI 收入占比首破 30% 是拐点信号</strong></p>
-    <p>过去三个季度阿里云增速加速：36% → 38%，且 AI 占比突破 30%。说明 AI 推理需求不再只是"锦上添花"，而是真正成为云业务的核心增长引擎。对于中国的 AI 基础设施投资节奏有重要参考意义。</p>
-    <p style="margin-top:0.75rem"><strong>2. 平头哥 GPU 从"有"到"有用"</strong></p>
-    <p>47 万片规模化量产，400+ 企业客户，60% 外部商业化——国产 AI 芯片不再只是存在感问题，而是已经在"造 blood"。对比之前华为昇腾的进展，可以看到国产 AI 芯片生态正在加速成熟。</p>
-    <p style="margin-top:0.75rem"><strong>3. 即时零售 +57% 的"隐身"变量</strong></p>
-    <p>淘宝闪购推出一年后，即时零售增速 57%，亏损大幅收窄。这是阿里对抗美团、字节本地生活的重要棋子，也是 AI 调度能力（配送、履约、推荐）的商业化验证场。</p>
-    <p style="margin-top:0.75rem"><strong>4. Token Hub + 悟空：阿里版的 Agent OS</strong></p>
-    <p>ATH 事业群 + 悟空平台，与百度 DAA、中国移动 MoMA 形成鲜明对比——三家都在争夺 AI 时代的能力组织权，阿里的优势在于电商场景的天然 Agent 落地土壤。</p>
+    <p>阿里云增速加速：36% → 38%，且 AI 占比突破 30%。说明 AI 推理需求不再只是"锦上添花"，而是真正成为云业务的核心增长引擎。对于中国的 AI 基础设施投资节奏有重要参考意义。</p>
+    <p style="margin-top:0.75rem"><strong>2. 「卡利用率 100% + 两张工厂」构建产能叙事</strong></p>
+    <p>吴泳铭「服务器内几乎没有一张卡是空的」和「训练工厂+推理工厂」的表述，将 AI 投入从费用重新定义为产能投资。这与 AWS 当年大规模建设数据中心时的叙事逻辑一致——先建产能，再等需求填满。</p>
+    <p style="margin-top:0.75rem"><strong>3. 平头哥 GPU 从"有"到"有用"</strong></p>
+    <p>47 万片规模化量产、10 万+ 卡真武 PPU 部署公共云、400+ 企业客户、60% 外部商业化——国产 AI 芯片不再只是存在感问题，而是已经在产生实际收入。</p>
+    <p style="margin-top:0.75rem"><strong>4. 百炼 MaaS 客户 +800%：Agent 需求正在井喷</strong></p>
+    <p>同比增长 8 倍的客户数，叠加 Token Hub 事业群的成立，表明阿里正在从"卖云"转向"卖 Agent Runtime"，这与 Anthropic 的 Agent OS 进化路径方向一致。</p>
   </div>
 </div>
 
@@ -381,12 +528,14 @@
   <h2>📎 数据来源</h2>
   <div class="card" style="font-size:0.8rem;color:var(--muted)">
     <p>• 阿里巴巴 2026 财年 Q4 财报（2026-05-13 发布）</p>
-    <p>• 界面新闻：AI 相关产品季度收入 89.71 亿元</p>
-    <p>• 新浪财经「阿里 26 财年收官季 战略投入布局未来」</p>
+    <p>• 阿里巴巴 CEO 吴泳铭 Q4 财报电话会实录（自主可控新鲜事/第一财经）</p>
+    <p>• 新浪财经「阿里财报：AI商业化开启，AI收入占比首破30%」</p>
+    <p>• 界面新闻「阿里巴巴Q4财报：AI相关产品季度收入89.71亿元」</p>
     <p>• 证券时报「阿里最新财报！未来云收入将超千亿美元」</p>
+    <p>• Gartner 中国 IaaS 市场报告（2025）</p>
     <p>• PYMNTS: Alibaba AI Adoption Drives 36% Cloud Growth</p>
-    <p>• 上一财季（Q3 FY26）财报及分析师电话会</p>
-    <p style="margin-top:0.5rem;color:var(--muted)">汇率参考：1 USD ≈ 7.2 CNY</p>
+    <p>• Seeking Alpha: Alibaba Group Q4 FY2026 Earnings Call Transcript</p>
+    <p style="margin-top:0.5rem">汇率参考：1 USD ≈ 7.2 CNY</p>
   </div>
 </div>
 
