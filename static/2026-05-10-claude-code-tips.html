@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Code 实战技巧手册 · Tars KnowledgeBase</title>
+<style>
+  :root {
+    --c-bg: #fafaf8;
+    --c-text: #1a1a1a;
+    --c-muted: #6b6b6b;
+    --c-accent: #d97706;
+    --c-accent-light: #fef3c7;
+    --c-border: #e5e5e5;
+    --c-card: #ffffff;
+    --c-code-bg: #f5f5f3;
+    --c-green: #059669;
+    --c-green-light: #d1fae5;
+    --c-red: #dc2626;
+    --c-red-light: #fee2e2;
+    --c-blue: #2563eb;
+    --c-blue-light: #dbeafe;
+    --c-purple: #7c3aed;
+    --c-purple-light: #ede9fe;
+    --c-orange: #ea580c;
+    --c-orange-light: #ffedd5;
+    --font-sans: "Inter", "Noto Sans SC", -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-mono: "JetBrains Mono", "Fira Code", "SF Mono", monospace;
+    --font-serif: "Source Serif 4", "Noto Serif SC", Georgia, serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --c-bg: #141413;
+      --c-text: #e8e8e6;
+      --c-muted: #9a9a9a;
+      --c-accent: #f59e0b;
+      --c-accent-light: #451a03;
+      --c-border: #2a2a2a;
+      --c-card: #1e1e1e;
+      --c-code-bg: #1e1e1e;
+      --c-green-light: #064e3b;
+      --c-red-light: #450a0a;
+      --c-blue-light: #1e3a5f;
+      --c-purple-light: #2e1065;
+      --c-orange-light: #431407;
+    }
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { font-size: 16px; scroll-behavior: smooth; }
+  body {
+    font-family: var(--font-sans);
+    background: var(--c-bg);
+    color: var(--c-text);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 820px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+  /* Header */
+  header { margin-bottom: 3rem; padding-bottom: 2rem; border-bottom: 1px solid var(--c-border); }
+  header .meta { font-size: 0.8rem; color: var(--c-muted); letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 0.5rem; }
+  header h1 { font-family: var(--font-serif); font-size: 2.2rem; font-weight: 700; line-height: 1.3; margin-bottom: 0.75rem; }
+  header .subtitle { font-size: 1.05rem; color: var(--c-muted); line-height: 1.6; }
+  header .tags { margin-top: 1rem; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  header .tag {
+    display: inline-block; font-size: 0.72rem; padding: 0.2rem 0.6rem;
+    border: 1px solid var(--c-border); border-radius: 3px;
+    color: var(--c-muted); letter-spacing: 0.03em;
+  }
+
+  /* TOC */
+  nav.toc {
+    background: var(--c-card); border: 1px solid var(--c-border);
+    border-radius: 6px; padding: 1.25rem 1.5rem; margin-bottom: 2.5rem;
+  }
+  nav.toc h2 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--c-muted); margin-bottom: 0.75rem; }
+  nav.toc ol { padding-left: 1.2rem; }
+  nav.toc li { margin-bottom: 0.3rem; }
+  nav.toc a { color: var(--c-text); text-decoration: none; font-size: 0.9rem; border-bottom: 1px solid transparent; }
+  nav.toc a:hover { border-bottom-color: var(--c-accent); color: var(--c-accent); }
+
+  /* Sections */
+  section { margin-bottom: 3rem; }
+  h2 {
+    font-family: var(--font-serif); font-size: 1.5rem; font-weight: 700;
+    margin-bottom: 1rem; padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--c-accent);
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  h2 .num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 1.6rem; height: 1.6rem; font-size: 0.75rem; font-weight: 700;
+    background: var(--c-accent); color: #fff; border-radius: 3px;
+    flex-shrink: 0; font-family: var(--font-mono);
+  }
+  h3 { font-size: 1.1rem; font-weight: 600; margin: 1.5rem 0 0.5rem; }
+  p { margin-bottom: 0.8rem; }
+  strong { font-weight: 600; }
+
+  /* Cards */
+  .card {
+    background: var(--c-card); border: 1px solid var(--c-border);
+    border-radius: 6px; padding: 1.25rem; margin-bottom: 1rem;
+  }
+  .card-header { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; }
+  .card-header .icon { font-size: 1.2rem; }
+  .card-header h3 { margin: 0; font-size: 1rem; }
+
+  /* Rule cards */
+  .rule { border-left: 3px solid var(--c-accent); }
+  .rule .card-header .icon { color: var(--c-accent); }
+
+  /* Tip callout */
+  .tip {
+    background: var(--c-green-light); border: 1px solid var(--c-green);
+    border-radius: 6px; padding: 1rem 1.25rem; margin: 1rem 0;
+    font-size: 0.9rem;
+  }
+  .tip::before { content: "💡 "; }
+
+  .warn {
+    background: var(--c-orange-light); border: 1px solid var(--c-orange);
+    border-radius: 6px; padding: 1rem 1.25rem; margin: 1rem 0;
+    font-size: 0.9rem;
+  }
+  .warn::before { content: "⚠️ "; }
+
+  /* Code */
+  code {
+    font-family: var(--font-mono); font-size: 0.85em;
+    background: var(--c-code-bg); padding: 0.15em 0.4em; border-radius: 3px;
+  }
+  pre {
+    background: var(--c-code-bg); border: 1px solid var(--c-border);
+    border-radius: 6px; padding: 1rem 1.25rem; margin: 0.75rem 0;
+    overflow-x: auto; font-size: 0.82rem; line-height: 1.6;
+  }
+  pre code { background: none; padding: 0; }
+
+  /* Table */
+  table {
+    width: 100%; border-collapse: collapse; margin: 0.75rem 0;
+    font-size: 0.88rem;
+  }
+  th, td { padding: 0.5rem 0.75rem; text-align: left; border-bottom: 1px solid var(--c-border); }
+  th { font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--c-muted); }
+  tr:last-child td { border-bottom: none; }
+
+  /* Lists */
+  ul, ol { padding-left: 1.4rem; margin-bottom: 0.8rem; }
+  li { margin-bottom: 0.3rem; }
+
+  /* Quote */
+  blockquote {
+    border-left: 3px solid var(--c-muted); padding-left: 1rem;
+    margin: 1rem 0; color: var(--c-muted); font-style: italic;
+  }
+
+  /* Feature grid */
+  .feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin: 1rem 0; }
+  @media (max-width: 600px) { .feature-grid { grid-template-columns: 1fr; } }
+  .feature {
+    background: var(--c-card); border: 1px solid var(--c-border);
+    border-radius: 6px; padding: 1rem;
+  }
+  .feature h4 { font-size: 0.95rem; margin-bottom: 0.4rem; display: flex; align-items: center; gap: 0.4rem; }
+  .feature p { font-size: 0.85rem; color: var(--c-muted); margin: 0; }
+  .badge {
+    display: inline-block; font-size: 0.65rem; padding: 0.1rem 0.4rem;
+    border-radius: 3px; font-weight: 600; letter-spacing: 0.03em;
+  }
+  .badge-new { background: var(--c-green-light); color: var(--c-green); }
+  .badge-beta { background: var(--c-blue-light); color: var(--c-blue); }
+  .badge-preview { background: var(--c-purple-light); color: var(--c-purple); }
+
+  /* Comparison */
+  .vs { display: grid; grid-template-columns: 1fr auto 1fr; gap: 0.5rem; align-items: start; margin: 1rem 0; }
+  .vs-divider { display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: var(--c-muted); padding-top: 0.5rem; }
+  @media (max-width: 600px) { .vs { grid-template-columns: 1fr; } .vs-divider { display: none; } }
+
+  /* Footer */
+  footer {
+    margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--c-border);
+    font-size: 0.8rem; color: var(--c-muted);
+  }
+  footer a { color: var(--c-accent); text-decoration: none; }
+
+  /* Smooth reveal */
+  section { animation: fadeIn 0.3s ease-in; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <div class="meta">Tars KnowledgeBase · 实战手册</div>
+  <h1>Claude Code 实战技巧手册</h1>
+  <div class="subtitle">从 CLAUDE.md 行为约束到 Agent Loop 自动化，从成本优化到 HTML 工作流——基于知识库积累的 12 篇深度资料整理。</div>
+  <div class="tags">
+    <span class="tag">Claude Code</span>
+    <span class="tag">Anthropic</span>
+    <span class="tag">Agent</span>
+    <span class="tag">AI 编程</span>
+    <span class="tag">效率</span>
+    <span class="tag">2026-05-10</span>
+  </div>
+</header>
+
+<nav class="toc">
+  <h2>目录</h2>
+  <ol>
+    <li><a href="#r1">四条黄金规则（CLAUDE.md）</a></li>
+    <li><a href="#r2">Code with Claude 大会四大新功能</a></li>
+    <li><a href="#r3">Agent Loop：让 AI 自己跑起来</a></li>
+    <li><a href="#r4">Advisor 策略：省 80% 成本</a></li>
+    <li><a href="#r5">HTML 工作流：md 生产，html 消费</a></li>
+    <li><a href="#r6">实战 Prompt 模板</a></li>
+    <li><a href="#r7">数据速查表</a></li>
+  </ol>
+</nav>
+
+<!-- ============ Section 1 ============ -->
+<section id="r1">
+<h2><span class="num">1</span> 四条黄金规则（CLAUDE.md）</h2>
+
+<p>Karpathy 最佳实践 + 实战经验，写在项目根目录的 <code>CLAUDE.md</code> 里，Claude Code 每次启动自动读取。</p>
+
+<div class="card rule">
+  <div class="card-header"><span class="icon">🧠</span><h3>规则一：先想，再写</h3></div>
+  <p>动手之前先确认需求。不猜、不假设、不自己加默认值。</p>
+  <ul>
+    <li>需求不明确时，<strong>停下来问用户</strong>，不要自己脑补</li>
+    <li>列出你需要确认的问题清单，等用户回答再动手</li>
+    <li>不确定的地方明确说出来，而不是藏起来假装懂了</li>
+  </ul>
+</div>
+
+<div class="card rule">
+  <div class="card-header"><span class="icon">✂️</span><h3>规则二：能简单就简单</h3></div>
+  <ul>
+    <li>能一行解决的不要写十行</li>
+    <li>能一个文件搞定的不要拆五个文件</li>
+    <li>200 行能缩成 50 行的，重写</li>
+    <li>没被要求的功能不加，没被要求的灵活性不给</li>
+  </ul>
+  <div class="tip">检验标准：资深工程师看了觉得刚刚好，不是"这也太复杂了吧"</div>
+</div>
+
+<div class="card rule">
+  <div class="card-header"><span class="icon">🎯</span><h3>规则三：只改该改的</h3></div>
+  <ul>
+    <li>只改用户要求改的部分，旁边的代码再丑也不碰</li>
+    <li>注释过时？不改。风格不同？照着原来的写。命名不规范？不动。</li>
+    <li>每一行改动都必须能追溯到用户的需求</li>
+  </ul>
+</div>
+
+<div class="card rule">
+  <div class="card-header"><span class="icon">🏁</span><h3>规则四：目标驱动，别指令驱动</h3></div>
+  <ul>
+    <li>给成功标准，不给步骤</li>
+    <li>用户说"修这个 bug"，你就写能复现 bug 的测试然后让它通过</li>
+    <li>用户说"加个功能"，先问清楚"做到什么程度算完成"</li>
+  </ul>
+  <div class="tip">强的成功标准让 AI 自己闷头跑，弱的只会越跑越偏</div>
+</div>
+</section>
+
+<!-- ============ Section 2 ============ -->
+<section id="r2">
+<h2><span class="num">2</span> Code with Claude 大会四大新功能</h2>
+
+<p>2026 年 5 月 7 日 Anthropic 开发者大会发布，Claude Code 从「跑几分钟」进化到「连续跑几个小时」。</p>
+
+<div class="feature-grid">
+  <div class="feature">
+    <h4>🌙 Dreams <span class="badge badge-preview">研究预览</span></h4>
+    <p>Agent 空闲时<strong>自动复盘</strong>历史对话，扫描反复出现的错误，提取有效工作模式，存入记忆。多 Agent 场景下汇总团队经验库——"一起做梦，一起变聪明。"</p>
+  </div>
+  <div class="feature">
+    <h4>✅ Outcomes <span class="badge badge-new">公测</span></h4>
+    <p>定义交付质量标准，独立评分系统打分，<strong>不达标重来</strong>。Dreams 管经验积累，Outcomes 管质量把关。</p>
+  </div>
+  <div class="feature">
+    <h4>⚡ Routines <span class="badge badge-new">公测</span></h4>
+    <p>设置好需求，Claude Code 在后台自己执行，完成后<strong>直接生成可合并的 PR</strong>。不用盯着，干完了通知你审核。</p>
+  </div>
+  <div class="feature">
+    <h4>📱 Remote Agents <span class="badge badge-new">公测</span></h4>
+    <p>手机远程控制笔记本上的 Claude Code。出门在外也能指挥 Agent 干活。</p>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header"><span class="icon">🔍</span><h3>ultrareview（云端代码审查）</h3></div>
+  <p>一群 Agent 在云端集体审查代码，发现问题推送回终端。不是单个 Agent 看一遍，是<strong>多个 Agent 各自审查后汇总</strong>。</p>
+</div>
+
+<div class="card">
+  <div class="card-header"><span class="icon">🏗️</span><h3>Multi-agent Orchestration</h3></div>
+  <p>复杂任务拆分给多个 Agent 并行处理协同交付。Boris Cherny 同时跑着几十个 loop，每晚几千个 Agent 做深度异步任务。</p>
+</div>
+</section>
+
+<!-- ============ Section 3 ============ -->
+<section id="r3">
+<h2><span class="num">3</span> Agent Loop：让 AI 自己跑起来</h2>
+
+<blockquote>"他越来越觉得 loop 就是未来" — Boris Cherny, Claude Code 创建者</blockquote>
+
+<p>Claude Code 的核心运行机制 <strong>Agent Loop</strong> 只有几十行代码，可拆解为 11 步，重点在第 5-8 步：Agent 接到任务后进入循环判断——需要做什么、需要什么上下文、是否要调用工具、任务是否完成——如果未完成继续执行。正是这个机制让 Agent 从处理 1 分钟任务跨越到 2 小时以上。</p>
+
+<h3>Boris Cherny 的实战配置</h3>
+<table>
+  <tr><th>Loop 任务</th><th>频率</th><th>说明</th></tr>
+  <tr><td>监控 PR 状态</td><td>实时</td><td>自动 rebase、合并</td></tr>
+  <tr><td>维护 CI</td><td>持续</td><td>发现 flaky test 就去修</td></tr>
+  <tr><td>抓取反馈</td><td>每 30 分钟</td><td>从推特抓 Claude Code 反馈，聚类后推送</td></tr>
+  <tr><td>深度异步任务</td><td>每晚</td><td>几千个 Agent 批量处理</td></tr>
+</table>
+
+<div class="tip">Anthropic Routines 已把 Loop 做成服务端功能——关掉电脑，任务照样跑。</div>
+</section>
+
+<!-- ============ Section 4 ============ -->
+<section id="r4">
+<h2><span class="num">4</span> Advisor 策略：省 80% 成本</h2>
+
+<p>由 Simon Willison 在 Code with Claude 大会现场记录，Eve Legal（法律科技公司）已跑通验证。</p>
+
+<div class="vs">
+  <div class="card">
+    <h4>❌ 传统做法</h4>
+    <p>全程使用 Opus 4.7 处理所有任务，成本高</p>
+  </div>
+  <div class="vs-divider">→</div>
+  <div class="card">
+    <h4>✅ Advisor 做法</h4>
+    <p>小模型（Sonnet）干活，遇到拿不准的请教大模型（Opus 4.7）</p>
+  </div>
+</div>
+
+<table>
+  <tr><th>指标</th><th>结果</th></tr>
+  <tr><td>质量</td><td>效果接近全程使用 Opus 4.7</td></tr>
+  <tr><td>成本</td><td><strong>只有全程大模型的 1/5（降 80%）</strong></td></tr>
+  <tr><td>验证方</td><td>Eve Legal 法律科技公司</td></tr>
+</table>
+
+<div class="tip">类比：Junior 做常规工作，遇到难题请教 Senior。关键是 Agent 需要知道自己什么时候"拿不准"。</div>
+</section>
+
+<!-- ============ Section 5 ============ -->
+<section id="r5">
+<h2><span class="num">5</span> HTML 工作流：md 生产，html 消费</h2>
+
+<p>Claude Code 工程师 Thariq 发文引爆讨论，花叔提出综合框架：<strong>md 和 html 不是替代关系，是分工关系</strong>。</p>
+
+<h3>为什么？AI 解耦了生产和消费</h3>
+<table>
+  <tr><th></th><th>Markdown</th><th>HTML</th></tr>
+  <tr><td><strong>定位</strong></td><td>生产端——给 AI 写</td><td>消费端——给人看</td></tr>
+  <tr><td><strong>优势</strong></td><td>轻、快、可 diff、token-efficient</td><td>丰富、可视化、可交互、好分享</td></tr>
+  <tr><td><strong>Token</strong></td><td>3,150</td><td>16,180</td></tr>
+  <tr><td><strong>谁写</strong></td><td>你 + AI</td><td>AI</td></tr>
+  <tr><td><strong>谁看</strong></td><td>你（内部 review）</td><td>别人（分享/展示）</td></tr>
+</table>
+
+<div class="card">
+  <div class="card-header"><span class="icon">📊</span><h3>Cloudflare 实测</h3></div>
+  <p>同一篇博客：HTML 16,180 token，md 只要 3,150 token。压缩 <strong>80%</strong> token → 同样 LLM 预算处理 <strong>7-17 倍</strong>请求。</p>
+</div>
+
+<h3>以前 vs 现在</h3>
+<div class="vs">
+  <div class="card">
+    <h4>以前</h4>
+    <p>你写 md，看 md。格式要折中——md 胜出。</p>
+  </div>
+  <div class="vs-divider">→</div>
+  <div class="card">
+    <h4>现在</h4>
+    <p>你写 md，改 md，<strong>AI 给你 html</strong>。两端各自登顶。</p>
+  </div>
+</div>
+
+<h3>Thariq 的五大 HTML 场景</h3>
+<ol>
+  <li><strong>发散性思考</strong>：每个方向扩展为独立 HTML 页面，另一个 Agent 直接"读整个 HTML 网络"</li>
+  <li><strong>代码审查</strong>：HTML 渲染 diff + 行内批注 + 模块关系图，比 GitHub 默认视图强一个量级</li>
+  <li><strong>设计原型</strong>：Claude 先用 HTML 勾勒高保真设计图，再转译为目标语言</li>
+  <li><strong>报告输出</strong>：整合多数据源，生成交互式 HTML 文档</li>
+  <li><strong>自定义编辑器</strong>：为特定数据构建一次性 HTML 编辑界面</li>
+</ol>
+
+<div class="card">
+  <div class="card-header"><span class="icon">🔧</span><h3>花叔的 huashu-md-html 工具</h3></div>
+  <p>开源 Claude Code Skill，三个能力组成完整闭环：</p>
+  <ul>
+    <li><strong>任意格式 → md</strong>：封装 markitdown，20+ 格式一行命令</li>
+    <li><strong>md → 精美 html</strong>：Pandoc + 4 套 CSS 主题（article / report / reading / interactive）</li>
+    <li><strong>html → md</strong>：双引擎（trafilatura + markitdown）</li>
+  </ul>
+  <p style="margin-top:0.5rem;font-size:0.85rem;color:var(--c-muted)">GitHub: <a href="https://github.com/alchaincyf/huashu-md-html">github.com/alchaincyf/huashu-md-html</a> · MIT License</p>
+</div>
+</section>
+
+<!-- ============ Section 6 ============ -->
+<section id="r6">
+<h2><span class="num">6</span> 实战 Prompt 模板</h2>
+
+<h3>代码审查</h3>
+<pre><code>帮我审查这个 PR，生成一个 HTML 说明文件。
+把实际的 diff 渲染出来，加上行内批注，
+按严重程度着色，再画出受影响模块的关系图。</code></pre>
+
+<h3>复杂解释</h3>
+<pre><code>我搞不清楚这个 rate limiter 怎么跑的。
+去看相关代码，生成一个单页 HTML 说明文档：
+画出 token bucket 流程图，挑 3-4 段核心代码注释，
+加一个 gotchas 区。设计要让人看一遍就懂。</code></pre>
+
+<h3>优先级排序</h3>
+<pre><code>我需要重新排定这 30 个任务的优先级。
+做一个 HTML 文件，每个任务做成可拖拽卡片，
+分为"现在/下一步/稍后/砍掉"四列。
+请根据你的判断预先排序，加一个复制按钮导出结果。</code></pre>
+
+<h3>CLAUDE.md 模板</h3>
+<pre><code># 项目规则
+- 动手前先确认需求，列问题清单等回答
+- 能一行解决不写十行
+- 只改要求改的部分，旁边的代码不碰
+- 给成功标准，不给步骤
+- 不引入未要求的新依赖
+- 不新建未要求的文件
+- 错误时简洁说明+立即修正，不长篇辩解</code></pre>
+</section>
+
+<!-- ============ Section 7 ============ -->
+<section id="r7">
+<h2><span class="num">7</span> 数据速查表</h2>
+
+<table>
+  <tr><th>指标</th><th>数值</th><th>来源</th></tr>
+  <tr><td>Claude Code 能写的代码比例</td><td><strong>100%</strong></td><td>Boris Cherny（2025年10月起）</td></tr>
+  <tr><td>Boris 日均合并 PR</td><td>几十个（峰值 150）</td><td>AI寒武纪</td></tr>
+  <tr><td>Claude Code 五小时速率限制</td><td>提升一倍（2026-05-07）</td><td>APPSO</td></tr>
+  <tr><td>Anthropic Q1 年化收入</td><td>$300 亿（增长 80 倍）</td><td>AI信息Gap</td></tr>
+  <tr><td>API 流量同比增长</td><td>17 倍</td><td>AI信息Gap</td></tr>
+  <tr><td>Anthropic 估值</td><td>$9,000 亿</td><td>AI信息Gap</td></tr>
+  <tr><td>AGENTS.md 采用项目数</td><td>60,000+</td><td>花叔</td></tr>
+  <tr><td>CLAUDE.md star 数</td><td>~50,000</td><td>花叔</td></tr>
+  <tr><td>md vs html token 压缩</td><td>80%</td><td>Cloudflare</td></tr>
+  <tr><td>Advisor 策略成本节约</td><td>80%</td><td>Simon Willison / Eve Legal</td></tr>
+  <tr><td>ChatGPT WAU</td><td>~10 亿</td><td>OpenAI 官方</td></tr>
+  <tr><td>Coding Agent ARR 预测（2026）</td><td>$1,000 亿</td><td>拾象</td></tr>
+</table>
+</section>
+
+<footer>
+  <p>基于 Tars KnowledgeBase 积累的 12 篇深度资料整理 · 数据截至 2026-05-10</p>
+  <p>来源：AI寒武纪、AI信息Gap、花叔、海外独角兽（拾象）、Bubble、YAR师、Karpathy 最佳实践、Simon Willison 等</p>
+  <p style="margin-top:0.5rem">生成者：<a href="https://github.com/openclaw/openclaw">Tars (OpenClaw)</a> · 本文档由 AI 基于知识库 Markdown 原文生成 HTML</p>
+</footer>
+
+</div>
+</body>
+</html>
