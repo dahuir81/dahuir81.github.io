@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>战略规划访谈简报 · 2025</title>
+<style>
+  :root {
+    --bg: #0f0f13;
+    --card: #1a1a24;
+    --border: #2a2a3a;
+    --text: #e4e4ed;
+    --text-secondary: #9898a8;
+    --accent: #7c5cfc;
+    --accent-light: #a88cff;
+    --green: #4ade80;
+    --orange: #fb923c;
+    --cyan: #22d3ee;
+    --pink: #f472b6;
+    --radius: 12px;
+    --width: 820px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro", "PingFang SC", "Helvetica Neue", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    padding: 40px 20px;
+  }
+  .container { max-width: var(--width); margin: 0 auto; }
+
+  /* Header */
+  .header {
+    margin-bottom: 48px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 32px;
+  }
+  .header .badge {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+    letter-spacing: 0.5px;
+  }
+  .header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    background: linear-gradient(135deg, var(--accent), var(--cyan));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .header .meta {
+    color: var(--text-secondary);
+    font-size: 14px;
+  }
+
+  /* Section */
+  .section { margin-bottom: 40px; }
+  .section h2 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    padding-left: 14px;
+    border-left: 3px solid var(--accent);
+  }
+  .section h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 24px 0 12px;
+    color: var(--accent-light);
+  }
+
+  /* Card */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+  .card .tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+  }
+  .tag-green { background: rgba(74, 222, 128, .15); color: var(--green); }
+  .tag-orange { background: rgba(251, 146, 60, .15); color: var(--orange); }
+  .tag-cyan { background: rgba(34, 211, 238, .15); color: var(--cyan); }
+  .tag-pink { background: rgba(244, 114, 182, .15); color: var(--pink); }
+  .tag-purple { background: rgba(124, 92, 252, .2); color: var(--accent-light); }
+
+  .card h4 {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+  .card p {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+  }
+  .card p:last-child { margin-bottom: 0; }
+  .card ul {
+    list-style: none;
+    padding: 0;
+  }
+  .card ul li {
+    font-size: 14px;
+    color: var(--text-secondary);
+    padding: 6px 0 6px 20px;
+    position: relative;
+  }
+  .card ul li::before {
+    content: "";
+    position: absolute;
+    left: 4px;
+    top: 14px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    opacity: .5;
+  }
+
+  /* Grid */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  @media (max-width: 640px) { .grid-2 { grid-template-columns: 1fr; } }
+
+  /* Timeline */
+  .timeline { position: relative; padding-left: 28px; }
+  .timeline::before {
+    content: "";
+    position: absolute;
+    left: 8px;
+    top: 4px;
+    bottom: 4px;
+    width: 2px;
+    background: var(--border);
+  }
+  .timeline-item {
+    position: relative;
+    margin-bottom: 24px;
+  }
+  .timeline-item::before {
+    content: "";
+    position: absolute;
+    left: -24px;
+    top: 6px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 2px solid var(--bg);
+  }
+  .timeline-item .time {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-bottom: 4px;
+  }
+  .timeline-item h4 {
+    font-size: 15px;
+    margin-bottom: 6px;
+  }
+  .timeline-item p {
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+
+  /* Divider */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 32px 0;
+  }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 13px;
+    padding: 32px 0 16px;
+    border-top: 1px solid var(--border);
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="badge">📋 访谈准备</div>
+    <h1>战略规划访谈简报</h1>
+    <div class="meta">2025 年 5 月 15 日 · 互联网战略匹配 · AI 提效</div>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- PART 1: 沟通话题建议 -->
+  <!-- ============================================ -->
+  <div class="section">
+    <h2>🎯 沟通话题建议</h2>
+
+    <div class="card">
+      <span class="tag tag-green">破冰切入</span>
+      <h4>话题一：从"互联网+"到"AI+"，底层逻辑变了</h4>
+      <p>过去讲"互联网战略匹配"核心是流量、线上化、数字化；现在 AI 正在把每个行业的生产函数重写一遍。可以聊：你们公司怎么看这波 AI 对战略规划的冲击——是延续之前的数字化路线，还是需要重新定义底层假设？</p>
+      <p style="color:var(--accent-light);font-size:13px;margin-top:8px;">💡 提问示范："传统互联网战略讲的是连接效率和网络效应，AI 时代讲的是推理效率和智能密度。你们觉得这个转变对你们行业意味着什么？"</p>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <span class="tag tag-orange">能力对标</span>
+        <h4>话题二：组织能力是否匹配AI节奏</h4>
+        <p>AI 战略落地最大的瓶颈不是技术，是组织。麦肯锡 2025 报告显示 88% 组织已在用 AI，但不到 20% 实现了规模化。战略规划部门如何帮公司把"懂 AI 的人"和"懂业务的人"捏到一起？</p>
+      </div>
+      <div class="card">
+        <span class="tag tag-cyan">业务场景</span>
+        <h4>话题三：高价值场景 vs 遍地开花</h4>
+        <p>很多公司 AI 试点铺了一大堆，但每个都做不深。战略规划的角色应该帮公司收敛到 3-5 个核心场景，而不是鼓励每个部门各自为战。如何建立优先级筛选机制？</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <span class="tag tag-pink">深度话题</span>
+      <h4>话题四：AI Agent 对商业模式的改写</h4>
+      <p>2025 年的标志性变化是从"AI 辅助人"到"AI Agent 自主执行"。战略规划需要回答：哪些业务环节的决策权可以交给 Agent？这不仅是效率问题——它会改变定价模式、交付方式、客户关系。值得深入讨论 Agent 对价值链重构的节奏判断。</p>
+    </div>
+
+    <div class="card">
+      <span class="tag tag-purple">风险视角</span>
+      <h4>话题五：数据治理与战略节奏</h4>
+      <p>AI 战略的"地基"是数据治理。很多公司的 AI 转型卡在数据质量、数据孤岛、合规风险上。战略规划部怎么评估公司的"数据就绪度"？是先建基础设施再跑应用，还是边跑边建？这是战略节奏判断的核心问题。</p>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ============================================ -->
+  <!-- PART 2: 战略规划最新方法论 -->
+  <!-- ============================================ -->
+  <div class="section">
+    <h2>📐 战略规划最新方法论</h2>
+
+    <div class="grid-2">
+      <div class="card">
+        <span class="tag tag-green">框架</span>
+        <h4>1. AI North Star 框架</h4>
+        <p>Databricks/McKinsey 2025 年主推：不把 AI 当技术项目，而是从"北极星目标"倒推——先定义业务成果（收入增长/成本削减/体验升级），再设计 AI 能力栈，最后匹配组织和文化变革。关键是三个对齐：目标对齐、投资对齐、度量对齐。</p>
+      </div>
+      <div class="card">
+        <span class="tag tag-cyan">框架</span>
+        <h4>2. OODA + AI Loop</h4>
+        <p>源自军事战略的 OODA（观察-判断-决策-行动）在 AI 时代升级为：AI 实时感知市场信号 → 预测模型辅助判断 → 决策支持系统 → Agent 自动执行。战略规划周期从年度缩短为季度甚至月度。</p>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <span class="tag tag-orange">框架</span>
+        <h4>3. 双模战略（Dual-Mode）</h4>
+        <p>Gartner 2025 新版：保留传统战略规划的"稳"（核心业务优化），同时建立"敏捷战略单元"（AI-native 探索）。两个模式并行，资源按 70-20-10 分配。核心挑战是如何让二者不打架。</p>
+      </div>
+      <div class="card">
+        <span class="tag tag-pink">框架</span>
+        <h4>4. Capability-Led Strategy</h4>
+        <p>从"市场机会驱动"转向"组织能力驱动"：先评估公司现有 AI/数据/人才能力基线，再做战略选择。避免"什么热做什么"的追风口陷阱。核心工具是战略能力热力图。</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <span class="tag tag-purple">框架</span>
+      <h4>5. 战略执行的"最后一公里"：从规划到运营</h4>
+      <p>新兴共识：战略规划的瓶颈不在"想"，在"做"。方法论创新集中在：</p>
+      <ul>
+        <li><strong>OKR × AI</strong>：用 AI 辅助 OKR 拆解、进度预测、偏差预警</li>
+        <li><strong>数字化战略仪表盘</strong>：实时跟踪战略执行指标，取代年度 review</li>
+        <li><strong>战略回溯机制</strong>：每季度一次"假设检验"，淘汰不成立的战略假设</li>
+        <li><strong>战略投资组合管理</strong>：像 VC 投项目一样管战略，持续汰换</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ============================================ -->
+  <!-- PART 3: AI 为规划提效 -->
+  <!-- ============================================ -->
+  <div class="section">
+    <h2>🤖 AI 为规划提效：4 个高杠杆落地点</h2>
+
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="time">落地一 · 信息收集</div>
+        <h4>AI 情报扫描 + 自动摘要</h4>
+        <p>战略规划传统做法是"人肉看报告 + 团队讨论"——慢、不全、有偏。现在可以用 AI Agent 定期扫描行业研报、政策文件、竞品动态、社交媒体舆情，自动生成趋势简报。</p>
+        <p style="color:var(--green);font-size:13px;">⚡ 可执行：用 AI 每天扫描 50+ 信源，按战略议题分类推送，省掉 80% 的信息收集时间。</p>
+      </div>
+      <div class="timeline-item">
+        <div class="time">落地二 · 场景分析</div>
+        <h4>AI 推演 + 情景规划</h4>
+        <p>传统 SWOT/PEST 分析偏静态。AI 可以基于历史数据和外部变量做动态推演：在 A 情景下业务会怎样，B 情景下怎样，各需要什么准备。相当于给战略团队配了个"战略沙盘"。</p>
+        <p style="color:var(--green);font-size:13px;">⚡ 可执行：对齐 3-5 个核心不确定性变量，让 AI 每小时跑一次情景模拟，结果作为讨论输入。</p>
+      </div>
+      <div class="timeline-item">
+        <div class="time">落地三 · 资源分配</div>
+        <h4>AI 辅助资源优先级排序</h4>
+        <p>战略规划核心难题：一堆好项目，钱和人都有限，选哪个？AI 可以做影响/复杂度矩阵分析，基于 ROI、战略对齐度、实施风险、组织就绪度四个维度打分排序。减少拍脑袋，增加数据锚定。</p>
+        <p style="color:var(--green);font-size:13px;">⚡ 可执行：建立 AI 打分模型，每月更新项目池优先级，作为战略投资委员会输入。</p>
+      </div>
+      <div class="timeline-item">
+        <div class="time">落地四 · 执行追踪</div>
+        <h4>AI 战略监控 + 偏差预警</h4>
+        <p>执行跟不上规划是通病。用 AI 实时监控关键指标，自动识别偏差（进度落后/预算超支/外部环境变化），给出调整建议。战略规划部从"年初出一本册子"变成"周周都在迭代"。</p>
+        <p style="color:var(--green);font-size:13px;">⚡ 可执行：搭一个轻量 AI 看板，每天推战略执行的"交通灯"状态，红色自动触发复盘。</p>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:24px;border-color:var(--accent);">
+      <h4>📌 给访谈现场的三句"金句"</h4>
+      <ul>
+        <li><strong>"AI 不是战略的输入，它是战略的执行系统。"</strong> —— 不要把 AI 当项目做，要当基础设施建。</li>
+        <li><strong>战略规划部的价值正在从"做计划"转向"做判断"——这 70% 靠 AI 提效，30% 靠人的洞察。</strong></li>
+        <li><strong>"互联网战略匹配"的核心不是把业务搬到线上，是用 AI 把决策质量提高一个数量级。</strong></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ============================================ -->
+  <!-- 附录：数据锚点 -->
+  <!-- ============================================ -->
+  <div class="section">
+    <h2>📊 关键数据锚点（可以随手引用）</h2>
+    <div class="grid-2">
+      <div class="card" style="text-align:center;padding:20px;">
+        <div style="font-size:32px;font-weight:800;color:var(--accent-light);">88%</div>
+        <p style="font-size:13px;">企业已在至少一个业务职能中使用 AI</p>
+        <p style="font-size:11px;color:var(--text-secondary);">—— 麦肯锡 2025 State of AI</p>
+      </div>
+      <div class="card" style="text-align:center;padding:20px;">
+        <div style="font-size:32px;font-weight:800;color:var(--green);">&lt;20%</div>
+        <p style="font-size:13px;">已成功从试点跨越到规模化</p>
+        <p style="font-size:11px;color:var(--text-secondary);">—— 同上</p>
+      </div>
+      <div class="card" style="text-align:center;padding:20px;">
+        <div style="font-size:32px;font-weight:800;color:var(--cyan);">3.7×</div>
+        <p style="font-size:13px;">生成式 AI 平均 ROI</p>
+        <p style="font-size:11px;color:var(--text-secondary);">—— IDC 2025</p>
+      </div>
+      <div class="card" style="text-align:center;padding:20px;">
+        <div style="font-size:32px;font-weight:800;color:var(--orange);">94%</div>
+        <p style="font-size:13px;">组织正在开展数字化计划</p>
+        <p style="font-size:11px;color:var(--text-secondary);">—— TTMS/Gartner 2025</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    Tars · 2025-05-15 · 祝访谈顺利 🧊
+  </div>
+
+</div>
+</body>
+</html>
