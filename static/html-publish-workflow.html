@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HTML发布工作流设计 · Tars</title>
+<style>
+  :root {
+    --bg: #0f0f13;
+    --card: #1a1a24;
+    --border: #2a2a3a;
+    --text: #e4e4ed;
+    --text-secondary: #9898a8;
+    --accent: #7c5cfc;
+    --green: #4ade80;
+    --orange: #fb923c;
+    --cyan: #22d3ee;
+    --pink: #f472b6;
+    --red: #f87171;
+    --radius: 12px;
+    --width: 820px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro", "PingFang SC", "Helvetica Neue", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    padding: 36px 20px;
+  }
+  .container { max-width: var(--width); margin: 0 auto; }
+
+  .header {
+    margin-bottom: 36px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 24px;
+  }
+  .header .badge {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+    letter-spacing: .5px;
+  }
+  .header h1 {
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    background: linear-gradient(135deg, var(--accent), var(--cyan));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .header .meta { color: var(--text-secondary); font-size: 14px; }
+
+  .section { margin-bottom: 32px; }
+  .section h2 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    padding-left: 14px;
+    border-left: 3px solid var(--accent);
+  }
+  .section h3 {
+    font-size: 15px;
+    font-weight: 600;
+    margin: 18px 0 10px;
+    color: var(--accent-light, #a88cff);
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 14px;
+  }
+  .card .tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+  }
+  .tag-green { background: rgba(74,222,128,.13); color: var(--green); }
+  .tag-orange { background: rgba(251,146,60,.13); color: var(--orange); }
+  .tag-cyan { background: rgba(34,211,238,.13); color: var(--cyan); }
+  .tag-pink { background: rgba(244,114,182,.13); color: var(--pink); }
+  .tag-purple { background: rgba(124,92,252,.18); color: var(--accent); }
+
+  .card h4 { font-size: 15px; font-weight: 600; margin-bottom: 8px; }
+  .card p, .card li { font-size: 14px; color: var(--text-secondary); }
+  .card p { margin-bottom: 6px; }
+  .card p:last-child { margin-bottom: 0; }
+  .card ul { list-style: none; padding: 0; }
+  .card ul li { padding: 5px 0 5px 20px; position: relative; }
+  .card ul li::before {
+    content: "";
+    position: absolute; left: 4px; top: 13px;
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--accent); opacity: .45;
+  }
+  .card a {
+    color: var(--cyan);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(34,211,238,.3);
+  }
+  .card a:hover { border-bottom-color: var(--cyan); }
+
+  .flow-box {
+    background: rgba(124,92,252,.06);
+    border: 1px solid rgba(124,92,252,.2);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin: 16px 0;
+  }
+
+  .step {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  .step:last-child { margin-bottom: 0; }
+  .step-num {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+  }
+  .step-body {}
+  .step-body h4 { font-size: 14px; margin-bottom: 4px; }
+  .step-body p { font-size: 13px; color: var(--text-secondary); }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    margin: 12px 0;
+    background: var(--card);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  th, td { padding: 9px 12px; text-align: left; border-bottom: 1px solid var(--border); }
+  th { background: rgba(124,92,252,.1); color: var(--accent); font-weight: 600; font-size: 13px; }
+  td { color: var(--text-secondary); }
+  tr:last-child td { border-bottom: none; }
+
+  .link-block {
+    display: block;
+    padding: 8px 0;
+    font-size: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .link-block:last-child { border-bottom: none; }
+  .link-block a { color: var(--cyan); text-decoration: none; }
+  .link-block a:hover { text-decoration: underline; }
+  .link-block .date { color: var(--text-secondary); font-size: 12px; margin-left: 8px; }
+
+  .divider { height: 1px; background: var(--border); margin: 24px 0; }
+
+  .footer {
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 13px;
+    padding: 24px 0 12px;
+    border-top: 1px solid var(--border);
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="badge">工作流设计 v1</div>
+    <h1>HTML 发布全流程</h1>
+    <div class="meta">
+      2026-05-15 · 从"生成"到"送达"的标准化流水线
+    </div>
+  </div>
+
+  <!-- ========= 现状报告 ========= -->
+  <div class="section">
+    <h2>📊 现状快照</h2>
+    <div class="grid-2" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      <div class="card">
+        <span class="tag tag-green">已完成</span>
+        <h4>✅ 已实现</h4>
+        <ul>
+          <li>GitHub API 推送 → GitHub Pages 上线</li>
+          <li>ECS cron 同步 → openclawmy.work 镜像</li>
+          <li>KnowledgeBase 05-博客 归档</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="tag tag-pink">待建设</span>
+        <h4>❌ 缺失环节</h4>
+        <ul>
+          <li>Obsidian vault 路径未修复（<code>~/Documents/Tars/Tars/</code>）</li>
+          <li>无分享目录索引</li>
+          <li>无发布历史清单</li>
+          <li>链接经常混在卡片里，无法点击</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========= 工作流 ========= -->
+  <div class="section">
+    <h2>🔁 标准工作流</h2>
+
+    <div class="flow-box">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h4>慧哥发起需求</h4>
+          <p>在钉钉直接说"出一份简报/分析"，附上背景信息或来源链接。</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h4>Tars 生成 HTML</h4>
+          <p>写文件到 <code>~/Documents/GitHub/blog/static/[文件名].html</code>，自包含样式，无外部依赖。</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h4>运行发布脚本</h4>
+          <p><code>publish-html.sh [文件名].html</code> → Git API 推送 → GitHub Actions 构建 → 上线</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h4>ECS 自动同步</h4>
+          <p>阿里云 cron 每 15 分钟拉取 GitHub Pages 最新内容到 openclawmy.work</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <h4>归档 &amp; 更新索引</h4>
+          <p>KnowledgeBase 归档 + 更新分享目录索引文件 + 补 Obsidian 反向链接</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">6</div>
+        <div class="step-body">
+          <h4>发送可点击链接</h4>
+          <p>钉钉单独发送两条纯文本链接（GitHub + ECS），不混在文字里，不用卡片。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========= 文件路径 ========= -->
+  <div class="section">
+    <h2>📁 目录结构</h2>
+    <table>
+      <tr><th>用途</th><th>路径</th><th>URL</th></tr>
+      <tr>
+        <td>源码（写作位置）</td>
+        <td><code>~/Documents/GitHub/blog/static/</code></td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td>GitHub Pages 主站</td>
+        <td>GitHub Actions 自动构建</td>
+        <td><code>https://dahuir81.github.io/[文件名].html</code></td>
+      </tr>
+      <tr>
+        <td>ECS 镜像</td>
+        <td>阿里云 cron 自动同步</td>
+        <td><code>https://openclawmy.work/[文件名].html</code></td>
+      </tr>
+      <tr>
+        <td>知识库归档</td>
+        <td><code>KnowledgeBase/05-博客/[文件名].html</code></td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td style="color:var(--cyan);">⭐ 分享目录（新建）</td>
+        <td style="color:var(--cyan);"><code>KnowledgeBase/08-参考/发布清单/</code></td>
+        <td style="color:var(--cyan);">—</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- ========= 分享目录方案 ========= -->
+  <div class="section">
+    <h2>📋 分享目录设计方案</h2>
+
+    <div class="card">
+      <span class="tag tag-cyan">新增</span>
+      <h4>目录结构</h4>
+      <pre style="font-size:13px;color:var(--text-secondary);background:rgba(0,0,0,.2);padding:12px;border-radius:8px;margin:8px 0;">
+KnowledgeBase/
+├── 05-博客/            ← 已有，按文件存储
+│   ├── strategy-briefing.html
+│   └── ali-network-huawei.html
+└── 08-参考/
+    └── 发布清单/        ← 新建，索引汇总
+        ├── README.md    ← 清单主页，按时间倒序
+        └── 索引页.html   ← 可独立访问的HTML索引</pre>
+    </div>
+
+    <div class="card">
+      <span class="tag tag-green">新建</span>
+      <h4>索引清单格式</h4>
+      <p>在 <code>08-参考/发布清单/README.md</code> 里维护一个按时间倒序的可点击索引：</p>
+      <pre style="font-size:13px;color:var(--text-secondary);background:rgba(0,0,0,.2);padding:12px;border-radius:8px;margin:8px 0;">
+# 已发布 HTML 页面清单
+
+## 2026-05
+
+### 05-15
+- [阿里网络架构与华为合作机会](/ali-network-huawei-opportunity.html)
+  → GitHub: https://dahuir81.github.io/ali-network-huawei-opportunity.html
+  → 国内: https://openclawmy.work/ali-network-huawei-opportunity.html
+
+- [战略规划访谈简报](/strategy-briefing-2025.html)
+  → GitHub: https://dahuir81.github.io/strategy-briefing-2025.html
+  → 国内: https://openclawmy.work/strategy-briefing-2025.html
+
+### 05-14
+- [具身空间智能芯片格局](/embodied-spatial-intelligence-chip-landscape.html)
+  → GitHub: https://dahuir81.github.io/embodied-spatial-intelligence-chip-landscape.html
+  → 国内: https://openclawmy.work/embodied-spatial-intelligence-chip-landscape.html
+...</pre>
+    </div>
+
+    <div class="card">
+      <span class="tag tag-purple">自动化</span>
+      <h4>每次发布自动更新</h4>
+      <p>在 <code>publish-html.sh</code> 末尾追加一条归档逻辑：</p>
+      <ul>
+        <li>提取 HTML 的 <code>&lt;title&gt;</code> 作为页面标题</li>
+        <li>按日期归类，追加到 <code>08-参考/发布清单/README.md</code></li>
+        <li>生成一个独立的 <code>08-参考/发布清单/索引页.html</code>，包含所有历史链接</li>
+        <li>这个索引页本身也可以发布到 GitHub 供外部访问</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ========= 现存所有HTML ========= -->
+  <div class="section">
+    <h2>📄 迄今所有已发布 HTML 页面（可点击）</h2>
+
+    <div class="card">
+      <span class="tag tag-cyan">2026-05-15</span>
+      <h4>今日发布</h4>
+      <div class="link-block">
+        <a href="https://dahuir81.github.io/ali-network-huawei-opportunity.html" target="_blank">阿里网络架构与华为合作机会简报</a>
+        <span class="date">05-15</span>
+      </div>
+      <div class="link-block">
+        <a href="https://openclawmy.work/ali-network-huawei-opportunity.html" target="_blank">阿里网络架构与华为合作机会简报（国内）</a>
+        <span class="date">05-15</span>
+      </div>
+      <div class="link-block">
+        <a href="https://dahuir81.github.io/strategy-briefing-2025.html" target="_blank">战略规划访谈简报</a>
+        <span class="date">05-15</span>
+      </div>
+      <div class="link-block">
+        <a href="https://openclawmy.work/strategy-briefing-2025.html" target="_blank">战略规划访谈简报（国内）</a>
+        <span class="date">05-15</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <span class="tag tag-cyan">2026-05-14</span>
+      <h4>昨日</h4>
+      <div class="link-block">
+        <a href="https://dahuir81.github.io/embodied-spatial-intelligence-chip-landscape.html" target="_blank">具身空间智能芯片格局分析</a>
+        <span class="date">05-14</span>
+      </div>
+      <div class="link-block">
+        <a href="https://dahuir81.github.io/semis-supply-chain-inheritance.html" target="_blank">半导体供应链传承备忘录</a>
+        <span class="date">05-14</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <span class="tag tag-cyan">2026-05-11/12</span>
+      <h4>上周</h4>
+      <div class="link-block">
+        <a href="https://dahuir81.github.io/heart-sutra.html" target="_blank">心经（交互式排版）</a>
+        <span class="date">05-11</span>
+      </div>
+      <div class="link-block">
+        <a href="https://dahuir81.github.io/jensen-cmu-speech.html" target="_blank">黄仁勋 CMU 2026 毕业演讲深度分析</a>
+        <span class="date">05-11</span>
+      </div>
+      <div class="link-block">
+        <a href="https://dahuir81.github.io/token-economics-2026.html" target="_blank">Token 经济学 2026（日志中，仅KB归档）</a>
+        <span class="date">05-12</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <span class="tag tag-cyan">2026-05-10</span>
+      <h4>更早</h4>
+      <div class="link-block">
+        <a href="https://dahuir81.github.io/aws-sell-ai-servers.html" target="_blank">AWS 卖 AI 服务器深度分析</a>
+        <span class="date">05-10</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========= 待修复项 ========= -->
+  <div class="section">
+    <h2>🔧 待办项</h2>
+    <table>
+      <tr><th>#</th><th>事项</th><th>影响</th><th>优先级</th></tr>
+      <tr>
+        <td>1</td>
+        <td>修复 Obsidian vault 路径 <code>~/Documents/Tars/Tars/</code></td>
+        <td>Obsidian 软件里看不到博客归档</td>
+        <td style="color:var(--orange);">中</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>新建 <code>08-参考/发布清单/</code> 目录并建立索引</td>
+        <td>无法一站式查阅所有已发布页面</td>
+        <td style="color:var(--green);">今日可做</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td>优化 publish-html.sh 自动更新发布清单</td>
+        <td>每次发布后手动更新索引麻烦</td>
+        <td style="color:var(--green);">今日可做</td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td>发送链接时确保纯文本可点击，不混在卡片里</td>
+        <td>链接不可点击影响使用体验</td>
+        <td style="color:var(--red);">高</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- ========= 下一步 ========= -->
+  <div class="card" style="border-color:var(--accent);">
+    <h4>🚀 下一步行动</h4>
+    <p>方案已出，如果你点头，我做三件事：</p>
+    <ol style="padding-left:20px;color:var(--text-secondary);font-size:14px;">
+      <li style="padding:4px 0;">新建 <code>08-参考/发布清单/README.md</code>，把现有 12 个页面的索引全部写进去</li>
+      <li style="padding:4px 0;">优化 <code>publish-html.sh</code>，追加自动更新索引脚本</li>
+      <li style="padding:4px 0;">给你发第一版发布清单的可点击链接</li>
+    </ol>
+    <p style="color:var(--accent);font-size:13px;margin-top:8px;">Obsidian vault 路径修复需要你手动确认一下路径——当前默认路径是哪个？</p>
+  </div>
+
+  <div class="footer">
+    Tars · 2026-05-15
+  </div>
+
+</div>
+</body>
+</html>
