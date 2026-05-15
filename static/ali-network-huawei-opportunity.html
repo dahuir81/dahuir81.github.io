@@ -147,6 +147,14 @@
   }
   @media (max-width: 640px) { .grid-2 { grid-template-columns: 1fr; } }
 
+  .grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 14px;
+  }
+  @media (max-width: 768px) { .grid-3 { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 480px) { .grid-3 { grid-template-columns: 1fr; } }
+
   table {
     width: 100%;
     border-collapse: collapse;
@@ -186,6 +194,32 @@
     font-size: 14px;
   }
 
+  .vs-card-left {
+    background: linear-gradient(135deg, rgba(124, 92, 252, .1), rgba(34, 211, 238, .05));
+    border: 1px solid rgba(124, 92, 252, .25);
+    border-radius: var(--radius);
+    padding: 20px;
+  }
+  .vs-card-right {
+    background: linear-gradient(135deg, rgba(251, 146, 60, .1), rgba(244, 114, 182, .05));
+    border: 1px solid rgba(251, 146, 60, .25);
+    border-radius: var(--radius);
+    padding: 20px;
+  }
+  .vs-card-left h4, .vs-card-right h4 { margin-bottom: 10px; }
+  .vs-card-left h4 { color: var(--cyan); }
+  .vs-card-right h4 { color: var(--orange); }
+  .vs-badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 10px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+  }
+  .badge-hardware { background: rgba(34, 211, 238, .15); color: var(--cyan); }
+  .badge-software { background: rgba(251, 146, 60, .15); color: var(--orange); }
+
   .divider {
     height: 1px;
     background: var(--border);
@@ -208,7 +242,7 @@
     <div class="badge">内部讨论 · 参考材料</div>
     <h1>阿里网络架构与华为合作机会</h1>
     <div class="meta">
-      2026 年 5 月 15 日 · TPN / HPN / 李飞飞技术路线 &nbsp;·&nbsp; 
+      2026 年 5 月 15 日 · TPN / HPN / 李飞飞技术路线 &nbsp;·&nbsp;
       <span style="color:var(--orange);">未来网络领域合作切入点分析</span>
     </div>
   </div>
@@ -277,6 +311,7 @@
         <li>推理网络须按"链路角色"而非"统一 Fabric"设计</li>
         <li>Network Infra 与 Inference Runtime 的边界在消失</li>
         <li>引用 Jeff Dean（GTC 2026）：Agent 长时间自主运行使 ultra-low-latency inference 变得关键</li>
+        <li>Bill Dally：Inference is the job now</li>
       </ul>
     </div>
   </div>
@@ -297,7 +332,7 @@
         <li><strong>双 ToR + 双平面</strong>：采用冗余 TOR 交换机 + 双平面设计，提升可靠性和带宽</li>
         <li><strong>规模上限</strong>：最多连接约 15,000 GPU（对比下一代 MRC 架构可达 100K+）</li>
         <li><strong>定位</strong>：面向中大规模训练集群，已验证在阿里云内部大规模部署</li>
-        <li><strong>演进方向</strong>：与行业竞品对比，HPN 在规模扩展性上受限于传统网络架构，推动阿里向 MRC 等新一代方案演进</li>
+        <li><strong>演进方向</strong>：HPN 7.0 引领智算以太网生态，向高通量以太网和 ENode+ 超节点演进</li>
       </ul>
     </div>
 
@@ -327,18 +362,18 @@
     <div class="card">
       <span class="tag tag-purple">人物画像</span>
       <h4>数据库与云基础设施专家</h4>
-      <p><strong>李飞飞</strong>，2026 年 4 月出任阿里云 CTO，全面负责阿里云技术及 AI 云基础设施建设。与斯坦福 AI 教授李飞飞同名两人，此李飞飞是系统与数据库领域的权威。</p>
+      <p><strong>李飞飞</strong>，2026 年 4 月出任阿里云 CTO，全面负责阿里云技术及 AI 云基础设施建设。注意：此李飞飞与斯坦福 AI 教授李飞飞（Fei-Fei Li / World Labs）同名不同人，此位是系统与数据库领域权威。</p>
     </div>
 
     <div class="grid-2">
       <div class="card">
         <span class="tag tag-cyan">学术背景</span>
-        <h4>从学术到产业</h4>
+        <h4>从学者到技术领袖</h4>
         <ul>
           <li>美国犹他大学计算机系终身教授</li>
           <li>ACM 杰出科学家（ACM Distinguished Scientist）</li>
           <li>ACM TODS 期刊副主编</li>
-          <li>多次担任 ACM SIGMOD/SIGKDD 高级区域主席</li>
+          <li>多次担任 ACM SIGMOD / SIGKDD 高级区域主席</li>
           <li>研究成果获 IEEE ICDE、ACM SIGMOD 等顶会认可</li>
         </ul>
       </div>
@@ -383,14 +418,101 @@
       <span class="tag tag-purple">战略意义</span>
       <h4>为什么李飞飞对阿里网络路线重要？</h4>
       <p>李飞飞强调"AI 下半场回归系统与工程化"，与 TPN 的理念高度一致——网络不再只是传输管道，而是 Token 生产系统的核心组件。其 PolarDB 实践中已经验证了高密度 RDMA 网络、CXL 互联、跨机性能优化等核心技术，这些经验将直接影响阿里云 AI 基础设施（含网络）的技术路线选择。</p>
-      <p style="color:var(--accent-light);font-size:13px;margin-top:8px;">▸ 李飞飞 + 平头哥（芯片）+ TPN（网络架构）= 阿里云 AI 基础设施铁三角</p>
+      <p style="color:var(--accent-light);font-size:13px;margin-top:8px;">▸ 李飞飞（云基建）+ 平头哥（芯片）+ TPN（网络架构）= 阿里云 AI 基础设施铁三角</p>
     </div>
   </div>
 
   <div class="divider"></div>
 
   <!-- ============================================ -->
-  <!-- 四、与华为合作机会分析 -->
+  <!-- 新增：阿里网络双雄：蔡德忠 vs 祝顺民 -->
+  <!-- ============================================ -->
+  <div class="section">
+    <h2>🔄 阿里网络双雄：蔡德忠 vs 祝顺民</h2>
+
+    <p style="color:var(--text-secondary);font-size:14px;margin-bottom:16px;">阿里云网络领域两位负责人，分别代表硬件基础设施和软件定义两条技术路线。了解他们的观点分歧，对判断网络演进方向和华为合作策略有重要参考价值。</p>
+
+    <div class="card">
+      <h4>👤 蔡德忠</h4>
+      <table>
+        <tr><td style="width:100px;">职位</td><td>阿里云智能研发副总裁 · 基础设施网络负责人</td></tr>
+        <tr><td>代表作</td><td>HPN 7.0 架构 · 高通量以太网协议 · ENode+ 超节点系统</td></tr>
+        <tr><td>核心理念</td><td>Scale up + Scale out 融合架构，高通量以太网成为智算网络主流</td></tr>
+        <tr><td>发表场合</td><td>CCF ChinaNet 2024 · 乌镇峰会 2024 · CCF 秀湖会议 2026</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h4>👤 祝顺民（花名：江鹤）</h4>
+      <table>
+        <tr><td style="width:100px;">职位</td><td>阿里云智能研发副总裁 · 云网络产品线负责人 · 达摩院XG实验室负责人</td></tr>
+        <tr><td>代表作</td><td>洛神（Luocheng）云网络平台 · SDN/NFV 体系 · 5G 云专网</td></tr>
+        <tr><td>核心理念</td><td>软件定义一切，网络可编程、弹性、自动化是核心价值</td></tr>
+        <tr><td>发表场合</td><td>阿里云官方技术博客 · 开发者大会 · 网络技术峰会</td></tr>
+      </table>
+    </div>
+
+    <h3>⚡ Token 时代路线对立：硬件 vs 软件</h3>
+    <div class="grid-2">
+      <div class="vs-card-left">
+        <div class="vs-badge badge-hardware">🔧 硬件/基础设施派</div>
+        <h4>蔡德忠：硬件实现更高效</h4>
+        <p style="font-size:13px;color:var(--text-secondary);">
+          Token 生产的确定性时延和超大规模吞吐只能靠专用芯片、物理层创新和高通量以太网协议解决。软件抽象固然带来灵活性，但牺牲了不可接受的性能和确定性。HPN 7.0 和 ENode+ 超节点都是硬核硬件方案。
+        </p>
+        <p style="font-size:13px;margin-top:8px;">
+          <strong>核心论点</strong>：推理网络需要按"链路角色"差异化承载（TTFT / TPOT / KV / Expert 各走各路），这种差异化只能在物理层实现——硬件交换机做微秒级 QoS 调度才是真正答案。
+        </p>
+        <p style="font-size:12px;color:var(--cyan);margin-top:8px;border-top:1px solid rgba(124,92,252,.15);padding-top:8px;">
+          💬 <em>"X10 规模的智算集群，Ethernet 将成为主流方案"—— CCF ChinaNet 2024</em>
+        </p>
+      </div>
+
+      <div class="vs-card-right">
+        <div class="vs-badge badge-software">⚙️ 软件/虚拟化派</div>
+        <h4>祝顺民：软件实现更有效</h4>
+        <p style="font-size:13px;color:var(--text-secondary);">
+          Token 流的多样性（TTFT / TPOT / KV / MoE 各路流量特征完全不同）恰恰需要 SDN 层的智能调度和虚拟化抽象。硬件方案做得再好，本质上是一套固定的策略——而 Token 时代流量模式在持续演变。阿里云的规模决定了软件自动化是唯一出路。
+        </p>
+        <p style="font-size:13px;margin-top:8px;">
+          <strong>核心论点</strong>：硬件确定性在网络规模和多样性到达一定程度后必然让位于软件的弹性。洛神平台 10 年验证了软件定义可以承载百万级用户和 8 次双 11——token 时代也跳不出这个规律。
+        </p>
+        <p style="font-size:12px;color:var(--orange);margin-top:8px;border-top:1px solid rgba(251,146,60,.15);padding-top:8px;">
+          💬 <em>"软硬一体虽然在性能上优势明显，但云需要被软件定义"—— 洛神平台技术理念</em>
+        </p>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px;border-color:var(--border);">
+      <h4>⚡ 核心对立点一览</h4>
+      <table>
+        <tr><th style="width:22%;">维度</th><th style="width:39%;">蔡德忠（硬件派）</th><th style="width:39%;">祝顺民（软件派）</th></tr>
+        <tr><td>Token 时代本质</td><td>确定性高性能硬件时代</td><td>软件可编程弹性时代</td></tr>
+        <tr><td>网络效率来源</td><td>芯片级加速 + 物理层协议创新</td><td>智能调度 + 虚拟化 + 自动化</td></tr>
+        <tr><td>核心路径</td><td>往底层走（芯片→协议→设备）</td><td>往上层走（SDN→调度→平台）</td></tr>
+        <tr><td>对硬件的态度</td><td>专用硬件是唯一有效的确定性方案</td><td>通用硬件 + 软件定义更符合云弹性</td></tr>
+        <tr><td>对软件的态度</td><td>软件抽象带来不可控的时延抖动</td><td>不引入软件智能，硬件再快也是瞎忙</td></tr>
+        <tr><td>Scale up vs out</td><td>Scale up（超节点）和 Scale out 融合</td><td>Scale out 优先，软件全局调度应对分布式</td></tr>
+        <tr><td>部署形态</td><td>高通量以太网交换机 + 超节点机柜</td><td>洛神 SDN 平台 + 虚拟化网络功能</td></tr>
+        <tr><td>典型合作方</td><td>交换机/芯片/光模块厂商</td><td>云管平台/NFV/AI 调度平台</td></tr>
+      </table>
+    </div>
+
+    <div class="highlight-box" style="border-color:var(--pink);background:rgba(244,114,182,.06);">
+      <h4 style="color:var(--pink);">💡 对华为合作策略的启发</h4>
+      <ul>
+        <li><strong>蔡德忠路线 → 华为的强连接点</strong>：交换机硬件合作（CloudEngine + 高通量以太网互认证）、光模块供应、超节点架构经验输出。华为的硬件基因与蔡德忠路线天然匹配，容易切入。</li>
+        <li><strong>祝顺民路线 → 华为的弱连接点</strong>：SDN 控制器互操作、云网协同联合验证、5G/6G 云专网标准。华为 iMaster NCE 与洛神存在对接可能，但软件层合作更敏感。</li>
+        <li><strong>当前谁占上风</strong>：从公开曝光度看，蔡德忠路线（HPN 7.0 / 高通量以太网 / TPN）获得了阿里云更高调的战略背书；但洛神平台是阿里云收入的压舱石，祝顺民在收入贡献上话语权更实。</li>
+        <li><strong>建议接触优先级</strong>：光互联合作（硬件采购）→ 交换机互认证（硬件合作）→ 超节点架构交流（技术互鉴）→ SDN 互联互通（软件标准层面，敏感度最高放最后）。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ============================================ -->
+  <!-- 五、与华为合作机会分析 -->
   <!-- ============================================ -->
   <div class="section">
     <h2>4️⃣ 与华为合作机会：网络领域切入点</h2>
@@ -469,23 +591,25 @@
     </table>
 
     <div class="highlight-box" style="border-color:var(--green);background:rgba(74,222,128,.06);">
-      <h4 style="color:var(--green);">📌 建议的讨论策略</h4>
+      <h4 style="color:var(--green);">📌 讨论策略建议</h4>
       <ul>
         <li><strong>先易后难</strong>：从光互联（采购/合作）切入，建立合作基础</li>
         <li><strong>技术互鉴</strong>：阿里 TPN 的理念可以为华为推理网络设计提供思路，华为超节点的高密度互联经验对阿里有参考价值</li>
         <li><strong>避开直接竞争区</strong>：在昇腾 vs 阿里云 AI 训练平台层面保持距离，聚焦基础设施层面的互补</li>
-        <li><strong>关注 CXL 生态共建</strong>：CXL 互联标准处于爆发前夜，双方可以联合推进中国 CXL 生态标准</li>
+        <li><strong>关注 CXL 生态共建</strong>：CXL 互联标准处于爆发前夜，双方可联合推进中国 CXL 生态标准</li>
         <li><strong>TPN 落地设备互认证</strong>：阿里推出 TPN 架构后，需要交换机/网卡/光模块等硬件的适配验证，华为可作为关键设备供应商参与</li>
+        <li><strong>看人下菜碟</strong>：硬件层面的合作（交换机/光模块）对蔡德忠路线，软件层面的互鉴（SDN/调度平台）看祝顺民路线的走向</li>
       </ul>
     </div>
 
     <div class="card" style="border-color:var(--accent);">
-      <h4>📝 总结：阿里网络技术路线一览</h4>
+      <h4>📝 总览：阿里网络技术路线</h4>
       <table>
         <tr><th>层次</th><th>训练</th><th>推理</th><th>负责人/相关方</th></tr>
         <tr><td>架构理念</td><td>HPN（双平面）</td><td>TPN（Token 生产网络）</td><td>蔡德忠 / CCF 秀湖会议</td></tr>
         <tr><td>芯片</td><td>磐脉 920 智能网卡</td><td>（推理网卡待演进）</td><td>平头哥半导体</td></tr>
         <tr><td>基础设施</td><td>PolarDB 100G RDMA</td><td>KV-Cache 池化（CXL）</td><td>李飞飞 / PolarDB 团队</td></tr>
+        <tr><td>软件平台</td><td>洛神 SDN / SRv6</td><td>推理调度平台</td><td>祝顺民 / XG 实验室</td></tr>
         <tr><td>战略层</td><td>通义实验室（周靖人）</td><td>阿里云 AI 基建（李飞飞）</td><td>技术委员会（吴泳铭组长）</td></tr>
       </table>
     </div>
