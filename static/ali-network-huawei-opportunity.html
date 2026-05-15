@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>阿里网络架构与华为合作机会 · 内部简报</title>
+<style>
+  :root {
+    --bg: #0f0f13;
+    --card: #1a1a24;
+    --border: #2a2a3a;
+    --text: #e4e4ed;
+    --text-secondary: #9898a8;
+    --accent: #7c5cfc;
+    --accent-light: #a88cff;
+    --green: #4ade80;
+    --orange: #fb923c;
+    --cyan: #22d3ee;
+    --pink: #f472b6;
+    --red: #f87171;
+    --yellow: #facc15;
+    --radius: 12px;
+    --width: 820px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro", "PingFang SC", "Helvetica Neue", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    padding: 40px 20px;
+  }
+  .container { max-width: var(--width); margin: 0 auto; }
+
+  .header {
+    margin-bottom: 40px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 28px;
+  }
+  .header .badge {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 14px;
+    letter-spacing: 0.5px;
+  }
+  .header .badge-2 {
+    display: inline-block;
+    background: rgba(251, 146, 60, .15);
+    color: var(--orange);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 4px;
+    margin-left: 8px;
+  }
+  .header h1 {
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    background: linear-gradient(135deg, var(--accent), var(--cyan));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .header .meta {
+    color: var(--text-secondary);
+    font-size: 14px;
+  }
+
+  .section { margin-bottom: 36px; }
+  .section h2 {
+    font-size: 19px;
+    font-weight: 700;
+    margin-bottom: 18px;
+    padding-left: 14px;
+    border-left: 3px solid var(--accent);
+  }
+  .section h3 {
+    font-size: 15px;
+    font-weight: 600;
+    margin: 20px 0 10px;
+    color: var(--accent-light);
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px;
+    margin-bottom: 14px;
+  }
+  .card .tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+  }
+  .tag-green { background: rgba(74, 222, 128, .13); color: var(--green); }
+  .tag-orange { background: rgba(251, 146, 60, .13); color: var(--orange); }
+  .tag-cyan { background: rgba(34, 211, 238, .13); color: var(--cyan); }
+  .tag-pink { background: rgba(244, 114, 182, .13); color: var(--pink); }
+  .tag-purple { background: rgba(124, 92, 252, .18); color: var(--accent-light); }
+  .tag-red { background: rgba(248, 113, 113, .13); color: var(--red); }
+  .tag-yellow { background: rgba(250, 204, 21, .13); color: var(--yellow); }
+
+  .card h4 {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .card p, .card li {
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+  .card p { margin-bottom: 6px; }
+  .card p:last-child { margin-bottom: 0; }
+  .card ul {
+    list-style: none;
+    padding: 0;
+  }
+  .card ul li {
+    padding: 5px 0 5px 20px;
+    position: relative;
+  }
+  .card ul li::before {
+    content: "";
+    position: absolute;
+    left: 4px;
+    top: 13px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    opacity: .45;
+  }
+
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  @media (max-width: 640px) { .grid-2 { grid-template-columns: 1fr; } }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    margin: 12px 0;
+    background: var(--card);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  th, td {
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  th {
+    background: rgba(124, 92, 252, .1);
+    color: var(--accent-light);
+    font-weight: 600;
+    font-size: 13px;
+  }
+  td { color: var(--text-secondary); }
+  tr:last-child td { border-bottom: none; }
+
+  .highlight-box {
+    background: rgba(124, 92, 252, .08);
+    border: 1px solid rgba(124, 92, 252, .2);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin: 16px 0;
+  }
+  .highlight-box h4 {
+    color: var(--accent-light);
+    margin-bottom: 10px;
+  }
+  .highlight-box p, .highlight-box li {
+    color: var(--text-secondary);
+    font-size: 14px;
+  }
+
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 28px 0;
+  }
+
+  .footer {
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 13px;
+    padding: 28px 0 16px;
+    border-top: 1px solid var(--border);
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="badge">内部讨论 · 参考材料</div>
+    <h1>阿里网络架构与华为合作机会</h1>
+    <div class="meta">
+      2026 年 5 月 15 日 · TPN / HPN / 李飞飞技术路线 &nbsp;·&nbsp; 
+      <span style="color:var(--orange);">未来网络领域合作切入点分析</span>
+    </div>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- 一、阿里TPN：Token Performance Network -->
+  <!-- ============================================ -->
+  <div class="section">
+    <h2>1️⃣ 阿里 TPN：Token 生产网络架构</h2>
+
+    <div class="card">
+      <span class="tag tag-purple">概念首提</span>
+      <h4>蔡德忠 · CCF 秀湖会议（2026年4月）</h4>
+      <p>阿里云在 CCF 秀湖会议上首次提出 <strong>TPN（Token Performance Network）</strong>，核心主张：<strong>推理时代的网络不再围绕 GPU/Job 定义，而要围绕 Token 生产效率定义。</strong></p>
+      <p>目标函数从"峰值带宽"转向"极致 Token 性能与最低 Token 成本之间的系统最优解"。推理网络的终局是 <strong>Token Economics</strong>——不是比谁的带宽大，而是谁能用更低成本持续产出更多有效 Token。</p>
+    </div>
+
+    <h3>训练 vs 推理：网络思维的根本转变</h3>
+    <table>
+      <tr><th>维度</th><th>训练网络</th><th>推理网络（TPN）</th></tr>
+      <tr><td>服务对象</td><td>GPU / Job</td><td>Token 生产过程</td></tr>
+      <tr><td>核心指标</td><td>Step Time、扩展效率</td><td>TTFT、TPOT、Goodput、Cost/Token</td></tr>
+      <tr><td>瓶颈类型</td><td>Compute-bound</td><td>I/O-bound → Network-bound</td></tr>
+      <tr><td>优化方式</td><td>统一 Fabric</td><td>按链路角色差异化</td></tr>
+      <tr><td>状态管理</td><td>无状态</td><td>状态感知（KV-Cache 生命周期）</td></tr>
+    </table>
+
+    <h3>推理时代为什么网络成了主角？</h3>
+    <div class="grid-2">
+      <div class="card">
+        <span class="tag tag-cyan">PD 分离</span>
+        <h4>KV-Cache 网络化</h4>
+        <p>Prefill-Decode 分离把 KV-Cache 从本地缓存推到网络，推理从 compute-bound 坠入 network-bound。</p>
+      </div>
+      <div class="card">
+        <span class="tag tag-orange">Agentic</span>
+        <h4>高复用缓存命中</h4>
+        <p>Agent 场景 KV-Cache 命中率 95%+，瓶颈从"算"转向"取"——推理系统成为网络吞吐瓶颈的奴隶。</p>
+      </div>
+      <div class="card">
+        <span class="tag tag-pink">MoE 风暴</span>
+        <h4>Expert 路由小包风暴</h4>
+        <p>MoE 架构下 Expert 路由产生持续微秒级小包风暴，对网络拥塞控制和 QoS 提出极端要求。</p>
+      </div>
+      <div class="card">
+        <span class="tag tag-green">跨域协同</span>
+        <h4>跨集群状态接续</h4>
+        <p>Agent 长时间运行需要跨集群/跨域的状态迁移和接续，广域网成为推理网络的自然延伸。</p>
+      </div>
+    </div>
+
+    <h3>TPN 的四类网络路径</h3>
+    <table>
+      <tr><th>路径类型</th><th>流量特征</th><th>QoS 需求</th></tr>
+      <tr><td>模型并行通信</td><td>TP/EP/MoE All-to-All</td><td>低时延、高吞吐</td></tr>
+      <tr><td>PD 交接路径</td><td>Prefill 到 Decode 状态迁移</td><td>确定性低时延</td></tr>
+      <tr><td>KV 存储访问</td><td>本地/远端 DRAM/SSD 拉取</td><td>带宽敏感、近存储</td></tr>
+      <tr><td>跨集群协同</td><td>跨池调度、跨域状态接续</td><td>广域网确定性时延</td></tr>
+    </table>
+
+    <div class="highlight-box">
+      <h4>💡 行业启发</h4>
+      <ul>
+        <li>Inference-Centric 网络必须重写目标函数</li>
+        <li>网络必须成为"状态感知系统"的一部分</li>
+        <li>推理网络须按"链路角色"而非"统一 Fabric"设计</li>
+        <li>Network Infra 与 Inference Runtime 的边界在消失</li>
+        <li>引用 Jeff Dean（GTC 2026）：Agent 长时间自主运行使 ultra-low-latency inference 变得关键</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ============================================ -->
+  <!-- 二、阿里 HPN：高性能训练网络 -->
+  <!-- ============================================ -->
+  <div class="section">
+    <h2>2️⃣ 阿里 HPN：高性能训练网络</h2>
+
+    <div class="card">
+      <span class="tag tag-green">产品</span>
+      <h4>阿里 HPN 网络架构</h4>
+      <p>阿里 HPN（High Performance Network）是阿里云面向 AI 训练场景设计的高性能网络架构，核心特征如下：</p>
+      <ul>
+        <li><strong>双 ToR + 双平面</strong>：采用冗余 TOR 交换机 + 双平面设计，提升可靠性和带宽</li>
+        <li><strong>规模上限</strong>：最多连接约 15,000 GPU（对比下一代 MRC 架构可达 100K+）</li>
+        <li><strong>定位</strong>：面向中大规模训练集群，已验证在阿里云内部大规模部署</li>
+        <li><strong>演进方向</strong>：与行业竞品对比，HPN 在规模扩展性上受限于传统网络架构，推动阿里向 MRC 等新一代方案演进</li>
+      </ul>
+    </div>
+
+    <h3>行业竞品对比</h3>
+    <table>
+      <tr><th>方案</th><th>架构特点</th><th>规模上限</th><th>部署</th></tr>
+      <tr><td><strong>阿里 HPN</strong></td><td>双 ToR + 双平面</td><td>~15K GPU</td><td>阿里云内部</td></tr>
+      <tr><td><strong>Google Falcon</strong></td><td>多路径子流 + Swift 拥塞控制</td><td>大型集群</td><td>Google 内部</td></tr>
+      <tr><td><strong>Meta DCQCN</strong></td><td>配置复杂，转向集合通信库管理</td><td>—</td><td>Meta</td></tr>
+      <tr><td><strong>OpenAI MRC</strong></td><td>RoCEv2 最小化扩展 + 数据包喷洒</td><td>100K+ GPU</td><td>OpenAI/Microsoft</td></tr>
+      <tr><td><strong>华为超节点</strong></td><td>384 卡高速互联，Atlas 950 可达 8192 卡</td><td>8K+ NPU</td><td>华为内部</td></tr>
+    </table>
+
+    <div class="card">
+      <p><strong>关键观察</strong>：阿里 HPN 在训练侧采取了稳健的双平面架构，但相比 OpenAI MRC 的 100K+ 规模和华为超节点的高密度互联，规模扩展性和创新密度有差距。阿里正在通过平头哥磐脉 920 智能网卡（内置 PCIe Switch、400Gbps）和 TPN 概念补足网络能力。</p>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ============================================ -->
+  <!-- 三、李飞飞技术背景 -->
+  <!-- ============================================ -->
+  <div class="section">
+    <h2>3️⃣ 李飞飞：阿里云新任 CTO 技术画像</h2>
+
+    <div class="card">
+      <span class="tag tag-purple">人物画像</span>
+      <h4>数据库与云基础设施专家</h4>
+      <p><strong>李飞飞</strong>，2026 年 4 月出任阿里云 CTO，全面负责阿里云技术及 AI 云基础设施建设。与斯坦福 AI 教授李飞飞同名两人，此李飞飞是系统与数据库领域的权威。</p>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <span class="tag tag-cyan">学术背景</span>
+        <h4>从学术到产业</h4>
+        <ul>
+          <li>美国犹他大学计算机系终身教授</li>
+          <li>ACM 杰出科学家（ACM Distinguished Scientist）</li>
+          <li>ACM TODS 期刊副主编</li>
+          <li>多次担任 ACM SIGMOD/SIGKDD 高级区域主席</li>
+          <li>研究成果获 IEEE ICDE、ACM SIGMOD 等顶会认可</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="tag tag-orange">阿里履历</span>
+        <h4>从数据库到云 CTO</h4>
+        <ul>
+          <li>阿里巴巴集团副总裁、数据库产品事业部负责人</li>
+          <li>达摩院数据库和存储研究实验室主任/首席科学家</li>
+          <li>带领阿里云打造 PolarDB 云原生分布式数据库</li>
+          <li>PolarDB 登顶 TPC-C 全球性能和性价比双榜（2025 年）</li>
+          <li>2026 年 4 月升任阿里云 CTO，进入集团技术委员会</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>技术路线：从 PolarDB 看李飞飞的体系化思维</h3>
+    <div class="grid-2">
+      <div class="card">
+        <span class="tag tag-green">CXL 内存池化</span>
+        <h4>打破"内存墙"</h4>
+        <p>PolarDB 首个 CXL Switch 内存池化机型，扩展性提升 3 倍、成本下降 50%。三层解耦架构将数据中心变成"云原生计算机"。</p>
+      </div>
+      <div class="card">
+        <span class="tag tag-pink">AI+DB 融合</span>
+        <h4>Model as an Operator</h4>
+        <p>"第一波 AI 浪潮由 Native AI 群体掀起，下半场回归系统领域和工程化。"PolarDB 推出 Model as an Operator 架构，将大模型嵌入数据库内核。</p>
+      </div>
+      <div class="card">
+        <span class="tag tag-cyan">RDMA 网络升级</span>
+        <h4>100G Lossy RDMA</h4>
+        <p>PolarDB 从 25G Lossless RDMA 升级到 100G Lossy 高性能 RDMA 网络，支持数千台物理机集群，跨机性能影响控制在 7% 以内。</p>
+      </div>
+      <div class="card">
+        <span class="tag tag-yellow">TPC-C 世界纪录</span>
+        <h4>20.55 亿 tpmC</h4>
+        <p>1170 台物理机组成 PolarDB 集群，跑出 20.55 亿 tpmC，性能为前纪录保持者的 1.8 倍、成本仅 60%。</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <span class="tag tag-purple">战略意义</span>
+      <h4>为什么李飞飞对阿里网络路线重要？</h4>
+      <p>李飞飞强调"AI 下半场回归系统与工程化"，与 TPN 的理念高度一致——网络不再只是传输管道，而是 Token 生产系统的核心组件。其 PolarDB 实践中已经验证了高密度 RDMA 网络、CXL 互联、跨机性能优化等核心技术，这些经验将直接影响阿里云 AI 基础设施（含网络）的技术路线选择。</p>
+      <p style="color:var(--accent-light);font-size:13px;margin-top:8px;">▸ 李飞飞 + 平头哥（芯片）+ TPN（网络架构）= 阿里云 AI 基础设施铁三角</p>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ============================================ -->
+  <!-- 四、与华为合作机会分析 -->
+  <!-- ============================================ -->
+  <div class="section">
+    <h2>4️⃣ 与华为合作机会：网络领域切入点</h2>
+
+    <div class="highlight-box" style="border-color:var(--orange);background:rgba(251,146,60,.06);">
+      <h4 style="color:var(--orange);">🎯 核心判断</h4>
+      <p>阿里云正经历从"训练基建"到"推理基建"的重大转向，TPN 是其推理网络的新理论框架。华为在网络设备（交换机/路由/光互联）和超节点架构上有深厚积累。双方在网络基础设施层面存在互补性，但需注意华为也自研昇腾 AI 平台的竞争关系。</p>
+    </div>
+
+    <h3>方向一：推理网络交换机与互联</h3>
+    <div class="grid-2">
+      <div class="card">
+        <span class="tag tag-green">阿里需求</span>
+        <h4>推理网络差异化承载</h4>
+        <p>TPN 要求按 TTFT、TPOT、KV、Expert 路径做差异化 QoS。阿里需要支持微秒级调度、多平面隔离、确定性时延的交换机芯片和整机设备。</p>
+      </div>
+      <div class="card">
+        <span class="tag tag-cyan">华为能力</span>
+        <h4>CloudEngine + 自研芯片</h4>
+        <p>华为 CloudEngine 系列交换机+自研昇腾/鲲鹏网络芯片，支持 RoCEv2、智能无损网络、微秒级拥塞控制。其在运营商和企业网的高端交换机能力可复用。</p>
+      </div>
+    </div>
+
+    <h3>方向二：CXL 互联与内存池化</h3>
+    <div class="grid-2">
+      <div class="card">
+        <span class="tag tag-green">阿里需求</span>
+        <h4>KV-Cache 池化硬件</h4>
+        <p>TPN 的 KV-Cache 网络化需要 CXL Switch 和 CXL 内存池化硬件。PolarDB 已验证 CXL Switch 方案，但推理侧的 KV-Cache 池化需要更大规模部署。</p>
+      </div>
+      <div class="card">
+        <span class="tag tag-cyan">华为能力</span>
+        <h4>CXL 与内存互联</h4>
+        <p>华为在内存池化、CXL 协议实现和高速互联方面有技术储备（鲲鹏处理器内置 CXL 控制器），可与阿里 PolarDB/TPN 场景形成互补。</p>
+      </div>
+    </div>
+
+    <h3>方向三：400G/800G 光互联</h3>
+    <div class="grid-2">
+      <div class="card">
+        <span class="tag tag-green">阿里需求</span>
+        <h4>大规模集群光互联</h4>
+        <p>阿里云数据中心正在部署 400G，向 800G 演进。HPN 和未来 MRC 架构都需要高性能光模块和光互联方案。</p>
+      </div>
+      <div class="card">
+        <span class="tag tag-cyan">华为能力</span>
+        <h4>光产业全栈</h4>
+        <p>华为海思光电子在高速光模块、硅光技术上有深厚积累，是少数能提供从光芯片→光模块→光互联系统全栈方案的厂商。</p>
+      </div>
+    </div>
+
+    <h3>方向四：智能网卡与 DPU</h3>
+    <div class="grid-2">
+      <div class="card">
+        <span class="tag tag-green">阿里需求</span>
+        <h4>RDMA 卸载加速</h4>
+        <p>阿里平头哥磐脉 920 已实现 400G 智能网卡（内置 PCIe Switch），但面临 NVIDIA ConnectX-8 和 AMD 方案的竞争。需要更丰富的网卡生态支撑。</p>
+      </div>
+      <div class="card">
+        <span class="tag tag-cyan">华为能力</span>
+        <h4>鲲鹏智能网卡</h4>
+        <p>华为鲲鹏智能网卡和昇腾 AI 算力网的集合通信方案已经过大规模验证。RDMA over Converged Ethernet 方面华为有深厚积累，可与阿里 TPN 的推理流量卸载需求对接。</p>
+      </div>
+    </div>
+
+    <div class="divider" style="margin:20px 0;"></div>
+
+    <h3>合作可行性评估</h3>
+    <table>
+      <tr><th>合作领域</th><th>阿里需求强度</th><th>华为能力匹配</th><th>竞争顾虑</th><th>优先级</th></tr>
+      <tr><td>推理网络交换机</td><td>⭐⭐⭐⭐⭐</td><td>⭐⭐⭐⭐</td><td>华为昇腾 AI 与阿里云存在竞争</td><td style="color:var(--green);">🔥 中高</td></tr>
+      <tr><td>CXL 互联/内存池化</td><td>⭐⭐⭐⭐</td><td>⭐⭐⭐</td><td>竞争度低，更偏技术合作</td><td style="color:var(--green);">🔥 中高</td></tr>
+      <tr><td>400G/800G 光互联</td><td>⭐⭐⭐⭐</td><td>⭐⭐⭐⭐⭐</td><td>商业采购模式，竞争度低</td><td style="color:var(--green);">🔥 高</td></tr>
+      <tr><td>智能网卡/DPU</td><td>⭐⭐⭐</td><td>⭐⭐⭐⭐</td><td>平头哥自研存在竞争</td><td style="color:var(--yellow);">中</td></tr>
+      <tr><td>超节点架构参考</td><td>⭐⭐⭐</td><td>⭐⭐⭐⭐⭐</td><td>华为昇腾超节点与阿里存在竞争</td><td>低</td></tr>
+    </table>
+
+    <div class="highlight-box" style="border-color:var(--green);background:rgba(74,222,128,.06);">
+      <h4 style="color:var(--green);">📌 建议的讨论策略</h4>
+      <ul>
+        <li><strong>先易后难</strong>：从光互联（采购/合作）切入，建立合作基础</li>
+        <li><strong>技术互鉴</strong>：阿里 TPN 的理念可以为华为推理网络设计提供思路，华为超节点的高密度互联经验对阿里有参考价值</li>
+        <li><strong>避开直接竞争区</strong>：在昇腾 vs 阿里云 AI 训练平台层面保持距离，聚焦基础设施层面的互补</li>
+        <li><strong>关注 CXL 生态共建</strong>：CXL 互联标准处于爆发前夜，双方可以联合推进中国 CXL 生态标准</li>
+        <li><strong>TPN 落地设备互认证</strong>：阿里推出 TPN 架构后，需要交换机/网卡/光模块等硬件的适配验证，华为可作为关键设备供应商参与</li>
+      </ul>
+    </div>
+
+    <div class="card" style="border-color:var(--accent);">
+      <h4>📝 总结：阿里网络技术路线一览</h4>
+      <table>
+        <tr><th>层次</th><th>训练</th><th>推理</th><th>负责人/相关方</th></tr>
+        <tr><td>架构理念</td><td>HPN（双平面）</td><td>TPN（Token 生产网络）</td><td>蔡德忠 / CCF 秀湖会议</td></tr>
+        <tr><td>芯片</td><td>磐脉 920 智能网卡</td><td>（推理网卡待演进）</td><td>平头哥半导体</td></tr>
+        <tr><td>基础设施</td><td>PolarDB 100G RDMA</td><td>KV-Cache 池化（CXL）</td><td>李飞飞 / PolarDB 团队</td></tr>
+        <tr><td>战略层</td><td>通义实验室（周靖人）</td><td>阿里云 AI 基建（李飞飞）</td><td>技术委员会（吴泳铭组长）</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="footer">
+    Tars · 2026-05-15 · 内部参考，不作公开发布
+  </div>
+
+</div>
+</body>
+</html>
