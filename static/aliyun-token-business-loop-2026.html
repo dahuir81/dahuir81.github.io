@@ -1,0 +1,1403 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>阿里云 Token 变现逻辑研究</title>
+  <style>
+    :root {
+      --bg: #f6f3ec;
+      --paper: #fffdf8;
+      --paper-2: #fdf8ef;
+      --ink: #1d2428;
+      --muted: #606a70;
+      --line: #d7cec0;
+      --blue: #126a7a;
+      --green: #2f7a54;
+      --amber: #aa681f;
+      --red: #a5413f;
+      --violet: #55547a;
+      --shadow: 0 18px 45px rgba(41, 35, 26, 0.08);
+      --radius: 8px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "PingFang SC", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif;
+      line-height: 1.65;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.12;
+      background-image:
+        linear-gradient(rgba(29, 36, 40, 0.09) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(29, 36, 40, 0.07) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 292px minmax(0, 1fr);
+      min-height: 100vh;
+    }
+
+    aside {
+      position: sticky;
+      top: 0;
+      align-self: start;
+      height: 100vh;
+      padding: 28px 22px;
+      border-right: 1px solid var(--line);
+      background: rgba(255, 253, 248, 0.82);
+      backdrop-filter: blur(10px);
+      overflow: auto;
+    }
+
+    .brand {
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 18px;
+    }
+
+    .brand strong {
+      display: block;
+      font-family: Georgia, "Songti SC", serif;
+      font-size: 22px;
+      line-height: 1.18;
+      font-weight: 700;
+    }
+
+    .brand span {
+      display: block;
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    nav a {
+      display: block;
+      padding: 9px 10px;
+      margin: 2px 0;
+      border-left: 3px solid transparent;
+      color: #334047;
+      font-size: 14px;
+    }
+
+    nav a.active {
+      border-left-color: var(--blue);
+      background: rgba(18, 106, 122, 0.08);
+      color: var(--blue);
+      font-weight: 700;
+    }
+
+    .side-note {
+      margin-top: 22px;
+      padding-top: 16px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    main {
+      position: relative;
+      padding: 34px clamp(18px, 4vw, 58px) 72px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+      margin-bottom: 28px;
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .tag {
+      border: 1px solid var(--line);
+      background: rgba(255, 253, 248, 0.72);
+      padding: 5px 8px;
+      border-radius: 999px;
+    }
+
+    button {
+      border: 1px solid var(--line);
+      background: var(--paper);
+      color: var(--ink);
+      padding: 8px 11px;
+      border-radius: 6px;
+      cursor: pointer;
+      font: inherit;
+    }
+
+    button:hover { border-color: var(--blue); color: var(--blue); }
+
+    .hero {
+      min-height: 76vh;
+      display: grid;
+      align-items: center;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 34px;
+      margin-bottom: 34px;
+    }
+
+    h1, h2, h3 {
+      font-family: Georgia, "Songti SC", serif;
+      line-height: 1.18;
+      margin: 0;
+      font-weight: 700;
+      letter-spacing: 0;
+    }
+
+    h1 {
+      font-size: clamp(42px, 6vw, 76px);
+      max-width: 980px;
+    }
+
+    h2 { font-size: clamp(28px, 3.2vw, 42px); margin-bottom: 18px; }
+    h3 { font-size: 22px; margin-bottom: 10px; }
+
+    .lead {
+      max-width: 880px;
+      margin: 24px 0 0;
+      font-size: clamp(17px, 1.8vw, 23px);
+      color: #374046;
+    }
+
+    .verdict {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 18px;
+      margin-top: 34px;
+      max-width: 1060px;
+    }
+
+    .panel, .card {
+      background: rgba(255, 253, 248, 0.88);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .panel { padding: 22px; }
+    .card { padding: 18px; }
+
+    .verdict .label {
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+
+    .answer {
+      font-size: 28px;
+      line-height: 1.28;
+      font-weight: 800;
+      color: var(--blue);
+    }
+
+    .confidence {
+      display: grid;
+      gap: 10px;
+    }
+
+    .score {
+      font-size: 42px;
+      font-weight: 800;
+      color: var(--amber);
+      line-height: 1;
+    }
+
+    .meter {
+      height: 10px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: #eadfce;
+      border: 1px solid #ded2c0;
+    }
+
+    .meter span {
+      display: block;
+      height: 100%;
+      background: linear-gradient(90deg, var(--amber), var(--green));
+      width: var(--w, 62%);
+    }
+
+    section {
+      padding: 54px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: minmax(0, 0.72fr) minmax(320px, 0.28fr);
+      gap: 28px;
+      align-items: start;
+      margin-bottom: 24px;
+    }
+
+    .section-kicker {
+      color: var(--blue);
+      font-weight: 800;
+      font-size: 12px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .section-note {
+      color: var(--muted);
+      font-size: 14px;
+      border-left: 3px solid var(--line);
+      padding-left: 14px;
+    }
+
+    .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+
+    .stat {
+      display: grid;
+      gap: 8px;
+      min-height: 152px;
+    }
+
+    .stat b {
+      font-size: 28px;
+      line-height: 1.1;
+      color: var(--blue);
+    }
+
+    .stat small {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .source {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 8px;
+    }
+
+    .loop-wrap {
+      display: grid;
+      grid-template-columns: minmax(0, 1.25fr) minmax(280px, 0.75fr);
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .loop-panel {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 16px;
+    }
+
+    .loop-svg {
+      width: 100%;
+      min-height: 500px;
+      display: block;
+    }
+
+    .loop-node {
+      cursor: pointer;
+      transition: transform 180ms ease, opacity 180ms ease;
+    }
+
+    .loop-node:hover { opacity: 0.9; }
+
+    .loop-node rect {
+      fill: #fffaf0;
+      stroke: #cfc3b2;
+      stroke-width: 1.2;
+      rx: 8;
+    }
+
+    .loop-node.active rect {
+      stroke: var(--blue);
+      stroke-width: 2.2;
+      fill: #edf8f8;
+    }
+
+    .loop-node text {
+      fill: var(--ink);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .arrow {
+      stroke: #938674;
+      stroke-width: 1.6;
+      fill: none;
+      marker-end: url(#arrow);
+    }
+
+    .detail-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--blue);
+      display: inline-block;
+    }
+
+    .detail-list {
+      padding-left: 18px;
+      margin: 12px 0 0;
+      color: #354046;
+    }
+
+    .tabs, .scenario-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .tab, .scenario-button {
+      background: #fffaf0;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 8px 12px;
+      color: #39434a;
+    }
+
+    .tab.active, .scenario-button.active {
+      background: var(--blue);
+      border-color: var(--blue);
+      color: white;
+    }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    th, td {
+      padding: 12px 11px;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+      text-align: left;
+      font-size: 14px;
+    }
+
+    th {
+      color: #293136;
+      background: #efe7da;
+      font-weight: 800;
+    }
+
+    tr:last-child td { border-bottom: 0; }
+
+    .model-grid {
+      display: grid;
+      grid-template-columns: 360px minmax(0, 1fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .control {
+      margin-bottom: 16px;
+    }
+
+    .control label {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--blue);
+    }
+
+    .calc-result {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .calc-result .card {
+      min-height: 112px;
+      box-shadow: none;
+    }
+
+    .calc-result b {
+      display: block;
+      font-size: 26px;
+      color: var(--blue);
+      margin-top: 6px;
+    }
+
+    .bars {
+      display: grid;
+      gap: 13px;
+      padding: 6px 0;
+    }
+
+    .bar-row {
+      display: grid;
+      grid-template-columns: 140px minmax(0, 1fr) 110px;
+      gap: 12px;
+      align-items: center;
+      font-size: 13px;
+    }
+
+    .bar-track {
+      height: 16px;
+      background: #eadfce;
+      border: 1px solid #d7cec0;
+      overflow: hidden;
+      border-radius: 999px;
+    }
+
+    .bar-fill {
+      height: 100%;
+      width: var(--w, 40%);
+      background: var(--blue);
+      border-radius: 999px;
+      transition: width 240ms ease;
+    }
+
+    .bar-fill.green { background: var(--green); }
+    .bar-fill.amber { background: var(--amber); }
+    .bar-fill.red { background: var(--red); }
+    .bar-fill.violet { background: var(--violet); }
+
+    .quote {
+      padding: 18px 20px;
+      border-left: 4px solid var(--blue);
+      background: rgba(255, 253, 248, 0.82);
+      color: #334047;
+      margin: 18px 0;
+    }
+
+    .pricing-note {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 10px;
+    }
+
+    .condition {
+      display: grid;
+      gap: 10px;
+    }
+
+    .condition strong {
+      color: #263238;
+    }
+
+    .risk {
+      border-top: 4px solid var(--red);
+    }
+
+    .ok {
+      border-top: 4px solid var(--green);
+    }
+
+    .watchlist {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .watch-item {
+      display: grid;
+      grid-template-columns: 36px minmax(0, 1fr);
+      gap: 12px;
+      align-items: start;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 14px;
+    }
+
+    .num {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: var(--blue);
+      color: white;
+      font-weight: 800;
+      font-size: 13px;
+    }
+
+    .questions {
+      columns: 2;
+      column-gap: 28px;
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    .questions li {
+      break-inside: avoid;
+      margin-bottom: 10px;
+    }
+
+    .sources li {
+      margin-bottom: 10px;
+    }
+
+    .reveal {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 420ms ease, transform 420ms ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .print-only { display: none; }
+
+    @media (max-width: 980px) {
+      .layout { grid-template-columns: 1fr; }
+      aside {
+        position: relative;
+        height: auto;
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+      nav {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 4px;
+      }
+      .section-head, .verdict, .loop-wrap, .model-grid, .grid-2, .grid-3, .grid-4, .watchlist {
+        grid-template-columns: 1fr;
+      }
+      .loop-panel { overflow-x: auto; }
+      .loop-svg {
+        min-width: 720px;
+        min-height: 430px;
+      }
+      .questions { columns: 1; }
+      .calc-result { grid-template-columns: 1fr; }
+      .bar-row { grid-template-columns: 100px minmax(0, 1fr); }
+      .bar-row span:last-child { grid-column: 2; }
+    }
+
+    @media print {
+      body { background: white; }
+      aside, .topbar button, .scenario-buttons, .tabs { display: none; }
+      .layout { display: block; }
+      main { padding: 0; }
+      section { page-break-inside: avoid; }
+      .reveal { opacity: 1; transform: none; }
+      .print-only { display: block; }
+      .panel, .card { box-shadow: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside>
+      <div class="brand">
+        <strong>阿里云 Token<br>变现逻辑研究</strong>
+        <span>内部讨论稿 · 2026-05-17</span>
+      </div>
+      <nav id="nav">
+        <a href="#summary">执行摘要</a>
+        <a href="#loop">商业闭环图</a>
+        <a href="#strategy">战略背景</a>
+        <a href="#mechanism">Token 变现机制</a>
+        <a href="#model">收入与成本模型</a>
+        <a href="#competition">竞争格局</a>
+        <a href="#conditions">成立条件与风险</a>
+        <a href="#watch">关键观察指标</a>
+        <a href="#conclusion">结论与讨论问题</a>
+        <a href="#sources">数据来源与假设</a>
+      </nav>
+      <div class="side-note">
+        本报告不把“开源热度”“API 低价”直接视为商业成功；公开数据缺少 token 调用量和模型级毛利，因此关键判断以条件和反证指标表达。
+      </div>
+    </aside>
+
+    <main>
+      <div class="topbar">
+        <div class="meta">
+          <span class="tag">研究对象：阿里云 AI 云 / MaaS / Token 计费</span>
+          <span class="tag">口径：公开资料 + 情景估算</span>
+          <span class="tag">适用：内部战略讨论</span>
+        </div>
+        <button type="button" onclick="window.print()">打印 / 导出 PDF</button>
+      </div>
+
+      <header class="hero" id="summary">
+        <div>
+          <div class="section-kicker">Executive Summary</div>
+          <h1>阿里云能否通过 token 消耗形成可持续的 AI 云商业闭环？</h1>
+          <p class="lead">
+            初步判断：可以形成，但不是“单靠 token 单价赚钱”的闭环。更稳健的闭环是：token 作为推理用量计价单位和开发入口，带动模型 API、企业套餐、专属推理、训练微调、数据库、存储、云原生和行业解决方案的组合收入。
+          </p>
+          <div class="verdict">
+            <div class="panel">
+              <div class="label">核心判断</div>
+              <div class="answer">有条件成立：token 是入口与计量层，利润池更可能来自 AI 云全栈。</div>
+              <p>
+                支撑证据包括：阿里云 2026 财年云智能集团收入 1,581.32 亿元，同比增长 34%；2026 年 3 月季度云收入 416.26 亿元，同比增长 38%；AI 相关产品收入 89.71 亿元，且官方称占云外部收入 30%。同时，百炼 Model Studio 客户数同比增长 8 倍。<a href="#s1">[S1]</a>
+              </p>
+            </div>
+            <div class="panel confidence">
+              <div class="label">置信度</div>
+              <div class="score">0.62</div>
+              <div class="meter" style="--w: 62%"><span></span></div>
+              <p>
+                偏正面但不高。增长和产品闭环证据较强，模型级毛利、token 调用量、留存、折扣、成本曲线均未充分披露。
+              </p>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <section class="reveal">
+        <div class="grid-4">
+          <div class="card stat">
+            <small>云智能集团 FY2026 收入</small>
+            <b>1,581.32 亿元</b>
+            <span>同比 +34%，外部客户收入同比 +33%。<a href="#s1">[S1]</a></span>
+          </div>
+          <div class="card stat">
+            <small>2026 年 3 月季度 AI 相关产品收入</small>
+            <b>89.71 亿元</b>
+            <span>连续第 11 个季度三位数增长，并占云外部收入 30%。<a href="#s1">[S1]</a></span>
+          </div>
+          <div class="card stat">
+            <small>Model Studio 客户基数</small>
+            <b>同比 8 倍</b>
+            <span>官方披露截至 2026 年 3 月，百炼客户基数同比增长 8 倍。<a href="#s1">[S1]</a></span>
+          </div>
+          <div class="card stat">
+            <small>关键约束</small>
+            <b>现金流与算力</b>
+            <span>FY2026 自由现金流为流出 466.09 亿元，主要受快消即时零售投资和云基础设施支出增加影响。<a href="#s1">[S1]</a></span>
+          </div>
+        </div>
+      </section>
+
+      <section id="loop" class="reveal">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">Commercial Loop</div>
+            <h2>商业闭环图</h2>
+          </div>
+          <div class="section-note">
+            点击图中节点查看“收入、成本、客户锁定”的具体含义。闭环真正成立的关键，不是每个 token 都高毛利，而是 token 是否能稳定转化为更广的云资源和企业工作流。
+          </div>
+        </div>
+
+        <div class="loop-wrap">
+          <div class="loop-panel">
+            <svg class="loop-svg" viewBox="0 0 860 520" role="img" aria-label="阿里云 token 变现商业闭环">
+              <defs>
+                <marker id="arrow" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+                  <path d="M0,0 L0,6 L8,3 z" fill="#938674"></path>
+                </marker>
+              </defs>
+              <path class="arrow" d="M180 118 C260 50, 393 50, 500 116"></path>
+              <path class="arrow" d="M590 152 C710 180, 735 280, 647 356"></path>
+              <path class="arrow" d="M560 405 C445 492, 276 480, 190 400"></path>
+              <path class="arrow" d="M127 350 C55 278, 70 180, 142 135"></path>
+              <path class="arrow" d="M270 250 C350 202, 452 205, 536 255"></path>
+              <path class="arrow" d="M535 284 C445 326, 345 326, 267 284"></path>
+
+              <g class="loop-node active" data-node="model" transform="translate(96,76)">
+                <rect width="170" height="74"></rect>
+                <text x="18" y="30">模型能力</text>
+                <text x="18" y="52">Qwen / 多模态 / Agent</text>
+              </g>
+              <g class="loop-node" data-node="entry" transform="translate(506,76)">
+                <rect width="190" height="74"></rect>
+                <text x="18" y="30">开发入口</text>
+                <text x="18" y="52">百炼 / API / Token Plan</text>
+              </g>
+              <g class="loop-node" data-node="compute" transform="translate(610,244)">
+                <rect width="178" height="74"></rect>
+                <text x="18" y="30">推理算力</text>
+                <text x="18" y="52">GPU / 芯片 / 调度</text>
+              </g>
+              <g class="loop-node" data-node="apps" transform="translate(465,383)">
+                <rect width="202" height="74"></rect>
+                <text x="18" y="30">客户应用</text>
+                <text x="18" y="52">客服 / 代码 / 行业 Agent</text>
+              </g>
+              <g class="loop-node" data-node="cloud" transform="translate(148,383)">
+                <rect width="210" height="74"></rect>
+                <text x="18" y="30">周边云资源</text>
+                <text x="18" y="52">PAI / 数据库 / OSS / 网络</text>
+              </g>
+              <g class="loop-node" data-node="pay" transform="translate(72,244)">
+                <rect width="178" height="74"></rect>
+                <text x="18" y="30">持续付费</text>
+                <text x="18" y="52">按量 / 套餐 / 专属实例</text>
+              </g>
+              <g class="loop-node" data-node="flywheel" transform="translate(318,215)">
+                <rect width="220" height="90"></rect>
+                <text x="20" y="34">闭环成立点</text>
+                <text x="20" y="58">单位价值 &gt; 单位成本</text>
+                <text x="20" y="78">且带动云资源复购</text>
+              </g>
+            </svg>
+          </div>
+          <div class="panel" id="loopDetail">
+            <div class="detail-title">
+              <span class="dot"></span>
+              <h3>模型能力</h3>
+            </div>
+            <p>Qwen 系列模型提供调用理由：代码、推理、长上下文、多模态和行业 Agent 能力。模型能力越稳定，客户越愿意把更多任务迁入 API 或百炼工作流。</p>
+            <ul class="detail-list">
+              <li>收入：高级模型 token、企业套餐、专属模型服务。</li>
+              <li>成本：训练、后训练、推理优化、模型安全和评测。</li>
+              <li>锁定：提示词、评测集、工具链、业务流程迁移成本。</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="strategy" class="reveal">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">Strategic Context</div>
+            <h2>战略背景：阿里云已经把 AI 云从“试验项”推到收入主线</h2>
+          </div>
+          <div class="section-note">
+            最新财报的措辞已经从“投入 AI 能力”转向“规模化商业化回报周期”。但利润端仍需拆开看：云 EBITA 改善，不等于 token API 自身已经高毛利。
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="panel">
+            <h3>财务信号</h3>
+            <table>
+              <thead>
+                <tr><th>指标</th><th>公开披露</th><th>商业含义</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>云智能集团 FY2026</td>
+                  <td>收入 1,581.32 亿元，同比 +34%；调整 EBITA 142.65 亿元，同比 +35%。</td>
+                  <td>AI 需求正在拉动云收入，同时云部门仍保持正 EBITA。</td>
+                </tr>
+                <tr>
+                  <td>2026 年 3 月季度</td>
+                  <td>云收入 416.26 亿元，同比 +38%；云调整 EBITA 37.96 亿元，同比 +57%。</td>
+                  <td>收入增速加快，利润改善，但集团层面科技和基础设施投入仍压低自由现金流。</td>
+                </tr>
+                <tr>
+                  <td>AI 相关产品</td>
+                  <td>季度收入 89.71 亿元，连续第 11 个季度三位数增长；占云外部收入 30%。</td>
+                  <td>AI 已经不是边缘叙事，但“AI 相关产品”大概率包含算力、模型服务、训练推理平台等多项收入。</td>
+                </tr>
+                <tr>
+                  <td>百炼客户</td>
+                  <td>截至 2026 年 3 月，Model Studio 客户基数同比 8 倍。</td>
+                  <td>需求广度在扩张，但需要继续观察付费深度、留存和单位收入。</td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="source">来源：阿里巴巴 2026 财年业绩公告。<a href="#s1">[S1]</a></div>
+          </div>
+
+          <div class="panel">
+            <h3>产品矩阵如何支撑闭环</h3>
+            <div class="bars">
+              <div class="bar-row"><span>模型层</span><div class="bar-track"><div class="bar-fill" style="--w: 86%"></div></div><span>Qwen / 多模态</span></div>
+              <div class="bar-row"><span>MaaS 层</span><div class="bar-track"><div class="bar-fill green" style="--w: 78%"></div></div><span>百炼 / DashScope</span></div>
+              <div class="bar-row"><span>套餐层</span><div class="bar-track"><div class="bar-fill amber" style="--w: 65%"></div></div><span>Token Plan / Coding</span></div>
+              <div class="bar-row"><span>算力层</span><div class="bar-track"><div class="bar-fill violet" style="--w: 74%"></div></div><span>PAI / EAS / 灵骏</span></div>
+              <div class="bar-row"><span>云资源层</span><div class="bar-track"><div class="bar-fill red" style="--w: 68%"></div></div><span>数据库 / OSS / 网络</span></div>
+            </div>
+            <p>
+              百炼官方定位是一站式模型服务平台，整合 Qwen 与第三方模型，提供官方 Qwen API 和 OpenAI 兼容 API；Token Plan 团队版把多模型调用转为 Credits 和席位订阅；PAI/EAS 则承接自定义部署、推理服务和周边云资源。<a href="#s3">[S3]</a><a href="#s4">[S4]</a><a href="#s7">[S7]</a>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section id="mechanism" class="reveal">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">Monetization Mechanism</div>
+            <h2>Token 到底变现的是什么</h2>
+          </div>
+          <div class="section-note">
+            token 不是商品本身，而是把模型能力、推理算力、服务质量和客户业务价值压缩成可计量、可结算、可治理的单位。
+          </div>
+        </div>
+
+        <div class="grid-3">
+          <div class="card">
+            <h3>1. 推理服务</h3>
+            <p>客户购买的是“把请求转成可用答案”的生产能力。输入 token 代表读取上下文的成本，输出 token 通常消耗更多推理时间，因此输出价格更高。</p>
+          </div>
+          <div class="card">
+            <h3>2. 工程抽象</h3>
+            <p>百炼把模型选择、OpenAI 兼容接口、监控、告警、密钥、限流、日志和计费收进一个平台，降低客户自建推理栈的复杂度。</p>
+          </div>
+          <div class="card">
+            <h3>3. 企业确定性</h3>
+            <p>Token Plan、Coding Plan、专属部署和 PTU/资源包把不确定的用量转成预算、配额、性能隔离和采购流程。</p>
+          </div>
+        </div>
+
+        <div class="quote">
+          关键判断：token API 更像“水龙头”，水价能收钱，但真正的商业价值在于水网、压力、稳定性、接入设备和长期合同。阿里云的优势在水网，风险在水价。
+        </div>
+
+        <table>
+          <thead>
+            <tr><th>谁付费</th><th>为什么付费</th><th>如何持续付费</th><th>可能流失点</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>开发者 / AI 原生团队</td>
+              <td>快速接入模型、低起步成本、兼容 OpenAI 接口。</td>
+              <td>按 token、Coding Plan、Token Plan。</td>
+              <td>价格更低的 DeepSeek、OpenRouter、开源自部署。</td>
+            </tr>
+            <tr>
+              <td>企业应用团队</td>
+              <td>数据安全、稳定 SLA、账号权限、费用治理、国内合规。</td>
+              <td>Token Plan、资源包、专属实例、私有化或混合云。</td>
+              <td>若模型效果不稳定，或业务 ROI 无法证明。</td>
+            </tr>
+            <tr>
+              <td>ISV / SI / 行业解决方案商</td>
+              <td>把模型能力打包进客服、办公、代码、合同、医药等场景。</td>
+              <td>API 量、行业 Agent、PAI/EAS、数据库和存储。</td>
+              <td>客户要求多模型中立，或 ISV 自建模型层。</td>
+            </tr>
+            <tr>
+              <td>大客户 / 监管敏感行业</td>
+              <td>性能隔离、数据驻留、成本可预测、私有化控制。</td>
+              <td>专属算力、包年包月、PAI 灵骏、专有云。</td>
+              <td>国产芯片生态、私有部署供应商和内部算力池竞争。</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="model" class="reveal">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">Revenue & Cost Model</div>
+            <h2>收入与成本模型：不要把 AI 收入误读成纯 token 收入</h2>
+          </div>
+          <div class="section-note">
+            官方披露的 AI 相关产品收入很大，按当前 API 单价反推，需要极高 token 量。因此更合理的解释是：AI 相关产品收入包含模型调用、训练推理算力、平台服务、专属实例和周边云资源。
+          </div>
+        </div>
+
+        <div class="model-grid">
+          <div class="panel">
+            <h3>情景参数</h3>
+            <div class="scenario-buttons">
+              <button class="scenario-button active" data-scenario="base">基准</button>
+              <button class="scenario-button" data-scenario="pressure">价格压力</button>
+              <button class="scenario-button" data-scenario="upside">规模改善</button>
+            </div>
+            <div class="control">
+              <label>月调用量 <span><output id="tokenOut">300</output> T tokens</span></label>
+              <input id="tokenVolume" type="range" min="10" max="1400" step="10" value="300">
+            </div>
+            <div class="control">
+              <label>加权收入单价 <span><output id="priceOut">3.6</output> 元 / 百万 token</span></label>
+              <input id="blendPrice" type="range" min="0.5" max="18" step="0.1" value="3.6">
+            </div>
+            <div class="control">
+              <label>加权推理成本 <span><output id="costOut">1.8</output> 元 / 百万 token</span></label>
+              <input id="costPrice" type="range" min="0.2" max="10" step="0.1" value="1.8">
+            </div>
+            <div class="control">
+              <label>大客户折扣 <span><output id="discountOut">25</output>%</span></label>
+              <input id="discount" type="range" min="0" max="60" step="1" value="25">
+            </div>
+            <div class="control">
+              <label>周边云收入拉动 <span><output id="attachOut">0.45</output> × API收入</span></label>
+              <input id="attach" type="range" min="0" max="1.5" step="0.05" value="0.45">
+            </div>
+          </div>
+
+          <div class="panel">
+            <h3>模型输出</h3>
+            <div class="calc-result">
+              <div class="card">
+                <small>月 API 收入</small>
+                <b id="apiRevenue">810 百万元</b>
+              </div>
+              <div class="card">
+                <small>Token 毛利率</small>
+                <b id="tokenMargin">50%</b>
+              </div>
+              <div class="card">
+                <small>含周边云贡献后月毛利</small>
+                <b id="totalGross">620 百万元</b>
+              </div>
+            </div>
+            <div class="bars" style="margin-top: 18px">
+              <div class="bar-row"><span>API收入</span><div class="bar-track"><div id="barRevenue" class="bar-fill" style="--w: 60%"></div></div><span id="barRevenueText"></span></div>
+              <div class="bar-row"><span>推理成本</span><div class="bar-track"><div id="barCost" class="bar-fill red" style="--w: 30%"></div></div><span id="barCostText"></span></div>
+              <div class="bar-row"><span>周边云贡献</span><div class="bar-track"><div id="barAttach" class="bar-fill green" style="--w: 35%"></div></div><span id="barAttachText"></span></div>
+            </div>
+            <p class="pricing-note">
+              说明：这是敏感性模型，不代表阿里云实际毛利。周边云贡献按周边云收入的 35% 毛利贡献估算，用于展示方向而非给出精确财务预测。
+            </p>
+          </div>
+        </div>
+
+        <div class="grid-2" style="margin-top: 18px">
+          <div class="panel">
+            <h3>反推：如果只靠 token，要多少调用量？</h3>
+            <div class="control">
+              <label>季度 AI 相关收入目标 <span><output id="targetOut">8.971</output> 十亿元</span></label>
+              <input id="targetRevenue" type="range" min="0.5" max="20" step="0.1" value="8.971">
+            </div>
+            <div class="control">
+              <label>加权 token 单价 <span><output id="requiredPriceOut">3.0</output> 元 / 百万 token</span></label>
+              <input id="requiredPrice" type="range" min="0.5" max="12" step="0.1" value="3">
+            </div>
+            <div class="calc-result">
+              <div class="card">
+                <small>季度所需 token</small>
+                <b id="requiredQuarter">2.99 P</b>
+              </div>
+              <div class="card">
+                <small>月均所需 token</small>
+                <b id="requiredMonth">1.00 P</b>
+              </div>
+              <div class="card">
+                <small>推论</small>
+                <b style="font-size: 18px">AI收入≠纯API水费</b>
+              </div>
+            </div>
+            <p class="pricing-note">P = quadrillion tokens，即千万亿 token。该计算显示：89.71 亿元季度 AI 相关收入若完全来自 token API，需要极高调用量，因此应按“AI 云产品收入组合”理解。</p>
+          </div>
+          <div class="panel">
+            <h3>单位经济关系</h3>
+            <table>
+              <thead>
+                <tr><th>变量</th><th>正向机制</th><th>风险机制</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>模型能力</td><td>更高任务成功率支撑溢价和留存。</td><td>模型同质化后只剩价格比较。</td></tr>
+                <tr><td>推理成本</td><td>Batch、缓存、MoE、调度、国产/自研芯片提高利用率。</td><td>GPU/内存/网络成本上涨侵蚀毛利。</td></tr>
+                <tr><td>客户价值</td><td>代码、客服、营销、办公、行业流程可量化 ROI。</td><td>PoC 多、生产少，调用量无法持续。</td></tr>
+                <tr><td>云资源拉动</td><td>RAG、向量库、对象存储、EAS、日志、监控形成复购。</td><td>客户只把阿里云当低价模型路由。</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="competition" class="reveal">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">Competition</div>
+            <h2>竞争格局：价格会被压低，云全栈决定能否保利润</h2>
+          </div>
+          <div class="section-note">
+            不同模型的能力、上下文、地区、缓存和促销不可直接等价；下表只用于展示价格带和竞争压力。
+          </div>
+        </div>
+
+        <table>
+          <thead>
+            <tr><th>平台 / 模型</th><th>公开价格样例</th><th>竞争含义</th><th>来源</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>阿里云百炼 Qwen3-Max（中国内地，≤32K）</td>
+              <td>$0.359 / 1M 输入；$1.434 / 1M 输出。支持 Batch 半价、上下文缓存折扣。</td>
+              <td>旗舰模型价格明显低于海外旗舰，但国内仍要面对更低价模型和开源替代。</td>
+              <td><a href="#s2">[S2]</a></td>
+            </tr>
+            <tr>
+              <td>阿里云百炼 qwen3.5-plus（国际）</td>
+              <td>$0.4 / 1M 输入；$2.4 / 1M 输出；长上下文阶梯加价。</td>
+              <td>国际区强调数据位置和全球调度，价格与地区资源供给有关。</td>
+              <td><a href="#s2">[S2]</a></td>
+            </tr>
+            <tr>
+              <td>百度千帆 ERNIE 4.5 Turbo</td>
+              <td>0.0008 元 / 千输入；0.0032 元 / 千输出，即 0.8 / 3.2 元每百万 token。</td>
+              <td>国内主流厂商在中高性能模型上继续压低单价。</td>
+              <td><a href="#s12">[S12]</a></td>
+            </tr>
+            <tr>
+              <td>腾讯混元 Tencent HY 2.0 Think</td>
+              <td>≤32K：输入 3.975 元 / 百万 token，输出 15.9 元 / 百万 token。</td>
+              <td>腾讯将能力迁移至 TokenHub，说明平台化和统一计费成为共同方向。</td>
+              <td><a href="#s11">[S11]</a></td>
+            </tr>
+            <tr>
+              <td>火山方舟 Doubao Seed Code</td>
+              <td>≤32K：输入 1.2 元 / 百万 token，缓存命中 0.24 元，输出 8 元。</td>
+              <td>字节在开发者和应用分发上强，缓存价格会压低真实使用成本。</td>
+              <td><a href="#s13">[S13]</a></td>
+            </tr>
+            <tr>
+              <td>DeepSeek V4</td>
+              <td>Flash：$0.14 / $0.28；Pro 促销：$0.435 / $0.87，标价 $1.74 / $3.48。</td>
+              <td>低价和缓存机制会直接压缩 API 价格天花板，尤其影响开发者和价格敏感客户。</td>
+              <td><a href="#s9">[S9]</a></td>
+            </tr>
+            <tr>
+              <td>OpenAI GPT-5.4 / GPT-5.5</td>
+              <td>GPT-5.4：$2.5 / $15；GPT-5.5：$5 / $30。</td>
+              <td>海外旗舰仍有高价带，说明能力、品牌、生态和企业信任可支撑溢价。</td>
+              <td><a href="#s10">[S10]</a></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="grid-2" style="margin-top: 18px">
+          <div class="card">
+            <h3>阿里云相对优势</h3>
+            <p>中国云基础设施领导地位、Qwen 模型体系、百炼 MaaS 平台、PAI/EAS/灵骏承接训练推理、集团电商和钉钉等应用场景可作为内部需求和示范场景。Canalys 报道显示，2025 年一季度中国云基础设施支出中阿里云份额约 33%，仍居第一。<a href="#s14">[S14]</a></p>
+          </div>
+          <div class="card">
+            <h3>阿里云主要短板</h3>
+            <p>低价模型持续压制 API 溢价；企业客户可能要求多模型中立；AI 基础设施 CapEx 与芯片供给约束抬高成本；模型开源和私有化部署会把部分高频需求从公有 API 抽走。</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="conditions" class="reveal">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">Conditions & Risks</div>
+            <h2>什么时候成为增长引擎，什么时候变成价格战</h2>
+          </div>
+          <div class="section-note">
+            下面不是结论清单，而是判断闭环是否成立的条件树。每个条件都应该能在未来财报、产品定价或客户案例中找到证据。
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card ok condition">
+            <h3>闭环成立的条件</h3>
+            <p><strong>模型能力持续进入第一梯队。</strong> 企业不会为低质 token 长期付费，代码、推理、多模态和 Agent 成功率要足以支撑生产场景。</p>
+            <p><strong>推理成本下降快于价格下降。</strong> Batch、缓存、调度、MoE、量化、自研或国产芯片适配必须把单位成本压低。</p>
+            <p><strong>token 带动周边云消费。</strong> RAG、向量检索、数据库、OSS、EAS、日志和安全治理形成复购，才有云厂商优势。</p>
+            <p><strong>从开发者转向企业采购。</strong> Token Plan、专属实例、行业 Agent 和 SI 生态把偶发调用变成预算内持续支出。</p>
+          </div>
+          <div class="card risk condition">
+            <h3>闭环断裂的风险</h3>
+            <p><strong>API 被商品化。</strong> 如果客户只比较每百万 token 价格，阿里云会被 DeepSeek、火山、百度、开源自部署压价。</p>
+            <p><strong>PoC 无法规模上线。</strong> 调用量看似增长，但业务价值无法证明，企业会削减预算或改为私有化低频使用。</p>
+            <p><strong>算力成本与价格错配。</strong> 基础设施价格上涨、GPU/内存供给紧张、利用率不足，会让 token 增长带来利润压力。</p>
+            <p><strong>平台锁定不够强。</strong> OpenAI 兼容接口降低迁移成本，也让多模型路由更容易替代单一云平台。</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="watch" class="reveal">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">Watchlist</div>
+            <h2>未来 1-3 年关键观察指标</h2>
+          </div>
+          <div class="section-note">
+            建议把这些指标分为“增长是否真实”“毛利是否可持续”“锁定是否形成”三类跟踪。
+          </div>
+        </div>
+
+        <div class="watchlist">
+          <div class="watch-item"><span class="num">1</span><div><strong>AI 相关产品收入占云外部收入比例</strong><br>是否从 30% 继续提升，同时云 EBITA 率不恶化。</div></div>
+          <div class="watch-item"><span class="num">2</span><div><strong>百炼付费客户和 ARPU</strong><br>仅有客户数增长不够，需要付费客户、复购、资源包和企业席位扩张。</div></div>
+          <div class="watch-item"><span class="num">3</span><div><strong>价格与成本曲线</strong><br>Qwen、DeepSeek、豆包、文心、混元的价格变化；阿里是否更多使用缓存、Batch、套餐保持毛利。</div></div>
+          <div class="watch-item"><span class="num">4</span><div><strong>推理性能指标</strong><br>TTFT、TPS、失败率、TPM/RPM 保障、上下文缓存命中率和峰值稳定性。</div></div>
+          <div class="watch-item"><span class="num">5</span><div><strong>周边云 attach rate</strong><br>AI 客户是否同时购买 PAI/EAS、数据库、OSS、网络、安全和观测服务。</div></div>
+          <div class="watch-item"><span class="num">6</span><div><strong>CapEx 与自由现金流</strong><br>云基础设施支出是否转化为收入增长，而不是形成长期现金消耗。</div></div>
+          <div class="watch-item"><span class="num">7</span><div><strong>行业案例从 PoC 到生产</strong><br>医药、金融、制造、零售、跨境贸易等是否有可量化 ROI，而非发布会案例。</div></div>
+          <div class="watch-item"><span class="num">8</span><div><strong>私有化与专属部署比例</strong><br>若大客户持续转向专属算力，token API 仍是入口，但收入确认和毛利结构会更像传统云。</div></div>
+        </div>
+      </section>
+
+      <section id="conclusion" class="reveal">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">Conclusion</div>
+            <h2>结论与讨论问题</h2>
+          </div>
+          <div class="section-note">
+            最终判断不是“看多”或“看空”，而是明确：哪些证据说明闭环正在形成，哪些反证会推翻它。
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>最终判断</h3>
+          <p>
+            阿里云 token 变现逻辑有条件成立。短期看，token 能作为 MaaS 和开发者入口推动 AI 相关产品收入增长；中期看，闭环能否可持续，取决于 token 是否转化为企业生产系统里的持续工作负载，以及这些工作负载是否带动 PAI、EAS、数据库、存储、网络、安全和专属算力。
+          </p>
+          <p>
+            最大风险是把 token 视为独立利润池。国内模型 API 价格会长期承压，低价模型和开源部署会持续存在。阿里云真正的可防守位置，是“模型能力 + 推理效率 + 云资源 + 企业治理 + 生态场景”的组合，而不是某一个 Qwen API 的标价。
+          </p>
+        </div>
+
+        <div class="grid-2" style="margin-top: 16px">
+          <div class="card">
+            <h3>关键反证</h3>
+            <p>如果未来 4-6 个季度出现“AI 相关收入继续增长但云 EBITA 率下降、自由现金流压力扩大、API 价格持续下调、企业案例停留在试点、Token Plan 主要靠低价吸引开发者”的组合信号，应下调闭环成立判断。</p>
+          </div>
+          <div class="card">
+            <h3>上修信号</h3>
+            <p>如果阿里披露更多生产级客户、AI 相关产品占比继续提升、Model Studio 付费客户和企业席位扩张、云 EBITA 率稳定改善、专属推理和周边云资源 attach 增强，应上修判断。</p>
+          </div>
+        </div>
+
+        <h3 style="margin-top: 24px">建议讨论问题</h3>
+        <ol class="questions">
+          <li>我们讨论的 token 收入，是开发者 API 收入，还是 AI 相关云产品收入？口径必须先统一。</li>
+          <li>阿里云应优先追求 token 市占率，还是优先维护云 EBITA 和现金流？</li>
+          <li>Qwen 的优势场景是代码、办公、行业 Agent、消费应用，还是通用推理？哪个场景最有付费纵深？</li>
+          <li>低价模型出现时，阿里应降价跟随、用套餐锁定，还是转向专属部署和周边云资源？</li>
+          <li>企业客户何时会从 API 调用迁移到专属实例或私有化？这对毛利是利好还是利空？</li>
+          <li>如果未来披露 token 调用量，我们应重点看总量、有效输出 token、缓存命中率，还是单位收入？</li>
+        </ol>
+      </section>
+
+      <section id="sources" class="reveal">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">Sources & Assumptions</div>
+            <h2>数据来源与假设说明</h2>
+          </div>
+          <div class="section-note">
+            本报告使用 2026-05-17 前可公开验证资料。涉及市场份额和模型调用量的第三方数据，只作为辅助信号，不作为核心财务结论。
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="panel">
+            <h3>核心来源</h3>
+            <ol class="sources">
+              <li id="s1">阿里巴巴集团：《<a href="https://data.alibabagroup.com/ecms-files/1532295521/5b1cb883-8d00-4237-a148-6631cc12a5d2/Alibaba%20Group%20Announces%20March%20Quarter%202026%20and%20Fiscal%20Year%202026%20Results.pdf" target="_blank" rel="noreferrer">March Quarter 2026 and Fiscal Year 2026 Results</a>》，2026-05-13。</li>
+              <li id="s2">阿里云百炼：《<a href="https://www.alibabacloud.com/help/zh/model-studio/model-pricing" target="_blank" rel="noreferrer">模型价格</a>》，页面显示 2026 年更新。</li>
+              <li id="s3">阿里云百炼：《<a href="https://www.alibabacloud.com/help/en/model-studio/what-is-model-studio" target="_blank" rel="noreferrer">What is Alibaba Cloud Model Studio</a>》，2026-03-26。</li>
+              <li id="s4">阿里云百炼：《<a href="https://www.alibabacloud.com/help/en/model-studio/token-plan-overview" target="_blank" rel="noreferrer">Token Plan Team Edition Overview</a>》，2026-05-01。</li>
+              <li id="s5">阿里云百炼：《<a href="https://www.alibabacloud.com/help/en/model-studio/model-telemetry" target="_blank" rel="noreferrer">Model monitoring</a>》，2026-03-23。</li>
+              <li id="s6">阿里云百炼：《<a href="https://www.alibabacloud.com/help/en/model-studio/model-training-and-deployment-billing" target="_blank" rel="noreferrer">Model training and deployment pricing</a>》，2026-03-18。</li>
+              <li id="s7">阿里云 PAI：《<a href="https://www.alibabacloud.com/help/en/pai/product-overview/billing-of-eas" target="_blank" rel="noreferrer">Billing and pricing of EAS</a>》，官方文档。</li>
+              <li id="s8">阿里云 PAI 灵骏：《<a href="https://help.aliyun.com/zh/pai/user-guide/what-is-xxx" target="_blank" rel="noreferrer">PAI 灵骏智算服务</a>》，官方文档。</li>
+            </ol>
+          </div>
+          <div class="panel">
+            <h3>竞品与行业来源</h3>
+            <ol class="sources" start="9">
+              <li id="s9">DeepSeek API Docs：《<a href="https://api-docs.deepseek.com/quick_start/pricing" target="_blank" rel="noreferrer">Models & Pricing</a>》，2026 年页面。</li>
+              <li id="s10">OpenAI：《<a href="https://openai.com/api/pricing/" target="_blank" rel="noreferrer">API Pricing</a>》，2026 年页面。</li>
+              <li id="s11">腾讯云：《<a href="https://cloud.tencent.com/document/product/1729/97731" target="_blank" rel="noreferrer">混元生文计费概述</a>》，2026-04-27。</li>
+              <li id="s12">百度智能云：《<a href="https://cloud.baidu.com/doc/qianfan-docs/s/Jm8r1826a" target="_blank" rel="noreferrer">千帆价格</a>》，2026 年页面。</li>
+              <li id="s13">火山引擎：《<a href="https://www.volcengine.com/docs/82379/1949118?lang=zh" target="_blank" rel="noreferrer">Doubao Seed Code 模型价格</a>》，2026 年页面。</li>
+              <li id="s14">Data Center Dynamics 转述 Canalys：《<a href="https://www.datacenterdynamics.com/en/news/cloud-computing-spend-in-china-reached-116bn-in-q1-2025/" target="_blank" rel="noreferrer">China cloud computing spend reached $11.6bn in Q1 2025</a>》，2025-07。</li>
+              <li id="s15">新浪财经转述信通院与 IDC：《<a href="https://finance.sina.com.cn/wm/2026-03-26/doc-inhsiqkq5942523.shtml" target="_blank" rel="noreferrer">从大模型服务性能变化看产业新趋势</a>》，2026-03。</li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="panel" style="margin-top: 16px">
+          <h3>关键假设与不确定性</h3>
+          <table>
+            <thead><tr><th>事项</th><th>处理方式</th><th>置信度</th></tr></thead>
+            <tbody>
+              <tr><td>阿里云 token 调用量</td><td>未公开披露；本报告不编造，用反推模型展示量级要求。</td><td>高</td></tr>
+              <tr><td>AI 相关产品收入构成</td><td>财报未拆分；判断其包含模型服务、AI 算力、训练推理平台等组合收入。</td><td>中</td></tr>
+              <tr><td>模型级毛利</td><td>未披露；情景模型使用可调变量，不作为实际财务预测。</td><td>中低</td></tr>
+              <tr><td>竞品价格可比性</td><td>不同上下文、地区、促销、缓存机制不可完全可比；仅作价格压力参考。</td><td>中</td></tr>
+              <tr><td>行业市场份额</td><td>优先使用公开转述的 Canalys、IDC、信通院等资料；非核心结论用辅助信号标注。</td><td>中</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const loopData = {
+      model: {
+        title: "模型能力",
+        text: "Qwen 系列模型提供调用理由：代码、推理、长上下文、多模态和行业 Agent 能力。模型能力越稳定，客户越愿意把更多任务迁入 API 或百炼工作流。",
+        items: ["收入：高级模型 token、企业套餐、专属模型服务。", "成本：训练、后训练、推理优化、模型安全和评测。", "锁定：提示词、评测集、工具链、业务流程迁移成本。"]
+      },
+      entry: {
+        title: "开发入口",
+        text: "百炼 / Model Studio 把模型、API、OpenAI 兼容、密钥、监控、计费和套餐整合为开发入口。入口越易用，越能获得长尾开发者和企业试点。",
+        items: ["收入：按 token 付费、Credits、Coding Plan、Token Plan。", "成本：平台研发、客户支持、模型路由和合规。", "锁定：账号体系、费用治理、团队席位和工具集成。"]
+      },
+      compute: {
+        title: "推理算力",
+        text: "推理算力是 token 成本的核心。GPU、国产/自研芯片、显存、网络、调度、Batch 和缓存共同决定单位 token 成本。",
+        items: ["收入：推理服务、专属实例、PAI/EAS、灵骏算力。", "成本：硬件折旧、电力、网络、调度系统、闲置容量。", "锁定：容量保障、性能隔离、数据驻留和采购合同。"]
+      },
+      apps: {
+        title: "客户应用",
+        text: "客户不是为了 token 付费，而是为了客服降本、代码提效、合同审查、销售辅助、医药文档、跨境贸易等业务结果付费。",
+        items: ["收入：持续调用量、行业 Agent、应用订阅和项目服务。", "成本：场景适配、交付、评估、内容安全和业务集成。", "锁定：工作流嵌入、业务数据结构和运营指标。"]
+      },
+      cloud: {
+        title: "周边云资源",
+        text: "一旦应用进入生产，RAG、向量检索、数据库、OSS、日志、监控、权限、安全、网络和容器都会产生周边云消费。",
+        items: ["收入：数据库、存储、网络、PAI、EAS、云原生和安全产品。", "成本：传统云资源成本结构，相对更可规模化。", "锁定：数据位置、架构依赖、运维习惯和企业采购。"]
+      },
+      pay: {
+        title: "持续付费",
+        text: "持续付费来自从按量调用到套餐，再到资源包、专属实例和私有化部署的阶梯迁移。客户越大，越追求预算和性能确定性。",
+        items: ["收入：后付费、预付费、Credits、包年包月、专属集群。", "成本：销售折扣、SLA、客户成功、交付和容量预留。", "锁定：预算周期、合同、权限和合规审计。"]
+      },
+      flywheel: {
+        title: "闭环成立点",
+        text: "闭环成立需要两个条件同时满足：客户从每个 token 得到的业务价值高于支出，阿里云的单位收入高于推理成本并能带动周边云复购。",
+        items: ["正循环：能力提升 → 调用增加 → 算力利用率提高 → 成本下降 → 更多企业场景。", "负循环：低价获客 → GPU 成本上升 → 毛利承压 → 服务限流或降质 → 客户迁移。", "关键指标：AI 收入占比、云 EBITA、付费客户留存、周边云 attach rate。"]
+      }
+    };
+
+    document.querySelectorAll(".loop-node").forEach(node => {
+      node.addEventListener("click", () => {
+        document.querySelectorAll(".loop-node").forEach(n => n.classList.remove("active"));
+        node.classList.add("active");
+        const data = loopData[node.dataset.node];
+        document.getElementById("loopDetail").innerHTML = `
+          <div class="detail-title"><span class="dot"></span><h3>${data.title}</h3></div>
+          <p>${data.text}</p>
+          <ul class="detail-list">${data.items.map(item => `<li>${item}</li>`).join("")}</ul>
+        `;
+      });
+    });
+
+    const controls = {
+      tokenVolume: document.getElementById("tokenVolume"),
+      blendPrice: document.getElementById("blendPrice"),
+      costPrice: document.getElementById("costPrice"),
+      discount: document.getElementById("discount"),
+      attach: document.getElementById("attach")
+    };
+
+    const scenarios = {
+      base: { tokenVolume: 300, blendPrice: 3.6, costPrice: 1.8, discount: 25, attach: 0.45 },
+      pressure: { tokenVolume: 500, blendPrice: 1.6, costPrice: 1.4, discount: 35, attach: 0.20 },
+      upside: { tokenVolume: 900, blendPrice: 4.8, costPrice: 1.5, discount: 18, attach: 0.80 }
+    };
+
+    function formatMillions(value) {
+      if (value >= 1000) return `${(value / 1000).toFixed(2)} 十亿元`;
+      return `${Math.round(value)} 百万元`;
+    }
+
+    function calcModel() {
+      const tokenT = Number(controls.tokenVolume.value);
+      const price = Number(controls.blendPrice.value);
+      const cost = Number(controls.costPrice.value);
+      const discount = Number(controls.discount.value) / 100;
+      const attach = Number(controls.attach.value);
+
+      document.getElementById("tokenOut").value = tokenT;
+      document.getElementById("priceOut").value = price.toFixed(1);
+      document.getElementById("costOut").value = cost.toFixed(1);
+      document.getElementById("discountOut").value = Math.round(discount * 100);
+      document.getElementById("attachOut").value = attach.toFixed(2);
+
+      const apiRevenueM = tokenT * price * (1 - discount);
+      const costM = tokenT * cost;
+      const tokenGrossM = apiRevenueM - costM;
+      const attachRevenueM = apiRevenueM * attach;
+      const attachGrossM = attachRevenueM * 0.35;
+      const totalGrossM = tokenGrossM + attachGrossM;
+      const margin = apiRevenueM > 0 ? tokenGrossM / apiRevenueM : 0;
+
+      document.getElementById("apiRevenue").textContent = formatMillions(apiRevenueM);
+      document.getElementById("tokenMargin").textContent = `${Math.round(margin * 100)}%`;
+      document.getElementById("totalGross").textContent = formatMillions(totalGrossM);
+
+      const maxBar = Math.max(apiRevenueM, costM, attachGrossM, 1);
+      document.getElementById("barRevenue").style.setProperty("--w", `${Math.max(4, apiRevenueM / maxBar * 100)}%`);
+      document.getElementById("barCost").style.setProperty("--w", `${Math.max(4, costM / maxBar * 100)}%`);
+      document.getElementById("barAttach").style.setProperty("--w", `${Math.max(4, attachGrossM / maxBar * 100)}%`);
+      document.getElementById("barRevenueText").textContent = formatMillions(apiRevenueM);
+      document.getElementById("barCostText").textContent = formatMillions(costM);
+      document.getElementById("barAttachText").textContent = formatMillions(attachGrossM);
+    }
+
+    Object.values(controls).forEach(input => input.addEventListener("input", calcModel));
+    document.querySelectorAll(".scenario-button").forEach(button => {
+      button.addEventListener("click", () => {
+        document.querySelectorAll(".scenario-button").forEach(b => b.classList.remove("active"));
+        button.classList.add("active");
+        const preset = scenarios[button.dataset.scenario];
+        Object.entries(preset).forEach(([key, value]) => controls[key].value = value);
+        calcModel();
+      });
+    });
+    calcModel();
+
+    const targetRevenue = document.getElementById("targetRevenue");
+    const requiredPrice = document.getElementById("requiredPrice");
+    function calcRequired() {
+      const targetB = Number(targetRevenue.value);
+      const price = Number(requiredPrice.value);
+      const quarterP = targetB / price;
+      const monthP = quarterP / 3;
+      document.getElementById("targetOut").value = targetB.toFixed(3);
+      document.getElementById("requiredPriceOut").value = price.toFixed(1);
+      document.getElementById("requiredQuarter").textContent = `${quarterP.toFixed(2)} P`;
+      document.getElementById("requiredMonth").textContent = `${monthP.toFixed(2)} P`;
+    }
+    targetRevenue.addEventListener("input", calcRequired);
+    requiredPrice.addEventListener("input", calcRequired);
+    calcRequired();
+
+    const navLinks = Array.from(document.querySelectorAll("nav a"));
+    const sections = navLinks.map(link => document.querySelector(link.getAttribute("href"))).filter(Boolean);
+    const navObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        navLinks.forEach(link => link.classList.toggle("active", link.getAttribute("href") === `#${entry.target.id}`));
+      });
+    }, { rootMargin: "-35% 0px -55% 0px", threshold: 0.01 });
+    sections.forEach(section => navObserver.observe(section));
+
+    const revealObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add("visible");
+      });
+    }, { threshold: 0.12 });
+    document.querySelectorAll(".reveal").forEach(el => revealObserver.observe(el));
+  </script>
+</body>
+</html>
