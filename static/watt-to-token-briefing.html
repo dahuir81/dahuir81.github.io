@@ -264,8 +264,8 @@
 
     <!-- Correction Note -->
     <div class="card" style="border-left: 3px solid var(--orange);">
-      <div class="card-title"><span style="color:var(--orange)">📐</span> 校正确认 &amp; 反直觉发现</div>
-      <p>来自阿里云内部研究的一份 Token 变现分析报告提供了关键的运营层数据校准：</p>
+      <div class="card-title"><span style="color:var(--orange)">📐</span> 校正确认 — 财务层 vs 物理层是两个维度</div>
+      <p>来自阿里云内部研究的 Token 变现报告提供了关键的运营层数据校准：</p>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;">
         <div style="background:rgba(255,106,0,0.04);border-radius:8px;padding:14px;">
           <div style="font-size:13px;color:var(--muted);margin-bottom:4px;">PUE 校准</div>
@@ -278,11 +278,13 @@
           <div style="font-size:12px;color:var(--muted);margin-top:4px;">打了 6-7 折</div>
         </div>
       </div>
-      <div style="margin-top:14px;padding:12px;background:rgba(91,156,246,0.06);border-radius:8px;">
-        <div style="font-weight:600;font-size:14px;">💡 一项反直觉的发现</div>
-        <p style="font-size:14px;color:var(--muted);margin-top:6px;">在阿里云 3,800 亿投资的年度 OPEX 拆分中：<br>
-        <span style="font-size:22px;font-weight:700;color:var(--red);">电力仅占 2.2%</span>（~15.5 亿/年），而 <strong style="color:var(--orange);">芯片折旧占 62.3%</strong>（~440 亿/年）。<br>
-        <span style="color:var(--text);">真正的瓶颈不是电费，而是 GPU 资本支出的回收节奏。</span></p>
+      <div style="margin-top:14px;padding:14px;background:rgba(255,106,0,0.06);border-radius:8px;">
+        <div style="font-weight:600;font-size:14px;">💡 一个需要厘清的两层视角</div>
+        <p style="font-size:14px;color:var(--muted);margin-top:6px;">参考报告做了阿里 3,800 亿投资的年度 OPEX 拆分：<br>
+        <span style="font-size:20px;font-weight:700;color:var(--orange);">芯片折旧 62.3%</span> · 基础设施 28.3% · 运维 7.1% · <strong style="color:var(--red);">电力 2.2%</strong><br><br>
+        但注意：<strong style="color:var(--text);">这说的是「钱花在哪」，不是「瓶颈在哪」。</strong><br>
+        GPU 折旧高恰恰是因为产能受限——产能受限的根因之一仍是电力供给。<br>
+        <span style="color:var(--accent);">「Grid is the new GPU」在物理层面成立，财务报表只是另一个叙事维度。</span></p>
       </div>
     </div>
   </div>
@@ -433,9 +435,9 @@
         <div style="font-size:13px;color:var(--muted);margin-top:4px;">轻量模型为主，单 GW 产出约 460-690K tok/s/MW。<br>阿里以中大模型为主，同等电力下 Token 产出约为字节的 50-60%。</div>
       </div>
 
-      <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border);">
-        <div style="font-weight:600;margin-bottom:10px;">💡 OPEX 视角——真正的大头不是电费</div>
-        <p style="font-size:14px;color:var(--muted);">基于阿里 3,800 亿投资的年度运营成本拆分：</p>
+      <div style="margin-top:14px;padding:14px;background:rgba(91,156,246,0.06);border-radius:8px;">
+        <div style="font-weight:600;margin-bottom:6px;">💰 OPEX 视角——钱花在哪 vs 瓶颈在哪</div>
+        <p style="font-size:14px;color:var(--muted);">基于阿里 3,800 亿投资的年度运营成本拆分（财务口径）：</p>
         <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px;text-align:center;">
           <div style="background:rgba(255,106,0,0.06);border-radius:6px;padding:10px;">
             <div style="font-size:20px;font-weight:700;color:var(--orange);">62.3%</div>
@@ -454,7 +456,7 @@
             <div style="font-size:12px;color:var(--muted);">电力<br>~15.5 亿/年</div>
           </div>
         </div>
-        <p style="font-size:14px;color:var(--text);margin-top:10px;"><strong>关键修正</strong>：Token 经济学的真实瓶颈不是电费，是 GPU 折旧回收节奏。电力虽是物理天花板，但在财务层面只占极小比重。</p>
+        <p style="font-size:14px;color:var(--text);margin-top:10px;"><strong>⚠️ 但要注意：这是「钱花在哪」，不是「瓶颈在哪」。</strong> GPU 折旧高恰恰因为产能受限——而产能受限的根因之一仍是电力供给。你可以有钱交电费，但电网拉不过来就是拉不过来。</p>
       </div>
 
       <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border);">
@@ -524,10 +526,9 @@
       <div class="quote">Grid is the new GPU</div>
       <p style="color:var(--muted);font-size:13px;text-align:right;margin-top:8px">真正的瓶颈不是芯片，是电网</p>
       <div style="margin-top:16px;padding-top:14px;border-top:1px solid rgba(118,185,0,0.2);">
-        <p style="font-size:14px;color:var(--muted);"><strong style="color:var(--text);">⚠️ 但需注意财务层面的反直觉结论</strong>：在阿里云 3,800 亿投资的实际 OPEX 中，<br>
-        <span style="font-size:18px;font-weight:700;color:var(--red);">电力仅占 2.2%</span>，芯片折旧占 <strong style="color:var(--orange);">62.3%</strong>。<br>
-        Token 经济学<strong style="color:var(--text);">压倒性的财务瓶颈</strong>不是电费，而是 GPU 资本支出的 4-5 年回收窗口。<br>
-        <span style="font-size:13px;color:var(--muted);">「Grid is the new GPU」在物理层面成立，在财务报表层面需要加注脚。</span></p>
+        <p style="font-size:14px;color:var(--muted);"><strong style="color:var(--accent);">补充一个财务层视角</strong>：参考报告做了阿里 3,800 亿投资的 OPEX 拆分——电力仅占 2.2%，芯片折旧占 62.3%。但这说的是「钱花在哪」，不是「瓶颈在哪」。<br>
+        GPU 折旧高恰恰因为产能受限，而产能受限的根因之一仍是电力供给。<br>
+        <span style="font-size:13px;color:var(--muted);">两个维度不矛盾：物理瓶颈是电，财务杠杆在 GPU。</span></p>
       </div>
     </div>
   </div>
