@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>从电力 GW 到算力 Token：AI 工厂的能量-智商转换链</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --card: #1a1d28;
+    --card-hover: #222639;
+    --border: #2a2e3e;
+    --text: #e4e6ef;
+    --muted: #8b8fa3;
+    --accent: #76b900;
+    --accent-dim: #4a7a00;
+    --blue: #5b9cf6;
+    --orange: #f5a623;
+    --purple: #b388ff;
+    --green: #4caf7d;
+    --red: #ef5350;
+    --radius: 12px;
+    --max-w: 820px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans SC", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    padding: 0 20px;
+  }
+  .container { max-width: var(--max-w); margin: 0 auto; padding: 40px 0 80px; }
+
+  /* Header */
+  .header { text-align: center; margin-bottom: 48px; }
+  .header .tag { display: inline-block; background: var(--accent-dim); color: var(--accent); font-size: 13px; padding: 4px 14px; border-radius: 20px; font-weight: 500; letter-spacing: 0.5px; margin-bottom: 16px; }
+  .header h1 { font-size: 28px; font-weight: 700; margin-bottom: 12px; background: linear-gradient(135deg, #76b900, #a8ff35); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .header .sub { color: var(--muted); font-size: 15px; }
+  .header .meta { color: var(--muted); font-size: 13px; margin-top: 8px; }
+
+  /* Sections */
+  .section { margin-bottom: 36px; }
+  .section-title {
+    font-size: 20px; font-weight: 700; margin-bottom: 20px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-title .emoji { font-size: 22px; }
+
+  /* Cards */
+  .card { background: var(--card); border-radius: var(--radius); padding: 24px; margin-bottom: 16px; border: 1px solid var(--border); }
+  .card-title { font-size: 16px; font-weight: 600; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+
+  /* Data Grid */
+  .data-grid { overflow-x: auto; margin: 16px 0; border-radius: var(--radius); border: 1px solid var(--border); }
+  .data-grid table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .data-grid th { background: #1d2132; color: var(--muted); font-weight: 600; text-align: left; padding: 12px 16px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  .data-grid td { padding: 12px 16px; border-bottom: 1px solid var(--border); color: var(--text); }
+  .data-grid tr:last-child td { border-bottom: none; }
+  .data-grid tr:hover td { background: rgba(118,185,0,0.04); }
+
+  /* Chain visualization */
+  .chain { display: flex; flex-direction: column; gap: 4px; padding: 20px 0; }
+  .chain-step { display: flex; align-items: flex-start; gap: 12px; padding: 8px 16px; border-left: 2px solid var(--border); position: relative; }
+  .chain-step:first-child { border-left-color: var(--accent); }
+  .chain-step:last-child { border-left-color: var(--green); }
+  .chain-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--muted); flex-shrink: 0; margin-top: 6px; margin-left: -22px; border: 2px solid var(--bg); }
+  .chain-step:first-child .chain-dot { background: var(--accent); }
+  .chain-step:last-child .chain-dot { background: var(--green); }
+  .chain-label { font-size: 13px; color: var(--muted); font-weight: 500; min-width: 100px; flex-shrink: 0; }
+  .chain-desc { font-size: 14px; color: var(--text); }
+  .chain-desc strong { color: var(--accent); }
+
+  /* Highlight box */
+  .highlight { background: rgba(118,185,0,0.06); border: 1px solid rgba(118,185,0,0.2); border-radius: var(--radius); padding: 20px 24px; margin: 20px 0; }
+  .highlight p { font-size: 15px; }
+  .highlight strong { color: var(--accent); }
+
+  /* Tags */
+  .tag-list { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0; }
+  .tag-item { background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 4px 12px; font-size: 13px; color: var(--muted); }
+
+  /* Community grid */
+  .comm-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 600px) { .comm-grid { grid-template-columns: 1fr; } }
+  .comm-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; }
+  .comm-card .badge { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 4px; margin-bottom: 8px; }
+  .badge-hn { background: #ff66001a; color: #ff6600; }
+  .badge-x { background: #1d9bf01a; color: #1d9bf0; }
+  .badge-gh { background: #6e40c91a; color: #b388ff; }
+  .badge-reddit { background: #ff45001a; color: #ff4500; }
+  .comm-card p { font-size: 14px; color: var(--muted); line-height: 1.6; }
+
+  /* Takeaway bottom */
+  .takeaway { background: linear-gradient(135deg, #1a2d1a, #1a1d28); border: 1px solid rgba(118,185,0,0.3); border-radius: var(--radius); padding: 28px; margin-top: 12px; }
+  .takeaway h3 { color: var(--accent); font-size: 18px; margin-bottom: 12px; }
+  .takeaway p { font-size: 15px; line-height: 1.8; }
+  .takeaway .quote { font-size: 22px; font-weight: 700; color: var(--accent); text-align: center; padding: 16px 0; }
+
+  /* Number highlight */
+  .num { color: var(--accent); font-weight: 600; }
+  .num-orange { color: var(--orange); font-weight: 600; }
+  .num-blue { color: var(--blue); font-weight: 600; }
+  .num-purple { color: var(--purple); font-weight: 600; }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    .header h1 { font-size: 22px; }
+    .chain-step { flex-direction: column; gap: 4px; }
+    .chain-label { min-width: auto; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="tag">📡 AI 基建经济学</div>
+    <h1>从电力 GW 到算力 Token</h1>
+    <p class="sub">黄仁勋 GTC 2026 核心框架：AI 工厂的能量-智商转换链</p>
+    <p class="meta">2026-05-19 · 基于 GTC 2026 主题演讲 &amp; 社区讨论综合整理</p>
+  </div>
+
+  <!-- Chain -->
+  <div class="section">
+    <div class="section-title"><span class="emoji">⚡</span> 转换链条</div>
+    <div class="card">
+      <div class="chain">
+        <div class="chain-step">
+          <div class="chain-dot"></div>
+          <div class="chain-label">电网 1 GW</div>
+          <div class="chain-desc">数据中心的电力配额上限——这是 AI 工厂的真正产能瓶颈</div>
+        </div>
+        <div class="chain-step">
+          <div class="chain-dot"></div>
+          <div class="chain-label">基础设施损耗</div>
+          <div class="chain-desc">约 <span class="num-orange">40%</span> 被冷却、配电、UPS 吃掉（PUE ≈ 1.4-1.8） → 实际到 GPU 集群 ≈ <span class="num">0.6 GW</span></div>
+        </div>
+        <div class="chain-step">
+          <div class="chain-dot"></div>
+          <div class="chain-label">GPU 计算</div>
+          <div class="chain-desc">单块 Rubin GPU 功耗 <span class="num-orange">1800-2300 W</span>，100% 液冷。集群协同做 AI 推理</div>
+        </div>
+        <div class="chain-step">
+          <div class="chain-dot"></div>
+          <div class="chain-label">产出 Token</div>
+          <div class="chain-desc">每秒产出 <span class="num">百万到亿级</span> Token。核心指标：<strong>Tokens per Watt → Tokens per MW</strong></div>
+        </div>
+        <div class="chain-step">
+          <div class="chain-dot"></div>
+          <div class="chain-label">变现</div>
+          <div class="chain-desc">Token × 单价（$/M tokens）= 营收。<strong>Revenue per MW</strong> 是投资人真正关心的终局指标</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Data Table -->
+  <div class="section">
+    <div class="section-title"><span class="emoji">📊</span> 代际效率跃迁（每 MW 产出 Token）</div>
+    <div class="data-grid">
+      <table>
+        <thead>
+          <tr>
+            <th>架构</th>
+            <th>Tokens/s/MW</th>
+            <th>较 Hopper</th>
+            <th>1 GW 工厂 ≈</th>
+            <th>Token 成本</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Hopper</strong> (H100)</td>
+            <td class="num-orange">~180K</td>
+            <td>基准</td>
+            <td>~180M tokens/s</td>
+            <td>基准</td>
+          </tr>
+          <tr>
+            <td><strong>Blackwell</strong> (B200)</td>
+            <td class="num">~1.8M</td>
+            <td>10x</td>
+            <td>~1.8B tokens/s</td>
+            <td>1/15x</td>
+          </tr>
+          <tr>
+            <td><strong>Blackwell Ultra</strong> (GB300)</td>
+            <td class="num">~9M</td>
+            <td>50x</td>
+            <td>~9B tokens/s</td>
+            <td>1/35x</td>
+          </tr>
+          <tr>
+            <td><strong>Vera Rubin</strong> (VR200)</td>
+            <td class="num-purple">~18M</td>
+            <td>100x</td>
+            <td>~18B tokens/s</td>
+            <td>1/100x</td>
+          </tr>
+          <tr>
+            <td><strong>Rubin + Groq 3 LPX</strong></td>
+            <td class="num-purple">~63M</td>
+            <td>350x</td>
+            <td>~63B tokens/s</td>
+            <td>1/350x</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="highlight">
+      <p>六代 GPU 架构实现 <strong>1,000,000x</strong> 推理效率提升。黄仁勋的类比：「如果汽车燃油效率也这么涨，一加仑油够开到月球再回来。」</p>
+      <p style="margin-top:8px;color:var(--muted);font-size:13px;">* 数据来源：NVIDIA 官方技术博客 &amp; SemiAnalysis InferenceX 独立测试</p>
+    </div>
+  </div>
+
+  <!-- GTC 2026 Core Theses -->
+  <div class="section">
+    <div class="section-title"><span class="emoji">🎙️</span> 黄仁勋 GTC 2026 六大核心论点</div>
+
+    <div class="card">
+      <div class="card-title"><span style="color:var(--accent)">🏭</span> 1. Token Factory 框架</div>
+      <p>数据中心被重新定义为「<strong>生产 Token 的工厂</strong>」。电力 = 产能上限，Token/s = 产量，$/M tokens = 单件成本。衡量 AI 基建 ROI 不再看 TFLOPS，看每瓦产出多少 Token。</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span style="color:var(--blue)">💰</span> 2. 推理取代训练成为经济引擎</div>
+      <p>「训练是一次性投资，推理是持续的现金流业务。」每个用户每次提问都是新的推理请求。Agentic AI 的爆发进一步放大了推理需求——每个 Agent 需要<strong>持续对话、检索记忆、实时响应</strong>，Token 消耗量成倍增长。</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span style="color:var(--orange)">🔧</span> 3. 极端协同设计（Extreme Co-Design）</div>
+      <p>每一层都在榨效率：</p>
+      <div class="tag-list" style="margin-top:6px">
+        <span class="tag-item">cuLitho 光刻加速 70x</span>
+        <span class="tag-item">cuEST 量子化学材料模拟</span>
+        <span class="tag-item">HBM4 内存带宽 22 TB/s</span>
+        <span class="tag-item">NVLink 6 互联</span>
+        <span class="tag-item">100% 液冷 → PUE 1.1</span>
+        <span class="tag-item">Dynamo/FM 全栈调度</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span style="color:var(--green)">📏</span> 4. Intelligence per Watt 成为核心投资指标</div>
+      <p>未来基建投资人衡量项目的第一个指标不是「几兆瓦」，而是「你这兆瓦能产出多少 Token」——这改变了数据中心估值逻辑。</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span style="color:var(--red)">🔥</span> 5. 单 GPU 功耗 1800-2300W，100% 液冷强制</div>
+      <p>Rubin GPU 功耗是 H100 的 <strong>4-5 倍</strong>。传统风冷机架设计彻底失效，数据中心面临全盘冷却架构重做。功率密度翻倍意味着传统 1MW 机柜只能放 <strong>400-500 块 Rubin GPU</strong>。</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span style="color:var(--purple)">🌍</span> 6. 全球 AI 基建投资 → $2 万亿</div>
+      <p>黄仁勋预测未来 4-5 年全球 AI 工厂投资将达到 2 万亿美元。「每个工程师/开发者每年应该至少花 $250K 在 Token 上——否则我会发飙。」</p>
+    </div>
+  </div>
+
+  <!-- Community Reactions -->
+  <div class="section">
+    <div class="section-title"><span class="emoji">💬</span> 社区讨论扫描</div>
+    <div class="comm-grid">
+
+      <div class="comm-card">
+        <div class="badge badge-hn">Hacker News</div>
+        <p>「黄仁勋要求工资之外加 Token 预算」——HN 热帖讨论两极。</p>
+        <p style="margin-top:6px">技术向讨论集中在：<strong>电力成本已占 TCO 的 30-50%</strong>，NV 的 50x 效率提升在混合负载下是否打折扣。</p>
+      </div>
+
+      <div class="comm-card">
+        <div class="badge badge-x">𝕏 / Twitter</div>
+        <p>「tokens per watt」benchmark 竞赛火热。独立测试确认 Blackwell 比 Hopper 省 30-50x 能耗/Token。</p>
+        <p style="margin-top:6px">分析师造新词 <strong>#Tokenomics</strong>。争议：NV 的 50x 是对特定模型和精度的最乐观结果。</p>
+      </div>
+
+      <div class="comm-card">
+        <div class="badge badge-gh">GitHub</div>
+        <p><strong>TensorRT-LLM #43</strong>：功耗约束下如何准确评估 tokens/s——实测方法论讨论</p>
+        <p><strong>nathom/token-efficiency</strong>：跨格式 token 效率对比</p>
+        <p><strong>cuopt #1037</strong>：质疑「cost per token」忽略了安全/合规的隐性成本</p>
+      </div>
+
+      <div class="comm-card">
+        <div class="badge badge-reddit">Reddit</div>
+        <p><strong>r/hardware 热帖</strong>：1800-2300W 的 Rubin GPU 让运营商崩溃——机柜密度翻倍，冷却全盘重来。</p>
+        <p style="margin-top:6px">核心讨论：到底是买更多 HW，还是把现有电用好？</p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Takeaway -->
+  <div class="section">
+    <div class="takeaway">
+      <h3>🎯 一句话总结</h3>
+      <p>将 AI 算力视作一种生产，电力是输入成本，token 是产出商品。Token 经济学正在取代晶体管经济学。<br><br>
+      <strong>GW → Token 的转换，本质不是物理换算，是商业模式换算：</strong><br>
+      谁拥有电网配额，谁就有 AI 产能；谁能把每瓦产出最大化，谁就是下一波 AI 基建的赢家。</p>
+      <div class="quote">Grid is the new GPU</div>
+      <p style="color:var(--muted);font-size:13px;text-align:right;margin-top:8px">真正的瓶颈不是芯片，是电网</p>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div style="text-align:center;margin-top:48px;padding-top:20px;border-top:1px solid var(--border);color:var(--muted);font-size:13px;">
+    <p>由 Tars 基于 GTC 2026 公开资料 &amp; 社区讨论综合整理</p>
+  </div>
+
+</div>
+</body>
+</html>
