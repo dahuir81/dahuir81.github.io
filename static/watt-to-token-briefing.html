@@ -159,16 +159,6 @@
   <!-- Data Table -->
   <div class="section">
     <div class="section-title"><span class="emoji">📊</span> 代际效率跃迁（每 MW 产出 Token）</div>
-    
-    <div class="card">
-      <div class="card-title"><span style="color:var(--orange)">⚠️ 校准确认</span></div>
-      <p>初版使用了 NVIDIA 官方峰值宣传数据（特定模型+精度优化场景），实际运营数据有较大差距。以下提供<strong>两层数据</strong>：</p>
-      <ul style="font-size:14px;color:var(--muted);line-height:2;padding-left:20px;">
-        <li><strong style="color:var(--text);">理论峰值层</strong>（灰底）：NVIDIA 官方数据，特定 MoE 模型 + FP4 精度优化，接近极限场景</li>
-        <li><strong style="color:var(--text);">运营加权层</strong>（彩底）：含 7B-70B+ 多模型组合加权，接近实际运营产出</li>
-      </ul>
-      <p style="font-size:13px;color:var(--muted);margin-top:8px;">* 运营层加权基准参考阿里云 Token 变现报告 &amp; SemiAnalysis 行业分析；PUE 按中国 IDC 标准取 1.25</p>
-    </div>
 
     <div class="data-grid">
       <table>
@@ -224,10 +214,9 @@
     <div class="highlight">
       <p>六代 GPU 架构实现 <strong>1,000,000x</strong> 推理效率提升。黄仁勋的类比：「如果汽车燃油效率也这么涨，一加仑油够开到月球再回来。」</p>
       <p style="margin-top:8px;color:var(--muted);font-size:13px;">
-        <strong>InferenceMAX 数据</strong>：开源独立基准，由 SemiAnalysis 运营，覆盖数百块 GPU 的逐夜自动化测试。<br>
-        <strong>运营加权数据</strong>：阿里云Token变现报告，含模型组合权重和 PUE 1.25 的中国 IDC 运营口径。<br>
-        H100/B200/GB200 数据来自 InferenceMAX v1（DeepSeek-R1 8K/1K 基准）。GB300 数据来自 InferenceX v2。<br>
-        注意：InferenceMAX tok/s/MW 为「all-in provisioned」口径（含冷却/配电损耗），非纯 GPU TDP 理论值。
+        InferenceMAX 数据由 SemiAnalysis 基于 DeepSeek-R1 8K/1K 基准的逐夜自动化测试产生，覆盖 1000+ GPU。<br>
+        运营加权数据参考阿里云 Token 变现报告，含模型组合权重和 PUE 1.25 的中国 IDC 运营口径。<br>
+        InferenceMAX tok/s/MW 为「all-in provisioned」口径（含冷却/配电损耗）。
       </p>
     </div>
   </div>
@@ -274,28 +263,20 @@
       <p>黄仁勋预测未来 4-5 年全球 AI 工厂投资将达到 2 万亿美元。「每个工程师/开发者每年应该至少花 $250K 在 Token 上——否则我会发飙。」</p>
     </div>
 
-    <!-- Correction Note -->
-    <div class="card" style="border-left: 3px solid var(--orange);">
-      <div class="card-title"><span style="color:var(--orange)">📐</span> 校正确认 — 采用 SemiAnalysis InferenceMAX/InferenceX 独立基准数据</div>
-      <p>本次校准引入 SemiAnalysis 运营的 <strong>InferenceMAX/InferenceX</strong> 开源推理基准测试数据：</p>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;">
-        <div style="background:rgba(255,106,0,0.04);border-radius:8px;padding:14px;">
-          <div style="font-size:13px;color:var(--muted);margin-bottom:4px;">PUE 校准</div>
-          <div style="font-size:18px;font-weight:700;color:var(--orange);">1.4 → 1.25</div>
-          <div style="font-size:12px;color:var(--muted);margin-top:4px;">InferenceMAX all-in 口径含冷却损耗</div>
+    <!-- Data Sources & OPEX Note -->
+    <div class="card" style="border-left: 3px solid var(--blue);">
+      <div class="card-title"><span style="color:var(--blue)">📡</span> 数据来源与 OPEX 视角</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+        <div>
+          <div style="font-weight:600;font-size:14px;margin-bottom:6px;">InferenceMAX / InferenceX 基准</div>
+          <p style="font-size:13px;color:var(--muted);">SemiAnalysis 运营的开源推理基准测试，覆盖 1000+ GPU，逐夜 CI 自动化测试。数据以 DeepSeek-R1 8K/1K 为主要负载模型。GB300 数据含 SGLang + NVFP4 + Disagg WideEP 优化。</p>
         </div>
-        <div style="background:rgba(76,175,125,0.04);border-radius:8px;padding:14px;">
-          <div style="font-size:13px;color:var(--muted);margin-bottom:4px;">Token/MW 数据源</div>
-          <div style="font-size:16px;font-weight:700;color:var(--green);">InferenceMAX → 独立第三方</div>
-          <div style="font-size:12px;color:var(--muted);margin-top:4px;">SemiAnalysis · 逐夜 CI 自动化测试 · 1000+ GPU</div>
+        <div style="background:rgba(255,106,0,0.04);border-radius:8px;padding:12px;">
+          <div style="font-weight:600;font-size:14px;margin-bottom:6px;">阿里 3,800 亿投资的 OPEX 结构</div>
+          <div style="font-size:18px;font-weight:700;color:var(--orange);">芯片折旧 62.3%</div>
+          <div style="font-size:14px;color:var(--muted);">基础设施 28.3% · 运维 7.1% · <strong style="color:var(--red);">电力 2.2%</strong></div>
+          <p style="font-size:13px;color:var(--muted);margin-top:6px;">财务口径 vs 物理瓶颈是不同维度。GPU 折旧高因其产能受限，产能受限的根因之一仍是电力供给。两个叙事不矛盾。</p>
         </div>
-      </div>
-      <div style="margin-top:14px;padding:14px;background:rgba(255,106,0,0.06);border-radius:8px;">
-        <div style="font-weight:600;font-size:14px;">💡 需要厘清的两层视角</div>
-        <p style="font-size:14px;color:var(--muted);margin-top:6px;">来自阿里云 Token 变现报告的    OPEX 拆分提供另一个维度：<br>
-        <span style="font-size:20px;font-weight:700;color:var(--orange);">芯片折旧 62.3%</span> · 基础设施 28.3% · 运维 7.1% · <strong style="color:var(--red);">电力 2.2%</strong><br><br>
-        但这说的是「钱花在哪」，不是「瓶颈在哪」。GPU 折旧高恰恰是因为产能受限——产能受限的根因之一仍是电力供给。<br>
-        <span style="color:var(--accent);">「Grid is the new GPU」在物理层面成立，财务报表只是另一个叙事维度。</span></p>
       </div>
     </div>
   </div>
@@ -537,9 +518,7 @@
       <div class="quote">Grid is the new GPU</div>
       <p style="color:var(--muted);font-size:13px;text-align:right;margin-top:8px">真正的瓶颈不是芯片，是电网</p>
       <div style="margin-top:16px;padding-top:14px;border-top:1px solid rgba(118,185,0,0.2);">
-        <p style="font-size:14px;color:var(--muted);"><strong style="color:var(--accent);">补充一个财务层视角</strong>：参考报告做了阿里 3,800 亿投资的 OPEX 拆分——电力仅占 2.2%，芯片折旧占 62.3%。但这说的是「钱花在哪」，不是「瓶颈在哪」。<br>
-        GPU 折旧高恰恰因为产能受限，而产能受限的根因之一仍是电力供给。<br>
-        <span style="font-size:13px;color:var(--muted);">两个维度不矛盾：物理瓶颈是电，财务杠杆在 GPU。</span></p>
+        <p style="font-size:14px;color:var(--muted);"><strong style="color:var(--accent);">补充：财务层视角</strong> 阿里 3,800 亿投资的 OPEX 拆分显示电力仅占 2.2%，芯片折旧占 62.3%。但这说的是「钱花在哪」，不是「瓶颈在哪」。GPU 折旧高因其产能受限，而产能受限的根因之一是电力供给。两个维度不矛盾：物理瓶颈是电，财务杠杆在 GPU。</p>
       </div>
     </div>
   </div>
