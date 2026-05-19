@@ -175,40 +175,47 @@
         <thead>
           <tr>
             <th>架构</th>
-            <th>Tokens/s/MW<br><span style="font-weight:400;font-size:12px;color:var(--muted);">理论峰值</span></th>
-            <th>Tokens/s/MW<br><span style="font-weight:400;font-size:12px;color:var(--muted);">运营加权</span></th>
-            <th>模型组合说明</th>
-            <th>Token 成本</th>
+            <th>InferenceMAX<br><span style="font-weight:400;font-size:12px;color:var(--muted);">tok/s/MW</span></th>
+            <th>vs H100</th>
+            <th>参考报告<br><span style="font-weight:400;font-size:12px;color:var(--muted);">运营加权</span></th>
+            <th>数据来源 &amp; 说明</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td><strong>Hopper</strong> (H100)</td>
-            <td style="color:var(--muted);">~180K</td>
-            <td class="num-orange" style="font-weight:700;">~100K</td>
-            <td style="font-size:13px;">7B-70B+ 混合，含存量和推理混跑</td>
+            <td class="num-orange" style="font-weight:700;">900K</td>
             <td>基准</td>
+            <td>~100K</td>
+            <td style="font-size:13px;">InferenceMAX v1（DeepSeek-R1）<br><span style="color:var(--muted);">运营加权含 7B-70B+ 多模型混合</span></td>
           </tr>
           <tr>
-            <td><strong>Blackwell</strong> (B200 NVL72)</td>
-            <td style="color:var(--muted);">~1.8M</td>
-            <td class="num" style="font-weight:700;">~425K</td>
-            <td style="font-size:13px;">轻 A40%+标 B40%+复杂 C20% 加权</td>
-            <td>1/15x</td>
+            <td><strong>Blackwell B200</strong></td>
+            <td class="num" style="font-weight:700;">2.8M</td>
+            <td>3.1x</td>
+            <td>~425K</td>
+            <td style="font-size:13px;">InferenceMAX v1 · 获 15x token 成本降低<br><span style="color:var(--muted);">B200 单 GPU 达 60K tok/s（gpt-oss）</span></td>
           </tr>
           <tr>
-            <td><strong>Blackwell Ultra</strong> (GB300)</td>
-            <td style="color:var(--muted);">~9M</td>
-            <td class="num" style="font-weight:700;">~500K</td>
-            <td style="font-size:13px;">NVFP4 + MoE 专项优化</td>
-            <td>1/35x</td>
+            <td><strong>GB200 NVL72</strong></td>
+            <td class="num" style="font-weight:700;">7.2M</td>
+            <td>8x</td>
+            <td>—</td>
+            <td style="font-size:13px;">InferenceMAX v1 · 72-GPU 机架级互联<br><span style="color:var(--muted);">GB200 NVL72 将推理 TCO 降低至 $0.10/M tok（DSR1 75 TPS/user）</span></td>
+          </tr>
+          <tr>
+            <td><strong>GB300 NVL72</strong> (Blackwell Ultra)</td>
+            <td class="num-blue" style="font-weight:700;">~59M</td>
+            <td>65x</td>
+            <td>~500K</td>
+            <td style="font-size:13px;">InferenceX v2 · FP8 对比<br><span style="color:var(--muted);">FP4 模式下达 90M tok/s/MW（100x H100）<br>SGLang + NVFP4 + Disagg WideEP</span></td>
           </tr>
           <tr>
             <td><strong>Vera Rubin</strong> (VR200)</td>
-            <td style="color:var(--muted);">~18M</td>
-            <td class="num-purple" style="font-weight:700;">~700K</td>
-            <td style="font-size:13px;">含 Groq 3 LPX 协同场景</td>
-            <td>1/100x</td>
+            <td class="num-purple" style="font-weight:700;">待测</td>
+            <td>NVIDIA 声称 10x vs BW</td>
+            <td>~700K</td>
+            <td style="font-size:13px;">NVIDIA 官方宣称，SemiAnalysis 未出数据<br><span style="color:var(--muted);">R200: 33.3 PFLOPS FP4 · 288GB HBM4 · 20.5 TB/s</span></td>
           </tr>
         </tbody>
       </table>
@@ -216,7 +223,12 @@
 
     <div class="highlight">
       <p>六代 GPU 架构实现 <strong>1,000,000x</strong> 推理效率提升。黄仁勋的类比：「如果汽车燃油效率也这么涨，一加仑油够开到月球再回来。」</p>
-      <p style="margin-top:8px;color:var(--muted);font-size:13px;">运营加权数据参考：阿里云Token变现报告（PUE 1.25 · 模型组合加权 · 含昇腾950PR国产方案对标）</p>
+      <p style="margin-top:8px;color:var(--muted);font-size:13px;">
+        <strong>InferenceMAX 数据</strong>：开源独立基准，由 SemiAnalysis 运营，覆盖数百块 GPU 的逐夜自动化测试。<br>
+        <strong>运营加权数据</strong>：阿里云Token变现报告，含模型组合权重和 PUE 1.25 的中国 IDC 运营口径。<br>
+        H100/B200/GB200 数据来自 InferenceMAX v1（DeepSeek-R1 8K/1K 基准）。GB300 数据来自 InferenceX v2。<br>
+        注意：InferenceMAX tok/s/MW 为「all-in provisioned」口径（含冷却/配电损耗），非纯 GPU TDP 理论值。
+      </p>
     </div>
   </div>
 
@@ -264,26 +276,25 @@
 
     <!-- Correction Note -->
     <div class="card" style="border-left: 3px solid var(--orange);">
-      <div class="card-title"><span style="color:var(--orange)">📐</span> 校正确认 — 财务层 vs 物理层是两个维度</div>
-      <p>来自阿里云内部研究的 Token 变现报告提供了关键的运营层数据校准：</p>
+      <div class="card-title"><span style="color:var(--orange)">📐</span> 校正确认 — 采用 SemiAnalysis InferenceMAX/InferenceX 独立基准数据</div>
+      <p>本次校准引入 SemiAnalysis 运营的 <strong>InferenceMAX/InferenceX</strong> 开源推理基准测试数据：</p>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;">
         <div style="background:rgba(255,106,0,0.04);border-radius:8px;padding:14px;">
           <div style="font-size:13px;color:var(--muted);margin-bottom:4px;">PUE 校准</div>
           <div style="font-size:18px;font-weight:700;color:var(--orange);">1.4 → 1.25</div>
-          <div style="font-size:12px;color:var(--muted);margin-top:4px;">中国西部IDC可达1.1-1.2</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:4px;">InferenceMAX all-in 口径含冷却损耗</div>
         </div>
         <div style="background:rgba(76,175,125,0.04);border-radius:8px;padding:14px;">
-          <div style="font-size:13px;color:var(--muted);margin-bottom:4px;">Token/MW 校准</div>
-          <div style="font-size:18px;font-weight:700;color:var(--green);">峰值→运营加权</div>
-          <div style="font-size:12px;color:var(--muted);margin-top:4px;">打了 6-7 折</div>
+          <div style="font-size:13px;color:var(--muted);margin-bottom:4px;">Token/MW 数据源</div>
+          <div style="font-size:16px;font-weight:700;color:var(--green);">InferenceMAX → 独立第三方</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:4px;">SemiAnalysis · 逐夜 CI 自动化测试 · 1000+ GPU</div>
         </div>
       </div>
       <div style="margin-top:14px;padding:14px;background:rgba(255,106,0,0.06);border-radius:8px;">
-        <div style="font-weight:600;font-size:14px;">💡 一个需要厘清的两层视角</div>
-        <p style="font-size:14px;color:var(--muted);margin-top:6px;">参考报告做了阿里 3,800 亿投资的年度 OPEX 拆分：<br>
+        <div style="font-weight:600;font-size:14px;">💡 需要厘清的两层视角</div>
+        <p style="font-size:14px;color:var(--muted);margin-top:6px;">来自阿里云 Token 变现报告的    OPEX 拆分提供另一个维度：<br>
         <span style="font-size:20px;font-weight:700;color:var(--orange);">芯片折旧 62.3%</span> · 基础设施 28.3% · 运维 7.1% · <strong style="color:var(--red);">电力 2.2%</strong><br><br>
-        但注意：<strong style="color:var(--text);">这说的是「钱花在哪」，不是「瓶颈在哪」。</strong><br>
-        GPU 折旧高恰恰是因为产能受限——产能受限的根因之一仍是电力供给。<br>
+        但这说的是「钱花在哪」，不是「瓶颈在哪」。GPU 折旧高恰恰是因为产能受限——产能受限的根因之一仍是电力供给。<br>
         <span style="color:var(--accent);">「Grid is the new GPU」在物理层面成立，财务报表只是另一个叙事维度。</span></p>
       </div>
     </div>
@@ -413,19 +424,19 @@
     <div class="card">
       <div class="card-title"><span style="color:var(--orange)">🔁</span> 用 Token Factory 框架换算阿里 20 GW（校正后）</div>
 
-      <p style="font-size:14px;color:var(--muted);margin-bottom:14px;">以下采用<strong>运营加权层</strong>数据（含模型组合权重 A40%+B40%+C20%），PUE 1.25，更贴近实际产出。</p>
+      <p style="font-size:14px;color:var(--muted);margin-bottom:14px;">以下使用 <strong>InferenceMAX v1</strong> 标准（H100 900K tok/s/MW），并对照阿里云变现报告的<strong>运营加权口径</strong>（含模型组合权重，PUE 1.25）。</p>
 
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
         <div style="background:rgba(76,175,125,0.04);border-radius:8px;padding:14px;">
-          <div style="font-weight:600;margin-bottom:6px;">2028 年（13 GW 阶段）</div>
-          <div style="font-size:22px;font-weight:700;color:var(--green);margin-bottom:4px;">~31,050 万亿 tok/年</div>
-          <div style="font-size:13px;color:var(--muted);">均衡基准（H200）<br>75% 利用率</div>
-          <div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border);font-size:13px;color:var(--muted);">混合A方案（含B300+GB200）<br><strong style="color:var(--accent);">~104,500 万亿 tok/年</strong></div>
+          <div style="font-weight:600;margin-bottom:6px;">2028 年（13 GW）InferenceMAX 口径</div>
+          <div style="font-size:22px;font-weight:700;color:var(--green);margin-bottom:4px;">~295 万亿 tok/年</div>
+          <div style="font-size:13px;color:var(--muted);">13 GW × 900K（H100级）× 86,400 × 365 × 0.75<br>若用 GB200 NVL72（7.2M/MW）→ <strong style="color:var(--accent);">~2,360 万亿</strong></div>
+          <div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border);font-size:13px;color:var(--muted);">运营加权（参考报告混合方案）<br><strong style="color:var(--orange);">~31,050 万亿</strong></div>
         </div>
         <div style="background:rgba(91,156,246,0.04);border-radius:8px;padding:14px;">
-          <div style="font-weight:600;margin-bottom:6px;">2030 年（20 GW）运营场景</div>
-          <div style="font-size:22px;font-weight:700;color:var(--blue);margin-bottom:4px;">~14,000 tok/s</div>
-          <div style="font-size:13px;color:var(--muted);">运营加权 ~700K/MW<br>= 20,000 MW × 700K × 86,400 × 365 × 0.75</div>
+          <div style="font-weight:600;margin-bottom:6px;">2030 年（20 GW）InferenceMAX 口径</div>
+          <div style="font-size:22px;font-weight:700;color:var(--blue);margin-bottom:4px;">~18M tok/s</div>
+          <div style="font-size:13px;color:var(--muted);">20 GW × 900K tok/s/MW（H100 基准）<br>= ~18M tok/s · 年产 ~<strong style="color:var(--blue);">4,430 万亿 tok</strong><br>若用 GB300（59M/MW）→ ~<strong style="color:var(--accent);">290 万亿 tok/s</strong></div>
         </div>
       </div>
 
