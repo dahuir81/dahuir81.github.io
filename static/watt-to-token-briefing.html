@@ -135,7 +135,7 @@
         <div class="chain-step">
           <div class="chain-dot"></div>
           <div class="chain-label">基础设施损耗</div>
-          <div class="chain-desc">约 <span class="num-orange">40%</span> 被冷却、配电、UPS 吃掉（PUE ≈ 1.4-1.8） → 实际到 GPU 集群 ≈ <span class="num">0.6 GW</span></div>
+          <div class="chain-desc">约 <span class="num-orange">20%</span> 被冷却、配电吃掉（中国 IDC 典型 PUE <strong>1.2-1.3</strong>，此处取 1.25） → 实际到 GPU 集群 ≈ <span class="num">0.8 GW</span></div>
         </div>
         <div class="chain-step">
           <div class="chain-dot"></div>
@@ -159,59 +159,64 @@
   <!-- Data Table -->
   <div class="section">
     <div class="section-title"><span class="emoji">📊</span> 代际效率跃迁（每 MW 产出 Token）</div>
+    
+    <div class="card">
+      <div class="card-title"><span style="color:var(--orange)">⚠️ 校准确认</span></div>
+      <p>初版使用了 NVIDIA 官方峰值宣传数据（特定模型+精度优化场景），实际运营数据有较大差距。以下提供<strong>两层数据</strong>：</p>
+      <ul style="font-size:14px;color:var(--muted);line-height:2;padding-left:20px;">
+        <li><strong style="color:var(--text);">理论峰值层</strong>（灰底）：NVIDIA 官方数据，特定 MoE 模型 + FP4 精度优化，接近极限场景</li>
+        <li><strong style="color:var(--text);">运营加权层</strong>（彩底）：含 7B-70B+ 多模型组合加权，接近实际运营产出</li>
+      </ul>
+      <p style="font-size:13px;color:var(--muted);margin-top:8px;">* 运营层加权基准参考阿里云 Token 变现报告 &amp; SemiAnalysis 行业分析；PUE 按中国 IDC 标准取 1.25</p>
+    </div>
+
     <div class="data-grid">
       <table>
         <thead>
           <tr>
             <th>架构</th>
-            <th>Tokens/s/MW</th>
-            <th>较 Hopper</th>
-            <th>1 GW 工厂 ≈</th>
+            <th>Tokens/s/MW<br><span style="font-weight:400;font-size:12px;color:var(--muted);">理论峰值</span></th>
+            <th>Tokens/s/MW<br><span style="font-weight:400;font-size:12px;color:var(--muted);">运营加权</span></th>
+            <th>模型组合说明</th>
             <th>Token 成本</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td><strong>Hopper</strong> (H100)</td>
-            <td class="num-orange">~180K</td>
-            <td>基准</td>
-            <td>~180M tokens/s</td>
+            <td style="color:var(--muted);">~180K</td>
+            <td class="num-orange" style="font-weight:700;">~100K</td>
+            <td style="font-size:13px;">7B-70B+ 混合，含存量和推理混跑</td>
             <td>基准</td>
           </tr>
           <tr>
-            <td><strong>Blackwell</strong> (B200)</td>
-            <td class="num">~1.8M</td>
-            <td>10x</td>
-            <td>~1.8B tokens/s</td>
+            <td><strong>Blackwell</strong> (B200 NVL72)</td>
+            <td style="color:var(--muted);">~1.8M</td>
+            <td class="num" style="font-weight:700;">~425K</td>
+            <td style="font-size:13px;">轻 A40%+标 B40%+复杂 C20% 加权</td>
             <td>1/15x</td>
           </tr>
           <tr>
             <td><strong>Blackwell Ultra</strong> (GB300)</td>
-            <td class="num">~9M</td>
-            <td>50x</td>
-            <td>~9B tokens/s</td>
+            <td style="color:var(--muted);">~9M</td>
+            <td class="num" style="font-weight:700;">~500K</td>
+            <td style="font-size:13px;">NVFP4 + MoE 专项优化</td>
             <td>1/35x</td>
           </tr>
           <tr>
             <td><strong>Vera Rubin</strong> (VR200)</td>
-            <td class="num-purple">~18M</td>
-            <td>100x</td>
-            <td>~18B tokens/s</td>
+            <td style="color:var(--muted);">~18M</td>
+            <td class="num-purple" style="font-weight:700;">~700K</td>
+            <td style="font-size:13px;">含 Groq 3 LPX 协同场景</td>
             <td>1/100x</td>
-          </tr>
-          <tr>
-            <td><strong>Rubin + Groq 3 LPX</strong></td>
-            <td class="num-purple">~63M</td>
-            <td>350x</td>
-            <td>~63B tokens/s</td>
-            <td>1/350x</td>
           </tr>
         </tbody>
       </table>
     </div>
+
     <div class="highlight">
       <p>六代 GPU 架构实现 <strong>1,000,000x</strong> 推理效率提升。黄仁勋的类比：「如果汽车燃油效率也这么涨，一加仑油够开到月球再回来。」</p>
-      <p style="margin-top:8px;color:var(--muted);font-size:13px;">* 数据来源：NVIDIA 官方技术博客 &amp; SemiAnalysis InferenceX 独立测试</p>
+      <p style="margin-top:8px;color:var(--muted);font-size:13px;">运营加权数据参考：阿里云Token变现报告（PUE 1.25 · 模型组合加权 · 含昇腾950PR国产方案对标）</p>
     </div>
   </div>
 
@@ -255,6 +260,30 @@
     <div class="card">
       <div class="card-title"><span style="color:var(--purple)">🌍</span> 6. 全球 AI 基建投资 → $2 万亿</div>
       <p>黄仁勋预测未来 4-5 年全球 AI 工厂投资将达到 2 万亿美元。「每个工程师/开发者每年应该至少花 $250K 在 Token 上——否则我会发飙。」</p>
+    </div>
+
+    <!-- Correction Note -->
+    <div class="card" style="border-left: 3px solid var(--orange);">
+      <div class="card-title"><span style="color:var(--orange)">📐</span> 校正确认 &amp; 反直觉发现</div>
+      <p>来自阿里云内部研究的一份 Token 变现分析报告提供了关键的运营层数据校准：</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;">
+        <div style="background:rgba(255,106,0,0.04);border-radius:8px;padding:14px;">
+          <div style="font-size:13px;color:var(--muted);margin-bottom:4px;">PUE 校准</div>
+          <div style="font-size:18px;font-weight:700;color:var(--orange);">1.4 → 1.25</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:4px;">中国西部IDC可达1.1-1.2</div>
+        </div>
+        <div style="background:rgba(76,175,125,0.04);border-radius:8px;padding:14px;">
+          <div style="font-size:13px;color:var(--muted);margin-bottom:4px;">Token/MW 校准</div>
+          <div style="font-size:18px;font-weight:700;color:var(--green);">峰值→运营加权</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:4px;">打了 6-7 折</div>
+        </div>
+      </div>
+      <div style="margin-top:14px;padding:12px;background:rgba(91,156,246,0.06);border-radius:8px;">
+        <div style="font-weight:600;font-size:14px;">💡 一项反直觉的发现</div>
+        <p style="font-size:14px;color:var(--muted);margin-top:6px;">在阿里云 3,800 亿投资的年度 OPEX 拆分中：<br>
+        <span style="font-size:22px;font-weight:700;color:var(--red);">电力仅占 2.2%</span>（~15.5 亿/年），而 <strong style="color:var(--orange);">芯片折旧占 62.3%</strong>（~440 亿/年）。<br>
+        <span style="color:var(--text);">真正的瓶颈不是电费，而是 GPU 资本支出的回收节奏。</span></p>
+      </div>
     </div>
   </div>
 
@@ -380,38 +409,107 @@
     </div>
 
     <div class="card">
-      <div class="card-title"><span style="color:var(--orange)">🔁</span> 用 Token Factory 框架换算阿里 20 GW</div>
+      <div class="card-title"><span style="color:var(--orange)">🔁</span> 用 Token Factory 框架换算阿里 20 GW（校正后）</div>
 
-      <div style="margin-bottom:16px;">
-        <div style="font-weight:600;margin-bottom:8px;">保守场景（主力 ≈ Rubin 级效率，18M tokens/s/MW）：</div>
-        <div style="font-size:22px;font-weight:700;color:var(--accent);margin-bottom:4px;">360M tokens/s</div>
-        <div style="font-size:14px;color:var(--muted);">= 每秒 3.6 亿 Token · 每小时 1.3 万亿 · 每天 31 万亿</div>
-      </div>
+      <p style="font-size:14px;color:var(--muted);margin-bottom:14px;">以下采用<strong>运营加权层</strong>数据（含模型组合权重 A40%+B40%+C20%），PUE 1.25，更贴近实际产出。</p>
 
-      <div style="margin-bottom:16px;">
-        <div style="font-weight:600;margin-bottom:8px;">混合场景（主力 ≈ Blackwell Ultra 效率，9M tokens/s/MW）：</div>
-        <div style="font-size:22px;font-weight:700;color:var(--orange);margin-bottom:4px;">180M tokens/s</div>
-        <div style="font-size:14px;color:var(--muted);">保持当前可验证的代际效率水平</div>
-      </div>
-
-      <div style="background:rgba(118,185,0,0.05);border-radius:8px;padding:14px;">
-        <div style="font-size:14px;color:var(--muted);margin-bottom:8px;">收入推算（均价 $2/M tokens, 混合场景）：</div>
-        <div style="display:flex;gap:20px;flex-wrap:wrap;">
-          <span><strong style="color:var(--accent);">$360/s</strong> <span style="color:var(--muted);font-size:13px;">每秒</span></span>
-          <span><strong style="color:var(--accent);">$1.3M/h</strong> <span style="color:var(--muted);font-size:13px;">每小时</span></span>
-          <span><strong style="color:var(--accent);">$31M/天</strong> <span style="color:var(--muted);font-size:13px;">每天</span></span>
-          <span><strong style="color:var(--accent);">~$113 亿/年</strong> <span style="color:var(--muted);font-size:13px;">仅推理 Token 收入</span></span>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+        <div style="background:rgba(76,175,125,0.04);border-radius:8px;padding:14px;">
+          <div style="font-weight:600;margin-bottom:6px;">2028 年（13 GW 阶段）</div>
+          <div style="font-size:22px;font-weight:700;color:var(--green);margin-bottom:4px;">~31,050 万亿 tok/年</div>
+          <div style="font-size:13px;color:var(--muted);">均衡基准（H200）<br>75% 利用率</div>
+          <div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border);font-size:13px;color:var(--muted);">混合A方案（含B300+GB200）<br><strong style="color:var(--accent);">~104,500 万亿 tok/年</strong></div>
+        </div>
+        <div style="background:rgba(91,156,246,0.04);border-radius:8px;padding:14px;">
+          <div style="font-weight:600;margin-bottom:6px;">2030 年（20 GW）运营场景</div>
+          <div style="font-size:22px;font-weight:700;color:var(--blue);margin-bottom:4px;">~14,000 tok/s</div>
+          <div style="font-size:13px;color:var(--muted);">运营加权 ~700K/MW<br>= 20,000 MW × 700K × 86,400 × 365 × 0.75</div>
         </div>
       </div>
 
-      <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border);">
-        <div style="font-weight:600;margin-bottom:8px;">💡 四个关键洞察</div>
+      <div style="margin-top:14px;padding:14px;background:rgba(255,106,0,0.04);border-radius:8px;">
+        <div style="font-size:13px;color:var(--muted);margin-bottom:6px;">参考营运验证：字节豆包 2026.4 官方数据</div>
+        <div style="font-size:16px;font-weight:600;">2-3 GW 装机支撑日均 <strong style="color:var(--orange);">120 万亿 Token 消耗</strong></div>
+        <div style="font-size:13px;color:var(--muted);margin-top:4px;">轻量模型为主，单 GW 产出约 460-690K tok/s/MW。<br>阿里以中大模型为主，同等电力下 Token 产出约为字节的 50-60%。</div>
+      </div>
+
+      <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border);">
+        <div style="font-weight:600;margin-bottom:10px;">💡 OPEX 视角——真正的大头不是电费</div>
+        <p style="font-size:14px;color:var(--muted);">基于阿里 3,800 亿投资的年度运营成本拆分：</p>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px;text-align:center;">
+          <div style="background:rgba(255,106,0,0.06);border-radius:6px;padding:10px;">
+            <div style="font-size:20px;font-weight:700;color:var(--orange);">62.3%</div>
+            <div style="font-size:12px;color:var(--muted);">芯片折旧<br>~440 亿/年</div>
+          </div>
+          <div style="background:rgba(91,156,246,0.06);border-radius:6px;padding:10px;">
+            <div style="font-size:20px;font-weight:700;color:var(--blue);">28.3%</div>
+            <div style="font-size:12px;color:var(--muted);">基础设施<br>~200 亿/年</div>
+          </div>
+          <div style="background:rgba(76,175,125,0.06);border-radius:6px;padding:10px;">
+            <div style="font-size:20px;font-weight:700;color:var(--green);">7.1%</div>
+            <div style="font-size:12px;color:var(--muted);">运维<br>~50 亿/年</div>
+          </div>
+          <div style="background:rgba(239,83,80,0.06);border-radius:6px;padding:10px;">
+            <div style="font-size:20px;font-weight:700;color:var(--red);">2.2%</div>
+            <div style="font-size:12px;color:var(--muted);">电力<br>~15.5 亿/年</div>
+          </div>
+        </div>
+        <p style="font-size:14px;color:var(--text);margin-top:10px;"><strong>关键修正</strong>：Token 经济学的真实瓶颈不是电费，是 GPU 折旧回收节奏。电力虽是物理天花板，但在财务层面只占极小比重。</p>
+      </div>
+
+      <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border);">
+        <div style="font-weight:600;margin-bottom:8px;">💡 四个关键洞察（校正版）</div>
         <ul style="font-size:14px;color:var(--muted);line-height:2;padding-left:20px;">
-          <li><strong style="color:var(--text);">阿里跑得比全球快一倍</strong> — +38% vs +18%。意味阿里在赌中国 AI 算力占比从 3% 拉到 10%+，这需要直接跟国家电网较劲</li>
-          <li><strong style="color:var(--text);">20 GW = 20 个核电站</strong> — 一个典型核电站机组 ≈ 1 GW。阿里到 2030 年需锁住 20 个核电站级别的供电容量</li>
-          <li><strong style="color:var(--text);">黄仁勋的 $2T vs 阿里的 $1T</strong> — 全球 AI 基建投资 $2 万亿预测 vs 阿里单家 AI 估值 $1 万亿，占比合理</li>
-          <li><strong style="color:var(--text);">2026-2029 爆发期 = Rubin 世代</strong> — 阿里 +38% 的年增速意味着会在 Rubin 这一代大量采购，跳过某些中间代际</li>
+          <li><strong style="color:var(--text);">阿里跑得比全球快一倍</strong> — +38% vs +18%。份额从 3.3% 提升到 10.2%，三倍增长</li>
+          <li><strong style="color:var(--text);">2028 年 13 GW 产能已超 OpenAI 2026</strong> — 混合方案达 ~104,500 万亿 tok/年，约 OpenAI 2026 的 132%</li>
+          <li><strong style="color:var(--text);">电力仅占 OPEX 2.2%</strong> — 芯片折旧 62.3% 才是真正财务负担。GPU 必须在 4-5 年内产出足够 Token 回收 CAPEX</li>
+          <li><strong style="color:var(--text);">字节豆包验证运营上限</strong> — 2-3 GW 支撑 120 万亿 tok/日（轻量模型为主），阿里若走中大模型路线，同等电力的 Token 产出仅为其 50-60%</li>
         </ul>
+      </div>
+    </div>  
+
+    <!-- 5-layer revenue projection -->
+    <div class="card">
+      <div class="card-title"><span style="color:var(--green)">📈</span> 阿里云 Token 变现三种情景（2028 年预测）</div>
+      <p style="font-size:14px;color:var(--muted);margin-bottom:12px;">基于参考报告的财务模型推算，Token 收入区间约 <strong style="color:var(--text);">62-327 亿 RMB</strong>，概率加权预期 ~191 亿 RMB。</p>
+      <div class="data-grid">
+        <table>
+          <thead>
+            <tr>
+              <th>指标</th>
+              <th style="color:var(--green);">🟢 牛市（20%）</th>
+              <th style="color:var(--blue);">🔵 基准（55%）</th>
+              <th style="color:var(--red);">🔴 熊市（25%）</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Token 收入</td>
+              <td class="num">327 亿 RMB</td>
+              <td>201 亿 RMB</td>
+              <td class="num-orange">62 亿 RMB</td>
+            </tr>
+            <tr>
+              <td>毛利率</td>
+              <td class="num">65-70%</td>
+              <td>50-55%</td>
+              <td class="num-orange">25-30%</td>
+            </tr>
+            <tr>
+              <td>市场占有率</td>
+              <td>35-40%</td>
+              <td>28-32%</td>
+              <td>12-15%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="font-size:13px;color:var(--muted);margin-top:8px;">概率加权预期：327×20% + 201×55% + 62×25% ≈ <strong style="color:var(--text);">191 亿 RMB</strong>（约 $26.7 亿）</div>
+      <div style="margin-top:12px;padding:12px;background:rgba(118,185,0,0.04);border-radius:8px;">
+        <div style="font-size:14px;font-weight:600;margin-bottom:4px;">短期（1年）✅ 确定性高</div>
+        <div style="font-size:13px;color:var(--muted);">Q1 AI收入 +38%、百炼支出增长200倍、模型排名稳定</div>
+        <div style="font-size:14px;font-weight:600;margin-top:8px;margin-bottom:4px;">中长期（1-3年）⚠️ 开源替代是关键变量</div>
+        <div style="font-size:13px;color:var(--muted);">日均 500 万 tokens 以上自部署已具经济性。若自部署占比超 30-50%，API 市场将被分流</div>
       </div>
     </div>
   </div>
@@ -425,12 +523,19 @@
       谁拥有电网配额，谁就有 AI 产能；谁能把每瓦产出最大化，谁就是下一波 AI 基建的赢家。</p>
       <div class="quote">Grid is the new GPU</div>
       <p style="color:var(--muted);font-size:13px;text-align:right;margin-top:8px">真正的瓶颈不是芯片，是电网</p>
+      <div style="margin-top:16px;padding-top:14px;border-top:1px solid rgba(118,185,0,0.2);">
+        <p style="font-size:14px;color:var(--muted);"><strong style="color:var(--text);">⚠️ 但需注意财务层面的反直觉结论</strong>：在阿里云 3,800 亿投资的实际 OPEX 中，<br>
+        <span style="font-size:18px;font-weight:700;color:var(--red);">电力仅占 2.2%</span>，芯片折旧占 <strong style="color:var(--orange);">62.3%</strong>。<br>
+        Token 经济学<strong style="color:var(--text);">压倒性的财务瓶颈</strong>不是电费，而是 GPU 资本支出的 4-5 年回收窗口。<br>
+        <span style="font-size:13px;color:var(--muted);">「Grid is the new GPU」在物理层面成立，在财务报表层面需要加注脚。</span></p>
+      </div>
     </div>
   </div>
 
   <!-- Footer -->
   <div style="text-align:center;margin-top:48px;padding-top:20px;border-top:1px solid var(--border);color:var(--muted);font-size:13px;">
-    <p>由 Tars 基于 GTC 2026 公开资料 &amp; 社区讨论综合整理</p>
+    <p>由 Tars 基于 GTC 2026 公开资料 · 阿里云Token变现报告 · 社区讨论综合整理</p>
+    <p style="margin-top:6px;font-size:12px;color:var(--muted);">校正依据：阿里云&amp;AI - 2030 展示图 · NVIDIA 官方技术博客 · SemiAnalysis InferenceX · 火山引擎官方数据</p>
   </div>
 
 </div>
