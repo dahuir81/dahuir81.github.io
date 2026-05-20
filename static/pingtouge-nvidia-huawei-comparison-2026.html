@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>平头哥 vs 英伟达 vs 华为 — AI芯片参数深度对比 (2026-05)</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --card: #161b22;
+    --border: #30363d;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --accent-blue: #58a6ff;
+    --accent-green: #3fb950;
+    --accent-orange: #d29922;
+    --accent-red: #f85149;
+    --accent-purple: #bc8cff;
+    --accent-cyan: #39d2c0;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    padding: 24px 16px;
+  }
+  .container { max-width: 1100px; margin: 0 auto; }
+
+  h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+    background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .subtitle {
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin-bottom: 28px;
+  }
+  .date-badge {
+    display: inline-block;
+    background: #1f2937;
+    color: var(--accent-cyan);
+    font-size: 0.75rem;
+    padding: 2px 10px;
+    border-radius: 10px;
+    margin-top: 4px;
+  }
+
+  /* Legend */
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    margin-bottom: 28px;
+    padding: 14px 18px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-size: 0.85rem;
+  }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .legend-dot {
+    width: 12px; height: 12px; border-radius: 50%; display: inline-block;
+  }
+  .dot-pingtouge { background: var(--accent-blue); }
+  .dot-nvidia { background: var(--accent-green); }
+  .dot-huawei { background: var(--accent-orange); }
+
+  /* Sections */
+  .section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 22px;
+    margin-bottom: 22px;
+  }
+  .section h2 {
+    font-size: 1.15rem;
+    margin-bottom: 6px;
+  }
+  .section h2 .vendor-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 1px 8px;
+    border-radius: 6px;
+    vertical-align: middle;
+    margin-left: 6px;
+  }
+  .label-pingtouge { background: rgba(88,166,255,0.15); color: var(--accent-blue); }
+  .label-nvidia { background: rgba(63,185,80,0.15); color: var(--accent-green); }
+  .label-huawei { background: rgba(210,153,34,0.15); color: var(--accent-orange); }
+  .section .desc {
+    color: var(--muted);
+    font-size: 0.85rem;
+    margin-bottom: 12px;
+  }
+
+  /* Table */
+  .table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    min-width: 700px;
+  }
+  thead th {
+    background: #1c2333;
+    padding: 10px 12px;
+    text-align: center;
+    font-weight: 600;
+    white-space: nowrap;
+    border-bottom: 2px solid var(--border);
+    position: sticky; top: 0;
+  }
+  thead th:first-child {
+    text-align: left;
+    background: #1a1f2e;
+    min-width: 140px;
+  }
+  thead th.vendor-pingtouge { color: var(--accent-blue); }
+  thead th.vendor-nvidia { color: var(--accent-green); }
+  thead th.vendor-huawei { color: var(--accent-orange); }
+
+  tbody td {
+    padding: 8px 12px;
+    border-bottom: 1px solid #21262d;
+    text-align: center;
+    vertical-align: middle;
+  }
+  tbody td:first-child {
+    text-align: left;
+    font-weight: 500;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  tbody tr:hover { background: rgba(255,255,255,0.03); }
+  tbody tr.highlight-pingtouge { background: rgba(88,166,255,0.06); }
+  tbody tr.highlight-nvidia { background: rgba(63,185,80,0.06); }
+  tbody tr.highlight-huawei { background: rgba(210,153,34,0.06); }
+  tbody tr.section-divider td {
+    padding: 6px 12px;
+    font-weight: 700;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    background: #1a1f2e;
+    color: var(--muted);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .badge-best {
+    display: inline-block;
+    background: rgba(63,185,80,0.18);
+    color: var(--accent-green);
+    font-size: 0.65rem;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-weight: 600;
+  }
+  .badge-warn {
+    display: inline-block;
+    background: rgba(210,153,34,0.18);
+    color: var(--accent-orange);
+    font-size: 0.65rem;
+    padding: 1px 6px;
+    border-radius: 4px;
+  }
+  .badge-na { color: var(--muted); font-size: 0.75rem; }
+
+  /* Analysis cards */
+  .analysis-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 14px;
+    margin-top: 14px;
+  }
+  .analysis-card {
+    padding: 14px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid #21262d;
+    border-radius: 10px;
+  }
+  .analysis-card h3 {
+    font-size: 0.9rem;
+    margin-bottom: 6px;
+  }
+  .analysis-card ul {
+    list-style: none;
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+  .analysis-card ul li::before { content: "• "; color: var(--accent-cyan); }
+
+  /* Footer */
+  .footer {
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    font-size: 0.78rem;
+    color: var(--muted);
+    text-align: center;
+  }
+  .footer a { color: var(--accent-blue); }
+
+  @media (max-width: 720px) {
+    .container { padding: 0; }
+    .analysis-grid { grid-template-columns: 1fr; }
+    h1 { font-size: 1.4rem; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>平头哥 vs 英伟达 vs 华为</h1>
+<div class="subtitle">
+  AI芯片及互联系统关键参数对比 · 截至2026年5月20日
+  <span class="date-badge">更新: 2026-05-20</span>
+</div>
+
+<div class="legend">
+  <span class="legend-item"><span class="legend-dot dot-pingtouge"></span> 平头哥（阿里）</span>
+  <span class="legend-item"><span class="legend-dot dot-nvidia"></span> 英伟达</span>
+  <span class="legend-item"><span class="legend-dot dot-huawei"></span> 华为昇腾</span>
+</div>
+
+<!-- ============ Overview ============ -->
+<div class="section">
+  <h2>📌 对比背景</h2>
+  <p class="desc" style="line-height:1.8;">
+    2026年5月20日阿里云峰会上，平头哥发布新一代AI芯片<strong>真武M890</strong>、互联芯片<strong>ICN Switch 1.0</strong>，以及<strong>磐久AL128超节点服务器</strong>。
+    同时公布真武系列路线图：V900（2027）→ J900（2028）。本文将真武M890及其配套系统对位英伟达和华为当前主力产品，从<strong>单芯片参数</strong>、<strong>互联能力</strong>、<strong>系统级方案</strong>三个维度做横向对比。
+  </p>
+  <p class="desc" style="margin-top:4px; color:var(--accent-red); font-size:0.82rem;">
+    ⚠️ 声明：本文数据源自官方公布、第三方评测及公开资料，部分参数为合理推算。标注 <span class="badge-warn">估</span> 为估算值。
+  </p>
+</div>
+
+<!-- ============ TABLE ============ -->
+<div class="section">
+  <h2>📊 单芯片参数对比</h2>
+  <p class="desc">AI加速芯片核心规格</p>
+  <div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>参数</th>
+        <th class="vendor-pingtouge">真武M890</th>
+        <th class="vendor-nvidia">NVIDIA H200</th>
+        <th class="vendor-nvidia">NVIDIA B200</th>
+        <th class="vendor-nvidia">NVIDIA B300</th>
+        <th class="vendor-huawei">昇腾910C</th>
+        <th class="vendor-huawei">昇腾950DT</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Section: Basics -->
+      <tr class="section-divider"><td colspan="7">基础信息</td></tr>
+      <tr>
+        <td>发布/量产时间</td>
+        <td><strong>2026.05</strong> 🆕</td>
+        <td>2024 Q1</td>
+        <td>2024 H2</td>
+        <td>2025 H2</td>
+        <td>2025 Q1</td>
+        <td>2026 Q4 <span class="badge-warn">规划</span></td>
+      </tr>
+      <tr>
+        <td>架构</td>
+        <td>自研并行计算</td>
+        <td>Hopper</td>
+        <td>Blackwell</td>
+        <td>Blackwell Ultra</td>
+        <td>达芬奇</td>
+        <td>达芬奇+</td>
+      </tr>
+      <tr>
+        <td>制程</td>
+        <td>N/A（官方未公布）</td>
+        <td>TSMC 4nm</td>
+        <td>TSMC 4nm</td>
+        <td>TSMC 4nm</td>
+        <td>7nm</td>
+        <td>N/A</td>
+      </tr>
+
+      <!-- Section: Memory -->
+      <tr class="section-divider"><td colspan="7">显存</td></tr>
+      <tr>
+        <td>显存容量</td>
+        <td><strong>144 GB</strong></td>
+        <td>141 GB <span class="badge-best">HBM3e</span></td>
+        <td><strong>180 GB</strong> <span class="badge-best">HBM3e</span></td>
+        <td><strong>288 GB</strong> <span class="badge-best">HBM3e</span></td>
+        <td>128 GB HBM3</td>
+        <td><strong>144 GB</strong></td>
+      </tr>
+      <tr>
+        <td>显存带宽</td>
+        <td>800 GB/s <span class="badge-warn">(片间互联)</span></td>
+        <td><strong>4.8 TB/s</strong> <span class="badge-best"></span></td>
+        <td><strong>7.7 TB/s</strong> <span class="badge-best"></span></td>
+        <td><strong>8 TB/s</strong> <span class="badge-best"></span></td>
+        <td>784 GB/s</td>
+        <td><strong>4 TB/s</strong> <span class="badge-warn">估</span></td>
+      </tr>
+      <tr>
+        <td>显存类型</td>
+        <td>（官方未公布）</td>
+        <td>HBM3e</td>
+        <td>HBM3e</td>
+        <td>HBM3e (12-high)</td>
+        <td>HBM3</td>
+        <td>HBM HiZQ 2.0</td>
+      </tr>
+
+      <!-- Section: Compute -->
+      <tr class="section-divider"><td colspan="7">算力</td></tr>
+      <tr>
+        <td>FP32</td>
+        <td>N/A</td>
+        <td>~67 TFLOPS</td>
+        <td>~90 TFLOPS <span class="badge-warn">估</span></td>
+        <td>~120 TFLOPS <span class="badge-warn">估</span></td>
+        <td>N/A (NPU无独立FP32)</td>
+        <td>N/A</td>
+      </tr>
+      <tr>
+        <td>FP16 / BF16</td>
+        <td>N/A（未公布）</td>
+        <td>~1,979 TFLOPS</td>
+        <td>~2,250 TFLOPS <span class="badge-warn">估</span></td>
+        <td>~3,000 TFLOPS <span class="badge-warn">估</span></td>
+        <td>800 TFLOPS</td>
+        <td>500 TFLOPS <span class="badge-warn">估</span></td>
+      </tr>
+      <tr>
+        <td>FP8</td>
+        <td>N/A</td>
+        <td>3,958 TFLOPS</td>
+        <td>~9 PFLOPS</td>
+        <td>~15 PFLOPS</td>
+        <td>1,600 TOPS <span class="badge-warn">(INT8)</span></td>
+        <td>1 PFLOPS</td>
+      </tr>
+      <tr>
+        <td>FP4 / INT4</td>
+        <td><strong>✓ 原生支持</strong></td>
+        <td>✗（FP8最低）</td>
+        <td><strong>~18 PFLOPS</strong> <span class="badge-best"></span></td>
+        <td><strong>15 PFLOPS</strong> <span class="badge-best"></span></td>
+        <td>N/A</td>
+        <td>N/A</td>
+      </tr>
+      <tr>
+        <td>精度范围</td>
+        <td><strong>FP32→FP4</strong>（全场景）</td>
+        <td>FP32→FP8</td>
+        <td>FP32→FP4</td>
+        <td>FP32→FP4</td>
+        <td>FP32→INT8</td>
+        <td>FP32→FP8</td>
+      </tr>
+
+      <!-- Section: Power -->
+      <tr class="section-divider"><td colspan="7">功耗与互联</td></tr>
+      <tr>
+        <td>TDP</td>
+        <td>N/A（官方未公布）</td>
+        <td>700W</td>
+        <td>1,000W <span class="badge-warn">估</span></td>
+        <td>1,400W</td>
+        <td>~350W <span class="badge-warn">估</span></td>
+        <td>N/A</td>
+      </tr>
+      <tr>
+        <td>片间互联带宽</td>
+        <td><strong>800 GB/s</strong></td>
+        <td>900 GB/s (NVLink 4)</td>
+        <td><strong>1.8 TB/s</strong> (NVLink 5) <span class="badge-best"></span></td>
+        <td><strong>1.8 TB/s</strong> (NVLink 5) <span class="badge-best"></span></td>
+        <td>3.2 TB/s <span class="badge-warn">(6x HCCS)</span></td>
+        <td><strong>2 TB/s</strong> <span class="badge-warn">估</span></td>
+      </tr>
+      <tr>
+        <td>最大互联规模</td>
+        <td><strong>128卡</strong>（单机柜）</td>
+        <td>8卡 (NVSwitch)</td>
+        <td><strong>72卡</strong> (NVL72) <span class="badge-best"></span></td>
+        <td><strong>72卡</strong> (NVL72) <span class="badge-best"></span></td>
+        <td><strong>384卡</strong> (CloudMatrix) <span class="badge-best"></span></td>
+        <td><strong>8,192卡</strong> (SuperPod) <span class="badge-best"></span></td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<!-- ============ TABLE 2: Interconnect ============ -->
+<div class="section">
+  <h2>🔗 互联与系统级方案对比</h2>
+  <p class="desc">从芯片互联到整机柜方案</p>
+  <div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>系统维度</th>
+        <th class="vendor-pingtouge">平头哥</th>
+        <th class="vendor-nvidia">英伟达</th>
+        <th class="vendor-huawei">华为</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="section-divider"><td colspan="4">互联芯片</td></tr>
+      <tr>
+        <td>互联芯片</td>
+        <td><strong>ICN Switch 1.0</strong></td>
+        <td>NVSwitch 5</td>
+        <td>HCCS（华为自研）</td>
+      </tr>
+      <tr>
+        <td>吞吐量</td>
+        <td><strong>25.6 Tbps</strong></td>
+        <td>~50 Tbps <span class="badge-warn">估</span></td>
+        <td>N/A</td>
+      </tr>
+      <tr>
+        <td>协议</td>
+        <td>自研ICN互联总线 + PCCL通信库</td>
+        <td>NVLink 5 + NVLink SHARP</td>
+        <td>HCCS + CCL</td>
+      </tr>
+      <tr>
+        <td>单链路带宽</td>
+        <td>800 GB/s</td>
+        <td><strong>1.8 TB/s</strong></td>
+        <td>~100 GB/s <span class="badge-warn">估</span></td>
+      </tr>
+
+      <tr class="section-divider"><td colspan="4">超节点/整机柜方案</td></tr>
+      <tr>
+        <td>方案名称</td>
+        <td><strong>磐久AL128</strong></td>
+        <td>GB200/GB300 NVL72</td>
+        <td>CloudMatrix 384 / Atlas 950 SuperPod</td>
+      </tr>
+      <tr>
+        <td>单柜芯片数</td>
+        <td><strong>128卡</strong></td>
+        <td><strong>72卡</strong></td>
+        <td><strong>384卡</strong> / 8,192卡 (SuperPod)</td>
+      </tr>
+      <tr>
+        <td>P2P时延</td>
+        <td><strong>&lt;150 ns</strong></td>
+        <td>&lt;200 ns <span class="badge-warn">估</span></td>
+        <td>N/A</td>
+      </tr>
+      <tr>
+        <td>单柜带宽</td>
+        <td>Pb/s级</td>
+        <td><strong>1.8 TB/s×72</strong></td>
+        <td>16.3 PB/s (SuperPod)</td>
+      </tr>
+      <tr>
+        <td>冷却方式</td>
+        <td>N/A</td>
+        <td><strong>液冷（标准）</strong></td>
+        <td>液冷</td>
+      </tr>
+      <tr>
+        <td>支持模型</td>
+        <td>Qwen, DeepSeek, Kimi等主流模型（百炼已上线）</td>
+        <td>全量主流模型</td>
+        <td>昇腾适配模型</td>
+      </tr>
+
+      <tr class="section-divider"><td colspan="4">CPU协同</td></tr>
+      <tr>
+        <td>服务器CPU</td>
+        <td><strong>倚天系列</strong>（Arm，自研）</td>
+        <td>Grace <span class="badge-warn">(定制)</span> / x86</td>
+        <td>鲲鹏（Arm，自研）</td>
+      </tr>
+      <tr>
+        <td>CPU定位</td>
+        <td>Agent任务规划/状态管理/工具调用</td>
+        <td>CPU-GPU统一内存</td>
+        <td>通用计算 + AI协同</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<!-- ============ TABLE 3: Agent Era Positioning ============ -->
+<div class="section">
+  <h2>🎯 Agent时代定位对比</h2>
+  <p class="desc">面向Agent工作负载的战略定位</p>
+  <div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>维度</th>
+        <th class="vendor-pingtouge" style="color:var(--accent-blue)">平头哥</th>
+        <th class="vendor-nvidia" style="color:var(--accent-green)">英伟达</th>
+        <th class="vendor-huawei" style="color:var(--accent-orange)">华为</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Agent核心痛点</td>
+        <td>Agent任务连续发起数十次模型调用，对通信时延和带宽要求极高</td>
+        <td>万亿参数LLM推理的实时性</td>
+        <td>大规模集群训练 + 国产替代</td>
+      </tr>
+      <tr>
+        <td>核心优势</td>
+        <td><strong>全栈自研</strong>（AI芯 + CPU + 网卡 + 存储 + 互联）</td>
+        <td><strong>生态成熟</strong>（CUDA + 全行业适配）</td>
+        <td><strong>规模最大</strong>（8,192卡SuperPod，CloudMatrix 384）</td>
+      </tr>
+      <tr>
+        <td>出货量</td>
+        <td><strong>56万片</strong>（累计，截至2026.05）</td>
+        <td>~300万+/年 <span class="badge-warn">估</span></td>
+        <td>~100万+ <span class="badge-warn">估</span></td>
+      </tr>
+      <tr>
+        <td>云平台闭环</td>
+        <td><strong>阿里云百炼</strong>——Agent运行环境 + 模型API</td>
+        <td>DGX Cloud + 合作伙伴云</td>
+        <td>昇腾云 + 华为云</td>
+      </tr>
+      <tr>
+        <td>模型生态</td>
+        <td>Qwen专属优化 + 开放接入DeepSeek/Kimi等</td>
+        <td>全模型适配（CUDA生态壁垒）</td>
+        <td>昇腾适配 + ModelZoo优化</td>
+      </tr>
+      <tr>
+        <td>代际差距判断</td>
+        <td><strong>追赶中</strong>：单卡显存对位H200级别，带宽差距明显（800GB/s vs 4.8-8TB/s）</td>
+        <td>行业标杆</td>
+        <td><strong>追赶中</strong>：910C带宽784GB/s，与平头哥同级</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<!-- ============ Analysis ============ -->
+<div class="section">
+  <h2>🧠 分析：三方案力对比</h2>
+  <div class="analysis-grid">
+    <div class="analysis-card">
+      <h3 style="color:var(--accent-blue)">✅ 平头哥强项</h3>
+      <ul>
+        <li><strong>全栈自研</strong>是最大护城河：AI芯片+服务器CPU+互联+网卡+存储，系统级优化的想象空间大</li>
+        <li><strong>128卡单机柜</strong>密度高于英伟达NVL72（72卡），AP2P时延&lt;150ns领先</li>
+        <li>阿里云百炼已上线，支持多模型（不锁Qwen）</li>
+        <li>FP4原生支持——紧跟低精度推理趋势</li>
+        <li>56万片出货量说明已过"能用"门槛，正在走量</li>
+      </ul>
+    </div>
+    <div class="analysis-card">
+      <h3 style="color:var(--accent-orange)">⚠️ 明显差距</h3>
+      <ul>
+        <li>显存带宽差距最大：800 GB/s vs 英伟达4.8-8 TB/s（差6-10倍）</li>
+        <li>单芯片算力（TFLOPS）未公布——大概率差距更大</li>
+        <li>制程工艺不明，若仍是成熟制程，能效比差距显著</li>
+        <li>软件生态（对标CUDA）差距最大，T-Head SAIL刚起步</li>
+        <li>对比华为910C：带宽相近（800 vs 784 GB/s），但华为已有950DT路线图（4 TB/s）</li>
+      </ul>
+    </div>
+    <div class="analysis-card">
+      <h3 style="color:var(--accent-cyan)">🔮 值得关注</h3>
+      <ul>
+        <li><strong>倚天CPU在Agent时代的战略价值</strong>被明确强调——这是平头哥相比英伟达差异化的地方</li>
+        <li>ICN Switch 1.0自研互联体系，长期看可降低对NVLink生态依赖</li>
+        <li>路线图V900→J900两代迭代，说明阿里在持续加码而非试水</li>
+        <li>华为950DT（2026 Q4）直接对位M890，144GB显存+4TB/s带宽，阿里的时间窗口有限</li>
+        <li>英伟达B300（2025 H2）已到288GB+8TB/s，平头哥至少落后1-2代</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ============ Product Line ============ -->
+<div class="section">
+  <h2>🗺️ 产品线对位图谱</h2>
+  <div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>层级</th>
+        <th class="vendor-pingtouge">平头哥</th>
+        <th class="vendor-nvidia">英伟达对位</th>
+        <th class="vendor-huawei">华为对位</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>AI芯片（当前）</td><td><strong>真武M890</strong></td><td>H200（性能同级）</td><td>昇腾910C</td></tr>
+      <tr><td>AI芯片（下一代）</td><td>真武V900（2027）</td><td>B200/B300（2025）</td><td>昇腾950DT（2026 Q4）</td></tr>
+      <tr><td>AI芯片（远期）</td><td>真武J900（2028）</td><td>Vera Rubin（2026 H2）</td><td>昇腾960/970</td></tr>
+      <tr><td>互联芯片</td><td><strong>ICN Switch 1.0</strong></td><td>NVSwitch 5</td><td>HCCS</td></tr>
+      <tr><td>服务器CPU</td><td><strong>倚天</strong>（Arm）</td><td>Grace（Arm）</td><td>鲲鹏（Arm）</td></tr>
+      <tr><td>智能网卡</td><td><strong>磐脉</strong></td><td>BlueField 4 DPU</td><td>昇腾智能网卡</td></tr>
+      <tr><td>存储主控</td><td><strong>镇岳</strong></td><td>N/A（依赖第三方）</td><td>N/A</td></tr>
+      <tr><td>超节点</td><td><strong>磐久AL128</strong>（128卡）</td><td>GB200/GB300 NVL72（72卡）</td><td>CloudMatrix 384（384卡）<br>Atlas 950 SuperPod（8,192卡）</td></tr>
+      <tr><td>软件栈</td><td><strong>T-Head SAIL</strong></td><td>CUDA + cuDNN + TensorRT</td><td>CANN + MindSpore</td></tr>
+      <tr><td>云平台</td><td><strong>阿里云百炼</strong> / 千问云</td><td>DGX Cloud / 各家云</td><td>华为云 / 昇腾云</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="desc" style="margin-top:10px;">
+    可见：平头哥在<strong>产品线完整性</strong>上与英伟达、华为处于同一级别——AI芯片、CPU、互联、网卡、存储全栈自研。
+    差距主要在：① 单芯片绝对性能（带宽/算力）；② 软件生态成熟度；③ 代际节奏（落后英伟达1-2年）。
+  </p>
+</div>
+
+<div class="footer">
+  <p>数据来源：平头哥/阿里云官方公告、NVIDIA官方规格、华为昇腾官网、AI柠檬博客等公开资料</p>
+  <p>发布于 <a href="https://dahuir81.github.io">dahuir81.github.io</a> · 镜像 <a href="https://openclawmy.work">openclawmy.work</a></p>
+</div>
+
+</div>
+</body>
+</html>
