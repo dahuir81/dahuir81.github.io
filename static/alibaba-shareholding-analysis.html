@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>阿里巴巴集团股权架构深度解析 | 前十大股东下层控股全图谱</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --bg-card: #161b22;
+    --bg-hover: #1c2333;
+    --border: #30363d;
+    --text: #e6edf3;
+    --text-muted: #8b949e;
+    --accent: #58a6ff;
+    --green: #3fb950;
+    --orange: #d29922;
+    --red: #f85149;
+    --purple: #bc8cff;
+    --max-w: 960px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI","Noto Sans SC", "PingFang SC", Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.65;
+    padding: 24px 16px;
+  }
+  .container { max-width: var(--max-w); margin: 0 auto; }
+  header {
+    text-align: center;
+    padding: 48px 0 32px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 40px;
+  }
+  header h1 {
+    font-size: 2em;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--accent), var(--purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 12px;
+  }
+  header p { color: var(--text-muted); font-size: 0.95em; }
+  header .meta {
+    margin-top: 12px;
+    font-size: 0.85em;
+    color: var(--text-muted);
+  }
+  header .meta span { margin: 0 8px; }
+  section { margin-bottom: 48px; }
+  h2 {
+    font-size: 1.4em;
+    font-weight: 600;
+    margin-bottom: 20px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  h2 .badge {
+    font-size: 0.5em;
+    font-weight: 500;
+    padding: 2px 10px;
+    border-radius: 12px;
+    -webkit-text-fill-color: initial;
+    color: #fff;
+  }
+  .badge.cn { background: #1f6feb; }
+  .badge.us { background: #8957e5; }
+  .badge.jp { background: #d29922; }
+  .badge.no { background: #3fb950; }
+  .badge.private { background: #f85149; }
+  .badge.public { background: #58a6ff; }
+
+  /* Summary Cards */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .summary-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    transition: all 0.2s;
+  }
+  .summary-card:hover { border-color: var(--accent); background: var(--bg-hover); }
+  .summary-card .rank {
+    display: inline-block;
+    font-size: 0.75em;
+    font-weight: 600;
+    color: var(--text-muted);
+    background: rgba(139,148,158,0.1);
+    padding: 2px 10px;
+    border-radius: 10px;
+    margin-bottom: 8px;
+  }
+  .summary-card h3 {
+    font-size: 1.1em;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .summary-card .pct {
+    font-size: 1.6em;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  .summary-card .type {
+    font-size: 0.82em;
+    color: var(--text-muted);
+    margin: 4px 0 8px;
+  }
+  .summary-card .note {
+    font-size: 0.82em;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  /* Org chart */
+  .org-chart {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px 20px;
+    margin-bottom: 24px;
+  }
+  .org-chart h3 {
+    font-size: 1.05em;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: var(--accent);
+  }
+  .org-node {
+    padding: 10px 16px;
+    border-left: 2px solid var(--border);
+    margin: 6px 0 6px 12px;
+    position: relative;
+  }
+  .org-node::before {
+    content: "";
+    position: absolute;
+    left: -2px;
+    top: 50%;
+    width: 10px;
+    height: 2px;
+    background: var(--border);
+  }
+  .org-node .label {
+    font-size: 0.88em;
+    font-weight: 500;
+  }
+  .org-node .desc {
+    font-size: 0.78em;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+  .org-node .hl {
+    color: var(--green);
+    font-weight: 500;
+  }
+  .org-root {
+    padding: 10px 16px;
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    background: rgba(88,166,255,0.08);
+    margin-bottom: 4px;
+    display: inline-block;
+  }
+  .org-root .label { font-weight: 600; color: var(--accent); }
+
+  /* Data table */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88em;
+    margin-bottom: 16px;
+  }
+  .data-table th {
+    background: rgba(139,148,158,0.08);
+    padding: 10px 14px;
+    text-align: left;
+    font-weight: 600;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  .data-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid rgba(48,54,61,0.5);
+    vertical-align: top;
+  }
+  .data-table tr:hover td { background: rgba(88,166,255,0.04); }
+  .data-table .num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .data-table .source-link {
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 0.82em;
+  }
+  .data-table .source-link:hover { text-decoration: underline; }
+
+  /* Deep dive card */
+  .deep-dive {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+    margin-bottom: 20px;
+  }
+  .deep-dive h3 {
+    font-size: 1.15em;
+    font-weight: 600;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .deep-dive h3 .flag { font-size: 1.2em; }
+  .deep-dive .stat-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  .deep-dive .stat-item {
+    background: rgba(139,148,158,0.06);
+    border-radius: 8px;
+    padding: 12px 16px;
+    min-width: 130px;
+    flex: 1;
+  }
+  .deep-dive .stat-item .stat-label {
+    font-size: 0.75em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .deep-dive .stat-item .stat-val {
+    font-size: 1.1em;
+    font-weight: 600;
+    margin-top: 4px;
+  }
+  .deep-dive p {
+    font-size: 0.88em;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 12px;
+  }
+  .deep-dive .sources {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+  }
+  .deep-dive .sources span {
+    font-size: 0.75em;
+    color: var(--text-muted);
+    display: block;
+  }
+  .deep-dive .sources a {
+    color: var(--accent);
+    font-size: 0.82em;
+    text-decoration: none;
+  }
+  .deep-dive .sources a:hover { text-decoration: underline; }
+
+  .highlight-box {
+    background: linear-gradient(135deg, rgba(188,140,255,0.08), rgba(88,166,255,0.08));
+    border: 1px solid var(--purple);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .highlight-box h3 { color: var(--purple); margin-bottom: 12px; }
+  .highlight-box p { font-size: 0.88em; color: var(--text-muted); line-height: 1.7; }
+  .highlight-box strong { color: var(--text); }
+
+  .tag {
+    display: inline-block;
+    font-size: 0.72em;
+    padding: 2px 8px;
+    border-radius: 8px;
+    margin-right: 4px;
+  }
+  .tag.blue { background: rgba(88,166,255,0.15); color: #58a6ff; }
+  .tag.green { background: rgba(63,185,80,0.15); color: #3fb950; }
+  .tag.orange { background: rgba(210,153,34,0.15); color: #d29922; }
+  .tag.purple { background: rgba(188,140,255,0.15); color: #bc8cff; }
+  .tag.red { background: rgba(248,81,73,0.15); color: #f85149; }
+
+  footer {
+    text-align: center;
+    padding: 32px 0;
+    border-top: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 0.82em;
+  }
+
+  @media (max-width: 640px) {
+    .summary-grid { grid-template-columns: 1fr; }
+    .data-table { font-size: 0.78em; }
+    .data-table th, .data-table td { padding: 8px 10px; }
+    .deep-dive { padding: 20px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>阿里巴巴集团股权架构深度解析</h1>
+  <p>前十大股东下层控股全图谱 · 截至2026年3月</p>
+  <div class="meta">
+    <span>📊 数据整理于 2026-05-21</span>
+    <span>🔍 基于 AnySearch 多源交叉搜索</span>
+  </div>
+</header>
+
+<!-- ==================== OVERVIEW ==================== -->
+<section>
+  <h2>📋 股权全景概述</h2>
+  <p style="color:var(--text-muted);font-size:0.9em;margin-bottom:20px;">
+    阿里巴巴集团股权高度分散，<strong style="color:var(--text)">无单一持股超15%的控股股东</strong>。
+    通过「湖畔合伙人制度」实现股权与控制权分离，管理层仅1.9%持股却掌握董事会提名权。
+    两大结构性变化：<span class="tag blue">软银基本清仓</span><span class="tag green">南向资金成第一大股东</span>
+  </p>
+
+  <div class="summary-grid">
+    <div class="summary-card">
+      <div class="rank">#1</div>
+      <h3>南向资金（港股通）</h3>
+      <div class="pct">11.8%</div>
+      <div class="type">🇨🇳 通道式资金 · 非单一实体</div>
+      <div class="note">2024年9月纳入港股通后，内地投资者通过沪深港通持续买入，跃居第一大股东</div>
+    </div>
+    <div class="summary-card">
+      <div class="rank">#2</div>
+      <h3>贝莱德 BlackRock</h3>
+      <div class="pct">5.6%</div>
+      <div class="type">🇺🇸 全球最大资管 · NYSE: BLK</div>
+      <div class="note">AUM $12.5万亿（2025），全球最大资管公司，纯财务投资</div>
+    </div>
+    <div class="summary-card">
+      <div class="rank">#3</div>
+      <h3>先锋领航 Vanguard</h3>
+      <div class="pct">4.2%</div>
+      <div class="type">🇺🇸 全球第二大资管 · 客户所有制</div>
+      <div class="note">AUM $8.1万亿（2022），独特持有人所有制结构</div>
+    </div>
+    <div class="summary-card">
+      <div class="rank">#4</div>
+      <h3>软银集团 SoftBank</h3>
+      <div class="pct">3.5%</div>
+      <div class="type">🇯🇵 控股公司 · TYO: 9984</div>
+      <div class="note">已基本清仓（从34.4%→<0.5%），套现约$1115亿，仅剩极小持仓</div>
+    </div>
+    <div class="summary-card">
+      <div class="rank">#5</div>
+      <h3>挪威银行投资管理 NBIM</h3>
+      <div class="pct">2.5%</div>
+      <div class="type">🇳🇴 全球最大主权基金</div>
+      <div class="note">管理挪威政府养老金全球基金，AUM约$1.6万亿</div>
+    </div>
+    <div class="summary-card">
+      <div class="rank">#6</div>
+      <h3>摩根资产管理</h3>
+      <div class="pct">2.1%</div>
+      <div class="type">🇺🇸 摩根大通旗下 · NYSE: JPM</div>
+      <div class="note">JPMorgan Chase & Co. 四大业务板块之一</div>
+    </div>
+    <div class="summary-card">
+      <div class="rank">#7</div>
+      <h3>马云家族（APN Ltd）</h3>
+      <div class="pct">1.5%</div>
+      <div class="type">🇨🇳 创始人 · 永久合伙人</div>
+      <div class="note">虽持股极低，但通过合伙人制度掌控核心控制权</div>
+    </div>
+    <div class="summary-card">
+      <div class="rank">#8</div>
+      <h3>蔡崇信</h3>
+      <div class="pct">1.45%</div>
+      <div class="type">🇨🇳 联合创始人 · 董事会主席</div>
+      <div class="note">永久合伙人，管理层最大持股人</div>
+    </div>
+    <div class="summary-card">
+      <div class="rank">#9</div>
+      <h3>富达投资 Fidelity</h3>
+      <div class="pct">1.17%</div>
+      <div class="type">🇺🇸 全球第三大共同基金 · 私人持有</div>
+      <div class="note">早期投资者，2000年代即通过风投团队下注阿里</div>
+    </div>
+    <div class="summary-card">
+      <div class="rank">#10</div>
+      <h3>高盛集团 Goldman Sachs</h3>
+      <div class="pct">1.08%</div>
+      <div class="type">🇺🇸 投行 · NYSE: GS</div>
+      <div class="note">1999年阿里A轮投资者（$500万），持续财务持有</div>
+    </div>
+  </div>
+
+  <div class="highlight-box">
+    <h3>🔑 关键认知：股权分散 ≠ 控制权分散</h3>
+    <p>
+      阿里巴巴管理层合计仅持股 <strong>1.9%</strong>，但通过 <strong>湖畔合伙人制度</strong>，
+      合伙人委员会提名董事会简单多数成员（<strong>95%的董事会席位</strong>），
+      且修改该制度需出席股东大会 <strong>95%以上表决权通过</strong>。
+      这就是马云和蔡崇信用不到3%的股权，牢牢控制一家数万亿市值公司的密码。
+    </p>
+  </div>
+</section>
+
+<!-- ==================== DEEP DIVES ==================== -->
+<section>
+  <h2>🔍 股东深度拆解 · 下层控股架构</h2>
+
+  <!-- 1. 南向资金 -->
+  <div class="deep-dive">
+    <h3><span class="flag">🇨🇳</span> 南向资金（港股通）— #1 · 11.8%</h3>
+    <div class="stat-row">
+      <div class="stat-item"><div class="stat-label">性质</div><div class="stat-val">通道式资金流</div></div>
+      <div class="stat-item"><div class="stat-label">实际持有人</div><div class="stat-val">中国内地投资者</div></div>
+      <div class="stat-item"><div class="stat-label">结算机构</div><div class="stat-val">中国结算</div></div>
+    </div>
+    <p>
+      <strong>南向资金不是单一实体</strong>，而是通过「沪深港通」机制流入香港股市的中国内地机构与散户资金的总称。
+      结算端统一由中国证券登记结算有限责任公司（中国结算）作为名义持有人出现在香港中央结算系统。
+      2024年9月，阿里巴巴正式纳入港股通标的，内地投资者得以直接买入，此后南向资金持续增持，
+      从2024年底约8%一路攀升至2026年3月的约11.8%，跃居名义第一大股东。
+    </p>
+    <p>
+      穿透来看，南向资金构成复杂——包括保险资金、公募基金、私募基金及散户投资者，
+      各自独立决策，并非一致行动人。因此"第一大股东"的实际影响力远低于机构大股东。
+    </p>
+    <div class="sources">
+      <span>📎 来源：</span>
+      <a href="https://www.stcn.com/article/detail/3903400.html" target="_blank">证券时报·南向资金追踪</a> ·
+      <a href="https://www.hkexnews.hk/sdw/search/mutualmarket_c.aspx" target="_blank">HKEX 港股通持股纪录</a> ·
+      <a href="https://www.bnppwarrant.com/tc/stock-connect/southbound-money-flow" target="_blank">法巴南向资金数据</a>
+    </div>
+  </div>
+
+  <!-- 2. 贝莱德 -->
+  <div class="deep-dive">
+    <h3><span class="flag">🇺🇸</span> 贝莱德 BlackRock — #2 · 5.6%</h3>
+    <div class="stat-row">
+      <div class="stat-item"><div class="stat-label">AUM</div><div class="stat-val">$12.53万亿</div></div>
+      <div class="stat-item"><div class="stat-label">成立</div><div class="stat-val">1988年</div></div>
+      <div class="stat-item"><div class="stat-label">创始人/CEO</div><div class="stat-val">Larry Fink</div></div>
+      <div class="stat-item"><div class="stat-label">上市代码</div><div class="stat-val">NYSE: BLK</div></div>
+    </div>
+    <p>
+      全球最大资产管理公司，总部纽约。1988年由Larry Fink等人创立，起初为黑石集团旗下债券投资部门，
+      1995年独立。2004年起通过一系列收购（State Street Research、BGI/巴克莱全球投资者、
+      Global Infrastructure Partners、HPS Investment Partners等）成长为资管巨无霸。
+    </p>
+
+    <h4 style="font-size:0.9em;color:var(--accent);margin:16px 0 8px;">📌 集团架构</h4>
+    <div class="org-chart">
+      <div class="org-root"><span class="label">BlackRock, Inc. (NYSE: BLK)</span></div>
+      <div class="org-node"><span class="label">BlackRock Advisors, LLC</span><div class="desc">美国注册投资顾问，管理共同基金</div></div>
+      <div class="org-node"><span class="label">iShares</span><div class="desc">全球最大ETF平台，管理超$3万亿ETF资产</div></div>
+      <div class="org-node"><span class="label">Aladdin Platform</span><div class="desc">风险分析与投资管理技术平台，管理超$20万亿资产数据</div></div>
+      <div class="org-node"><span class="label">Global Infrastructure Partners (GIP)</span><div class="desc">$125亿收购，基础设施投资，持伦敦盖特威克机场等资产</div></div>
+      <div class="org-node"><span class="label">HPS Investment Partners</span><div class="desc">$120亿收购(2025)，私人信贷，AUM约$2200亿</div></div>
+      <div class="org-node"><span class="label">ElmTree Funds</span><div class="desc">$73亿收购(2025)，净租赁房地产投资</div></div>
+      <div class="org-node"><span class="label">Jio BlackRock</span><div class="desc">与中国信实集团50:50合资，印度资管</div></div>
+      <div class="org-node"><span class="label">贝莱德基金管理（中国）</span><div class="desc">中国外商独资公募基金</div></div>
+    </div>
+
+    <h4 style="font-size:0.9em;color:var(--accent);margin:16px 0 8px;">📌 贝莱德自身的股权结构</h4>
+    <p>贝莱德自身也被机构交叉持股（2026Q1数据）：</p>
+    <table class="data-table">
+      <tr><th>股东</th><th>持股</th></tr>
+      <tr><td>先锋领航 Vanguard</td><td class="num">~7.5%</td></tr>
+      <tr><td>科威特投资局 KIA</td><td class="num">~5.2%</td></tr>
+      <tr><td>道富集团 State Street</td><td class="num">~4.8%</td></tr>
+      <tr><td>淡马锡 Temasek</td><td class="num">~3.6%</td></tr>
+      <tr><td>挪威主权基金 NBIM</td><td class="num">~3.1%</td></tr>
+      <tr><td>资本集团 Capital Group</td><td class="num">~2.8%</td></tr>
+    </table>
+
+    <div class="sources">
+      <span>📎 来源：</span>
+      <a href="https://www.mg21.com/blk.html" target="_blank">美股之家·贝莱德集团</a> ·
+      <a href="https://www.tradingkey.com/zh-hans/markets/stocks/nasdaq-blk/company" target="_blank">TradingKey·BLK公司详情</a> ·
+      <a href="https://baike.baidu.com/item/%E8%B4%9D%E8%8E%B1%E5%BE%B7%E9%9B%86%E5%9B%A2/9777662" target="_blank">百度百科·贝莱德</a> ·
+      <a href="https://www.blackrock.com/cn/about-us" target="_blank">BlackRock官网</a>
+    </div>
+  </div>
+
+  <!-- 3. 先锋领航 -->
+  <div class="deep-dive">
+    <h3><span class="flag">🇺🇸</span> 先锋领航 Vanguard — #3 · 4.2%</h3>
+    <div class="stat-row">
+      <div class="stat-item"><div class="stat-label">AUM</div><div class="stat-val">~$8.1万亿</div></div>
+      <div class="stat-item"><div class="stat-label">成立</div><div class="stat-val">1975年</div></div>
+      <div class="stat-item"><div class="stat-label">创始人</div><div class="stat-val">John Bogle</div></div>
+      <div class="stat-item"><div class="stat-label">结构</div><div class="stat-val" style="color:var(--green)">客户所有制（非上市）</div></div>
+    </div>
+    <p>
+      全球最大共同基金公司之一，指数投资奠基者。1975年创立，1976年推出全球首只指数基金——先锋500指数基金。
+      Vanguard的独特之处在于其 <strong style="color:var(--green)">客户所有制结构</strong>：
+      公司本身由旗下管理的基金共同持有，基金的持有人就是Vanguard实质上的股东。
+      因此公司创造的利润通过降低费率反馈给投资者，平均管理费仅0.23%，为行业最低。
+    </p>
+    <p>
+      Vanguard是全球最大的不收费基金家族，服务全球超3000万投资者。
+      2023年宣布退出中国，关闭上海办公室。
+    </p>
+
+    <h4 style="font-size:0.9em;color:var(--accent);margin:16px 0 8px;">📌 集团架构（独特：非传统控股结构）</h4>
+    <div class="org-chart">
+      <div class="org-root"><span class="label">The Vanguard Group, Inc.</span><div class="desc" style="color:var(--green)">🏛️ 由旗下基金共同持有，无外部股东</div></div>
+      <div class="org-node"><span class="label">Vanguard Marketing Corporation</span><div class="desc">分销与经纪服务</div></div>
+      <div class="org-node"><span class="label">Vanguard Investments</span><div class="desc">全球投资管理，覆盖美/欧/亚/澳</div></div>
+      <div class="org-node"><span class="label">Vanguard Asset Management</span><div class="desc">主动管理与 ETF 产品线</div></div>
+      <div class="org-node"><span class="label">Vanguard Advisers, Inc.</span><div class="desc">投资顾问服务</div></div>
+      <div class="org-node"><span class="label">Vanguard Funds</span><div class="desc">旗下数百只共同基金（基金持有 Vanguard 公司）</div></div>
+    </div>
+    <p style="font-size:0.82em;color:var(--text-muted);margin-top:8px;">
+      ⚡ 关键注：Vanguard 自身也是贝莱德第一大股东（~7.5%）、摩根大通大股东（~8.5%）。
+      这种资管巨头之间的交叉持股是华尔街的普遍现象。
+    </p>
+    <div class="sources">
+      <span>📎 来源：</span>
+      <a href="https://zh.wikipedia.org/wiki/%E5%85%88%E9%94%8B%E9%A2%86%E8%88%AA" target="_blank">维基百科·先锋领航</a> ·
+      <a href="https://baike.baidu.com/item/%E5%85%88%E9%94%8B%E9%A2%86%E8%88%AA%E9%9B%86%E5%9B%A2/52819050" target="_blank">百度百科·先锋领航</a> ·
+      <a href="https://www.todayusstock.com/news/451946.html" target="_blank">今日美股·先锋集团</a>
+    </div>
+  </div>
+
+  <!-- 4. 软银 -->
+  <div class="deep-dive">
+    <h3><span class="flag">🇯🇵</span> 软银集团 SoftBank — #4 · 3.5%</h3>
+    <div class="stat-row">
+      <div class="stat-item"><div class="stat-label">成立</div><div class="stat-val">1981年</div></div>
+      <div class="stat-item"><div class="stat-label">创始人/会长</div><div class="stat-val">孙正义 Masayoshi Son</div></div>
+      <div class="stat-item"><div class="stat-label">上市代码</div><div class="stat-val">TYO: 9984</div></div>
+      <div class="stat-item"><div class="stat-label">核心资产</div><div class="stat-val">ARM (45%)</div></div>
+    </div>
+    <p>
+      软银是阿里巴巴历史上最重要的外部股东。2000年孙正义投资$2000万，最高持股34.4%。
+      但从2020年起，软银因愿景基金巨亏开始持续减持阿里股份套现。
+      通过全资子公司 Skybridge LLC 与金融机构签订预付远期合约，分期减持。
+    </p>
+    <p>
+      <strong style="color:var(--red)">到2024年1月，所有远期合约实物结算完毕，软银实际持有阿里股份已不足0.5%。</strong>
+      目前账面约3.5%的持股主要是尚未完成最终交割的残余。软银已彻底完成了对阿里的战略减持，
+      投资重心全面转向 ARM（占软银净资产45%）和 AI。
+    </p>
+
+    <h4 style="font-size:0.9em;color:var(--accent);margin:16px 0 8px;">📌 软银集团架构</h4>
+    <div class="org-chart">
+      <div class="org-root"><span class="label">软银集团 SoftBank Group Corp. (TYO: 9984)</span></div>
+      <div class="org-node"><span class="label hl">ARM Holdings</span><div class="desc">占净资产45%，芯片设计，2023年NASDAQ上市</div></div>
+      <div class="org-node"><span class="label">愿景基金 Vision Fund</span><div class="desc">全球最大科技投资基金，占净资产29%，投资Uber、字节跳动等</div></div>
+      <div class="org-node"><span class="label">愿景基金II Vision Fund 2</span><div class="desc">投资人包括苹果、微软、富士康等</div></div>
+      <div class="org-node"><span class="label">SoftBank Corp.</span><div class="desc">日本电信业务（非集团主体）</div></div>
+      <div class="org-node"><span class="label">Skybridge LLC</span><div class="desc">全资子公司，阿里减持工具，已完成使命</div></div>
+      <div class="org-node"><span class="label">其他投资</span><div class="desc">波士顿动力、Graphcore、NVIDIA(已退出)等</div></div>
+    </div>
+
+    <div class="sources">
+      <span>📎 来源：</span>
+      <a href="https://www.pai.com.cn/244921.html" target="_blank">电商派·软银出售阿里全部股份</a> ·
+      <a href="https://www.36kr.com/p/3353438025626497" target="_blank">36氪·阿里合伙人名单缩水</a> ·
+      <a href="https://cn.wsj.com/articles/%E8%BB%9F%E9%8A%80%E5%9C%98%E8%A8%88%E5%8A%83%E6%B8%9B%E6%8C%81%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4-%E6%96%99%E7%8D%B2%E5%88%A9%E5%BE%97340%E5%84%84%E7%BE%8E%E5%85%83-121660132507" target="_blank">华尔街日报·软银减持</a>
+    </div>
+  </div>
+
+  <!-- 5. 挪威主权基金 -->
+  <div class="deep-dive">
+    <h3><span class="flag">🇳🇴</span> 挪威银行投资管理 NBIM — #5 · 2.5%</h3>
+    <div class="stat-row">
+      <div class="stat-item"><div class="stat-label">AUM</div><div class="stat-val">~$1.6万亿</div></div>
+      <div class="stat-item"><div class="stat-label">性质</div><div class="stat-val">全球最大主权财富基金</div></div>
+      <div class="stat-item"><div class="stat-label">隶属</div><div class="stat-val">挪威央行 Norges Bank</div></div>
+      <div class="stat-item"><div class="stat-label">全球持股</div><div class="stat-val">~9,000家公司</div></div>
+    </div>
+    <p>
+      全称 Norges Bank Investment Management (NBIM)，隶属于挪威央行，管理挪威政府养老金全球基金（GPFG）。
+      资金来源于挪威石油和天然气收入，旨在为后代储备财富。
+      是全球最大的单一主权投资者，持有全球约9000家公司的股份，平均持股约1.5%。
+    </p>
+    <p>
+      NBIM 对阿里的持仓在2024年持续增加——从Q2的563.4万股增至Q4的690.5万股，
+      是2024年增持阿里最显著的大型机构之一。持仓主要通过其全球股票指数投资组合被动配置。
+    </p>
+
+    <h4 style="font-size:0.9em;color:var(--accent);margin:16px 0 8px;">📌 组织架构</h4>
+    <div class="org-chart">
+      <div class="org-root"><span class="label">Norges Bank (挪威央行)</span></div>
+      <div class="org-node"><span class="label hl">Norges Bank Investment Management (NBIM)</span><div class="desc">资产管理运营机构，管理GPFG</div></div>
+      <div class="org-node" style="margin-left:36px;"><span class="label">股权投资部</span><div class="desc">~70%资产配置于全球股票</div></div>
+      <div class="org-node" style="margin-left:36px;"><span class="label">固定收益部</span><div class="desc">~27%资产配置于债券</div></div>
+      <div class="org-node" style="margin-left:36px;"><span class="label">房地产投资部</span><div class="desc">~3%配置于不动产</div></div>
+      <div class="org-node" style="margin-left:36px;"><span class="label">负责任投资部</span><div class="desc">ESG整合与尽职治理</div></div>
+    </div>
+
+    <div class="sources">
+      <span>📎 来源：</span>
+      <a href="https://www.yicai.com/news/102474024.html" target="_blank">第一财经·机构持仓出炉</a> ·
+      <a href="https://www.nbim.no/en/investments/all-investments/" target="_blank">NBIM 持仓查询</a> ·
+      <a href="https://finance.sina.com.cn/stock/bxjj/2025-02-15/doc-inekqcqa6194879.shtml" target="_blank">新浪财经·挪威主权基金增持</a>
+    </div>
+  </div>
+
+  <!-- 6. 摩根大通 -->
+  <div class="deep-dive">
+    <h3><span class="flag">🇺🇸</span> 摩根资产管理 — #6 · 2.1%</h3>
+    <div class="stat-row">
+      <div class="stat-item"><div class="stat-label">母公司</div><div class="stat-val">JPMorgan Chase & Co.</div></div>
+      <div class="stat-item"><div class="stat-label">母公司代码</div><div class="stat-val">NYSE: JPM</div></div>
+      <div class="stat-item"><div class="stat-label">资管AUM</div><div class="stat-val">~$3.1万亿</div></div>
+      <div class="stat-item"><div class="stat-label">成立</div><div class="stat-val">1970年（资管部门）</div></div>
+    </div>
+    <p>
+      摩根资产管理（JPMorgan Asset Management）是摩根大通公司四大核心业务板块之一。
+      摩根大通集团由J.P. Morgan & Co.（2000年与大通曼哈顿合并）和众多金融公司整合而成，
+      是美国资产规模最大的银行，总资产超$3.7万亿。
+    </p>
+    <p>
+      在中国，摩根资管于2023年完成对上投摩根基金的全资控股（100%持股），
+      成为第6家外商独资公募基金管理公司。上投摩根在国内公募基金规模排名中上游。
+    </p>
+
+    <h4 style="font-size:0.9em;color:var(--accent);margin:16px 0 8px;">📌 摩根大通组织架构</h4>
+    <div class="org-chart">
+      <div class="org-root"><span class="label">JPMorgan Chase & Co. (NYSE: JPM)</span></div>
+      <div class="org-node"><span class="label">消费者与社区银行</span><div class="desc">零售银行、信用卡、房贷</div></div>
+      <div class="org-node"><span class="label">公司与投资银行 (CIB)</span><div class="desc">投行、证券交易、市场做市</div></div>
+      <div class="org-node"><span class="label">商业银行</span><div class="desc">中型企业银行服务</div></div>
+      <div class="org-node"><span class="label hl">资产与财富管理 (AWM)</span><div class="desc">
+        JPMorgan Asset Management Holdings Inc. → 管理阿里持股的主体
+        <br>含：上投摩根基金管理（中国，100%控股）
+      </div></div>
+    </div>
+    <p style="font-size:0.82em;color:var(--text-muted);margin-top:8px;">
+      ⚡ 摩根大通自身前三大股东：先锋领航(~8.5%)、贝莱德(~6.5%)、道富(~4.2%)
+    </p>
+
+    <div class="sources">
+      <span>📎 来源：</span>
+      <a href="https://zh.wikipedia.org/wiki/%E6%91%A9%E6%A0%B9%E5%A4%A7%E9%80%9A" target="_blank">维基百科·摩根大通</a> ·
+      <a href="http://www.csrc.gov.cn/csrc/c101881/c7007757/content.shtml" target="_blank">证监会·核准摩根资管控股上投摩根</a> ·
+      <a href="https://www.jiemian.com/article/8783218.html" target="_blank">界面新闻·上投摩根全资控股</a>
+    </div>
+  </div>
+
+  <!-- 7. 马云家族 -->
+  <div class="deep-dive">
+    <h3><span class="flag">🇨🇳</span> 马云家族（APN Ltd）— #7 · 1.5%</h3>
+    <div class="stat-row">
+      <div class="stat-item"><div class="stat-label">持股主体</div><div class="stat-val">APN Ltd（家族办公室）</div></div>
+      <div class="stat-item"><div class="stat-label">合伙人身份</div><div class="stat-val" style="color:var(--purple)">永久合伙人</div></div>
+      <div class="stat-item"><div class="stat-label">投票权</div><div class="stat-val">通过合伙人制度间接控制</div></div>
+    </div>
+    <p>
+      马云的个人直接持股约1.5%，但他通过 <strong style="color:var(--purple)">阿里巴巴合伙人制度</strong> 保持了对公司的核心影响力。
+      马云与蔡崇信是仅有的两位 <strong style="color:var(--purple)">永久合伙人</strong>，
+      可任职至70周岁（可由多数合伙人表决延长），无需遵守60岁退休的普通合伙人规定。
+    </p>
+    <p>
+      2023Q4，马云增持约$5000万美元阿里股票，当时持股超过4.3%，
+      一度取代软银成为最大股东。但后续随着阿里持续回购稀释，以及马云自身小幅减持，
+      目前持股稳定在1.5%左右。马云通过 APN Ltd（其家族办公室平台）持有阿里股份。
+    </p>
+    <div class="sources">
+      <span>📎 来源：</span>
+      <a href="https://www.67wa.com/9626.html" target="_blank">星速云·马云持股分析</a> ·
+      <a href="https://fin.sina.com.cn/tech/csj/2025-06-26/doc-infcmqpy4438531.shtml" target="_blank">新浪科技·阿里年报披露</a>
+    </div>
+  </div>
+
+  <!-- 8. 蔡崇信 -->
+  <div class="deep-dive">
+    <h3><span class="flag">🇨🇳</span> 蔡崇信 — #8 · 1.45%</h3>
+    <div class="stat-row">
+      <div class="stat-item"><div class="stat-label">现任职务</div><div class="stat-val">董事会主席</div></div>
+      <div class="stat-item"><div class="stat-label">合伙人身份</div><div class="stat-val" style="color:var(--purple)">永久合伙人</div></div>
+      <div class="stat-item"><div class="stat-label">持股平台</div><div class="stat-val">蓝池资本管理</div></div>
+    </div>
+    <p>
+      蔡崇信是阿里巴巴联合创始人兼现任董事会主席，也是除马云外唯一的永久合伙人。
+      他通过家族投资平台 <strong>蓝池资本管理（Blue Pool Capital）</strong> 管理阿里持股及多元化投资组合。
+      蓝池资本同时也管理马云的部分家族资产。
+    </p>
+    <p>
+      2023年底至2024年初，蔡崇信通过蓝池资本购买了约$1.5亿阿里股票，
+      与马云的增持形成协同，向市场传递管理层信心的强烈信号。
+      截至2025年6月，蔡崇信持股1.45%，是管理层中最大的单一持股人。
+    </p>
+    <div class="sources">
+      <span>📎 来源：</span>
+      <a href="https://fin.sina.com.cn/tech/csj/2025-06-26/doc-infcmqpy4438531.shtml" target="_blank">新浪科技·阿里2025年报</a> ·
+      <a href="https://www.36kr.com/p/3353438025626497" target="_blank">36氪·合伙人名单变动</a>
+    </div>
+  </div>
+
+  <!-- 9. 富达 -->
+  <div class="deep-dive">
+    <h3><span class="flag">🇺🇸</span> 富达投资 Fidelity — #9 · 1.17%</h3>
+    <div class="stat-row">
+      <div class="stat-item"><div class="stat-label">AUM</div><div class="stat-val">~$4.5万亿</div></div>
+      <div class="stat-item"><div class="stat-label">成立</div><div class="stat-val">1946年</div></div>
+      <div class="stat-item"><div class="stat-label">创始人家族</div><div class="stat-val">Johnson家族</div></div>
+      <div class="stat-item"><div class="stat-label">结构</div><div class="stat-val" style="color:var(--green)">私人持有</div></div>
+    </div>
+    <p>
+      富达投资（Fidelity Investments）是全球第三大共同基金公司。
+      由Johnson家族于1946年创立，总部波士顿。<strong style="color:var(--green)">约60%的股权由管理层、员工和Johnson家族私人持有</strong>，
+      这种私人持有结构使其能够进行长期投资而不受季度业绩压力影响。
+    </p>
+    <p>
+      富达与阿里的渊源远超一般机构投资者——富达国际（Fidelity International）的风险投资团队
+      自2000年代起活跃在中国市场，对阿里的投资总规模接近$10亿。
+      富达国际于1969年成立，负责美国以外市场，是独立于富达投资的实体。
+    </p>
+
+    <h4 style="font-size:0.9em;color:var(--accent);margin:16px 0 8px;">📌 富达集团架构</h4>
+    <div class="org-chart">
+      <div class="org-root"><span class="label">FMR LLC（顶屋控股公司）</span><div class="desc">60%由Johnson家族/管理层持有，私人公司</div></div>
+      <div class="org-node"><span class="label hl">Fidelity Investments（富达投资）</span><div class="desc">美国业务，含共同基金、401(k)、经纪</div></div>
+      <div class="org-node" style="margin-left:36px;"><span class="label">Fidelity Management & Research (FMR)</span><div class="desc">投资管理主体</div></div>
+      <div class="org-node" style="margin-left:36px;"><span class="label">Fidelity Brokerage</span><div class="desc">美国第二大在线券商</div></div>
+      <div class="org-node"><span class="label hl">Fidelity International（富达国际）</span><div class="desc">独立实体，负责美以外市场，AUM $3500亿</div></div>
+      <div class="org-node" style="margin-left:36px;"><span class="label">富达国际风险投资</span><div class="desc">阿里早期投资者，投资近$10亿</div></div>
+      <div class="org-node" style="margin-left:36px;"><span class="label">富达基金管理（中国）</span><div class="desc">中国外商独资公募</div></div>
+    </div>
+
+    <div class="sources">
+      <span>📎 来源：</span>
+      <a href="https://www.yicai.com/news/3961292.html" target="_blank">第一财经·解密富达国际投资</a> ·
+      <a href="https://zh.wikipedia.org/wiki/%E5%AF%8C%E8%BE%BE%E6%8A%95%E8%B5%84" target="_blank">维基百科·富达投资</a> ·
+      <a href="https://zhuanlan.zhihu.com/p/381977484" target="_blank">知乎·富达三代家族扩张逻辑</a>
+    </div>
+  </div>
+
+  <!-- 10. 高盛 -->
+  <div class="deep-dive">
+    <h3><span class="flag">🇺🇸</span> 高盛集团 Goldman Sachs — #10 · 1.08%</h3>
+    <div class="stat-row">
+      <div class="stat-item"><div class="stat-label">成立</div><div class="stat-val">1869年</div></div>
+      <div class="stat-item"><div class="stat-label">CEO</div><div class="stat-val">David Solomon</div></div>
+      <div class="stat-item"><div class="stat-label">上市代码</div><div class="stat-val">NYSE: GS</div></div>
+      <div class="stat-item"><div class="stat-label">总资产</div><div class="stat-val">~$1.6万亿</div></div>
+    </div>
+    <p>
+      高盛是阿里巴巴最早的机构投资者——<strong style="color:var(--orange)">1999年，高盛领投阿里A轮$500万融资</strong>。
+      这是阿里历史上第一轮机构融资，高盛当时以投行视角押注中国电商。
+      虽然后续大部分早期投资已在阿里上市后退出，但高盛集团及其资产管理部门仍持续持有阿里股份。
+    </p>
+    <p>
+      2022年，高盛进行了史上最大规模组织架构调整，将业务重组为三大板块：
+      投行与交易、资产管理与财富管理（含GSAM高盛资产管理）、平台解决方案。
+      GSAM是高盛管理阿里持股的主体。
+    </p>
+
+    <h4 style="font-size:0.9em;color:var(--accent);margin:16px 0 8px;">📌 高盛架构（2022年重组后）</h4>
+    <div class="org-chart">
+      <div class="org-root"><span class="label">The Goldman Sachs Group, Inc. (NYSE: GS)</span></div>
+      <div class="org-node"><span class="label">投行与交易</span><div class="desc">投资银行、全球市场交易</div></div>
+      <div class="org-node"><span class="label hl">资产与财富管理</span><div class="desc">
+        含高盛资产管理 GSAM —— 阿里持股主体
+        <br>含高盛私人银行、Marcus消费贷
+      </div></div>
+      <div class="org-node"><span class="label">平台解决方案</span><div class="desc">交易银行、金融科技（与苹果/通用汽车合作）</div></div>
+    </div>
+
+    <div class="sources">
+      <span>📎 来源：</span>
+      <a href="https://www.pbc.gov.cn/guojisi/144449/144490/144544/144649/2834841/index.html" target="_blank">中国人民银行·高盛集团介绍</a> ·
+      <a href="https://zh.wikipedia.org/zh-hans/%E9%AB%98%E7%9B%9B" target="_blank">维基百科·高盛</a> ·
+      <a href="https://qzs.stcn.com/zixun/202210/t20221019_4902227.html" target="_blank">证券时报·高盛架构调整</a>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== PARTNERSHIP ==================== -->
+<section>
+  <h2>🔐 阿里巴巴合伙人制度 · 控制权核心</h2>
+
+  <div class="deep-dive" style="border-color: var(--purple);">
+    <p>
+      阿里巴巴的控制权结构在互联网公司中独一无二——不是AB股同股不同权，而是通过
+      <strong style="color:var(--purple)">合伙人制度</strong> 实现"股权分散、控制集中"。
+    </p>
+
+    <h4 style="font-size:0.9em;color:var(--accent);margin:16px 0 8px;">📌 制度核心要点</h4>
+    <table class="data-table">
+      <tr><th style="width:180px">维度</th><th>详情</th></tr>
+      <tr>
+        <td>合伙人人数</td>
+        <td><strong>17人</strong>（2025年从26人缩减，彭蕾、张勇、戴珊、俞永福等9人退出）</td>
+      </tr>
+      <tr>
+        <td>合伙人委员会</td>
+        <td><strong>5人</strong>：马云、蔡崇信、邵晓锋、吴泳铭、蒋凡</td>
+      </tr>
+      <tr>
+        <td>永久合伙人</td>
+        <td>仅 <strong style="color:var(--purple)">马云、蔡崇信</strong> 两人，可任职至70岁（可延长）</td>
+      </tr>
+      <tr>
+        <td>董事提名权</td>
+        <td>合伙人提名董事会 <strong style="color:var(--orange)">简单多数成员（≈95%席位）</strong></td>
+      </tr>
+      <tr>
+        <td>提名保护</td>
+        <td>提名未通过时，合伙人有权直接任命临时董事</td>
+      </tr>
+      <tr>
+        <td>修改难度</td>
+        <td>修改合伙人制度需出席股东大会 <strong style="color:var(--orange)">95%以上票数通过</strong></td>
+      </tr>
+      <tr>
+        <td>新合伙人入选</td>
+        <td>需现有合伙人 <strong style="color:var(--orange)">75%以上</strong> 投票同意</td>
+      </tr>
+      <tr>
+        <td>普通合伙人退休</td>
+        <td>年满60岁或与阿里解除聘用关系时退休</td>
+      </tr>
+      <tr>
+        <td>与软银/雅虎协议</td>
+        <td>软银和雅虎（曾为）同意在股东大会上投票支持合伙人提名的董事</td>
+      </tr>
+    </table>
+
+    <h4 style="font-size:0.9em;color:var(--accent);margin:20px 0 8px;">📌 控制权传递链路</h4>
+    <div class="org-chart">
+      <div class="org-root"><span class="label">管理团队持股 1.9%</span></div>
+      <div class="org-node"><span class="label">↓ 通过合伙人制度</span></div>
+      <div class="org-node"><span class="label hl">合伙人委员会提名 → 99%获股东大会通过</span><div class="desc">软银/雅虎投票协议 + 机构投资者惯常投票</div></div>
+      <div class="org-node"><span class="label">↓ 控制</span></div>
+      <div class="org-node"><span class="label">董事会（11人，多数为合伙人提名）</span></div>
+      <div class="org-node"><span class="label">↓ 任命</span></div>
+      <div class="org-node"><span class="label hl">CEO及核心管理层</span><div class="desc">吴泳铭（CEO/合伙人委员会委员）</div></div>
+    </div>
+
+    <p style="font-size:0.82em;color:var(--text-muted);margin-top:12px;">
+      ⚡ 这意味着：即使外部股东集体反对，也无法通过换董事来改变公司战略方向——除非先拉到95%以上股东同意修改合伙人制度本身。
+    </p>
+
+    <div class="sources">
+      <span>📎 来源：</span>
+      <a href="https://www.junhe.com/download?filePath=/upload/law-reviews/88d425e5f0b29a2e4f86772758022e6b.pdf&fileName=%E4%B8%93%E9%A2%98%E7%A0%94%E7%A9%B6%E6%8A%A5%E5%91%8A-%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4%E5%90%88%E4%BC%99%E4%BA%BA%E5%88%B6%E5%BA%A6%E7%AE%80%E6%9E%90%EF%BC%8820141216%EF%BC%89.PDF" target="_blank">君合律所·合伙人制度简析</a> ·
+      <a href="https://www1.hkexnews.hk/listedco/listconews/sehk/2019/1115/9068937/2019111500103_c.pdf" target="_blank">HKEX·阿里合伙人制度文件</a> ·
+      <a href="https://m.jiemian.com/article/1624409.html" target="_blank">界面新闻·合伙人制度详解</a> ·
+      <a href="https://zhuanlan.zhihu.com/p/660336519" target="_blank">知乎·公司治理研究</a>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== CROSS HOLDING ==================== -->
+<section>
+  <h2>🔄 华尔街机构交叉持股网络</h2>
+
+  <div class="deep-dive" style="border-color: var(--orange);">
+    <p style="margin-bottom:12px;">
+      阿里股东结构中一个有趣的现象：几大机构投资者之间互相持有对方股份，
+      形成了复杂的交叉持股网络。这使得单一机构的行为往往受到多重约束。
+    </p>
+
+    <table class="data-table">
+      <tr><th>持有方</th><th>被持有方</th><th>持股比例</th><th>备注</th></tr>
+      <tr>
+        <td>先锋领航 Vanguard</td>
+        <td>贝莱德 BlackRock</td>
+        <td class="num">~7.5%</td>
+        <td>Vanguard是贝莱德第一大股东</td>
+      </tr>
+      <tr>
+        <td>先锋领航 Vanguard</td>
+        <td>摩根大通 JPMorgan</td>
+        <td class="num">~8.5%</td>
+        <td>JPMorgan第一大股东</td>
+      </tr>
+      <tr>
+        <td>先锋领航 Vanguard</td>
+        <td>高盛 Goldman Sachs</td>
+        <td class="num">~6.2%</td>
+        <td>GS第二大股东</td>
+      </tr>
+      <tr>
+        <td>贝莱德 BlackRock</td>
+        <td>摩根大通 JPMorgan</td>
+        <td class="num">~6.5%</td>
+        <td>JPMorgan第二大股东</td>
+      </tr>
+      <tr>
+        <td>贝莱德 BlackRock</td>
+        <td>高盛 Goldman Sachs</td>
+        <td class="num">~5.1%</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>挪威主权基金 NBIM</td>
+        <td>贝莱德 BlackRock</td>
+        <td class="num">~3.1%</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>道富 State Street</td>
+        <td>贝莱德 BlackRock</td>
+        <td class="num">~4.8%</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>资本集团 Capital Group</td>
+        <td>贝莱德 BlackRock</td>
+        <td class="num">~2.8%</td>
+        <td></td>
+      </tr>
+    </table>
+
+    <p style="font-size:0.82em;color:var(--text-muted);margin-top:12px;">
+      ⚡ 图景：Vanguard和BlackRock这两家最大的资管公司，不仅是你阿里的前三大股东，
+      同时也在彼此和几乎所有华尔街巨头中互为最大股东。这种"彼此持股"是资管行业
+      指数化被动投资盛行的自然结果。
+    </p>
+
+    <div class="sources">
+      <span>📎 来源：</span>
+      <a href="https://www.tradingkey.com/zh-hans/markets/stocks/nasdaq-blk/company" target="_blank">TradingKey·BLK股东数据</a>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== TIMELINE ==================== -->
+<section>
+  <h2>⏳ 阿里股权结构演变简史（关键节点）</h2>
+
+  <div class="deep-dive">
+    <table class="data-table">
+      <tr><th style="width:110px">时间</th><th>事件</th></tr>
+      <tr>
+        <td><span class="tag blue">1999年</span></td>
+        <td>高盛领投A轮$500万，阿里首次机构融资；后续软银投$2000万</td>
+      </tr>
+      <tr>
+        <td><span class="tag blue">2004年</span></td>
+        <td>软银再投$6000万，成为第一大股东（占34.4%）。马云团队47%</td>
+      </tr>
+      <tr>
+        <td><span class="tag blue">2014年</span></td>
+        <td>IPO：软银34.4%、雅虎22.6%、马云7%、蔡崇信3.6%。合伙人制度正式写入章程</td>
+      </tr>
+      <tr>
+        <td><span class="tag orange">2020年</span></td>
+        <td>软银开始通过远期合约减持套现，以弥补愿景基金巨亏</td>
+      </tr>
+      <tr>
+        <td><span class="tag orange">2022年8月</span></td>
+        <td>软银宣布大幅减持，持股由23.7%降至14.6%，预计获利$340亿</td>
+      </tr>
+      <tr>
+        <td><span class="tag orange">2023Q4</span></td>
+        <td>马云增持$5000万、蔡崇信增持$1.5亿，两人合计持股首超软银</td>
+      </tr>
+      <tr>
+        <td><span class="tag orange">2024年1月</span></td>
+        <td>软银远期合约全部结算完毕，实际持股不足0.5%。套现累计约$1115亿</td>
+      </tr>
+      <tr>
+        <td><span class="tag green">2024年9月</span></td>
+        <td>阿里正式纳入港股通，内地资金开始持续买入</td>
+      </tr>
+      <tr>
+        <td><span class="tag green">2025年6月</span></td>
+        <td>阿里2025年报：管理层持股1.9%（蔡崇信1.5%）、软银不再是核心股东。合伙人从26人减至17人</td>
+      </tr>
+      <tr>
+        <td><span class="tag purple">2026年3月</span></td>
+        <td>南向资金11.8%成第一大股东；贝莱德5.6%第二；软银残余3.5%。股权高度分散格局形成</td>
+      </tr>
+    </table>
+  </div>
+</section>
+
+<footer>
+  <p>📊 基于 AnySearch 搜索API多源交叉整理 · 数据截至2026年3月</p>
+  <p>文中数据来源包括：新浪科技、第一财经、36氪、维基百科、证券时报、HKEX、各机构官网及SEC 13F文件</p>
+  <p style="margin-top:8px;">本页面仅供参考，不构成投资建议。持股比例因回购、增发、市场交易持续变动</p>
+</footer>
+
+</div>
+</body>
+</html>
