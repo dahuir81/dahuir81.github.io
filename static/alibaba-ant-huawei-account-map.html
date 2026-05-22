@@ -1,0 +1,805 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>阿里巴巴与蚂蚁集团客户地图｜华为销售视角</title>
+  <style>
+    :root {
+      --ink: #16211f;
+      --muted: #5f6b66;
+      --paper: #f8f6ee;
+      --panel: #ffffff;
+      --line: #d9d5c9;
+      --ali: #f26b21;
+      --ant: #1677ff;
+      --huawei: #c5162e;
+      --green: #13795b;
+      --gold: #aa7a1d;
+      --navy: #26374a;
+      --soft-blue: #e8f1ff;
+      --soft-red: #fff0f2;
+      --soft-orange: #fff2e8;
+      --soft-green: #eaf6f0;
+      --shadow: 0 18px 55px rgba(32, 37, 34, 0.11);
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        linear-gradient(90deg, rgba(22,33,31,0.035) 1px, transparent 1px) 0 0 / 32px 32px,
+        linear-gradient(0deg, rgba(22,33,31,0.03) 1px, transparent 1px) 0 0 / 32px 32px,
+        var(--paper);
+      font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      line-height: 1.62;
+    }
+
+    a {
+      color: #0f63d6;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(15,99,214,0.24);
+    }
+
+    a:hover { border-bottom-color: currentColor; }
+
+    .page {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 28px 22px 54px;
+    }
+
+    .masthead {
+      min-height: 88vh;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 360px;
+      gap: 34px;
+      align-items: center;
+      padding: 30px 0 22px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 10px;
+      color: var(--huawei);
+      background: rgba(197, 22, 46, 0.08);
+      border: 1px solid rgba(197, 22, 46, 0.18);
+      border-radius: 4px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 9px;
+      height: 9px;
+      background: var(--huawei);
+      border-radius: 50%;
+      box-shadow: 15px 0 0 var(--ali), 30px 0 0 var(--ant);
+    }
+
+    h1, h2, h3 {
+      font-family: "Songti SC", "STSong", "SimSun", serif;
+      font-weight: 700;
+      line-height: 1.12;
+      margin: 0;
+      letter-spacing: 0;
+    }
+
+    h1 {
+      max-width: 850px;
+      margin-top: 22px;
+      font-size: clamp(42px, 7.2vw, 88px);
+    }
+
+    .lead {
+      max-width: 850px;
+      margin: 24px 0 0;
+      color: #31423d;
+      font-size: 20px;
+    }
+
+    .hero-note {
+      max-width: 770px;
+      margin-top: 28px;
+      padding-left: 18px;
+      border-left: 4px solid var(--huawei);
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .hero-visual {
+      position: relative;
+      min-height: 540px;
+      padding: 22px;
+      background: #fbfaf6;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+    }
+
+    .visual-title {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .map-orbit {
+      position: relative;
+      height: 468px;
+      margin-top: 12px;
+      border: 1px dashed #c9c4b8;
+      background:
+        radial-gradient(circle at 50% 52%, rgba(197,22,46,0.12) 0 74px, transparent 75px),
+        conic-gradient(from 0deg, rgba(242,107,33,0.12), rgba(22,119,255,0.12), rgba(19,121,91,0.1), rgba(170,122,29,0.12), rgba(242,107,33,0.12));
+      overflow: hidden;
+    }
+
+    .hub {
+      position: absolute;
+      inset: 50% auto auto 50%;
+      width: 138px;
+      height: 138px;
+      transform: translate(-50%, -50%);
+      display: grid;
+      place-items: center;
+      text-align: center;
+      color: #fff;
+      background: var(--huawei);
+      border-radius: 50%;
+      font-weight: 900;
+      box-shadow: 0 18px 36px rgba(197,22,46,0.22);
+    }
+
+    .node {
+      position: absolute;
+      width: 128px;
+      min-height: 78px;
+      display: grid;
+      place-items: center;
+      padding: 10px;
+      color: var(--ink);
+      background: rgba(255,255,255,0.88);
+      border: 1px solid rgba(22,33,31,0.18);
+      border-radius: 6px;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 800;
+      box-shadow: 0 8px 24px rgba(38,55,74,0.1);
+    }
+
+    .node.one { top: 30px; left: calc(50% - 64px); border-top: 5px solid var(--navy); }
+    .node.two { top: 128px; right: 30px; border-top: 5px solid var(--ali); }
+    .node.three { right: 38px; bottom: 76px; border-top: 5px solid var(--ant); }
+    .node.four { bottom: 28px; left: calc(50% - 64px); border-top: 5px solid var(--green); }
+    .node.five { left: 34px; bottom: 76px; border-top: 5px solid var(--gold); }
+    .node.six { top: 128px; left: 30px; border-top: 5px solid var(--huawei); }
+
+    .quick-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin: -16px 0 36px;
+    }
+
+    .fact {
+      min-height: 142px;
+      padding: 18px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      box-shadow: 0 10px 28px rgba(32,37,34,0.06);
+    }
+
+    .fact strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 22px;
+      line-height: 1.2;
+    }
+
+    .fact span {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .section {
+      margin-top: 42px;
+      padding-top: 22px;
+      border-top: 2px solid var(--ink);
+    }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(230px, 380px);
+      gap: 24px;
+      align-items: end;
+      margin-bottom: 18px;
+    }
+
+    h2 {
+      font-size: clamp(30px, 4.2vw, 54px);
+    }
+
+    .section-kicker {
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .org-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .org-item {
+      min-height: 180px;
+      padding: 16px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-top: 6px solid var(--navy);
+    }
+
+    .org-item.ali { border-top-color: var(--ali); }
+    .org-item.ant { border-top-color: var(--ant); }
+    .org-item.green { border-top-color: var(--green); }
+    .org-item.gold { border-top-color: var(--gold); }
+
+    .org-item h3 {
+      margin-bottom: 12px;
+      font-size: 22px;
+    }
+
+    .org-item p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .table-wrap {
+      margin-top: 18px;
+      overflow-x: auto;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      box-shadow: 0 10px 28px rgba(32,37,34,0.06);
+    }
+
+    table {
+      width: 100%;
+      min-width: 980px;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 15px 16px;
+      vertical-align: top;
+      border-bottom: 1px solid #e6e1d6;
+      text-align: left;
+    }
+
+    th {
+      color: #24312d;
+      background: #ece8dc;
+      font-size: 13px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    td {
+      color: #2e3835;
+      font-size: 14px;
+    }
+
+    tr:last-child td { border-bottom: 0; }
+
+    .layer-name {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 900;
+      color: var(--ink);
+      white-space: nowrap;
+    }
+
+    .layer-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--navy);
+    }
+
+    .dot-ali { background: var(--ali); }
+    .dot-ant { background: var(--ant); }
+    .dot-red { background: var(--huawei); }
+    .dot-green { background: var(--green); }
+    .dot-gold { background: var(--gold); }
+
+    .split {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    .playbook {
+      padding: 20px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-left: 7px solid var(--huawei);
+      box-shadow: 0 10px 28px rgba(32,37,34,0.06);
+    }
+
+    .playbook h3 {
+      margin-bottom: 12px;
+      font-size: 24px;
+    }
+
+    .playbook p,
+    .playbook li {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .playbook ul {
+      margin: 12px 0 0;
+      padding-left: 18px;
+    }
+
+    .signal-row {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 18px;
+    }
+
+    .signal {
+      min-height: 96px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      background: #fbfaf6;
+    }
+
+    .signal b {
+      display: block;
+      font-size: 15px;
+    }
+
+    .signal span {
+      display: block;
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .source-list {
+      columns: 2;
+      column-gap: 32px;
+      margin: 18px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .source-list li {
+      break-inside: avoid;
+      margin-bottom: 10px;
+    }
+
+    .badge {
+      display: inline-block;
+      margin: 3px 5px 3px 0;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: #f0ece2;
+      color: #43514c;
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .badge.ali { background: var(--soft-orange); color: #99440d; }
+    .badge.ant { background: var(--soft-blue); color: #0f55ad; }
+    .badge.huawei { background: var(--soft-red); color: #9e1024; }
+    .badge.green { background: var(--soft-green); color: #116548; }
+
+    .note-strip {
+      margin-top: 18px;
+      padding: 16px 18px;
+      background: #17211f;
+      color: #f5f1e7;
+      border-left: 8px solid var(--huawei);
+    }
+
+    .note-strip strong {
+      color: #fff;
+    }
+
+    .footer {
+      margin-top: 38px;
+      padding: 18px 0 8px;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+      font-size: 13px;
+    }
+
+    @media (max-width: 980px) {
+      .masthead,
+      .section-head,
+      .split {
+        grid-template-columns: 1fr;
+      }
+
+      .masthead {
+        min-height: auto;
+      }
+
+      .hero-visual {
+        min-height: 500px;
+      }
+
+      .quick-grid,
+      .org-grid,
+      .signal-row {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 640px) {
+      .page {
+        padding: 18px 14px 40px;
+      }
+
+      .quick-grid,
+      .org-grid,
+      .signal-row {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-visual {
+        padding: 14px;
+      }
+
+      .map-orbit {
+        height: 620px;
+      }
+
+      .hub {
+        top: 50%;
+      }
+
+      .node {
+        width: calc(50% - 26px);
+        min-height: 68px;
+        font-size: 13px;
+      }
+
+      .node.one { top: 24px; left: 18px; }
+      .node.two { top: 24px; right: 18px; }
+      .node.three { top: 128px; right: 18px; bottom: auto; }
+      .node.six { top: 128px; left: 18px; }
+      .node.five { bottom: 24px; left: 18px; }
+      .node.four { bottom: 24px; right: 18px; left: auto; }
+
+      .source-list {
+        columns: 1;
+      }
+    }
+
+    @media print {
+      body {
+        background: #fff;
+      }
+
+      .page {
+        max-width: none;
+        padding: 0;
+      }
+
+      .masthead {
+        min-height: auto;
+        grid-template-columns: 1fr;
+      }
+
+      .hero-visual {
+        display: none;
+      }
+
+      a {
+        color: var(--ink);
+        border-bottom: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="masthead">
+      <div>
+        <span class="eyebrow">华为销售账户规划｜公开资料截至 2026-05-22</span>
+        <h1>阿里巴巴与蚂蚁集团客户地图</h1>
+        <p class="lead">把正式组织架构翻译成可推进的销售路径：谁定义场景，谁掌握技术，谁守住稳定性，谁控制采购流程。</p>
+        <p class="hero-note">这不是两家公司的内部组织图，而是一张“购买中心地图”。对超大型互联网客户，销售推进不能只找采购，也不能只找业务。正确打法是让业务价值、技术方案、稳定运行、合规采购四条线同时闭环。</p>
+      </div>
+
+      <aside class="hero-visual" aria-label="六层客户地图示意">
+        <div class="visual-title">Account map layers</div>
+        <div class="map-orbit">
+          <div class="hub">华为<br>销售推进</div>
+          <div class="node one">战略决策层</div>
+          <div class="node two">基础设施层</div>
+          <div class="node three">技术平台层</div>
+          <div class="node four">业务场景层</div>
+          <div class="node five">采购合规层</div>
+          <div class="node six">运维 / SRE / 安全</div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="quick-grid" aria-label="核心判断">
+      <div class="fact">
+        <strong>先分层，再找人</strong>
+        <span>“基础设施、技术平台、业务、采购、运维”是合理分法，但还要补一个战略决策层，才能覆盖重大合作。</span>
+      </div>
+      <div class="fact">
+        <strong>阿里主线</strong>
+        <span>公开口径聚焦“消费 + AI/Cloud”。华为销售重点看阿里云基础设施、中国电商场景、AIDC 全球化和 All Others 的垂直业务。</span>
+      </div>
+      <div class="fact">
+        <strong>蚂蚁主线</strong>
+        <span>公开口径聚焦 AI First、支付宝双飞轮、全球化，并形成支付、金融、健康三大战略支柱。</span>
+      </div>
+    </section>
+
+    <section class="section" id="alibaba">
+      <div class="section-head">
+        <div>
+          <h2>阿里巴巴：最新公开组织口径</h2>
+        </div>
+        <p class="section-kicker">阿里官网截至 2026 年 1 月将业务列为四大类；2026 财年公告继续强调 AI + Cloud 与综合消费平台。</p>
+      </div>
+
+      <div class="org-grid">
+        <article class="org-item ali">
+          <h3>中国电商集团</h3>
+          <p>淘宝、天猫、闲鱼、天猫超市、天猫国际、1688，并整合饿了么、飞猪，指向综合消费平台和即时零售。</p>
+        </article>
+        <article class="org-item gold">
+          <h3>AIDC</h3>
+          <p>AliExpress、Lazada、Trendyol、Daraz、Alibaba.com 等，承载跨境与海外电商增长。</p>
+        </article>
+        <article class="org-item ant">
+          <h3>云智能集团</h3>
+          <p>阿里云、AI 云基础设施、MaaS、模型服务、企业 AI，属于华为销售最敏感也最关键的基础设施入口。</p>
+        </article>
+        <article class="org-item green">
+          <h3>All Others</h3>
+          <p>盒马、菜鸟、阿里健康、虎鲸文娱、高德、通义消费者业务、灵犀互娱、钉钉等垂直业务集合。</p>
+        </article>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>华为销售层级</th>
+              <th>阿里对应对象</th>
+              <th>核心关注点</th>
+              <th>华为可切入话题</th>
+              <th>推进提示</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="layer-name"><span class="layer-dot dot-red"></span>战略决策层</span></td>
+              <td>集团 CEO/CFO、集团战略、重大技术投资与 AI 统筹层</td>
+              <td>消费与 AI/Cloud 双主线、长期资本开支、技术自主、全球化竞争。</td>
+              <td><span class="badge huawei">战略合作</span><span class="badge green">国产化与供应链稳定</span><span class="badge">联合创新</span></td>
+              <td>适合谈框架合作和长期路线，避免一开始陷入单品价格。</td>
+            </tr>
+            <tr>
+              <td><span class="layer-name"><span class="layer-dot dot-ali"></span>基础设施层</span></td>
+              <td>云智能集团、阿里云基础设施、数据中心、算力、网络、存储、芯片与能耗相关团队</td>
+              <td>AI 集群扩容、云基础设施、数据中心效率、网络与存储性能、稳定性。</td>
+              <td><span class="badge huawei">算力与网络</span><span class="badge">数据中心</span><span class="badge">存储</span><span class="badge">绿色节能</span></td>
+              <td>阿里云与华为云存在竞争关系，建议以硬件、标准、生态互通、供应链韧性切入。</td>
+            </tr>
+            <tr>
+              <td><span class="layer-name"><span class="layer-dot dot-ant"></span>技术平台层</span></td>
+              <td>MaaS、Model Studio、Qwen、ATH、企业智能体、钉钉、数据与研发平台</td>
+              <td>模型服务、AI 开发者生态、企业智能体、平台工具链、业务系统 AI 化。</td>
+              <td><span class="badge ant">AI 平台</span><span class="badge">软硬协同</span><span class="badge">行业模型</span></td>
+              <td>先证明能提升平台效率或降低推理成本，再进入平台级合作讨论。</td>
+            </tr>
+            <tr>
+              <td><span class="layer-name"><span class="layer-dot dot-green"></span>业务场景层</span></td>
+              <td>中国电商、AIDC、菜鸟、高德、盒马、阿里健康、钉钉、通义消费者业务</td>
+              <td>用户增长、即时零售、跨境履约、地图出行、物流效率、医疗健康、协同办公。</td>
+              <td><span class="badge ali">消费场景</span><span class="badge green">物流与出行</span><span class="badge">海外合规</span></td>
+              <td>业务方更关心增长和效率，不要先讲设备清单，要先讲场景收益。</td>
+            </tr>
+            <tr>
+              <td><span class="layer-name"><span class="layer-dot dot-gold"></span>采购合规层</span></td>
+              <td>阿里集团采购、供应商门户、合同、法务、财务与合规流程</td>
+              <td>供应商准入、招投标、合同条款、账期、价格、合规与风险。</td>
+              <td><span class="badge huawei">供应商准入</span><span class="badge">商务方案</span><span class="badge">交付承诺</span></td>
+              <td>采购通常是流程控制点，不是原始需求方。技术和业务认可后再强推商务。</td>
+            </tr>
+            <tr>
+              <td><span class="layer-name"><span class="layer-dot"></span>运维 / SRE / 安全</span></td>
+              <td>分布在阿里云、电商、菜鸟、高德等业务技术团队中的稳定性、容量、安全团队</td>
+              <td>SLA、峰值保障、故障恢复、监控告警、容量预测、数据安全。</td>
+              <td><span class="badge">高可用</span><span class="badge">故障响应</span><span class="badge">安全加固</span></td>
+              <td>他们未必拍板预算，但能决定方案能不能进生产环境。</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section" id="ant">
+      <div class="section-head">
+        <div>
+          <h2>蚂蚁集团：按同一逻辑补充</h2>
+        </div>
+        <p class="section-kicker">蚂蚁不是阿里的业务部门。销售上要把两者分开建图：蚂蚁更偏支付、金融、健康、全球化与金融级技术基础设施。</p>
+      </div>
+
+      <div class="org-grid">
+        <article class="org-item ant">
+          <h3>五大核心业务板块</h3>
+          <p>支付宝事业群、数字支付事业群、财富保险事业群、信贷事业群、健康事业群。</p>
+        </article>
+        <article class="org-item gold">
+          <h3>三家独立运营公司</h3>
+          <p>蚂蚁国际、蚂蚁数字科技、OceanBase 分别设董事会并独立面向市场。</p>
+        </article>
+        <article class="org-item green">
+          <h3>官网业务线</h3>
+          <p>数字支付、数字互联、数字医疗、数字金融、数字科技、全球化，覆盖用户、商家、机构与海外市场。</p>
+        </article>
+        <article class="org-item ali">
+          <h3>战略关键词</h3>
+          <p>AI First、支付宝双飞轮、加速全球化；2026 年 AI 支付、AI 健康和灵光应用继续放大。</p>
+        </article>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>华为销售层级</th>
+              <th>蚂蚁对应对象</th>
+              <th>核心关注点</th>
+              <th>华为可切入话题</th>
+              <th>推进提示</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="layer-name"><span class="layer-dot dot-red"></span>战略决策层</span></td>
+              <td>集团董事会/CEO、战略投资与企业发展、技术战略委员会</td>
+              <td>AI First、支付 + 金融 + 健康三大战略支柱、全球化、监管与合规。</td>
+              <td><span class="badge huawei">金融级可信底座</span><span class="badge ant">AI 应用生态</span><span class="badge">全球化合作</span></td>
+              <td>蚂蚁的战略讨论通常绕不开监管、风控、数据安全和金融级稳定性。</td>
+            </tr>
+            <tr>
+              <td><span class="layer-name"><span class="layer-dot dot-ali"></span>基础设施层</span></td>
+              <td>数字支付基础设施、支付宝核心交易系统、OceanBase、蚂蚁国际全球支付网络、底层风控与安全平台</td>
+              <td>高并发交易、资金安全、数据库可靠性、跨境支付网络、实时风控、业务连续性。</td>
+              <td><span class="badge huawei">金融级基础设施</span><span class="badge">网络与安全</span><span class="badge">容灾多活</span><span class="badge">数据库生态</span></td>
+              <td>不要只按“云资源客户”看蚂蚁。它的基础设施核心是支付、交易、风控和金融级数据系统。</td>
+            </tr>
+            <tr>
+              <td><span class="layer-name"><span class="layer-dot dot-ant"></span>技术平台层</span></td>
+              <td>蚂蚁数科、OceanBase、SOFAStack、mPaaS、蚂蚁链、隐私计算、安全科技、AI 大模型平台</td>
+              <td>To B 技术商业化、金融级云原生、移动开发平台、区块链、隐私计算、身份安全、AI 工具链。</td>
+              <td><span class="badge ant">联合解决方案</span><span class="badge">行业客户共拓</span><span class="badge">AI + 安全</span></td>
+              <td>这里既可能是客户，也可能是生态伙伴或竞合对象；销售话术要从“卖给它”升级为“和它一起卖”。</td>
+            </tr>
+            <tr>
+              <td><span class="layer-name"><span class="layer-dot dot-green"></span>业务场景层</span></td>
+              <td>支付宝事业群、数字支付事业群、财富保险、信贷、健康、蚂蚁国际</td>
+              <td>支付入口、商家数字化、生活服务、金融机构服务、普惠信贷、保险理财、AI 健康、跨境收付汇。</td>
+              <td><span class="badge green">支付场景</span><span class="badge ant">健康 AI</span><span class="badge">金融机构</span><span class="badge">跨境 SMB</span></td>
+              <td>业务方关注的是交易转化、服务效率、合规可用和用户信任。</td>
+            </tr>
+            <tr>
+              <td><span class="layer-name"><span class="layer-dot dot-gold"></span>采购合规层</span></td>
+              <td>集团采购、法务、财务、金融合规、数据合规、供应商管理</td>
+              <td>合规准入、金融监管、数据安全、招标合同、审计、成本与风险控制。</td>
+              <td><span class="badge huawei">合规材料</span><span class="badge">安全认证</span><span class="badge">商务闭环</span></td>
+              <td>蚂蚁比一般互联网客户更重视金融合规。技术方案要提前准备安全、审计、隐私与稳定性证据。</td>
+            </tr>
+            <tr>
+              <td><span class="layer-name"><span class="layer-dot"></span>运维 / SRE / 安全</span></td>
+              <td>支付、金融、健康、国际业务、OceanBase 和蚂蚁数科各自的稳定性、安全、应急团队</td>
+              <td>7x24 支付连续性、资金与账户安全、数据库容灾、反欺诈、故障复盘、灰度发布。</td>
+              <td><span class="badge">SLA/SLO</span><span class="badge">安全防护</span><span class="badge">应急响应</span></td>
+              <td>蚂蚁场景里，SRE 和安全团队是实质守门人；没有他们认可，很难进入核心链路。</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section" id="playbook">
+      <div class="section-head">
+        <div>
+          <h2>销售打法：两家公司都适用，但切入点不同</h2>
+        </div>
+        <p class="section-kicker">同样是“基础设施 + 技术平台 + 业务场景”，阿里偏 AI 云与大消费，蚂蚁偏金融级交易与可信技术。</p>
+      </div>
+
+      <div class="split">
+        <article class="playbook">
+          <h3>阿里优先打法</h3>
+          <p>先围绕 AI + Cloud 和综合消费平台找场景，再判断是基础设施机会、平台机会还是业务协同机会。</p>
+          <ul>
+            <li>卖算力、网络、存储、数据中心：优先看云智能集团和 SRE/基础设施团队。</li>
+            <li>做 AI 平台或企业智能体：优先看阿里云 MaaS、Qwen、钉钉和企业应用场景。</li>
+            <li>做业务合作：从中国电商、AIDC、菜鸟、高德、阿里健康等场景切入。</li>
+          </ul>
+        </article>
+
+        <article class="playbook">
+          <h3>蚂蚁优先打法</h3>
+          <p>先确认是支付主链路、金融机构服务、健康 AI、全球化支付网络，还是蚂蚁数科/OceanBase 的生态合作。</p>
+          <ul>
+            <li>卖基础设施：围绕金融级高可用、数据库、网络安全、容灾多活和稳定性证明。</li>
+            <li>做技术平台合作：重点看蚂蚁数科、OceanBase、SOFAStack、mPaaS、蚂蚁链和安全科技。</li>
+            <li>做场景合作：围绕支付宝、数字支付、健康、财富保险、信贷、蚂蚁国际找业务价值。</li>
+          </ul>
+        </article>
+      </div>
+
+      <div class="signal-row" aria-label="六个判断信号">
+        <div class="signal"><b>预算信号</b><span>AI/Cloud、交易稳定性、全球化、健康 AI 是高优先级。</span></div>
+        <div class="signal"><b>需求信号</b><span>业务部门说增长，技术平台说效率，SRE 说稳定。</span></div>
+        <div class="signal"><b>风险信号</b><span>只找采购会被压价，只找业务会卡在落地。</span></div>
+        <div class="signal"><b>竞合信号</b><span>阿里云、蚂蚁数科和 OceanBase 都有自有技术商业化诉求。</span></div>
+        <div class="signal"><b>验证信号</b><span>生产环境认可来自 PoC、压测、稳定性和安全审计。</span></div>
+        <div class="signal"><b>闭环信号</b><span>战略、业务、技术、SRE、采购五线同时推进。</span></div>
+      </div>
+
+      <div class="note-strip">
+        <strong>一句话版本：</strong>阿里按“AI 云底座 + 综合消费场景”推进；蚂蚁按“金融级交易底座 + 支付金融健康场景 + 数科/OceanBase 生态”推进。两者都不要从组织名开始卖，要从业务战役和技术瓶颈开始找入口。
+      </div>
+    </section>
+
+    <section class="section" id="sources">
+      <div class="section-head">
+        <div>
+          <h2>来源与口径说明</h2>
+        </div>
+        <p class="section-kicker">公开资料可能滞后于内部调整；本页面用于销售规划，不代表两家公司官方组织图。</p>
+      </div>
+      <ol class="source-list">
+        <li><a href="https://home.alibabagroup.com/en-US/about-alibaba-businesses">阿里巴巴官网：业务架构，更新至 2026 年 1 月</a></li>
+        <li><a href="https://home.alibabagroup.com/en-US/document-1830678592242057216">阿里巴巴：未来三年投入至少 3800 亿元用于 AI 与云基础设施</a></li>
+        <li><a href="https://www.alibabagroup.com/document-1991364841188622336">阿里巴巴：2026 年 5 月云与 AI 业务进展</a></li>
+        <li><a href="https://www.nasdaq.com/press-release/alibaba-group-announces-march-quarter-2026-and-fiscal-year-2026-results-2026-05-13">阿里巴巴 2026 财年业绩公告</a></li>
+        <li><a href="https://www.alibabagroup.com/en-US/document-1898208128135069696">阿里巴巴：中国电商集团与综合消费平台说明</a></li>
+        <li><a href="https://www.antgroup.com/">蚂蚁集团官网：公司简介、业务线与最新动态</a></li>
+        <li><a href="https://finance.sina.com.cn/jjxw/2024-03-20/doc-inanxnpz6375156.shtml">新浪财经转中国经营报：蚂蚁 2024 年组织升级与 1+3 格局</a></li>
+        <li><a href="https://finance.sina.com.cn/jjxw/2024-12-24/doc-ineaprwu8584686.shtml">新浪财经转中国基金报：蚂蚁成立支付宝事业群、数字支付事业群</a></li>
+        <li><a href="https://www.stcn.com/article/detail/3483973.html">证券时报：蚂蚁设立健康事业群，形成五大核心业务板块</a></li>
+        <li><a href="https://finance.yahoo.com/news/ant-group-alipay-ai-pay-094800173.html">Business Wire/Yahoo Finance：蚂蚁 AI Pay 与 AQ 用户里程碑</a></li>
+        <li><a href="https://www.antdigital.com/">蚂蚁数字科技官网：区块链、隐私计算、安全科技与数字化产品</a></li>
+        <li><a href="https://www.sofastack.tech/">SOFAStack 官网：金融级云原生架构与中间件体系</a></li>
+      </ol>
+    </section>
+
+    <footer class="footer">
+      生成日期：2026-05-22。建议用于客户规划、内部汇报和销售线索拆解；正式拜访前应再按联系人与项目机会更新一版。
+    </footer>
+  </main>
+</body>
+</html>
