@@ -1,0 +1,1226 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>华为对接阿里巴巴矩阵式作战组织设计</title>
+  <style>
+    :root {
+      --ink: #18211f;
+      --muted: #5c6762;
+      --paper: #f7f6f0;
+      --panel: #ffffff;
+      --line: #d9d5c8;
+      --huawei: #c5162e;
+      --ali: #f26b21;
+      --cloud: #1677ff;
+      --teal: #127c72;
+      --green: #1e7c4f;
+      --gold: #a97516;
+      --navy: #1d3557;
+      --violet: #5d5fef;
+      --soft-red: #fff0f2;
+      --soft-orange: #fff2e8;
+      --soft-blue: #eaf3ff;
+      --soft-teal: #e9f6f4;
+      --soft-green: #ecf7ef;
+      --soft-gold: #fff6df;
+      --shadow: 0 18px 45px rgba(30, 36, 34, 0.10);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        linear-gradient(90deg, rgba(24, 33, 31, 0.04) 1px, transparent 1px) 0 0 / 36px 36px,
+        linear-gradient(0deg, rgba(24, 33, 31, 0.035) 1px, transparent 1px) 0 0 / 36px 36px,
+        var(--paper);
+      font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      line-height: 1.62;
+    }
+
+    a {
+      color: #0b63ce;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(11, 99, 206, 0.28);
+    }
+
+    a:hover { border-bottom-color: currentColor; }
+
+    .page {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 30px 22px 58px;
+    }
+
+    .masthead {
+      min-height: 82vh;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 410px;
+      gap: 34px;
+      align-items: center;
+      padding: 24px 0 28px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 11px;
+      padding: 7px 10px;
+      color: var(--huawei);
+      background: rgba(197, 22, 46, 0.08);
+      border: 1px solid rgba(197, 22, 46, 0.18);
+      border-radius: 4px;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 9px;
+      height: 9px;
+      background: var(--huawei);
+      border-radius: 50%;
+      box-shadow: 16px 0 0 var(--ali), 32px 0 0 var(--cloud), 48px 0 0 var(--teal);
+    }
+
+    h1, h2, h3 {
+      margin: 0;
+      font-family: "Songti SC", "STSong", "SimSun", serif;
+      font-weight: 700;
+      letter-spacing: 0;
+      line-height: 1.12;
+    }
+
+    h1 {
+      max-width: 860px;
+      margin-top: 22px;
+      font-size: clamp(42px, 6.7vw, 84px);
+    }
+
+    h2 {
+      font-size: clamp(30px, 4vw, 54px);
+    }
+
+    h3 {
+      font-size: 25px;
+    }
+
+    .lead {
+      max-width: 840px;
+      margin: 24px 0 0;
+      color: #2f403c;
+      font-size: 20px;
+    }
+
+    .hero-note {
+      max-width: 790px;
+      margin-top: 28px;
+      padding-left: 18px;
+      border-left: 4px solid var(--huawei);
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .hero-panel {
+      min-height: 540px;
+      padding: 22px;
+      background: #fbfaf5;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+    }
+
+    .panel-kicker {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .matrix-poster {
+      position: relative;
+      min-height: 466px;
+      margin-top: 12px;
+      padding: 18px;
+      background:
+        radial-gradient(circle at 50% 47%, rgba(197, 22, 46, 0.13) 0 82px, transparent 84px),
+        linear-gradient(135deg, rgba(22,119,255,0.12), rgba(18,124,114,0.12) 44%, rgba(242,107,33,0.13));
+      border: 1px dashed #c8c3b6;
+      overflow: hidden;
+    }
+
+    .poster-hub {
+      position: absolute;
+      inset: 50% auto auto 50%;
+      width: 154px;
+      height: 154px;
+      transform: translate(-50%, -50%);
+      display: grid;
+      place-items: center;
+      padding: 18px;
+      text-align: center;
+      color: #fff;
+      background: var(--huawei);
+      border-radius: 50%;
+      font-weight: 900;
+      line-height: 1.32;
+      box-shadow: 0 18px 40px rgba(197,22,46,0.25);
+      z-index: 2;
+    }
+
+    .poster-node {
+      position: absolute;
+      width: 138px;
+      min-height: 76px;
+      display: grid;
+      place-items: center;
+      padding: 10px;
+      background: rgba(255,255,255,0.92);
+      border: 1px solid rgba(24,33,31,0.18);
+      border-radius: 6px;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 900;
+      line-height: 1.35;
+      box-shadow: 0 8px 22px rgba(29,53,87,0.10);
+    }
+
+    .poster-node.one { top: 28px; left: calc(50% - 69px); border-top: 5px solid var(--ali); }
+    .poster-node.two { top: 112px; right: 26px; border-top: 5px solid var(--cloud); }
+    .poster-node.three { right: 36px; bottom: 92px; border-top: 5px solid var(--teal); }
+    .poster-node.four { bottom: 24px; left: calc(50% - 69px); border-top: 5px solid var(--green); }
+    .poster-node.five { bottom: 92px; left: 36px; border-top: 5px solid var(--gold); }
+    .poster-node.six { top: 112px; left: 26px; border-top: 5px solid var(--huawei); }
+
+    .toc {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin: -12px 0 38px;
+    }
+
+    .toc a {
+      display: block;
+      min-height: 86px;
+      padding: 14px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-bottom: 4px solid var(--ink);
+      color: var(--ink);
+      box-shadow: 0 8px 20px rgba(30,36,34,0.055);
+    }
+
+    .toc strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 17px;
+    }
+
+    .toc span {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .section {
+      margin-top: 42px;
+      padding-top: 24px;
+      border-top: 2px solid var(--ink);
+    }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 360px;
+      gap: 26px;
+      align-items: end;
+      margin-bottom: 20px;
+    }
+
+    .section-head p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .grid-4,
+    .grid-3,
+    .grid-2 {
+      display: grid;
+      gap: 14px;
+    }
+
+    .grid-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      box-shadow: 0 10px 24px rgba(30,36,34,0.06);
+      overflow: hidden;
+    }
+
+    .card-pad { padding: 18px; }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 26px;
+      padding: 3px 8px;
+      border-radius: 4px;
+      background: #f0eee7;
+      color: #394540;
+      font-size: 12px;
+      font-weight: 900;
+      line-height: 1.2;
+    }
+
+    .tag.red { background: var(--soft-red); color: var(--huawei); }
+    .tag.orange { background: var(--soft-orange); color: #b44d0f; }
+    .tag.blue { background: var(--soft-blue); color: #0b63ce; }
+    .tag.teal { background: var(--soft-teal); color: var(--teal); }
+    .tag.green { background: var(--soft-green); color: var(--green); }
+    .tag.gold { background: var(--soft-gold); color: var(--gold); }
+
+    .card h3 {
+      margin-top: 12px;
+      font-size: 24px;
+    }
+
+    .card p {
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .bullet-list {
+      margin: 14px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .bullet-list li {
+      position: relative;
+      padding-left: 16px;
+      margin: 8px 0;
+      color: #33413d;
+      font-size: 14px;
+    }
+
+    .bullet-list li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.78em;
+      width: 6px;
+      height: 6px;
+      background: var(--huawei);
+      border-radius: 50%;
+    }
+
+    .diagram {
+      padding: 18px;
+      background: #fbfaf6;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      box-shadow: var(--shadow);
+    }
+
+    .diagram-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .diagram-title strong {
+      font-size: 18px;
+    }
+
+    .alibaba-map {
+      display: grid;
+      grid-template-columns: 210px repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      align-items: stretch;
+    }
+
+    .map-label,
+    .map-cell {
+      min-height: 112px;
+      padding: 12px;
+      border: 1px solid #d7d2c6;
+      border-radius: 6px;
+      background: #fff;
+    }
+
+    .map-label {
+      display: grid;
+      align-content: center;
+      background: #272f39;
+      color: #fff;
+      font-weight: 900;
+    }
+
+    .map-cell strong {
+      display: block;
+      font-size: 17px;
+      line-height: 1.24;
+    }
+
+    .map-cell span {
+      display: block;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .map-cell.ali { border-top: 5px solid var(--ali); }
+    .map-cell.cloud { border-top: 5px solid var(--cloud); }
+    .map-cell.green { border-top: 5px solid var(--green); }
+    .map-cell.gold { border-top: 5px solid var(--gold); }
+
+    .matrix {
+      display: grid;
+      grid-template-columns: 190px repeat(4, minmax(0, 1fr));
+      gap: 8px;
+      align-items: stretch;
+    }
+
+    .mx {
+      min-height: 84px;
+      padding: 11px;
+      background: #fff;
+      border: 1px solid #d8d2c6;
+      border-radius: 5px;
+      font-size: 13px;
+    }
+
+    .mx.head {
+      min-height: 66px;
+      display: grid;
+      align-content: center;
+      color: #fff;
+      background: var(--navy);
+      font-weight: 900;
+      text-align: center;
+    }
+
+    .mx.side {
+      display: grid;
+      align-content: center;
+      background: #fff8ec;
+      border-left: 5px solid var(--ali);
+      font-weight: 900;
+      font-size: 15px;
+    }
+
+    .mx em {
+      display: inline-block;
+      margin-bottom: 5px;
+      color: var(--huawei);
+      font-style: normal;
+      font-weight: 900;
+    }
+
+    .mx.dim {
+      color: #737d78;
+      background: #faf9f4;
+    }
+
+    .org-compare {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .flow {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .flow-row {
+      display: grid;
+      grid-template-columns: 150px minmax(0, 1fr);
+      gap: 10px;
+      align-items: stretch;
+    }
+
+    .flow-left {
+      display: grid;
+      align-content: center;
+      padding: 10px;
+      border-radius: 5px;
+      color: #fff;
+      background: var(--huawei);
+      font-weight: 900;
+      text-align: center;
+    }
+
+    .flow-right {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .pill {
+      min-height: 58px;
+      display: grid;
+      align-content: center;
+      padding: 9px;
+      border: 1px solid #d8d2c6;
+      border-radius: 5px;
+      background: #fff;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 850;
+    }
+
+    .pillar-wrap {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 220px minmax(0, 1fr);
+      gap: 14px;
+      align-items: center;
+    }
+
+    .pillar-side {
+      display: grid;
+      gap: 10px;
+    }
+
+    .pillar-side .block {
+      min-height: 78px;
+      padding: 13px;
+      border: 1px solid #d8d2c6;
+      border-radius: 6px;
+      background: #fff;
+    }
+
+    .block strong {
+      display: block;
+      font-size: 16px;
+    }
+
+    .block span {
+      display: block;
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .vse-core {
+      min-height: 310px;
+      display: grid;
+      align-content: center;
+      padding: 18px;
+      color: #fff;
+      background:
+        linear-gradient(145deg, rgba(197,22,46,0.94), rgba(29,53,87,0.96));
+      border-radius: 8px;
+      text-align: center;
+      box-shadow: 0 16px 34px rgba(197,22,46,0.2);
+    }
+
+    .vse-core strong {
+      display: block;
+      font-family: "Songti SC", "STSong", "SimSun", serif;
+      font-size: 32px;
+      line-height: 1.18;
+    }
+
+    .vse-core span {
+      display: block;
+      margin-top: 14px;
+      color: rgba(255,255,255,0.82);
+      font-size: 14px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 10px 24px rgba(30,36,34,0.06);
+    }
+
+    th, td {
+      padding: 13px 12px;
+      border-bottom: 1px solid #e7e2d8;
+      text-align: left;
+      vertical-align: top;
+      font-size: 14px;
+    }
+
+    th {
+      color: #fff;
+      background: #2a3541;
+      font-weight: 900;
+    }
+
+    tr:last-child td { border-bottom: 0; }
+
+    td:first-child {
+      font-weight: 900;
+      color: var(--ink);
+    }
+
+    .role-strip {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .role {
+      min-height: 226px;
+      padding: 16px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-top: 6px solid var(--huawei);
+      border-radius: 6px;
+      box-shadow: 0 8px 20px rgba(30,36,34,0.055);
+    }
+
+    .role:nth-child(2) { border-top-color: var(--cloud); }
+    .role:nth-child(3) { border-top-color: var(--ali); }
+    .role:nth-child(4) { border-top-color: var(--green); }
+    .role:nth-child(5) { border-top-color: var(--gold); }
+
+    .role b {
+      display: block;
+      font-size: 26px;
+      line-height: 1;
+    }
+
+    .role strong {
+      display: block;
+      margin-top: 8px;
+      font-size: 15px;
+    }
+
+    .role p {
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .route {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .route-step {
+      position: relative;
+      min-height: 150px;
+      padding: 18px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+    }
+
+    .route-step::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      right: -12px;
+      width: 12px;
+      height: 2px;
+      background: var(--huawei);
+    }
+
+    .route-step:last-child::after { display: none; }
+
+    .route-step b {
+      color: var(--huawei);
+      font-size: 28px;
+    }
+
+    .route-step strong {
+      display: block;
+      margin-top: 8px;
+      font-size: 18px;
+    }
+
+    .route-step span {
+      display: block;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .notice {
+      padding: 16px 18px;
+      background: #fffaf0;
+      border: 1px solid #e5d2a7;
+      border-left: 5px solid var(--gold);
+      border-radius: 6px;
+      color: #4c4230;
+      font-size: 14px;
+    }
+
+    .source-list {
+      display: grid;
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .source-list li {
+      padding: 13px 14px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    .footer {
+      margin-top: 44px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .print-actions {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      display: flex;
+      gap: 8px;
+      z-index: 20;
+    }
+
+    button {
+      min-height: 40px;
+      padding: 0 14px;
+      color: #fff;
+      background: var(--ink);
+      border: 0;
+      border-radius: 5px;
+      font: inherit;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 10px 22px rgba(24,33,31,0.18);
+    }
+
+    button:hover { background: var(--huawei); }
+
+    @media (max-width: 980px) {
+      .masthead,
+      .section-head,
+      .org-compare,
+      .pillar-wrap {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-panel { min-height: auto; }
+      .matrix-poster { min-height: 420px; }
+      .toc,
+      .grid-4,
+      .grid-3,
+      .grid-2,
+      .role-strip,
+      .route {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .alibaba-map,
+      .matrix {
+        grid-template-columns: 1fr;
+      }
+
+      .map-label,
+      .mx.head {
+        min-height: auto;
+        text-align: left;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .page { padding: 18px 14px 42px; }
+      .masthead { min-height: auto; }
+      h1 { font-size: 40px; }
+      .lead { font-size: 17px; }
+      .toc,
+      .grid-4,
+      .grid-3,
+      .grid-2,
+      .role-strip,
+      .route,
+      .flow-right {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-panel { display: none; }
+      .flow-row { grid-template-columns: 1fr; }
+      .route-step::after { display: none; }
+      .print-actions { display: none; }
+    }
+
+    @media print {
+      body { background: #fff; }
+      .print-actions { display: none; }
+      .page { max-width: none; padding: 0; }
+      .masthead { min-height: auto; }
+      .card, table, .diagram, .hero-panel { box-shadow: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="masthead">
+      <div>
+        <div class="eyebrow">华为对接阿里巴巴｜组织设计稿</div>
+        <h1>客户部门主责，产业资源池支撑，VSE统一编排</h1>
+        <p class="lead">
+          这是一套面向阿里巴巴集团客户经营的矩阵式作战设计。前台按照阿里真实业务与职能入口组织覆盖，后台按照华为智算、通算、数通 DCN、光传输 DCI 等产品线调动资源，VSE承担行业洞察、架构编排和重大机会作战中枢。
+        </p>
+        <div class="hero-note">
+          公开组织口径截至 2026-05-23 核对。页面中的“客户部门入口”是华为销售对接视角，不等同于阿里内部正式组织全称；“华为产业资源池”是按销售作战需要映射到产品线能力，不代表华为内部 HR 编制。
+        </div>
+      </div>
+
+      <aside class="hero-panel" aria-label="矩阵作战摘要">
+        <div class="panel-kicker">Operating model</div>
+        <div class="matrix-poster">
+          <div class="poster-hub">VSE<br>综合方案<br>与行业洞察</div>
+          <div class="poster-node one">客户部门<br>主责</div>
+          <div class="poster-node two">智算<br>昇腾</div>
+          <div class="poster-node three">通算<br>鲲鹏/部件</div>
+          <div class="poster-node four">数通<br>DCN</div>
+          <div class="poster-node five">光传输<br>DCI</div>
+          <div class="poster-node six">CC4<br>AR/PSE/CR/FR</div>
+        </div>
+      </aside>
+    </header>
+
+    <nav class="toc" aria-label="页面目录">
+      <a href="#alibaba"><strong>01 阿里真实口径</strong><span>报表分部与销售对接入口分开看</span></a>
+      <a href="#huawei"><strong>02 华为产品线</strong><span>智算、通算、DCN、DCI资源池</span></a>
+      <a href="#matrix"><strong>03 矩阵作战</strong><span>客户部门主责 + 产业后台支撑</span></a>
+      <a href="#roles"><strong>04 岗位责任</strong><span>AR、PSE、VSE、FR、CR边界</span></a>
+    </nav>
+
+    <section id="alibaba" class="section">
+      <div class="section-head">
+        <div>
+          <h2>阿里巴巴：先尊重官方口径，再转换成销售入口</h2>
+        </div>
+        <p>
+          公开资料里，阿里近期业绩披露采用四个报表分部。华为做客户经营时不能只按财报分部走，因为真实采购、技术评审、运维准入和业务试点会分布在不同职能入口。
+        </p>
+      </div>
+
+      <div class="diagram">
+        <div class="diagram-title">
+          <strong>阿里巴巴公开报表分部与关键业务资产</strong>
+          <span class="tag orange">官方口径优先</span>
+        </div>
+        <div class="alibaba-map">
+          <div class="map-label">报表分部</div>
+          <div class="map-cell ali">
+            <strong>阿里中国电商集团</strong>
+            <span>淘宝、天猫、1688、闲鱼，以及即时零售、飞猪等被整合进中国电商经营口径的业务。</span>
+          </div>
+          <div class="map-cell ali">
+            <strong>AIDC 国际数字商业</strong>
+            <span>AliExpress、Lazada、Trendyol、Daraz、Alibaba.com 等国际零售与国际批发电商平台。</span>
+          </div>
+          <div class="map-cell cloud">
+            <strong>云智能集团</strong>
+            <span>阿里云为核心，承载云计算、AI基础设施、模型服务、开发者平台等能力。</span>
+          </div>
+          <div class="map-cell green">
+            <strong>All Others</strong>
+            <span>公开披露中包括盒马、菜鸟、阿里健康、高德、通义消费者业务、灵犀互娱、钉钉等。</span>
+          </div>
+
+          <div class="map-label">华为销售入口</div>
+          <div class="map-cell">
+            <strong>业务增长与场景入口</strong>
+            <span>大促、推荐广告、搜索、交易、即时零售、商家服务、用户增长。</span>
+          </div>
+          <div class="map-cell">
+            <strong>国际化与区域入口</strong>
+            <span>跨境、本地电商、海外数据中心、合规、区域网络、物流与支付协同。</span>
+          </div>
+          <div class="map-cell">
+            <strong>技术平台与基础设施入口</strong>
+            <span>AI算力、云平台、数据中心网络、云网、存储、数据库、中间件、开发平台。</span>
+          </div>
+          <div class="map-cell">
+            <strong>生态与运营入口</strong>
+            <span>物流、地图、健康、协同办公、消费AI、游戏等独立业务的场景化机会。</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-3" style="margin-top:14px;">
+        <article class="card card-pad">
+          <span class="tag red">关键判断</span>
+          <h3>AIDC不是泛称海外业务</h3>
+          <p>AIDC应定义为阿里国际电商业务集团。阿里云海外、菜鸟国际物流、钉钉海外等需要按各自业务或平台能力另行识别，不能全部塞进 AIDC。</p>
+        </article>
+        <article class="card card-pad">
+          <span class="tag blue">客户经营</span>
+          <h3>云智能是技术锚点</h3>
+          <p>华为对接阿里时，云智能集团既是客户业务分部，也是基础设施、AI平台、数据中心网络和运维工程的重要技术入口。</p>
+        </article>
+        <article class="card card-pad">
+          <span class="tag green">组织设计</span>
+          <h3>All Others需要拆开看</h3>
+          <p>菜鸟、高德、钉钉、盒马等业务的技术、采购和服务路径不同，适合纳入机会地图，而不是统一按一个部门推进。</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="huawei" class="section">
+      <div class="section-head">
+        <div>
+          <h2>华为：后台按产品线资源池组织，前台不按产品线对客</h2>
+        </div>
+        <p>
+          产品线是华为内部调兵遣将的抓手，但阿里客户侧不会按“智算、通算、DCN、DCI”自然分配预算。因此建议产品线做后台资源池，由客户部门 AR 和 VSE 拉通使用。
+        </p>
+      </div>
+
+      <div class="grid-4">
+        <article class="card card-pad">
+          <span class="tag red">智算</span>
+          <h3>昇腾 / AI算力</h3>
+          <ul class="bullet-list">
+            <li>训练与推理集群、AI服务器、加速卡与算力集群。</li>
+            <li>面向大模型、推荐广告、搜索、智能客服、代码与办公AI。</li>
+            <li>对接云智能、业务算法团队、AI平台、基础设施团队。</li>
+          </ul>
+        </article>
+        <article class="card card-pad">
+          <span class="tag blue">通算</span>
+          <h3>鲲鹏 / 服务器 / 部件</h3>
+          <ul class="bullet-list">
+            <li>通用计算、CPU服务器、基础软硬件、部件与整机方案。</li>
+            <li>面向资源池扩容、成本优化、国产化替代和异构计算协同。</li>
+            <li>对接云资源池、集团IT、采购供应链和工程运维。</li>
+          </ul>
+        </article>
+        <article class="card card-pad">
+          <span class="tag teal">数通 DCN</span>
+          <h3>数据中心网络</h3>
+          <ul class="bullet-list">
+            <li>数据中心交换机、无损以太、云网、SDN控制与网络自动化。</li>
+            <li>面向AI集群互联、云数据中心、跨机房流量调度和稳定性。</li>
+            <li>对接网络架构、SRE、云基础设施和数据中心工程团队。</li>
+          </ul>
+        </article>
+        <article class="card card-pad">
+          <span class="tag gold">光传输 DCI</span>
+          <h3>数据中心互联</h3>
+          <ul class="bullet-list">
+            <li>OTN/WDM、DCI、城域互联、跨地域高带宽低时延传输。</li>
+            <li>面向双活、多活、海外节点、云边协同和区域容灾。</li>
+            <li>对接数据中心、网络、国际化业务和基础设施规划团队。</li>
+          </ul>
+        </article>
+      </div>
+
+      <div class="notice" style="margin-top:14px;">
+        本版主线遵循你提出的四个产业维度。存储、安全、云服务、咨询、生态伙伴不单独建主组，建议作为 VSE 拉通能力、FR 服务能力和 CR 伙伴能力嵌入，避免前台组织过厚。
+      </div>
+    </section>
+
+    <section id="matrix" class="section">
+      <div class="section-head">
+        <div>
+          <h2>推荐模式：客户部门主责 + 产业资源池支撑</h2>
+        </div>
+        <p>
+          对阿里这种集团型客户，前台最好按客户真实入口建队，后台按华为产品线建资源池。这样既能贴近客户预算和决策链，又能保持华为产品线的技术纵深。
+        </p>
+      </div>
+
+      <div class="diagram">
+        <div class="diagram-title">
+          <strong>矩阵式作战总图</strong>
+          <span class="tag red">推荐组织形态</span>
+        </div>
+        <div class="pillar-wrap">
+          <div class="pillar-side">
+            <div class="block"><strong>战略与集团层</strong><span>集团战略、财务、投资、合规、重大框架合作。</span></div>
+            <div class="block"><strong>基础设施层</strong><span>数据中心、服务器、网络、存储、资源池、云基础设施。</span></div>
+            <div class="block"><strong>技术平台层</strong><span>云平台、AI平台、数据库、中间件、开发者平台、数据平台。</span></div>
+            <div class="block"><strong>业务场景层</strong><span>中国电商、AIDC、云智能、菜鸟、高德、钉钉等场景机会。</span></div>
+            <div class="block"><strong>采购供应链层</strong><span>供应商准入、招投标、框架协议、价格、供货与合同。</span></div>
+            <div class="block"><strong>运维工程层</strong><span>SRE、稳定性、安全、交付、巡检、变更、故障响应。</span></div>
+          </div>
+
+          <div class="vse-core">
+            <strong>VSE统一编排</strong>
+            <span>行业洞察<br>客户战略解读<br>跨产品架构<br>POC / TCO / 标书<br>重大机会作战</span>
+          </div>
+
+          <div class="pillar-side">
+            <div class="block"><strong>智算资源池</strong><span>昇腾、AI服务器、训练推理集群、AI生态适配。</span></div>
+            <div class="block"><strong>通算资源池</strong><span>鲲鹏、通用服务器、部件、基础软硬件协同。</span></div>
+            <div class="block"><strong>数通 DCN 资源池</strong><span>CloudEngine、数据中心网络、无损以太、SDN。</span></div>
+            <div class="block"><strong>光传输 DCI 资源池</strong><span>OTN/WDM、数据中心互联、城域与跨地域传输。</span></div>
+            <div class="block"><strong>共享能力池</strong><span>存储、安全、服务、伙伴生态、行业咨询。</span></div>
+            <div class="block"><strong>交付保障池</strong><span>FR牵引备件、SLA、升级通道、重大保障机制。</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="org-compare" style="margin-top:16px;">
+        <article class="diagram">
+          <div class="diagram-title">
+            <strong>方案一：按华为产业维度建队</strong>
+            <span class="tag blue">产品纵深强</span>
+          </div>
+          <div class="flow">
+            <div class="flow-row">
+              <div class="flow-left">智算组</div>
+              <div class="flow-right"><div class="pill">AR</div><div class="pill">PSE</div><div class="pill">CR共享</div><div class="pill">FR</div></div>
+            </div>
+            <div class="flow-row">
+              <div class="flow-left">通算组</div>
+              <div class="flow-right"><div class="pill">AR</div><div class="pill">PSE</div><div class="pill">CR共享</div><div class="pill">FR</div></div>
+            </div>
+            <div class="flow-row">
+              <div class="flow-left">数通DCN组</div>
+              <div class="flow-right"><div class="pill">AR</div><div class="pill">PSE</div><div class="pill">CR共享</div><div class="pill">FR</div></div>
+            </div>
+            <div class="flow-row">
+              <div class="flow-left">光传输DCI组</div>
+              <div class="flow-right"><div class="pill">AR</div><div class="pill">PSE</div><div class="pill">CR共享</div><div class="pill">FR</div></div>
+            </div>
+          </div>
+          <p style="margin:14px 0 0;color:var(--muted);font-size:14px;">适合单产业突破和重点产品攻坚，但容易对客多头、方案割裂，尤其在阿里这种复杂组织里会削弱集团级经营能力。</p>
+        </article>
+
+        <article class="diagram">
+          <div class="diagram-title">
+            <strong>方案二：按阿里客户部门建队</strong>
+            <span class="tag red">推荐前台形态</span>
+          </div>
+          <div class="flow">
+            <div class="flow-row">
+              <div class="flow-left">基础设施组</div>
+              <div class="flow-right"><div class="pill">AR牵头</div><div class="pill">PSE调度</div><div class="pill">CR支撑</div><div class="pill">FR嵌入</div></div>
+            </div>
+            <div class="flow-row">
+              <div class="flow-left">技术平台组</div>
+              <div class="flow-right"><div class="pill">AR牵头</div><div class="pill">PSE调度</div><div class="pill">CR支撑</div><div class="pill">FR嵌入</div></div>
+            </div>
+            <div class="flow-row">
+              <div class="flow-left">采购供应链组</div>
+              <div class="flow-right"><div class="pill">AR牵头</div><div class="pill">PSE支撑</div><div class="pill">CR主责</div><div class="pill">FR支撑</div></div>
+            </div>
+            <div class="flow-row">
+              <div class="flow-left">运维工程组</div>
+              <div class="flow-right"><div class="pill">AR牵头</div><div class="pill">PSE支撑</div><div class="pill">CR支撑</div><div class="pill">FR主责</div></div>
+            </div>
+          </div>
+          <p style="margin:14px 0 0;color:var(--muted);font-size:14px;">贴近客户预算、技术把关、采购和运维入口。要求 VSE 强，否则容易变成关系覆盖强、产品纵深不足。</p>
+        </article>
+      </div>
+
+      <div class="diagram" style="margin-top:16px;">
+        <div class="diagram-title">
+          <strong>客户入口 × 华为产品线机会矩阵</strong>
+          <span class="tag teal">一张图找机会</span>
+        </div>
+        <div class="matrix">
+          <div class="mx head">阿里客户入口</div>
+          <div class="mx head">智算 昇腾</div>
+          <div class="mx head">通算 鲲鹏/部件</div>
+          <div class="mx head">数通 DCN</div>
+          <div class="mx head">光传输 DCI</div>
+
+          <div class="mx side">基础设施 / 云基础设施</div>
+          <div class="mx"><em>高优先级</em><br>AI集群、训练推理资源池、算力国产化验证。</div>
+          <div class="mx"><em>高优先级</em><br>通用服务器、资源池扩容、成本与能效优化。</div>
+          <div class="mx"><em>高优先级</em><br>AI Fabric、云数据中心网络、自动化运维。</div>
+          <div class="mx"><em>中高优先级</em><br>多机房互联、双活容灾、跨地域带宽扩容。</div>
+
+          <div class="mx side">技术平台 / AI平台 / 数据平台</div>
+          <div class="mx"><em>高优先级</em><br>模型训练、推理加速、AI开发工具链适配。</div>
+          <div class="mx"><em>中优先级</em><br>数据库、中间件、云原生基础软件适配。</div>
+          <div class="mx"><em>中高优先级</em><br>平台网络隔离、调度网络、东西向流量治理。</div>
+          <div class="mx dim">通常非主入口，除非涉及跨地域平台复制与容灾。</div>
+
+          <div class="mx side">采购供应链 / 商务准入</div>
+          <div class="mx"><em>准入关键</em><br>框架协议、POC采购、供货周期、价格策略。</div>
+          <div class="mx"><em>准入关键</em><br>部件供应、整机认证、供应稳定性。</div>
+          <div class="mx"><em>准入关键</em><br>网络设备入围、渠道授权、备件保障。</div>
+          <div class="mx"><em>准入关键</em><br>传输设备、光模块、项目交付条款。</div>
+
+          <div class="mx side">运维工程 / SRE / 安全</div>
+          <div class="mx"><em>风险把关</em><br>集群稳定性、故障定位、平台监控与升级策略。</div>
+          <div class="mx"><em>风险把关</em><br>服务器故障率、备件、巡检、生命周期管理。</div>
+          <div class="mx"><em>风险把关</em><br>网络变更、拥塞、丢包、自动化与可观测性。</div>
+          <div class="mx"><em>风险把关</em><br>线路保护、时延、割接、回退、SLA。</div>
+
+          <div class="mx side">业务集团 / 场景部门</div>
+          <div class="mx"><em>场景牵引</em><br>推荐广告、搜索、客服、内容生成、办公AI。</div>
+          <div class="mx"><em>成本牵引</em><br>交易系统、商家服务、通用工作负载。</div>
+          <div class="mx"><em>体验牵引</em><br>大促、直播、国际站点、业务峰值保障。</div>
+          <div class="mx"><em>全球化牵引</em><br>AIDC海外节点、区域互联、灾备与合规。</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="roles" class="section">
+      <div class="section-head">
+        <div>
+          <h2>岗位责任制：CC4前台作战，VSE做中枢</h2>
+        </div>
+        <p>
+          角色边界必须清楚：AR对客户经营结果负责，PSE对产品技术成交负责，VSE对行业洞察和整体方案负责，FR对交付服务负责，CR对渠道与商务路径负责。
+        </p>
+      </div>
+
+      <div class="role-strip">
+        <article class="role">
+          <b>AR</b>
+          <strong>客户经营责任人</strong>
+          <p>负责客户组织地图、关键人、机会推进、关系覆盖、收入预测和成交结果。AR牵头客户部门 CC4 小组，是前台第一责任人。</p>
+        </article>
+        <article class="role">
+          <b>PSE</b>
+          <strong>产品/产业责任人</strong>
+          <p>负责对应产品线方案、配置、BOM、POC、竞争分析和技术答疑，把华为产品能力转化为客户可采购方案。</p>
+        </article>
+        <article class="role">
+          <b>VSE</b>
+          <strong>综合方案与行业洞察责任人</strong>
+          <p>负责行业趋势、客户战略解读、场景机会地图、跨产品架构、TCO/ROI、标书和重大项目作战编排。</p>
+        </article>
+        <article class="role">
+          <b>FR</b>
+          <strong>服务与交付责任人</strong>
+          <p>负责交付计划、SLA、备件、巡检、故障升级、割接回退和客户满意度，让客户相信华为能长期稳定运行。</p>
+        </article>
+        <article class="role">
+          <b>CR</b>
+          <strong>渠道与生态责任人</strong>
+          <p>负责渠道伙伴、授权报价、商务路径、供货履约、渠道冲突和供应商准入协同，保障项目可交易、可交付。</p>
+        </article>
+      </div>
+
+      <div style="margin-top:16px;">
+        <table>
+          <thead>
+            <tr>
+              <th>事项</th>
+              <th>主责</th>
+              <th>支撑</th>
+              <th>关键产出</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>客户组织覆盖</td>
+              <td>AR</td>
+              <td>VSE / CR / FR</td>
+              <td>组织地图、关键人地图、决策链、年度经营计划。</td>
+            </tr>
+            <tr>
+              <td>行业与客户战略洞察</td>
+              <td>VSE</td>
+              <td>AR / PSE</td>
+              <td>行业洞察、客户战略解读、业务场景机会地图。</td>
+            </tr>
+            <tr>
+              <td>单产品技术成交</td>
+              <td>PSE</td>
+              <td>VSE / FR</td>
+              <td>产品方案、配置、POC方案、竞争分析、测试结论。</td>
+            </tr>
+            <tr>
+              <td>跨产品组合方案</td>
+              <td>VSE</td>
+              <td>PSE / FR / CR</td>
+              <td>端到端架构、TCO/ROI、技术路线图、标书技术部分。</td>
+            </tr>
+            <tr>
+              <td>采购与商务路径</td>
+              <td>CR</td>
+              <td>AR / PSE</td>
+              <td>渠道策略、准入材料、授权报价路径、供货履约计划。</td>
+            </tr>
+            <tr>
+              <td>交付与运维保障</td>
+              <td>FR</td>
+              <td>VSE / PSE / AR</td>
+              <td>交付计划、SLA、巡检报告、故障升级机制、风险清单。</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <h2>落地打法：从一张地图到四个闭环</h2>
+        </div>
+        <p>
+          组织设计最终要服务于销售结果。建议把阿里客户经营固化为四个管理动作，每个季度滚动更新。
+        </p>
+      </div>
+
+      <div class="route">
+        <div class="route-step">
+          <b>01</b>
+          <strong>客户入口地图</strong>
+          <span>按阿里真实报表分部、技术平台、采购供应链、运维工程和业务场景建立入口清单。</span>
+        </div>
+        <div class="route-step">
+          <b>02</b>
+          <strong>机会矩阵</strong>
+          <span>把每个客户入口映射到智算、通算、DCN、DCI四条华为产品线，标注优先级。</span>
+        </div>
+        <div class="route-step">
+          <b>03</b>
+          <strong>CC4作战表</strong>
+          <span>每个客户入口设 AR 牵头，PSE/CR/FR明确支撑边界，VSE统一架构和材料。</span>
+        </div>
+        <div class="route-step">
+          <b>04</b>
+          <strong>项目闭环</strong>
+          <span>从洞察、方案、POC、商务、交付、服务复盘形成闭环，沉淀下一个机会。</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <h2>资料来源与口径说明</h2>
+        </div>
+        <p>本页使用公开资料做组织口径校准，并在此基础上转换为华为销售作战模型。</p>
+      </div>
+      <ul class="source-list">
+        <li><a href="https://home.alibabagroup.com/en-US/about-alibaba-businesses" target="_blank" rel="noreferrer">Alibaba Group - Our Businesses</a>：用于核对阿里业务品牌与公开业务版图。</li>
+        <li><a href="https://home.alibabagroup.com/document-1991237455038119936" target="_blank" rel="noreferrer">Alibaba Group Announces March Quarter 2026 and Fiscal Year 2026 Results</a>：用于核对阿里最新报表分部与 2026 财年组织口径。</li>
+        <li><a href="https://www.huawei.com/en/huaweitech/publication/202505/ai-ready-data-centers" target="_blank" rel="noreferrer">HuaweiTech - Huawei's AI-ready data center architecture</a>：用于理解 AI 数据中心、计算与网络协同方向。</li>
+        <li><a href="https://e.huawei.com/en/products/datacom/data-center-network" target="_blank" rel="noreferrer">Huawei Enterprise - Data Center Network</a>：用于核对华为数据中心网络能力口径。</li>
+        <li><a href="https://e.huawei.com/en/products/optical-transmission-access" target="_blank" rel="noreferrer">Huawei Enterprise - Optical Transmission & Access</a>：用于核对光传输、DCI、OTN/WDM等能力口径。</li>
+      </ul>
+      <div class="footer">
+        输出文件：huawei_alibaba_matrix_org_design.html ｜ 版本日期：2026-05-23 ｜ 适用场景：阿里巴巴集团客户经营、组织覆盖、重大项目作战、季度账户规划。
+      </div>
+    </section>
+  </div>
+
+  <div class="print-actions" aria-label="页面操作">
+    <button type="button" onclick="window.print()">打印 / PDF</button>
+  </div>
+</body>
+</html>
