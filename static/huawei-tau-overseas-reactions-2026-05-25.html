@@ -1,0 +1,523 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>华为“韬（τ）定律”：海外媒体与公开社区首日反应</title>
+  <style>
+    :root {
+      --bg: #f4f6f2;
+      --paper: #fffefa;
+      --ink: #17201d;
+      --muted: #63706b;
+      --line: #dce2da;
+      --green: #0e6552;
+      --green-soft: #e7f3ed;
+      --red: #93443e;
+      --red-soft: #f9ece8;
+      --amber: #996418;
+      --amber-soft: #fbf2de;
+      --link: #075aa8;
+      --shadow: 0 10px 35px rgba(24, 33, 30, 0.06);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Noto Sans SC",
+        "Microsoft YaHei", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.68;
+    }
+    a { color: var(--link); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .hero {
+      padding: 64px 24px 54px;
+      background:
+        radial-gradient(circle at 88% 14%, #ddeee2 0, transparent 28%),
+        linear-gradient(120deg, #122c27, #0d5146);
+      color: #f7fbf8;
+    }
+    .wrap { max-width: 1100px; margin: 0 auto; }
+    .kicker {
+      font-size: 13px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: #bce2d4;
+      margin-bottom: 18px;
+    }
+    h1 {
+      max-width: 800px;
+      margin: 0 0 18px;
+      font-size: clamp(31px, 5vw, 49px);
+      line-height: 1.2;
+      font-weight: 730;
+    }
+    .dek {
+      max-width: 760px;
+      font-size: 17px;
+      color: #e5f0ec;
+      margin: 0 0 30px;
+    }
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .pill {
+      border: 1px solid rgba(220, 245, 236, .25);
+      border-radius: 999px;
+      padding: 6px 13px;
+      font-size: 13px;
+      color: #e5f0ec;
+      background: rgba(255,255,255,.06);
+    }
+    main { padding: 34px 24px 65px; }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 28px;
+      align-items: start;
+    }
+    section, aside .panel {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 28px 30px;
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+    }
+    aside { position: sticky; top: 18px; }
+    h2 {
+      font-size: 22px;
+      line-height: 1.3;
+      margin: 0 0 18px;
+    }
+    h3 {
+      font-size: 17px;
+      line-height: 1.4;
+      margin: 24px 0 8px;
+    }
+    p { margin: 0 0 14px; }
+    .takeaway {
+      border-left: 4px solid var(--green);
+      background: var(--green-soft);
+      padding: 17px 18px;
+      border-radius: 0 12px 12px 0;
+      margin: 18px 0 0;
+      font-weight: 500;
+    }
+    .stat-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin: 16px 0 6px;
+    }
+    .stat {
+      background: #f6f8f4;
+      border: 1px solid var(--line);
+      padding: 14px 14px 12px;
+      border-radius: 13px;
+    }
+    .stat strong { display: block; font-size: 23px; color: var(--green); }
+    .stat small { color: var(--muted); }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 13px;
+      margin-top: 12px;
+    }
+    .view {
+      border-radius: 14px;
+      padding: 16px 15px 14px;
+      border: 1px solid;
+    }
+    .view h3 { margin: 0 0 9px; font-size: 16px; }
+    .view p { font-size: 14px; margin: 0 0 10px; }
+    .pro { border-color: #bcdcca; background: var(--green-soft); }
+    .con { border-color: #ecd0cb; background: var(--red-soft); }
+    .wait { border-color: #ead8ac; background: var(--amber-soft); }
+    .tag {
+      display: inline-block;
+      font-size: 12px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.65);
+      color: var(--muted);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th {
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      text-align: left;
+      padding: 0 10px 10px 0;
+    }
+    td {
+      border-top: 1px solid var(--line);
+      padding: 13px 10px 13px 0;
+      vertical-align: top;
+    }
+    td:first-child { width: 22%; font-weight: 600; }
+    td:last-child { width: 19%; }
+    .source-note {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 12px;
+    }
+    .comment {
+      padding: 13px 0;
+      border-top: 1px solid var(--line);
+    }
+    .comment:first-of-type { border-top: 0; padding-top: 0; }
+    .comment-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+    .comment p { margin: 0; }
+    .alert {
+      background: #f5f2eb;
+      border: 1px dashed #d9ceb8;
+      border-radius: 12px;
+      padding: 14px 15px;
+      font-size: 14px;
+    }
+    .source-list {
+      padding-left: 20px;
+      margin: 0;
+    }
+    .source-list li { margin: 0 0 10px; padding-left: 3px; }
+    .source-list span { display: block; font-size: 13px; color: var(--muted); }
+    .nav a {
+      display: block;
+      padding: 7px 0;
+      border-bottom: 1px solid var(--line);
+      color: var(--ink);
+    }
+    .nav a:last-child { border: 0; }
+    .small { font-size: 13px; color: var(--muted); }
+    footer {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px 42px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    @media (max-width: 850px) {
+      .grid { grid-template-columns: 1fr; }
+      aside { position: static; order: -1; }
+      .cards, .stat-row { grid-template-columns: 1fr; }
+      section { padding: 23px 20px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="wrap">
+      <div class="kicker">International Reaction Snapshot</div>
+      <h1>华为“韬（τ）定律”<br>海外媒体与公开社区首日反应</h1>
+      <p class="dek">结合何庭波论文原文，对 2026 年 5 月 25 日发布消息的英文媒体报道与 Reddit 公开讨论进行梳理，重点观察技术证据、支持与质疑声音，并记录 X 平台可核验内容的取得情况。</p>
+      <div class="meta">
+        <span class="pill">采集日期：2026-05-25（北京时间）</span>
+        <span class="pill">主题：芯片 / LogicFolding / 后摩尔路线</span>
+        <span class="pill">含论文原文解读 + 首日舆情快照</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="grid">
+      <article>
+        <section id="summary">
+          <h2>结论先读</h2>
+          <p>截至首日可检索内容，海外英文报道已经快速覆盖这一发布，但报道中最稳健的基调不是“突破已被证明”，而是：华为提出了一条在先进光刻设备受限背景下、以缩短信号传播时间和多层协同优化为核心的替代发展路线。</p>
+          <p>用户提供的论文原文进一步披露了 Kirin 2026 的公司测量值，包括固定器件节点下晶体管密度由 155 增至 238 MTr/mm²、P-core 能效提高 41%、最高频率提高近 13%。这使报道中的部分数字有了原始出处，但仍属于作者和公司披露，尚不是外部复现实验结果。</p>
+          <div class="takeaway">社区意见并非一边倒。支持者把它理解为绕开单纯制程竞赛的务实工程路径；质疑者认为“定律”名称和 1.4 nm 等效表述带有营销成分；更常见、也更技术导向的立场是等待 2026 年秋季麒麟芯片拆解、功耗和性能测试。</div>
+        </section>
+
+        <section id="facts">
+          <h2>已核实的发布事实</h2>
+          <p>华为英文公告显示，何庭波于 <strong>2026 年 5 月 25 日</strong>在上海举行的 <strong>IEEE ISCAS 2026</strong> 主旨演讲中介绍 Tau（τ）Scaling Law，即中文所称“韬（τ）定律”。其主张是把关注重点从传统几何缩微，扩展到持续降低信号传播和系统执行时间。</p>
+          <div class="stat-row">
+            <div class="stat"><strong>381</strong><small>华为称过去六年已设计并量产的相关芯片数量</small></div>
+            <div class="stat"><strong>2026 秋</strong><small>华为称首批采用 LogicFolding 的麒麟芯片发布时间</small></div>
+            <div class="stat"><strong>2031</strong><small>目标达到 1.4 nm 工艺“等效晶体管密度”的年份</small></div>
+          </div>
+          <p class="source-note">注意：“等效晶体管密度”不等于已宣布或验证的 1.4 nm 物理制程量产；这也是海外报道和评论反复区分的关键点。</p>
+        </section>
+
+        <section id="paper">
+          <h2>论文原文分析：它到底提出了什么</h2>
+          <p><strong>文献身份：</strong><em>A Time Scaling Theory for Multi-Layer Electronic Systems</em>，作者 Tingbo He（Huawei），标记为 <strong>ChinaXiv:202605.00224v1</strong>，版本发布日期为 <strong>2026-05-25</strong>，共 16 页。论文自称为一篇 perspective，既汇报公司实践，也提出未来十年路线。</p>
+          <p><strong>核心命题：</strong>论文认为摩尔时代给终端用户带来的实质收益最终表现为时间减少，因此应将单一特征时间常数 <strong>τ</strong> 作为贯穿器件、电路、芯片、系统四个层级的共同优化目标。几何缩微不再是唯一主线，而是降低 τ 的手段之一。</p>
+
+          <h3>原文披露的关键数字</h3>
+          <table>
+            <thead>
+              <tr><th>层级 / 技术</th><th>论文披露内容</th><th>证据状态</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Kirin 2026<br>LogicFolding</td>
+                <td>在固定 device node 上，晶体管密度由 <strong>155</strong> 提升至 <strong>238 MTr/mm²</strong>；P-core 能效 <strong>+41%</strong>；最高时钟频率接近 <strong>+13%</strong>。</td>
+                <td><span class="tag">原文称 measured on Kirin 2026</span></td>
+              </tr>
+              <tr>
+                <td>互连 / SRAM</td>
+                <td>跨上下层的 NoC 数据路径占用面积减少 <strong>55%</strong>；SRAM 工作频率提高 <strong>40%+</strong>；代表性核心线长约减少 <strong>30%</strong>。</td>
+                <td><span class="tag">原文公司测量结果</span></td>
+              </tr>
+              <tr>
+                <td>制造连接条件</td>
+                <td>Kirin 2026 的 hybrid-bonding pitch 为 <strong>1.5 μm</strong>；论文列出 overlay 精度低于 0.5 μm、TSV 与冗余良率等指标。</td>
+                <td><span class="tag">披露参数，未见外部核验</span></td>
+              </tr>
+              <tr>
+                <td>Unified Bus</td>
+                <td>论文称端到端远程访问延迟从 TCP/IP 类栈的数十微秒降低至约 <strong>100 ns</strong>，即主导通信轴上的 τ 约降低 <strong>500 倍</strong>。</td>
+                <td><span class="tag">原文称 measured benefit</span></td>
+              </tr>
+              <tr>
+                <td>Hi-ONE 光互连</td>
+                <td>每模块 <strong>8 Tb/s</strong>，SerDes 距离约由 100 cm 降至 5 cm，面板间可达距离由不足 1 m 扩展至 100 m。</td>
+                <td><span class="tag">原文技术主张</span></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>已测结果与未来预测必须分开看</h3>
+          <p>论文将 Kirin 2026 与部分 Unified Bus 指标表述为测量结果；而下列说法明确属于规划或预测：2028/2029 Kirin P-core 分别达到 3.71/4 GHz 的 pre-silicon 路线、到 2031 年密度向 400+ MTr/mm² 演进、到 2035 年 AI 硬件集成增长超过 100 倍。这些数据不能作为当前已兑现性能。</p>
+
+          <h3>论文主动承认的限制</h3>
+          <div class="cards">
+            <div class="view wait">
+              <h3>工具链仍待完善</h3>
+              <p>多层 active tiers 需作为一个连续设计实体进行布局与时序收敛。论文称内部初步工具已形成，但方法细节将在后续公布。</p>
+              <span class="tag">Open Challenges</span>
+            </div>
+            <div class="view con">
+              <h3>堆叠不是免费收益</h3>
+              <p>不同晶圆间工艺差异、hybrid bond 与 TSV 引入的电阻电容开销、KOZ 对标准单元面积的挤占，均可能抵消收益。</p>
+              <span class="tag">需逐层证明收益大于损失</span>
+            </div>
+            <div class="view wait">
+              <h3>τ 不等于能耗指标</h3>
+              <p>论文直言 τ 是时间定律，不是能量定律：更快的系统若同比增大功耗，仍可能不可部署；需要额外的能效约束与新基准。</p>
+              <span class="tag">能源与 benchmark 问题</span>
+            </div>
+          </div>
+
+          <h3>它如何回应海外评论中的争议</h3>
+          <table>
+            <thead>
+              <tr><th>外部争议</th><th>论文补充了什么</th><th>仍未解决的问题</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>“只是给已有优化换名字”</td>
+                <td>论文给出跨层 τ 框架和 LogicFolding 的具体堆叠机制，并披露 Kirin 2026 公司测量数字。</td>
+                <td>能否跨多代产品形成可重复的 scaling 规律，仍需后续独立数据。</td>
+              </tr>
+              <tr>
+                <td>“没有 EUV 如何达到 1.4 nm”</td>
+                <td>论文并未宣称制造出 1.4 nm 物理工艺，而是通过三维组织和互连优化提高等效密度。</td>
+                <td>不同节点/封装之间的公平比较、成本及良率数据仍不足。</td>
+              </tr>
+              <tr>
+                <td>“等上市再看”</td>
+                <td>论文称 Kirin 2026 为 silicon 状态，并列出 3.1 GHz 与若干 measured 指标。</td>
+                <td>公开市场芯片的第三方拆解、性能功耗测试仍是关键验证。</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="source-note">分析判断：论文使“并非纯口号”的证据更强，但没有消除“证据主要来自提出方自身”的验证缺口。</p>
+        </section>
+
+        <section id="reference">
+          <h2>补充参考：APPSO《华为芯片的鸿蒙时刻》</h2>
+          <p>用户提供的微信公众号文章来自 <strong>APPSO</strong>。它不是海外评价样本，也不是独立测试报告；其用途是帮助解释论文技术路线及其产业叙事。</p>
+          <div class="cards">
+            <div class="view pro">
+              <h3>可借鉴的解释</h3>
+              <p>文章把几何缩微与时间缩微对照为“继续增强发动机”与“缩短行车路线”：晶体管继续变小不是唯一选项，降低走线和系统通信延迟也能带来增益。</p>
+              <span class="tag">通俗化 τ 核心概念</span>
+            </div>
+            <div class="view wait">
+              <h3>全栈视角</h3>
+              <p>文章依次说明器件、电路、芯片、系统四层协同，特别强调 LogicFolding 与 Unified Bus 在缩短物理走线和协议路径中的角色。</p>
+              <span class="tag">与论文结构一致</span>
+            </div>
+            <div class="view con">
+              <h3>明确提示风险</h3>
+              <p>文章指出立体堆叠会带来发热与良率压力，层数增加后收益并非无限；若竞品把新晶体管结构和三维集成结合，华为优势仍可能缩小。</p>
+              <span class="tag">非单向乐观</span>
+            </div>
+          </div>
+          <h3>采用与不采用的内容边界</h3>
+          <p>本报告采纳文章对技术机制和风险点的概括，因为这些可与论文原文中的 Open Challenges 交叉核验。文章中关于产业格局、产品生态或“重新定义路线”的叙事性判断，保留为作者观点，不作为技术已验证或海外舆论结论的证据。</p>
+        </section>
+
+        <section id="media">
+          <h2>海外媒体如何表述</h2>
+          <table>
+            <thead>
+              <tr><th>来源</th><th>主要框架 / 评价信号</th><th>倾向</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><a href="https://www.investing.com/news/economy-news/huawei-proposes-new-path-for-chip-development-amid-us-sanctions-4708270" target="_blank" rel="noopener">Reuters</a><br><span class="small">经 Investing.com 转载</span></td>
+                <td>突出美国制裁与缺少先进设备的背景；指出华为未提供独立性能数据，同时认为目标若实现将具有重大意义。</td>
+                <td><span class="tag">审慎 / 待验证</span></td>
+              </tr>
+              <tr>
+                <td><a href="https://www.tomshardware.com/tech-industry/semiconductors/huawei-claims-sanctions-busting-breakthrough-with-1-4nm-class-chips-by-2031-claims-55-percent-higher-transistor-density-firm-claims-new-logicfolding-chip-architecture-can-bypass-euv-restrictions-introduces-tau-scaling-law-to-replace-moores-law" target="_blank" rel="noopener">Tom's Hardware</a></td>
+                <td>标题将其视为可能绕开 EUV 限制的突破性路线，报道了密度和能效提升主张，并置于与 TSMC、Nvidia 的差距竞争中。</td>
+                <td><span class="tag">积极报道 / 依赖公司主张</span></td>
+              </tr>
+              <tr>
+                <td><a href="https://thenextweb.com/news/huawei-tau-scaling-law-chip-sanctions" target="_blank" rel="noopener">The Next Web</a></td>
+                <td>以“中国应对美国芯片制裁的 workaround”为标题，侧重“从晶体管缩小转向缩短传播时间”的战略转向。</td>
+                <td><span class="tag">战略意义</span></td>
+              </tr>
+              <tr>
+                <td><a href="https://www.scmp.com/tech/article/3354710/huawei-unveils-new-scaling-law-and-tech-can-develop-14-nm-equivalent-chips-2031" target="_blank" rel="noopener">SCMP</a></td>
+                <td>强调它对建设自主半导体生态的意义，转述 381 款芯片和 2031 等效密度目标。</td>
+                <td><span class="tag">里程碑框架</span></td>
+              </tr>
+              <tr>
+                <td><a href="https://vgtimes.com/tech-and-hardware/156698-huawei-comes-up-with-a-moores-law-replacement-company-promises-14nm-class-chips-by-2031.html" target="_blank" rel="noopener">VGTimes</a></td>
+                <td>认为缩短路径与架构优化本身并非全新概念；指出缺少独立测量、代工厂、良率及工具链信息，秋季真机才是检验点。</td>
+                <td><span class="tag">明确质疑</span></td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="source-note">媒体报道普遍使用 “claims / says / expects” 等归因表达。报告不把这些企业目标转写为已经证实的结果。</p>
+        </section>
+
+        <section id="spectrum">
+          <h2>正方、反方与观望观点</h2>
+          <div class="cards">
+            <div class="view pro">
+              <h3>正方：工程路径可行</h3>
+              <p>先进制程成本和设备可得性均受限制，芯片行业本已转向封装、互连和软硬协同；LogicFolding 若能规模化，可能形成实用竞争力。</p>
+              <span class="tag">媒体 + 支持型社区用户</span>
+            </div>
+            <div class="view con">
+              <h3>反方：概念包装过重</h3>
+              <p>降低 RC 延迟、缩短布线本就是芯片设计常规目标；在尚无公开第三方测量时称其为“定律”或使用“1.4 nm 等效”容易误导。</p>
+              <span class="tag">技术质疑型用户</span>
+            </div>
+            <div class="view wait">
+              <h3>观望：以产品验证</h3>
+              <p>认可方向值得关注，但要看到秋季麒麟芯片的拆解、基准性能、能效、面积、良率和成本之后，才能评价其是否可持续扩展。</p>
+              <span class="tag">r/hardware 常见态度</span>
+            </div>
+          </div>
+        </section>
+
+        <section id="reddit">
+          <h2>Reddit 公开评论样本</h2>
+          <h3><a href="https://www.reddit.com/r/hardware/comments/1tmwl8j/huawei_presents_the_tau_%CF%84_scaling_law_enabling/" target="_blank" rel="noopener">r/hardware：技术讨论更集中</a></h3>
+          <div class="comment">
+            <div class="comment-head"><span>质疑</span><span>帖子发布后首小时可见评论</span></div>
+            <p>有用户质疑企业是否能够“发明一个 scaling law”并据此宣称未来成果，尤其追问缺少 EUV 设备时如何兑现目标。</p>
+          </div>
+          <div class="comment">
+            <div class="comment-head"><span>较平衡的技术解读</span><span>高互动评论（搜索索引显示 +77）</span></div>
+            <p>有评论认为，降低传播延迟并不是新思想，真正可能具有价值的是 LogicFolding 是否能将这种优化稳定地扩展成性能增益；其判断标准应是后续多代芯片数据。</p>
+          </div>
+          <div class="comment">
+            <div class="comment-head"><span>观望</span><span>可见回复</span></div>
+            <p>用户提出等待消费者拿到产品后的拆解和 benchmark，再判断华为说法是否成立。</p>
+          </div>
+
+          <h3><a href="https://www.reddit.com/r/TankieTheDeprogram/comments/1tn1yrq/huawei_presents_the_tau_%CF%84_scaling_law_expected_to/" target="_blank" rel="noopener">r/TankieTheDeprogram：明显支持样本</a></h3>
+          <div class="comment">
+            <div class="comment-head"><span>支持</span><span>2 条可见用户评论</span></div>
+            <p>评论者以自己过去使用华为手机的良好体验为依据，表达对新芯片成功的信心与期待。</p>
+          </div>
+          <p class="source-note">该社区有明确政治倾向，样本适合说明“支持声音存在”，不适合代表一般硬件用户总体看法。</p>
+
+          <h3><a href="https://www.reddit.com/r/China_irl/comments/1tmvrio/%E5%8D%8E%E4%B8%BA%E7%A7%B0%E5%8D%8A%E5%AF%BC%E4%BD%93%E6%8A%80%E6%9C%AF%E5%8F%96%E5%BE%97%E7%AA%81%E7%A0%B4_%E9%A2%84%E8%AE%A12031%E5%B9%B4%E7%94%9F%E4%BA%A714%E7%BA%B3%E7%B1%B3%E8%8A%AF%E7%89%87/" target="_blank" rel="noopener">r/China_irl：海外平台中文讨论</a></h3>
+          <div class="comment">
+            <div class="comment-head"><span>负面 / 嘲讽居多</span><span>发布后首小时可见评论</span></div>
+            <p>多条评论质疑“时间缩微”是对已有优化方式的重新命名，或将“等效密度”误读为宣传性很强的“1.4 纳米芯片”。</p>
+          </div>
+          <div class="comment">
+            <div class="comment-head"><span>有限肯定</span><span>同一讨论串回复</span></div>
+            <p>也有评论表示三维封装或系统工程路线本身合理，若能实现多层集成会很有价值，但仍对宣传口径保留意见。</p>
+          </div>
+        </section>
+
+        <section id="x">
+          <h2>X（Twitter）检索情况</h2>
+          <div class="alert">
+            <strong>截至本次采集尚无可稳妥引用的 X 评论样本。</strong>
+            已检索 <code>Huawei "Tau Scaling Law"</code>、<code>Huawei LogicFolding</code>、<code>Huawei 1.4nm 2031</code> 及中文关键词；X 的公开搜索页可到达，但在未登录公开读取条件下没有呈现可核验帖文文本，搜索索引也未返回具体帖子。因此本报告未将 X 的立场纳入正反统计。
+          </div>
+          <p class="source-note">这不代表 X 上没有讨论，只表示在 2026-05-25 本次公开采集窗口内无法取得可引用证据。</p>
+        </section>
+
+        <section id="assessment">
+          <h2>综合判断与后续验证点</h2>
+          <p><strong>首日传播最强的主题：</strong>制裁压力下的技术替代路线，而非单纯的学术理论发布。媒体大多把 “Tau + LogicFolding” 与不依赖最先进 EUV 的发展路径绑定报道。</p>
+          <p><strong>最核心争议：</strong>“减少延迟的工程路线”是否足以称为新的 scaling law，以及“1.4 nm 等效晶体管密度”在面积、功耗、成本和量产良率维度能否成立。</p>
+          <p><strong>最有价值的观察节点：</strong>2026 年秋季首批 LogicFolding 麒麟芯片上市后的独立拆解、芯片面积/密度估算、同功耗性能比较及量产供货表现。</p>
+        </section>
+
+        <section id="sources">
+          <h2>来源与链接</h2>
+          <ol class="source-list">
+            <li><a href="https://chinaxiv.org/abs/202605.00224" target="_blank" rel="noopener">He, Tingbo: A Time Scaling Theory for Multi-Layer Electronic Systems</a><span>用户提供 PDF 并经 ChinaXiv 公开入口核对，ChinaXiv:202605.00224v1，2026-05-25；用于原文分析。</span></li>
+            <li><a href="https://mp.weixin.qq.com/s/XsxqleT4_V2HsMaxN3Drhg?scene=1" target="_blank" rel="noopener">APPSO：《华为芯片的鸿蒙时刻》</a><span>用户指定的中文分析参考；用于补充技术解释与风险观点，不计入海外舆情样本。</span></li>
+            <li><a href="https://www.huawei.com/en/news/2026/5/ieee-iscas-tau-scaling" target="_blank" rel="noopener">Huawei: HUAWEI Presents the Tau (τ) Scaling Law</a><span>英文官方公告，2026-05-25；用于核实发布内容和公司声明。</span></li>
+            <li><a href="https://www.investing.com/news/economy-news/huawei-proposes-new-path-for-chip-development-amid-us-sanctions-4708270" target="_blank" rel="noopener">Reuters: Huawei proposes new path for chip development amid US sanctions</a><span>Reuters 稿件转载页面；指出无独立性能数据并交代制裁语境。</span></li>
+            <li><a href="https://www.tomshardware.com/tech-industry/semiconductors/huawei-claims-sanctions-busting-breakthrough-with-1-4nm-class-chips-by-2031-claims-55-percent-higher-transistor-density-firm-claims-new-logicfolding-chip-architecture-can-bypass-euv-restrictions-introduces-tau-scaling-law-to-replace-moores-law" target="_blank" rel="noopener">Tom's Hardware: Huawei claims sanctions-busting breakthrough</a><span>英文科技媒体报道，2026-05-25。</span></li>
+            <li><a href="https://thenextweb.com/news/huawei-tau-scaling-law-chip-sanctions" target="_blank" rel="noopener">The Next Web: Huawei unveils Tau Scaling Law as workaround for US chip sanctions</a><span>英文科技媒体报道，2026-05-25。</span></li>
+            <li><a href="https://www.scmp.com/tech/article/3354710/huawei-unveils-new-scaling-law-and-tech-can-develop-14-nm-equivalent-chips-2031" target="_blank" rel="noopener">SCMP: Huawei unveils new scaling law and tech</a><span>英文报道，2026-05-25。</span></li>
+            <li><a href="https://vgtimes.com/tech-and-hardware/156698-huawei-comes-up-with-a-moores-law-replacement-company-promises-14nm-class-chips-by-2031.html" target="_blank" rel="noopener">VGTimes: Huawei Comes Up With a Moore's Law Replacement</a><span>明确表达技术怀疑的英文评论报道。</span></li>
+            <li><a href="https://www.reddit.com/r/hardware/comments/1tmwl8j/huawei_presents_the_tau_%CF%84_scaling_law_enabling/" target="_blank" rel="noopener">Reddit / r/hardware 讨论串</a><span>英语硬件社区公开评论样本，2026-05-25。</span></li>
+            <li><a href="https://www.reddit.com/r/TankieTheDeprogram/comments/1tn1yrq/huawei_presents_the_tau_%CF%84_scaling_law_expected_to/" target="_blank" rel="noopener">Reddit / r/TankieTheDeprogram 讨论串</a><span>支持型公开评论样本，社区倾向需注意。</span></li>
+            <li><a href="https://www.reddit.com/r/China_irl/comments/1tmvrio/%E5%8D%8E%E4%B8%BA%E7%A7%B0%E5%8D%8A%E5%AF%BC%E4%BD%93%E6%8A%80%E6%9C%AF%E5%8F%96%E5%BE%97%E7%AA%81%E7%A0%B4_%E9%A2%84%E8%AE%A12031%E5%B9%B4%E7%94%9F%E4%BA%A714%E7%BA%B3%E7%B1%B3%E8%8A%AF%E7%89%87/" target="_blank" rel="noopener">Reddit / r/China_irl 讨论串</a><span>海外平台上的中文公开讨论样本，2026-05-25。</span></li>
+            <li><a href="https://x.com/search?f=live&amp;q=%22Tau%20Scaling%20Law%22%20Huawei&amp;src=typed_query" target="_blank" rel="noopener">X 搜索页：Huawei "Tau Scaling Law"</a><span>用于记录检索尝试；本次未获得可引用公开帖文。</span></li>
+          </ol>
+        </section>
+      </article>
+
+      <aside>
+        <div class="panel nav">
+          <h2>目录</h2>
+          <a href="#summary">结论先读</a>
+          <a href="#facts">发布事实</a>
+          <a href="#paper">论文原文分析</a>
+          <a href="#reference">APPSO 分析参考</a>
+          <a href="#media">海外媒体</a>
+          <a href="#spectrum">观点光谱</a>
+          <a href="#reddit">Reddit 样本</a>
+          <a href="#x">X 检索情况</a>
+          <a href="#assessment">综合判断</a>
+          <a href="#sources">来源链接</a>
+        </div>
+        <div class="panel">
+          <h2>采集说明</h2>
+          <p class="small">报告基于用户提供的论文 PDF、指定的 APPSO 文章以及网页可公开访问与可索引的内容，采集截止于北京时间 2026 年 5 月 25 日晚间。社交平台讨论仍可能快速变化。</p>
+          <p class="small">论文指标按原文准确转述，但本页未进行芯片实测或独立复现，也不以少量社交样本推算整体舆论比例。</p>
+        </div>
+      </aside>
+    </div>
+  </main>
+  <footer>
+    制作日期：2026-05-25（Asia/Shanghai） | 公开来源调研报告 | 所有外链均指向原始来源或公开检索入口
+  </footer>
+</body>
+</html>
