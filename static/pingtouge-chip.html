@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>平头哥半导体全景梳理｜从玄铁到真武 阿里造芯的底层逻辑</title>
+<style>
+  :root {
+    --bg: #0f0f1a;
+    --card: #1a1a2e;
+    --card2: #222240;
+    --accent: #7c4dff;
+    --accent2: #00e5ff;
+    --accent3: #ff6d00;
+    --text: #e0e0f0;
+    --text2: #9090b0;
+    --border: #2a2a45;
+    --green: #00c853;
+    --red: #ff1744;
+    --orange: #ff9100;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", "Helvetica Neue", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    padding: 0;
+  }
+  .container {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, #1a1a3e 0%, #0f0f1a 50%, #1a1a2e 100%);
+    padding: 60px 0 40px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero h1 {
+    font-size: 2em;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 12px;
+  }
+  .hero .subtitle {
+    color: var(--text2);
+    font-size: 1em;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  .hero .meta {
+    margin-top: 16px;
+    font-size: 0.85em;
+    color: var(--text2);
+  }
+  .hero .meta span {
+    display: inline-block;
+    background: var(--card2);
+    padding: 2px 10px;
+    border-radius: 4px;
+    margin: 0 4px;
+  }
+
+  /* Section */
+  .section { padding: 40px 0; border-bottom: 1px solid var(--border); }
+  .section:last-child { border-bottom: none; }
+  .section-title {
+    font-size: 1.3em;
+    font-weight: 700;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-title .emoji { font-size: 1.2em; }
+
+  /* Cards */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+  .card h3 {
+    font-size: 1.05em;
+    color: var(--accent2);
+    margin-bottom: 10px;
+  }
+  .card p, .card li { color: var(--text); font-size: 0.95em; }
+  .card ul { padding-left: 18px; }
+  .card li { margin-bottom: 6px; }
+
+  /* Stats grid */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .stat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+  }
+  .stat-card .number {
+    font-size: 1.6em;
+    font-weight: 700;
+    color: var(--accent2);
+    display: block;
+  }
+  .stat-card .label {
+    font-size: 0.8em;
+    color: var(--text2);
+    margin-top: 4px;
+  }
+
+  /* Timeline */
+  .timeline { position: relative; padding-left: 30px; }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--border);
+  }
+  .timeline-item {
+    position: relative;
+    margin-bottom: 20px;
+    padding-left: 10px;
+  }
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -22px;
+    top: 6px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 2px solid var(--bg);
+  }
+  .timeline-item .date {
+    color: var(--accent);
+    font-size: 0.85em;
+    font-weight: 600;
+  }
+  .timeline-item .desc { font-size: 0.93em; margin-top: 4px; }
+
+  /* Product chips grid */
+  .chip-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 14px;
+    margin: 16px 0;
+  }
+  .chip-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px;
+    position: relative;
+    overflow: hidden;
+  }
+  .chip-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px;
+    height: 100%;
+    border-radius: 0 2px 2px 0;
+  }
+  .chip-card.ai::before { background: linear-gradient(to bottom, var(--accent), var(--accent2)); }
+  .chip-card.cpu::before { background: var(--accent3); }
+  .chip-card.net::before { background: var(--green); }
+  .chip-card.storage::before { background: var(--orange); }
+  .chip-card.link::before { background: var(--accent2); }
+
+  .chip-card .chip-name {
+    font-size: 1.05em;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .chip-card .chip-tag {
+    display: inline-block;
+    font-size: 0.75em;
+    padding: 1px 8px;
+    border-radius: 3px;
+    margin-bottom: 8px;
+  }
+  .chip-card.ai .chip-tag { background: rgba(124,77,255,0.2); color: var(--accent); }
+  .chip-card.cpu .chip-tag { background: rgba(255,109,0,0.2); color: var(--accent3); }
+  .chip-card.net .chip-tag { background: rgba(0,200,83,0.2); color: var(--green); }
+  .chip-card.storage .chip-tag { background: rgba(255,145,0,0.2); color: var(--orange); }
+  .chip-card.link .chip-tag { background: rgba(0,229,255,0.2); color: var(--accent2); }
+  .chip-card ul { padding-left: 16px; font-size: 0.88em; }
+  .chip-card li { margin-bottom: 3px; color: var(--text2); }
+
+  /* Comparison table */
+  .cmp-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9em; }
+  .cmp-table th, .cmp-table td {
+    padding: 10px 14px;
+    text-align: left;
+    border: 1px solid var(--border);
+  }
+  .cmp-table th {
+    background: var(--card2);
+    color: var(--accent2);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .cmp-table td { background: var(--card); }
+
+  /* Callout */
+  .callout {
+    background: var(--card2);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    padding: 16px 20px;
+    margin: 16px 0;
+    font-size: 0.93em;
+  }
+  .callout.warn { border-left-color: var(--orange); }
+  .callout .source { color: var(--text2); font-size: 0.85em; margin-top: 8px; }
+
+  /* Tag */
+  .tag { display: inline-block; font-size: 0.75em; padding: 2px 8px; border-radius: 3px; margin: 2px; }
+  .tag.blue { background: rgba(124,77,255,0.15); color: #b388ff; }
+  .tag.green { background: rgba(0,200,83,0.15); color: #69f0ae; }
+  .tag.orange { background: rgba(255,109,0,0.15); color: #ffab40; }
+  .tag.cyan { background: rgba(0,229,255,0.15); color: #80deea; }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    .hero h1 { font-size: 1.5em; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .chip-grid { grid-template-columns: 1fr; }
+    .cmp-table { font-size: 0.8em; }
+    .cmp-table th, .cmp-table td { padding: 6px 8px; }
+  }
+
+  /* Architecture diagram */
+  .arch-box {
+    background: var(--card2);
+    border: 1px dashed var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    margin: 16px 0;
+  }
+  .arch-box .level {
+    display: inline-block;
+    padding: 8px 20px;
+    border-radius: 6px;
+    margin: 4px;
+    font-weight: 600;
+    font-size: 0.9em;
+  }
+  .arch-box .level.l1 { background: rgba(124,77,255,0.25); color: #b388ff; }
+  .arch-box .level.l2 { background: rgba(0,229,255,0.2); color: #80deea; }
+  .arch-box .level.l3 { background: rgba(0,200,83,0.2); color: #69f0ae; }
+  .arch-box .arrow { color: var(--text2); margin: 4px 0; font-size: 0.85em; }
+
+  .footer {
+    text-align: center;
+    padding: 40px 0;
+    color: var(--text2);
+    font-size: 0.85em;
+  }
+</style>
+</head>
+<body>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="container">
+    <h1>平头哥半导体全景梳理</h1>
+    <p class="subtitle">从玄铁到真武，从RISC-V到AI芯片——阿里造芯的底层逻辑与最新进击</p>
+    <p class="meta">梳理于 <span>2026-05-25</span> ｜ 数据截至 <span>2026年5月</span></p>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- 1. 公司概况 -->
+<div class="section">
+  <div class="section-title"><span class="emoji">🧬</span> 公司概况</div>
+  <div class="card">
+    <p style="margin-bottom:12px;"><strong>平头哥半导体（T-Head）</strong>，阿里巴巴旗下半导体公司，2018年由阿里收购杭州中天微系统后与达摩院自研芯片团队整合成立。国内领先的AI芯片、存储主控芯片和RISC-V处理器设计公司。</p>
+    <p>公司定位：阿里"通云哥"黄金三角的硬件底座——<strong>通义实验室（大模型）↔ 阿里云（平台）↔ 平头哥（芯片）</strong>。</p>
+  </div>
+  <div class="stats-grid">
+    <div class="stat-card"><span class="number">56万</span><span class="label">芯片交付量（片）</span></div>
+    <div class="stat-card"><span class="number">400+</span><span class="label">企业客户</span></div>
+    <div class="stat-card"><span class="number">20+</span><span class="label">覆盖行业</span></div>
+    <div class="stat-card"><span class="number">百亿</span><span class="label">年化收入（元）</span></div>
+    <div class="stat-card"><span class="number">No.2</span><span class="label">国产AI芯片排名</span></div>
+    <div class="stat-card"><span class="number">$250-620亿</span><span class="label">摩根大通估值</span></div>
+  </div>
+</div>
+
+<!-- 2. 发展历程 -->
+<div class="section">
+  <div class="section-title"><span class="emoji">📅</span> 发展历程</div>
+  <div class="timeline">
+    <div class="timeline-item"><span class="date">2015</span><div class="desc">阿里首次接触杭州中天微系统——国内唯一拥有自主嵌入式CPU架构并实现大规模量产的芯片设计公司</div></div>
+    <div class="timeline-item"><span class="date">2018.04</span><div class="desc">中兴事件后全资收购中天微，阿里正式走上自研芯片之路</div></div>
+    <div class="timeline-item"><span class="date">2018.09</span><div class="desc">整合中天微与达摩院自研芯片团队，<strong>平头哥半导体正式成立</strong></div></div>
+    <div class="timeline-item"><span class="date">2025</span><div class="desc">真武PPU系列AI芯片快速迭代：1.0 → 1.1 → 1.2 → 1.5；累计出货超40万片，国产GPU出货量第一</div></div>
+    <div class="timeline-item"><span class="date">2026.05.20</span><div class="desc"><strong>阿里云峰会（杭州）</strong>：真武M890首发，磐久AL128超节点、ICN Switch 1.0同步发布；累计出货56万片</div></div>
+    <div class="timeline-item"><span class="date">2026秋-2028</span><div class="desc">路线图：真武V900 → 真武J900两代芯片陆续推出</div></div>
+  </div>
+</div>
+
+<!-- 3. 芯片矩阵 -->
+<div class="section">
+  <div class="section-title"><span class="emoji">🔩</span> 芯片矩阵全景</div>
+  <p style="margin-bottom:10px;color:var(--text2);">平头哥已完成数据中心<strong>算力 · 网力 · 存力</strong>全栈自研覆盖，五条核心产品线：</p>
+
+  <div class="chip-grid">
+    <div class="chip-card ai">
+      <div class="chip-name">真武系列</div>
+      <div class="chip-tag">🖥️ AI算力芯片</div>
+      <ul>
+        <li>真武810E：96GB HBM2e，7条ICN互联</li>
+        <li>真武M890：144GB，性能3倍↑，FP32~FP4</li>
+        <li>真武V900、J900（未来两年）</li>
+      </ul>
+    </div>
+    <div class="chip-card cpu">
+      <div class="chip-name">倚天系列</div>
+      <div class="chip-tag">🔄 服务器CPU</div>
+      <ul>
+        <li>阿里自研Arm架构服务器CPU</li>
+        <li>与真武AI芯片高效协同</li>
+        <li>Agent任务规划、工具调用核心</li>
+      </ul>
+    </div>
+    <div class="chip-card net">
+      <div class="chip-name">磐脉系列</div>
+      <div class="chip-tag">🌐 智能网卡</div>
+      <ul>
+        <li>磐脉920：国内首个内置PCIe Switch</li>
+        <li>400G智能网卡，已量产</li>
+        <li>400Mpps收发包率</li>
+        <li>多路径RDMA，系统成本降低30%</li>
+      </ul>
+    </div>
+    <div class="chip-card storage">
+      <div class="chip-name">镇岳系列</div>
+      <div class="chip-tag">💾 存储主控</div>
+      <ul>
+        <li>镇岳510：企业级SSD主控</li>
+        <li>4μs超低时延（比业界低30%）</li>
+        <li>pSLC+ZNS+QLC组合拳</li>
+        <li>补齐"存力"短板</li>
+      </ul>
+    </div>
+    <div class="chip-card link">
+      <div class="chip-name">ICN Switch</div>
+      <div class="chip-tag">🔗 互联芯片</div>
+      <ul>
+        <li>ICN Switch 1.0：25.6Tbps吞吐量</li>
+        <li>支持自研ICN互联总线协议</li>
+        <li>PCCL通信库</li>
+        <li>真武M890实现64卡全带宽互联</li>
+      </ul>
+    </div>
+    <div class="chip-card cpu">
+      <div class="chip-name">玄铁系列</div>
+      <div class="chip-tag">📟 RISC-V处理器</div>
+      <ul>
+        <li>C920：高性能应用处理器</li>
+        <li>C907：AIoT/边缘计算</li>
+        <li>适配安卓12/Debian/OpenHarmony</li>
+        <li>RISC-V国际12个技术小组主导</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout">
+    <strong>全栈自研的意义</strong>：平头哥不只是一家AI芯片公司。从AI芯片（真武）→ 服务器CPU（倚天）→ 智能网卡（磐脉）→ 存储主控（镇岳）→ 互联芯片（ICN Switch），数据中心五大核心芯片全部自研，实现算力、网力、存力系统级协同。<br>
+    <div class="source">—— 平头哥官方公众号《真武M890构建Agentic算力芯底座》，2026.05.20</div>
+  </div>
+</div>
+
+<!-- 4. 真武系列深度 -->
+<div class="section">
+  <div class="section-title"><span class="emoji">🚀</span> 真武系列深度解读</div>
+
+  <div class="card">
+    <h3>真武810E — 揭幕者</h3>
+    <ul>
+      <li><strong>定位</strong>：训推一体AI芯片，对标英伟达H20/A100</li>
+      <li><strong>参数</strong>：96GB HBM2e内存，7条ICN互联（700GB/s片间带宽）</li>
+      <li><strong>部署</strong>：已在阿里云部署多个万卡集群</li>
+      <li><strong>认证</strong>：AICAS 2026 Grand Challenge指定算力平台</li>
+      <li><strong>版本</strong>：PPU 1.0→1.1→1.2→1.5，快速迭代</li>
+    </ul>
+  </div>
+
+  <div class="card" style="border-color:var(--accent);">
+    <h3>真武M890 — 里程碑（2026.05.20发布）</h3>
+    <ul>
+      <li><strong>架构</strong>：自研并行计算架构</li>
+      <li><strong>显存</strong>：144GB，性能是真武810E的3倍</li>
+      <li><strong>精度</strong>：原生支持FP32→FP4全场景，高精度训练到超低精度推理全覆盖</li>
+      <li><strong>片间互联</strong>：800GB/s</li>
+      <li><strong>搭载平台</strong>：磐久AL128超节点服务器</li>
+      <li><strong>已上线</strong>：阿里云百炼，支持Qwen/DeepSeek/Kimi等主流模型</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>真武V900 / J900 — 路线图</h3>
+    <ul>
+      <li>未来两年陆续推出，算力持续提升</li>
+      <li>目标：满足Agent时代千行百业AI算力需求</li>
+    </ul>
+  </div>
+
+  <div class="callout">
+    <strong>性能飞跃</strong>：真武M890性能是810E的3倍，片间互联带宽800GB/s，搭配ICN Switch 1.0实现64卡全带宽互联。磐久AL128超节点128卡P2P时延低至<strong>150ns以内</strong>，单柜带宽达Pb/s级——专门为Agent场景的海量并发推理设计。
+  </div>
+</div>
+
+<!-- 5. 磐久AL128 + ICN Switch -->
+<div class="section">
+  <div class="section-title"><span class="emoji">⚡</span> 磐久AL128超节点 + ICN Switch 1.0</div>
+
+  <div class="card">
+    <h3>磐久AL128 超节点服务器</h3>
+    <ul>
+      <li>单机柜128张AI芯片紧密耦合互联</li>
+      <li>P2P通信时延 <strong>&lt;150ns</strong></li>
+      <li>单柜带宽达到 <strong>Pb/s</strong> 级</li>
+      <li>可让128张AI芯片「组成一台计算机」</li>
+      <li>满足海量Agent并发推理 + 大模型训练需求</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>ICN Switch 1.0 互联芯片</h3>
+    <ul>
+      <li><strong>吞吐量</strong>：25.6Tbps</li>
+      <li><strong>协议</strong>：自研ICN互联总线协议 + PCCL通信库</li>
+      <li><strong>效果</strong>：真武M890可实现64卡全带宽互联</li>
+      <li><strong>软硬协同</strong>：配合T-Head SAIL软件栈释放芯片算力</li>
+    </ul>
+  </div>
+</div>
+
+<!-- 6. 阿里云峰会发布 -->
+<div class="section">
+  <div class="section-title"><span class="emoji">🎙️</span> 阿里云峰会 · 杭州 2026.05.20</div>
+
+  <div class="card">
+    <p>阿里云资深副总裁刘伟光在峰会上宣布全栈技术革新路线：<strong>真武M890芯片 → 千问云 → Qwen模型 → 推理平台</strong>，建设中国最大的AI工厂。</p>
+  </div>
+
+  <div class="callout">
+    <strong>平头哥副总裁高慧表示</strong>："Agentic时代，一个Agent在执行任务时可能在毫秒间连续发起数十次模型调用，同时需要CPU、GPU、网络和存储等核心部件紧密协同。平头哥构建全栈自研芯片矩阵，核心就是希望实现算力、网力、存力的系统级协同，让每一个Agent都能流畅、稳定运行。"
+    <div class="source">—— 阿里云官方公众号《Agentic时代阿里云全栈就绪！》，2026.05.20</div>
+  </div>
+
+  <div class="card">
+    <h3>峰会四大发布</h3>
+    <ul>
+      <li><strong>真武M890 AI芯片</strong>：首次亮相，144GB显存，810E的3倍性能</li>
+      <li><strong>磐久AL128超节点</strong>：128卡互联，P2P&lt;150ns</li>
+      <li><strong>ICN Switch 1.0</strong>：25.6Tbps互联芯片</li>
+      <li><strong>千问云</strong>：Agent时代云入口，首页只有一行Agent指令</li>
+    </ul>
+  </div>
+</div>
+
+<!-- 7. 战略价值 -->
+<div class="section">
+  <div class="section-title"><span class="emoji">🏰</span> 战略价值</div>
+
+  <div class="arch-box">
+    <div class="level l1">通义实验室（千问大模型）</div>
+    <div class="arrow">⇅</div>
+    <div class="level l2">阿里云（亚太第一云）</div>
+    <div class="arrow">⇅</div>
+    <div class="level l3">平头哥（芯片）</div>
+  </div>
+
+  <div class="card">
+    <h3>"通云哥"黄金三角</h3>
+    <p><strong>全球唯二</strong>：阿里和谷歌是仅有的两家在"大模型+云+芯片"三大领域都具备顶级实力的公司。</p>
+    <ul style="margin-top:10px;">
+      <li>大模型驱动芯片需求（千问系列需要专用AI芯片）</li>
+      <li>芯片优化云服务（自研芯片打造差异化竞争力）</li>
+      <li>云平台加速模型落地（百炼平台连接芯片与应用）</li>
+    </ul>
+  </div>
+
+  <div class="callout warn">
+    <strong>风险提示</strong>：平头哥面临地缘政治（实体清单风险）、人才流失（副总裁孟建熠离职）、与英伟达代差、RISC-V生态早期、上市计划未确认等挑战。
+  </div>
+</div>
+
+<!-- 8. 竞争格局 -->
+<div class="section">
+  <div class="section-title"><span class="emoji">⚔️</span> 竞争格局</div>
+
+  <table class="cmp-table">
+    <thead>
+      <tr><th>维度</th><th>平头哥</th><th>华为昇腾</th><th>寒武纪</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>核心优势</td><td>云原生 · 阿里云闭环 · 商业化快</td><td>生态完整 · 政府支持</td><td>上市早 · 品牌认知</td></tr>
+      <tr><td>出货量</td><td>56万片</td><td>国内第一</td><td>持续亏损</td></tr>
+      <tr><td>客户结构</td><td>60%外部（小鹏/国网等）</td><td>政府/运营商/国企</td><td>政府/AI公司</td></tr>
+      <tr><td>最大风险</td><td>实体清单</td><td>美国制裁</td><td>长期亏损</td></tr>
+      <tr><td>估值/收入</td><td>百亿收入，$250-620亿估值</td><td>未独立披露</td><td>亏损中</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- 9. 关键人物 -->
+<div class="section">
+  <div class="section-title"><span class="emoji">👤</span> 关键人物</div>
+  <div class="card">
+    <ul>
+      <li><strong>高慧</strong> — 平头哥半导体副总裁，阿里云峰会发言人，"Agent全栈芯片协同"观点提出者</li>
+      <li><strong>刘伟光</strong> — 阿里云资深副总裁，峰会主发布人，宣布真武M890+千问云全栈路线</li>
+      <li><strong>李飞飞</strong> — 阿里云首席技术官，Agentic Cloud转型推动者</li>
+      <li><strong>孟建熠</strong>（已离职）— 前平头哥副总裁，RISC-V方向核心人物</li>
+    </ul>
+  </div>
+</div>
+
+<!-- 10. 资料来源 -->
+<div class="section">
+  <div class="section-title"><span class="emoji">📚</span> 资料来源</div>
+  <div class="card">
+    <ul style="font-size:0.88em;">
+      <li>平头哥官方公众号《真武M890 AI芯片首次亮相，构建Agentic算力芯底座》（2026.05.20）</li>
+      <li>阿里云官方公众号《Agentic时代阿里云全栈就绪！》（2026.05.20）</li>
+      <li>快科技《百纳秒超低时延！阿里真武M890刷新纪录》（2026.05.20）</li>
+      <li>平头哥官方《磐脉920智能网卡发布》（2026.04.29）</li>
+      <li>平头哥官方《AICAS 2026 Grand Challenge技术研讨会》（2026.05.12）</li>
+      <li>摩根大通平头哥估值研究报告</li>
+      <li>Tars KnowledgeBase · 平头哥半导体深度分析报告 · 慧哥一手信息记录</li>
+    </ul>
+  </div>
+</div>
+
+</div>
+
+<div class="footer">
+  <p>📡 Tars · 知识库梳理出品</p>
+  <p style="margin-top:4px;">数据截至 2026年5月25日 | 基于公开报道与知识库整理</p>
+</div>
+
+</body>
+</html>
