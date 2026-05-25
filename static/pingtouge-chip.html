@@ -323,7 +323,100 @@
   </div>
 </div>
 
-<!-- 3. 芯片矩阵 -->
+<!-- 3. 出货结构深度解析 -->
+<div class="section">
+  <div class="section-title"><span class="emoji">📊</span> 出货结构深度解析</div>
+  <p style="margin-bottom:10px;color:var(--text2);">从46万片到56万片——平头哥的出货量增长和产品分布拆解（慧哥一手数据 + 阿里云官方口径）</p>
+
+  <div class="callout warn" style="margin-bottom:16px;">
+    <strong>⚠️ 数据说明</strong>：以下出货结构分析基于慧哥一手调研信息，<strong>未经公开市场验证</strong>，仅供内部参考。与阿里云官方口径（56万片）可能存在统计口径差异（官方数据可能含镇岳510等非AI芯片）。
+  </div>
+
+  <div class="card">
+    <h3>📈 出货量演进</h3>
+    <div class="stats-grid" style="margin:10px 0;">
+      <div class="stat-card"><span class="number" style="color:var(--orange);">~46-47万</span><span class="label">2026年2月（慧哥口径/财报口径）</span></div>
+      <div class="stat-card"><span class="number">56万</span><span class="label">2026年5月（阿里云官方，含全线芯片）</span></div>
+      <div class="stat-card"><span class="number" style="color:var(--green);">+20%</span><span class="label">3个月增量约10万片</span></div>
+      <div class="stat-card"><span class="number" style="color:var(--accent2);">60%</span><span class="label">外部客户占比</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>🔬 47万片出货结构拆解（慧哥一手数据）</h3>
+    <table class="cmp-table" style="margin-top:12px;">
+      <thead>
+        <tr><th>型号</th><th>出货量（估）</th><th>算力</th><th>特点</th><th>主要用途</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>PPU 1.0 (810)</strong></td>
+          <td style="color:var(--accent2);font-weight:700;">~8万片</td>
+          <td>300+T</td>
+          <td>先进工艺，算力对标A100</td>
+          <td>阿里内部训练集群、蚂蚁、阿里云上</td></tr>
+        <tr>
+          <td><strong>PPU 1.1 (810E)</strong></td>
+          <td style="color:var(--accent2);font-weight:700;">~30万片</td>
+          <td>130+T</td>
+          <td>阉割版，成本优化，推理主力</td>
+          <td>一体机、外部客户核心出货、浪潮16卡服务器</td></tr>
+        <tr>
+          <td><strong>610E</strong></td>
+          <td style="color:var(--accent2);font-weight:700;">~8万片</td>
+          <td>—</td>
+          <td>PPU 1.0的PG片子海外背回</td>
+          <td>近期投放市场，8/16卡机器</td></tr>
+        <tr>
+          <td><strong>早期PCIe卡</strong></td>
+          <td style="color:var(--accent2);font-weight:700;">~1-2万片</td>
+          <td>—</td>
+          <td>早期版本</td>
+          <td>已逐步淘汰</td></tr>
+      </tbody>
+    </table>
+
+    <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border);">
+      <p style="font-size:0.88em;color:var(--text2);"><strong>产品策略：分层定位</strong></p>
+      <table class="cmp-table" style="margin-top:8px;">
+        <thead><tr><th>型号</th><th>定位</th><th>目标客户</th></tr></thead>
+        <tbody>
+          <tr><td>PPU 1.0</td><td>高性能训练</td><td>阿里内部、蚂蚁</td></tr>
+          <tr><td>PPU 1.1</td><td>成本优化推理</td><td>外部客户、一体机</td></tr>
+          <tr><td>PPU 1.5</td><td>纯国产替代</td><td>专有云、政府/国企</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>🏭 产能格局</h3>
+    <ul>
+      <li><strong>先进工艺：</strong>依赖海外制程（1.0/1.1），2026年PPU增产到20万的关键是有海外高端制程支持</li>
+      <li><strong>国产化：</strong>PPU 1.5（250T）为纯国产版本，产能受限</li>
+      <li><strong>产能结构：</strong>约30万片为推理芯片（810E），训练芯片（810/610E）约16万片，呈现&quot;推理为王&quot;的出货格局</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>🏢 400+客户分布</h3>
+    <table class="cmp-table">
+      <thead><tr><th>行业</th><th>典型客户</th><th>用途</th></tr></thead>
+      <tbody>
+        <tr><td>📡 通信</td><td>中国电信</td><td>AI推理、网络智能化</td></tr>
+        <tr><td>🚗 汽车</td><td>中国一汽、小鹏汽车</td><td>自动驾驶训练、智能座舱</td></tr>
+        <tr><td>⚡ 能源</td><td>国家电网</td><td>电网调度、故障预测</td></tr>
+        <tr><td>🏦 金融</td><td>浦发银行</td><td>风控模型、智能客服</td></tr>
+        <tr><td>🔬 科研</td><td>中科院</td><td>AI基础研究、大模型训练</td></tr>
+        <tr><td>🏛️ 政府</td><td>多个地方政府专有云</td><td>信创替代、国产化部署</td></tr>
+        <tr><td>☁️ 互联网/云</td><td>阿里内部、蚂蚁、通义</td><td>大规模训练推理集群</td></tr>
+      </tbody>
+    </table>
+    <p style="margin-top:8px;font-size:0.85em;color:var(--text2);">客户结构：40%阿里内部自用 + 60%外部商业化客户 ≈ 28万片对外销售</p>
+  </div>
+</div>
+
+<!-- 4. 芯片矩阵全景 -->
 <div class="section">
   <div class="section-title"><span class="emoji">🔩</span> 芯片矩阵全景</div>
   <p style="margin-bottom:10px;color:var(--text2);">平头哥已完成数据中心<strong>算力 · 网力 · 存力</strong>全栈自研覆盖，五条核心产品线：</p>
@@ -395,7 +488,7 @@
   </div>
 </div>
 
-<!-- 4. 真武系列深度 -->
+<!-- 5. 真武系列深度 -->
 <div class="section">
   <div class="section-title"><span class="emoji">🚀</span> 真武系列深度解读</div>
 
@@ -435,7 +528,7 @@
   </div>
 </div>
 
-<!-- 5. 磐久AL128 + ICN Switch -->
+<!-- 6. 磐久AL128 + ICN Switch -->
 <div class="section">
   <div class="section-title"><span class="emoji">⚡</span> 磐久AL128超节点 + ICN Switch 1.0</div>
 
@@ -461,7 +554,7 @@
   </div>
 </div>
 
-<!-- 6. 阿里云峰会发布 -->
+<!-- 7. 阿里云峰会发布 -->
 <div class="section">
   <div class="section-title"><span class="emoji">🎙️</span> 阿里云峰会 · 杭州 2026.05.20</div>
 
@@ -485,7 +578,7 @@
   </div>
 </div>
 
-<!-- 7. 战略价值 -->
+<!-- 8. 战略价值 -->
 <div class="section">
   <div class="section-title"><span class="emoji">🏰</span> 战略价值</div>
 
@@ -512,7 +605,7 @@
   </div>
 </div>
 
-<!-- 8. 竞争格局 -->
+<!-- 9. 竞争格局 -->
 <div class="section">
   <div class="section-title"><span class="emoji">⚔️</span> 竞争格局</div>
 
@@ -530,7 +623,7 @@
   </table>
 </div>
 
-<!-- 9. 关键人物 -->
+<!-- 10. 关键人物 -->
 <div class="section">
   <div class="section-title"><span class="emoji">👤</span> 关键人物</div>
   <div class="card">
@@ -543,7 +636,7 @@
   </div>
 </div>
 
-<!-- 10. 资料来源 -->
+<!-- 11. 资料来源 -->
 <div class="section">
   <div class="section-title"><span class="emoji">📚</span> 资料来源</div>
   <div class="card">
