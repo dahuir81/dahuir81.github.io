@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Karpathy AI Ascent 2026：Vibe Coding → Agentic Engineering</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d2e;
+    --surface2: #242840;
+    --border: #2d3250;
+    --text: #e2e8f0;
+    --text-dim: #8892b0;
+    --accent: #60a5fa;
+    --accent2: #a78bfa;
+    --green: #34d399;
+    --yellow: #fbbf24;
+    --orange: #fb923c;
+    --pink: #f472b6;
+    --radius: 12px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, "SF Pro", "PingFang SC", "Noto Sans SC", sans-serif;
+    line-height: 1.7;
+    font-size: 16px;
+  }
+  .container { max-width: 820px; margin: 0 auto; padding: 40px 24px; }
+  
+  /* Header */
+  header { margin-bottom: 48px; }
+  .label {
+    display: inline-block;
+    background: var(--accent);
+    color: #0f1117;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+    margin-bottom: 16px;
+  }
+  h1 {
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 12px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .meta {
+    color: var(--text-dim);
+    font-size: 14px;
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .meta span { display: flex; align-items: center; gap: 4px; }
+
+  /* Sections */
+  section { margin-bottom: 40px; }
+  h2 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 8px;
+  }
+  h2 .icon { font-size: 20px; }
+  h3 {
+    font-size: 17px;
+    font-weight: 600;
+    margin: 20px 0 8px;
+    color: var(--accent);
+  }
+  p { margin-bottom: 14px; color: var(--text); }
+  .dim { color: var(--text-dim); font-size: 14px; }
+
+  /* Quote block */
+  .quote {
+    background: var(--surface);
+    border-left: 3px solid var(--accent);
+    padding: 16px 20px;
+    margin: 16px 0;
+    border-radius: 0 var(--radius) var(--radius) 0;
+    font-style: italic;
+    color: var(--yellow);
+    font-size: 15px;
+  }
+  .quote .attr {
+    display: block;
+    margin-top: 8px;
+    font-style: normal;
+    font-size: 13px;
+    color: var(--text-dim);
+  }
+
+  /* Cards */
+  .card-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 16px 0;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+  }
+  .card h4 { font-size: 15px; margin-bottom: 8px; color: var(--accent); }
+  .card p { font-size: 14px; color: var(--text-dim); margin: 0; }
+
+  /* Framework table */
+  .framework {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin: 16px 0;
+  }
+  .framework-row {
+    display: grid;
+    grid-template-columns: 100px 1fr 1fr;
+    border-bottom: 1px solid var(--border);
+  }
+  .framework-row:last-child { border-bottom: none; }
+  .framework-row > div { padding: 12px 16px; font-size: 14px; }
+  .framework-row .era { font-weight: 600; color: var(--accent); }
+  .framework-row.header > div {
+    font-weight: 600;
+    color: var(--text-dim);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    background: var(--surface2);
+  }
+
+  /* Verifiability matrix */
+  .matrix {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .matrix-cell {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+  }
+  .matrix-cell h4 { font-size: 14px; margin-bottom: 6px; }
+  .matrix-cell p { font-size: 13px; color: var(--text-dim); margin: 0; }
+  .matrix-cell.high { border-color: var(--green); }
+  .matrix-cell.high h4 { color: var(--green); }
+  .matrix-cell.low { border-color: var(--orange); }
+  .matrix-cell.low h4 { color: var(--orange); }
+
+  /* List styles */
+  ul, ol { margin: 8px 0 16px 24px; }
+  li { margin-bottom: 6px; font-size: 15px; }
+  li::marker { color: var(--accent); }
+
+  /* Source block */
+  .sources {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-top: 32px;
+  }
+  .sources h3 { margin-top: 0; color: var(--text-dim); }
+  .sources a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .sources a:hover { text-decoration: underline; }
+  .sources li { font-size: 14px; }
+
+  /* Tags */
+  .tags { display: flex; gap: 8px; flex-wrap: wrap; margin: 24px 0; }
+  .tag {
+    background: var(--surface2);
+    color: var(--text-dim);
+    font-size: 12px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+  }
+  .tag.accent { color: var(--accent); border-color: var(--accent); }
+
+  /* Divider */
+  hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+
+  /* Responsive */
+  @media (max-width: 640px) {
+    .card-grid, .matrix { grid-template-columns: 1fr; }
+    .framework-row { grid-template-columns: 80px 1fr 1fr; }
+    .framework-row > div { padding: 10px 12px; font-size: 13px; }
+    h1 { font-size: 26px; }
+    .container { padding: 24px 16px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <div class="label">🎯 原始访谈整理</div>
+  <h1>Karpathy AI Ascent 2026：<br>Vibe Coding → Agentic Engineering</h1>
+  <div class="meta">
+    <span>📅 2026-04 · Sequoia Capital AI Ascent</span>
+    <span>🎤 Andrej Karpathy × Stephanie Zhan</span>
+    <span>⏱ 约50分钟</span>
+  </div>
+  <div class="tags">
+    <span class="tag accent">Software 3.0</span>
+    <span class="tag">Vibe Coding</span>
+    <span class="tag">Agentic Engineering</span>
+    <span class="tag">Jagged Intelligence</span>
+    <span class="tag">Verifiability</span>
+    <span class="tag">LLM as Ghost</span>
+  </div>
+</header>
+
+<!-- 1. Background -->
+<section>
+  <h2><span class="icon">📋</span> 背景</h2>
+  <p>2026年4月，Sequoia Capital在AI Ascent 2026大会上，合伙人Stephanie Zhan与Andrej Karpathy进行了一场深度对话。Karpathy是OpenAI联合创始人、前特斯拉AI负责人、Eureka Labs创始人。彼时他刚宣布加入Anthropic预训练团队，职掌利用Claude加速预训练研究的前沿方向。</p>
+  <p>这场访谈距离他2025年2月发明"Vibe Coding"概念过去一年多。他坦诚地回顾了这个概念的演变，提出了更严肃的工程框架，并系统阐述了Software 3.0时代的产品和工程认知框架。</p>
+</section>
+
+<!-- 2. Vibe Coding → Agentic Engineering -->
+<section>
+  <h2><span class="icon">🔄</span> Vibe Coding → Agentic Engineering</h2>
+  
+  <div class="quote">
+    "Vibe coding raises the floor. Agentic engineering raises the ceiling."
+  </div>
+  
+  <p>Karpathy明确修正了自己一年前提出的概念：<strong>Vibe Coding没有死，它分叉了。</strong></p>
+  
+  <div class="card-grid">
+    <div class="card">
+      <h4>🎨 Vibe Coding</h4>
+      <p>提升每个人的软件能力下限。原型验证阶段有效——描述需求、感受氛围、快速出活。适合实验、MVP、一次性脚本。</p>
+    </div>
+    <div class="card">
+      <h4>⚙️ Agentic Engineering</h4>
+      <p>专业开发者用AI获得速度提升，同时保持质量基线。涉及评估框架、测试套件、架构审查、安全边界。适合生产级工程。</p>
+    </div>
+  </div>
+  
+  <p>他谈到了一个感受转变的关键节点：当初AI编码工具还停留在"智能补全"阶段，生成块需要频繁修正。到2025年12月前后，质量跨过了某个阈值——生成结果"大部分是对的"，开发者角色从逐行敲代码变成<strong>引导和审查</strong>。</p>
+</section>
+
+<!-- 3. Software 3.0 -->
+<section>
+  <h2><span class="icon">🏗️</span> Software 3.0 范式框架</h2>
+  
+  <div class="framework">
+    <div class="framework-row header">
+      <div>时代</div>
+      <div>编程方式</div>
+      <div>核心理念</div>
+    </div>
+    <div class="framework-row">
+      <div class="era">1.0</div>
+      <div>人类手写显式代码</div>
+      <div>告诉计算机怎么做</div>
+    </div>
+    <div class="framework-row">
+      <div class="era">2.0</div>
+      <div>用数据训练神经网络</div>
+      <div>告诉计算机学什么</div>
+    </div>
+    <div class="framework-row">
+      <div class="era">3.0</div>
+      <div>用提示词编程LLM</div>
+      <div>告诉LLM做什么</div>
+    </div>
+  </div>
+
+  <p>Karpathy的原话表述：</p>
+  <div class="quote">
+    "Your programming now turns to prompting… and the LLM is kind of like interpreting your context and performing computation in the digital information space."
+  </div>
+
+  <h3>🎯 最震撼的例子：Menu Gen</h3>
+  <p>他做了一个"菜单图片识别App"——拍照→OCR菜品→AI生成菜品图片→重新渲染菜单。传统思路是做一整套App层：上传、处理、调用模型、展示。但Karpathy发现，在Software 3.0范式下，<strong>整个App不应该存在</strong>。</p>
+  <p>直接把菜单照片丢给多模态模型，一句话"用食物图片覆盖菜单"，模型直接完成全部转换。所有中间层的App代码，全部多余。</p>
+  <div class="quote">
+    "What does the model already know how to transform?"<br>
+    <span class="attr">——问题从"我怎么围绕这个建App"变成"模型已经能直接转换什么"</span>
+  </div>
+</section>
+
+<!-- 4. LLM is Ghost -->
+<section>
+  <h2><span class="icon">👻</span> LLM是Ghost，不是Animal</h2>
+  <p>Karpathy提出的最具哲学深度的认知框架：</p>
+  
+  <div class="quote">
+    "Why are people still telling me what to do? What is the thing I should copy-paste to my agent?"
+  </div>
+
+  <p>他用一个例子说明<strong>锯齿智能（Jagged Intelligence）</strong>的本质——最先进的模型能重构10万行代码库、发现零日漏洞，却告诉你"洗车店只有50米，走着去"——因为它不知道你开车来的。</p>
+  
+  <h3>对产品人的启示</h3>
+  <ul>
+    <li>不要因为AI在某领域表现惊艳，就假设它在所有领域同样可靠</li>
+    <li>始终为AI输出保留人工复核环节，尤其在"训练盲区"</li>
+    <li>骂它、夸它都没意义——关注的是它的<span style="color: var(--yellow);">数据分布</span>，而非"情绪状态"</li>
+  </ul>
+</section>
+
+<!-- 5. Verifiability -->
+<section>
+  <h2><span class="icon">✅</span> 可验证性：AI自动化的边界</h2>
+  
+  <div class="quote">
+    "AI systems improve fastest in domains where the output can be checked."<br>
+    <span class="attr">——AI在输出可被验证的领域进步最快</span>
+  </div>
+  
+  <p>Karpathy的核心论点：传统计算机自动化"能被精确规定的任务"（可编码性），现代LLM自动化的是"能被精确验证的任务"（可验证性）。代码可以编译、测试、lint——这就是RL训练能快速推进的原因。数学同理。</p>
+
+  <div class="matrix">
+    <div class="matrix-cell high">
+      <h4>✅ 高可验证性</h4>
+      <p><strong>AI进步最快</strong><br>代码审查、数学证明、合规检查、测试生成、数据cleanup、财务对账</p>
+    </div>
+    <div class="matrix-cell low">
+      <h4>⚠️ 低可验证性</h4>
+      <p><strong>AI进步慢，需人工兜底</strong><br>创意写作、战略决策、用户研究、产品定位、谈判、伦理判断</p>
+    </div>
+  </div>
+
+  <h3>给创业者的蓝海方向</h3>
+  <p><strong>寻找"高可验证性 × 低实验室关注度"的行业场景</strong>——法律合规检查、特定工业质检流程、专业文档审计。这些领域验证环境明确，但实验室还没针对它们做大量RL训练。</p>
+</section>
+
+<!-- 6. Core Quotes -->
+<section>
+  <h2><span class="icon">💎</span> 核心原话</h2>
+  
+  <div class="quote">
+    "You can outsource your thinking, but you can't outsource your understanding."
+    <span class="attr">——Karpathy 本场访谈最重要的一句</span>
+  </div>
+  
+  <p>AI可以写代码、做总结、生成方案、使用工具、甚至自动调试。但以下仍然是人类不可替代的：</p>
+  
+  <ul>
+    <li>数据如何建模</li>
+    <li>安全边界在哪</li>
+    <li>好的架构长什么样</li>
+    <li>用户真正需要什么</li>
+    <li>什么时候结果在技术上是正确的、但在战略上是错的</li>
+  </ul>
+
+  <div class="quote">
+    "Vibe coding is about accessibility. More people can build software now. That is good. But agentic engineering is about maintaining professional standards while moving faster."
+  </div>
+
+  <div class="quote">
+    "The next wave is agent-native infrastructure. Docs written with copy-pasteable agent instructions, APIs that expose clean actions, permission systems for delegated work, audit logs for agent activity."
+    <span class="attr">——他不满当前软件仍为人类设计：按钮、仪表盘、DNS设置，"我的agent能理解目标、使用工具，为什么还要手动粘贴？"</span>
+  </div>
+</section>
+
+<!-- 7. Agentic Engineering Skills -->
+<section>
+  <h2><span class="icon">🧰</span> Agentic Engineering 核心能力</h2>
+  
+  <p>Karpathy认为，下一代AI工程师的能力图谱需要重构：</p>
+  
+  <ol>
+    <li><strong>写更清晰的规格说明</strong> —— 代理在目的地精确时表现更好</li>
+    <li><strong>投资测试</strong> —— 可验证性就是杠杆</li>
+    <li><strong>人类掌控架构决策</strong> —— 别让agent定义系统边界</li>
+    <li><strong>让仓库对agent可读</strong> —— 好的文档、命令和约定对人和AI都有利</li>
+    <li><strong>审查产品逻辑而非仅语法</strong> —— 可怕的bug往往来自看似合理的决策</li>
+    <li><strong>用AI做探索</strong> —— 让agent生成方案、原型、迁移和测试</li>
+    <li><strong>AI输出视为委派工作</strong> —— 快不等于不用监督</li>
+  </ol>
+</section>
+
+<!-- 8. Karpathy Loop -->
+<section>
+  <h2><span class="icon">🔄</span> Karpathy Loop：预训练自动化</h2>
+  
+  <p>加入Anthropic前夕，Karpathy发布了一个震撼的实验：他让一个AI编码agent拿着一个小型语言模型，无人监督运行了两天，自主测试和调整训练代码。</p>
+  
+  <p>结果：agent执行了<strong>700次实验</strong>，发现了<strong>20个自寻优化</strong>，将这些优化应用到一个更大的模型后，训练时间砍了<strong>11%</strong>。</p>
+  
+  <div class="quote">
+    "Part code, part sci-fi, and a pinch of psychosis."
+    <span class="attr">——Karpathy 对自己实验的评价，这个方法后来被称为 "The Karpathy Loop"</span>
+  </div>
+
+  <p>这本质上就是他加入Anthropic后要做的事情：<strong>用Claude来加速Claude自己的预训练研究</strong>——让AI自己改进AI。</p>
+</section>
+
+<!-- 9. Sources -->
+<hr>
+<section class="sources">
+  <h3>📚 资料来源</h3>
+  <ol>
+    <li>
+      <strong>原始视频</strong> — Andrej Karpathy: From Vibe Coding to Agentic Engineering, Sequoia Capital AI Ascent 2026<br>
+      <a href="https://www.youtube.com/watch?v=96jN2OCOfLs">https://www.youtube.com/watch?v=96jN2OCOfLs</a>
+    </li>
+    <li>
+      <strong>Fortune报道</strong> — Andrej Karpathy, OpenAI founding member and inventor of 'vibe coding,' defects to Anthropic (2026-05-19)<br>
+      <a href="https://fortune.com/2026/05/19/who-is-andrej-karpathy-vibe-coding-anthropic-openai-rubiks-cube/">https://fortune.com/2026/05/19/who-is-andrej-karpathy-vibe-coding-anthropic-openai-rubiks-cube/</a>
+    </li>
+    <li>
+      <strong>深度解读（含大量原话引用）</strong> — Vibe Coding vs Agentic Engineering: Karpathy's Big Idea for AI Coding · Travis.media<br>
+      <a href="https://travis.media/blog/vibe-coding-agentic-engineering-karpathy/">https://travis.media/blog/vibe-coding-agentic-engineering-karpathy/</a>
+    </li>
+    <li>
+      <strong>微信公众号文章</strong> — Karpathy加入Anthropic后首讲：Vibe Coding已死，Software 3.0来了 · FLY AI CLOUD (归纳整理版)
+    </li>
+  </ol>
+  
+  <p style="margin-top:12px; font-size:13px; color:var(--text-dim);">
+    📝 注：本页内容综合自Sequoia Capital AI Ascent 2026现场访谈（视频）、Fortune报道、以及数篇忠实于原话的解读。由于原始访谈未提供公开文字稿，部分引述经由二次来源复核。
+  </p>
+</section>
+
+</div>
+</body>
+</html>
