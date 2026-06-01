@@ -409,11 +409,13 @@
 
     <div class="divider"></div>
 
+    <div class="divider"></div>
+
   <!-- ===================== BONUS: GPU算力租赁市场 ===================== -->
   <div class="section">
     <div class="section-header">
       <span class="icon">📉</span>
-      <h2>专题分析：BIS 封堵 × 算力租赁市场多空分歧</h2>
+      <h2>专题分析：BIS 封堵对 GPU 算力租赁市场的影响</h2>
       <span class="badge">算力租赁 · 雪球讨论</span>
     </div>
 
@@ -421,53 +423,24 @@
       <span class="tag tag-infra">算力租赁</span>
       <h3>BIS 新指引封堵"绕道"通道，海外 GPU 租赁市场面临重构</h3>
       <p>5 月 31 日 BIS 指引明确：总部或最终母公司在 D:5 组（含中国）的企业，即便通过境外子公司采购高端 AI 芯片，也必须申请出口许可证。这一规定直接冲击了过去一年快速膨胀的 <strong>海外 GPU 算力租赁产业</strong>。</p>
-      <p>6月1日雪球（国内投资社区）上出现了两篇相关讨论，标题同为《关于算力租赁的几个利空》，但角度不同：</p>
-    </div>
-
-    <div class="product-card">
-      <span class="tag tag-market">路标 1：市场恐慌情绪</span>
-      <h3>利通电子暴雷 → 算力租赁板块恐慌</h3>
-      <p>利通电子（SH603629）股价急跌引发市场对算力租赁板块的担忧。但一篇分析指出：</p>
+      <p>雪球上同日出现讨论《关于算力租赁的几个利空》，核心疑虑有三：</p>
       <ul style="color: var(--text2); font-size: 14px; line-height: 1.8; padding-left: 20px;">
-        <li>利通电子与国内核心算力租赁公司没有直接关联</li>
-        <li>该公司与 NVIDIA、东方光等主流玩家无业务联系</li>
-        <li>其暴雷不代表整个行业的基本面出了问题</li>
+        <li><strong>利通电子暴雷</strong>（SH603629）——股价急跌引发算力租赁板块恐慌，但该公司与核心算力租赁市场无直接关联</li>
+        <li><strong>H200 租赁价格下跌</strong>——一度跌至约 $4.31/小时，但 A100、A800、B200、RTX 3090/5080 等型号价格同期全线上涨，仅 H200 单点异常</li>
+        <li><strong>NBIS（Nebius Group）创历史新高</strong>——前 OpenAI 研究员 Aschenbrenner 持股约 5.6%，反映 AI 推理算力需求才是市场主线</li>
       </ul>
-    </div>
-
-    <div class="product-card">
-      <span class="tag tag-market">路标 2：H200 租赁价格争议</span>
-      <h3>H200 价格跌到 $4.31/小时——但只是单点异常</h3>
-      <p>有人用 H200 租赁价格短期下跌来说明市场在崩，但看多方指出：<strong>A100、A800、B200、RTX 3090、RTX 5080 等全线上涨</strong>，仅 H200 一个型号出现下跌，属于短期供需波动而非趋势。核心逻辑：</p>
       <div class="quote">
-        "不要被个别事件误导。算力租赁的本质是 AI 推理需求的结构性增长，GPU 供给根本跟不上。"
-        <span class="attr">—— 雪球"调研爱好者" · 2026.06.01</span>
+        "不要被个别事件误导。算力租赁的本质是AI推理需求的结构性增长，GPU供给根本跟不上。"
+        <span class="attr">—— 调研爱好者 · 雪球 2026.06.01</span>
       </div>
     </div>
 
     <div class="product-card">
-      <span class="tag tag-market">路标 3：NBIS 创历史新高</span>
-      <h3>Nebius Group 股价飙升——推理算力需求才是主线</h3>
-      <p>NBIS（Nebius Group）股价持续新高，由前 OpenAI 研究员 Aschenbrenner 操盘，持有约 5.6% 股权（~$3500 万）。反映出 <strong>AI 推理算力需求</strong>才是市场的主驱动力——GPU 供给跟不上需求，议价权在供应商手中。</p>
-    </div>
-
-    <div class="product-card">
-      <span class="tag tag-market">综合分析</span>
-      <h3>BIS 禁令后算力租赁市场的三层推演</h3>
-      
-      <p><strong>① 短期（1-3 个月）：情绪冲击 → 市场消化</strong></p>
-      <p>BIS 指引发布初期，海外 GPU 租赁商紧急排查客户背景，中国背景企业租约可能被中止。部分租赁商抛售原本锁定的"中国长单"导致 H200 等型号租赁价格短期波动。但这是情绪面而非基本面的反应。</p>
-
-      <p><strong>② 中期（3-12 个月）：市场加速分化</strong></p>
-      <p>中国市场与海外合规市场将清晰分裂：</p>
-      <div class="specs" style="grid-template-columns: 1fr 1fr;">
-        <div class="spec-item"><div class="spec-label">✅ 合规市场</div><div class="spec-value green">美/欧/日企业租用——需求强劲，价格坚挺</div></div>
-        <div class="spec-item"><div class="spec-label">❌ 受限市场</div><div class="spec-value red">中国背景企业——海外渠道基本关闭</div></div>
-      </div>
-      <p>但值得注意的是，中国企业在海外租赁的 GPU 主要用于训练，而推理算力需求（看多方指出的主线）主要由北美/欧洲本地企业驱动。因此 BIS 对<strong>训练租赁市场</strong>冲击大，对<strong>推理租赁市场</strong>影响相对有限。</p>
-
-      <p><strong>③ 长期（1-3 年）：产业格局重塑</strong></p>
-      <p>海外 GPU 租赁商（CoreWeave、Lambda 等）客户结构洗牌，失去中国大客户后转向更高利润率但碎片化的按需模式。同时倒逼租赁商加速在东南亚、中东、欧洲布局本地化数据中心以承接溢出需求。</p>
+      <span class="tag tag-market">推演</span>
+      <h3>BIS 禁令后算力租赁市场三层影响</h3>
+      <p><strong>短期（1-3 个月）：</strong>海外租赁商排查客户背景，中国背景企业租约可能被中止。部分锁定的中国长单释放到市场，H200 等型号租赁价格短期承压。这是情绪面波动，非基本面反转。</p>
+      <p><strong>中期（3-12 个月）：</strong>市场明确分裂：合规市场（美/欧/日企业）需求强劲、价格坚挺；受限市场（中国背景企业）海外渠道基本关闭。但中国企业在海外的 GPU 主要用于训练，而推理需求才是目前全球 GPU 需求的主驱动力——训练租赁受冲击大，推理租赁影响有限。</p>
+      <p><strong>长期（1-3 年）：</strong>CoreWeave、Lambda 等海外租赁商客户结构洗牌，失去中国大客户后转向按需模式，同时加速在东南亚/中东/欧洲布局本地化数据中心。</p>
 
       <div class="specs">
         <div class="spec-item"><div class="spec-label">全球 GPU 租赁市场</div><div class="spec-value blue">~$200 亿（2025年估算）</div></div>
