@@ -31,7 +31,6 @@
     -webkit-font-smoothing: antialiased;
   }
 
-  /* Hero */
   .hero {
     background: linear-gradient(135deg, #0d1117 0%, #1a2332 40%, #0d2810 80%, #0a0a0f 100%);
     padding: 64px 24px 48px;
@@ -43,228 +42,76 @@
   .hero::before {
     content: '';
     position: absolute;
-    top: -40%;
-    left: -20%;
-    width: 140%;
-    height: 180%;
+    top: -40%; left: -20%;
+    width: 140%; height: 180%;
     background: radial-gradient(ellipse at 30% 40%, rgba(118, 185, 0, 0.08) 0%, transparent 50%),
                 radial-gradient(ellipse at 70% 60%, rgba(96, 165, 250, 0.05) 0%, transparent 50%);
     pointer-events: none;
   }
-  .hero .logo {
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--green);
-    letter-spacing: 3px;
-    margin-bottom: 16px;
-    text-transform: uppercase;
-  }
-  .hero h1 {
-    font-size: clamp(28px, 5vw, 48px);
-    font-weight: 800;
-    line-height: 1.2;
-    max-width: 750px;
-    margin: 0 auto 10px;
-    position: relative;
-  }
+  .hero .logo { font-size: 14px; font-weight: 700; color: var(--green); letter-spacing: 3px; margin-bottom: 16px; text-transform: uppercase; }
+  .hero h1 { font-size: clamp(28px, 5vw, 48px); font-weight: 800; line-height: 1.2; max-width: 800px; margin: 0 auto 10px; position: relative; }
   .hero h1 .highlight { color: var(--green); }
-  .hero .subtitle {
-    color: var(--text2);
-    font-size: 16px;
-    margin-bottom: 6px;
-  }
-  .hero .date {
-    color: var(--text3);
-    font-size: 13px;
-  }
-  .hero .count {
-    display: inline-block;
-    margin-top: 16px;
-    background: var(--green-dim);
-    color: var(--green);
-    font-size: 13px;
-    font-weight: 600;
-    padding: 6px 18px;
-    border-radius: 20px;
-  }
+  .hero .subtitle { color: var(--text2); font-size: 16px; margin-bottom: 6px; }
+  .hero .date { color: var(--text3); font-size: 13px; }
+  .hero .count { display: inline-block; margin-top: 16px; background: var(--green-dim); color: var(--green); font-size: 13px; font-weight: 600; padding: 6px 18px; border-radius: 20px; }
 
   .container { max-width: 880px; margin: 0 auto; padding: 40px 24px 80px; }
 
-  /* Section */
   .section { margin-bottom: 52px; }
-  .section-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 20px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid var(--border);
-  }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
   .section-header .icon { font-size: 22px; }
-  .section-header h2 {
-    font-size: 20px;
-    font-weight: 700;
-    flex: 1;
-  }
-  .section-header .badge {
-    font-size: 11px;
-    font-weight: 600;
-    padding: 3px 10px;
-    border-radius: 12px;
-    background: var(--surface2);
-    color: var(--text2);
-    border: 1px solid var(--border);
-  }
+  .section-header h2 { font-size: 20px; font-weight: 700; flex: 1; }
+  .section-header .badge { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 12px; background: var(--surface2); color: var(--text2); border: 1px solid var(--border); }
   .section p { color: var(--text2); font-size: 15px; margin-bottom: 16px; }
 
-  /* Product Card */
-  .product-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 24px 28px;
-    margin-bottom: 16px;
-    transition: border-color 0.2s;
-  }
+  .product-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px 28px; margin-bottom: 16px; transition: border-color 0.2s; }
   .product-card:hover { border-color: rgba(118, 185, 0, 0.3); }
-  .product-card .tag {
-    display: inline-block;
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    padding: 2px 10px;
-    border-radius: 4px;
-    margin-bottom: 10px;
-  }
+  .product-card .tag { display: inline-block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; padding: 2px 10px; border-radius: 4px; margin-bottom: 10px; }
   .tag-hardware { background: rgba(96, 165, 250, 0.15); color: var(--accent); }
   .tag-model { background: var(--green-dim); color: var(--green); }
   .tag-platform { background: rgba(129, 140, 248, 0.15); color: var(--accent2); }
   .tag-robot { background: rgba(251, 191, 36, 0.15); color: #fbbf24; }
   .tag-infra { background: rgba(248, 113, 113, 0.15); color: #f87171; }
   .tag-av { background: rgba(52, 211, 153, 0.15); color: #34d399; }
+  .tag-market { background: rgba(244, 114, 182, 0.15); color: #f472b6; }
 
   .product-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
   .product-card h3 .co { color: var(--text3); font-weight: 400; font-size: 14px; }
+  .product-card .sub-title { font-size: 14px; color: var(--text3); margin-bottom: 10px; }
   .product-card p { color: var(--text2); font-size: 14px; line-height: 1.8; margin-bottom: 12px; }
-  .product-card .quote {
-    border-left: 3px solid var(--green);
-    padding: 10px 16px;
-    margin: 12px 0;
-    background: var(--green-glow);
-    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-    font-size: 13px;
-    color: var(--text2);
-    font-style: italic;
-  }
-  .product-card .quote .attr {
-    display: block;
-    margin-top: 4px;
-    font-style: normal;
-    font-size: 12px;
-    color: var(--text3);
-  }
+  .product-card .quote { border-left: 3px solid var(--green); padding: 10px 16px; margin: 12px 0; background: var(--green-glow); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; font-size: 13px; color: var(--text2); font-style: italic; }
+  .product-card .quote .attr { display: block; margin-top: 4px; font-style: normal; font-size: 12px; color: var(--text3); }
 
-  /* Spec grid */
-  .specs {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 10px;
-    margin: 12px 0;
-  }
-  .spec-item {
-    background: var(--surface2);
-    border-radius: var(--radius-sm);
-    padding: 10px 14px;
-  }
-  .spec-item .spec-label {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    color: var(--text3);
-    margin-bottom: 2px;
-  }
-  .spec-item .spec-value {
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--text);
-  }
+  .specs { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin: 12px 0; }
+  .spec-item { background: var(--surface2); border-radius: var(--radius-sm); padding: 10px 14px; }
+  .spec-item .spec-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text3); margin-bottom: 2px; }
+  .spec-item .spec-value { font-size: 14px; font-weight: 600; color: var(--text); }
   .spec-item .spec-value.green { color: var(--green); }
   .spec-item .spec-value.blue { color: var(--accent); }
+  .spec-item .spec-value.red { color: #f87171; }
 
-  /* Customer list */
-  .cust-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin: 8px 0;
-  }
-  .cust-tag {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 4px 12px;
-    font-size: 13px;
-    color: var(--text2);
-  }
+  .cust-list { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0; }
+  .cust-tag { background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; padding: 4px 12px; font-size: 13px; color: var(--text2); }
 
-  /* Full product table */
-  .table-wrap {
-    overflow-x: auto;
-    margin: 16px 0;
-    border-radius: var(--radius-sm);
-    border: 1px solid var(--border);
-  }
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 13px;
-  }
-  thead th {
-    background: var(--surface2);
-    color: var(--text);
-    font-weight: 600;
-    padding: 10px 14px;
-    text-align: left;
-    border-bottom: 2px solid var(--border);
-    white-space: nowrap;
-  }
-  tbody td {
-    padding: 10px 14px;
-    border-bottom: 1px solid var(--border);
-    color: var(--text2);
-    vertical-align: top;
-  }
+  .table-wrap { overflow-x: auto; margin: 16px 0; border-radius: var(--radius-sm); border: 1px solid var(--border); }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead th { background: var(--surface2); color: var(--text); font-weight: 600; padding: 10px 14px; text-align: left; border-bottom: 2px solid var(--border); white-space: nowrap; }
+  tbody td { padding: 10px 14px; border-bottom: 1px solid var(--border); color: var(--text2); vertical-align: top; }
   tbody tr:last-child td { border-bottom: none; }
   tbody tr:hover { background: rgba(118, 185, 0, 0.03); }
 
-  /* Divider */
   .divider { height: 1px; background: var(--border); margin: 48px 0; }
 
-  /* Deep quote */
-  .deep-quote {
-    background: linear-gradient(135deg, var(--surface), var(--surface2));
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 28px 32px;
-    text-align: center;
-    margin: 32px 0;
-  }
-  .deep-quote p {
-    font-size: 17px;
-    font-weight: 600;
-    color: var(--text);
-    line-height: 1.6;
-    margin: 0;
-  }
-  .deep-quote .sub {
-    font-size: 13px;
-    color: var(--text3);
-    font-weight: 400;
-    margin-top: 10px;
-  }
+  .deep-quote { background: linear-gradient(135deg, var(--surface), var(--surface2)); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px 32px; text-align: center; margin: 32px 0; }
+  .deep-quote p { font-size: 17px; font-weight: 600; color: var(--text); line-height: 1.6; margin: 0; }
+  .deep-quote .sub { font-size: 13px; color: var(--text3); font-weight: 400; margin-top: 10px; }
 
-  /* Responsive */
+  .summary-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 24px; margin-bottom: 16px; }
+  .summary-box .big-num { font-size: 28px; font-weight: 800; color: var(--green); }
+  .summary-box .big-num.red { color: #f87171; }
+  .summary-box .big-num.blue { color: var(--accent); }
+  .summary-box .meta { font-size: 12px; color: var(--text3); }
+
   @media (max-width: 640px) {
     .hero { padding: 40px 16px 32px; }
     .container { padding: 24px 16px 60px; }
@@ -278,18 +125,17 @@
 <body>
 
 <div class="hero">
-  <div class="logo">NVIDIA GTC Taipei</div>
+  <div class="logo">NVIDIA GTC Taipei @ COMPUTEX</div>
   <h1>老黄把整条产品线<span class="highlight">推倒重来</span></h1>
   <p class="subtitle">2026 年 6 月 1 日 · 台北国际会议中心</p>
-  <p class="count">📦 20+ 发布 / 4 大产品线 / 1 个 Agent 时代宣言</p>
+  <p class="count">📦 22+ 发布 / 4 大产品线 / 40,000 工程师参与</p>
 </div>
 
 <div class="container">
 
-  <!-- Overarching theme -->
   <div class="deep-quote">
     <p>"过去四十年，计算机是为人造的。<br>从今天起，它要为 <strong>Agent</strong> 造。"</p>
-    <p class="sub">—— Jensen Huang, NVIDIA GTC Taipei 2026</p>
+    <p class="sub">—— 黄仁勋, GTC Taipei 2026</p>
   </div>
 
   <!-- ===================== CHAPTER 1 ===================== -->
@@ -297,69 +143,44 @@
     <div class="section-header">
       <span class="icon">💻</span>
       <h2>个人电脑被重新发明</h2>
-      <span class="badge">Consumer PC</span>
+      <span class="badge">Consumer PC · 今年秋季上市</span>
     </div>
 
     <div class="product-card">
       <span class="tag tag-hardware">超级芯片</span>
       <h3>RTX Spark (N1X) — 全球首款 Agent PC 芯片</h3>
-      <p>和老黄在 GTC 2025 推出的 DGX Spark 开发者套件不同，RTX Spark 是一个全新的消费级产品线。英伟达与微软联手，把数据中心级算力塞进 14mm 厚的笔记本。<strong>四十年 PC 史第一次，整条产品线被推倒重来。</strong></p>
+      <div class="sub-title">台积电 3nm · 700 亿晶体管 · 英伟达 × 联发科</div>
+      <p>"时隔 40 年，微软与英伟达将重新发明 PC。"老黄宣布与微软共同推出全新 PC 产品线，涵盖<strong>笔记本电脑、紧凑型台式机、工作站</strong>三大形态。RTX Spark 融合英伟达 33 年创新成果，100% 软件栈全兼容。</p>
       <div class="specs">
-        <div class="spec-item">
-          <div class="spec-label">GPU 核心</div>
-          <div class="spec-value green">6144 CUDA</div>
-        </div>
-        <div class="spec-item">
-          <div class="spec-label">统一内存</div>
-          <div class="spec-value green">128 GB LPDDR5X</div>
-        </div>
-        <div class="spec-item">
-          <div class="spec-label">AI 算力</div>
-          <div class="spec-value green">1 PFLOP FP4</div>
-        </div>
-        <div class="spec-item">
-          <div class="spec-label">CPU</div>
-          <div class="spec-value">20核 Grace (联发科合作)</div>
-        </div>
-        <div class="spec-item">
-          <div class="spec-label">工艺</div>
-          <div class="spec-value">台积电 3nm</div>
-        </div>
-        <div class="spec-item">
-          <div class="spec-label">晶体管</div>
-          <div class="spec-value">700 亿</div>
-        </div>
+        <div class="spec-item"><div class="spec-label">GPU</div><div class="spec-value green">6144 CUDA + 第5代 Tensor Core</div></div>
+        <div class="spec-item"><div class="spec-label">统一内存</div><div class="spec-value green">128 GB LPDDR5X</div></div>
+        <div class="spec-item"><div class="spec-label">AI 算力</div><div class="spec-value green">1 PFLOP FP4</div></div>
+        <div class="spec-item"><div class="spec-label">CPU</div><div class="spec-value">20核 Grace（联发科）</div></div>
+        <div class="spec-item"><div class="spec-label">工艺</div><div class="spec-value">台积电 3nm</div></div>
+        <div class="spec-item"><div class="spec-label">晶体管</div><div class="spec-value">700 亿</div></div>
       </div>
+      <p><strong>本地模型：</strong>可运行 1200 亿参数大模型、100 万 token 上下文。<br>
+      <strong>笔记本：</strong>14mm 厚、约 1.36kg（3 磅），可 24 小时不间断运行本地 Agent。<br>
+      <strong>定价含义：</strong>这是与微软联手的消费级产品线，每代架构（Grace Blackwell、Vera Rubin、Rosa Feynman）都将配备台式机、笔记本和工作站。</p>
       <div class="quote">
-        "四十年后，英伟达要和微软，一起重新发明 PC。大模型就是新时代的 DirectX，Agent 就是新时代的应用。"
-        <span class="attr">—— Jensen Huang</span>
+        "RTX Spark 是世界上制造过的最神奇的芯片。英伟达 100% 的软件栈都在其上运行。"
+        <span class="attr">—— 黄仁勋</span>
       </div>
-      <p><strong>关键护城河：</strong>RTX Spark 第一次在同一颗芯片上实现了 <strong>统一内存 + 完整 CUDA 生态</strong>。在此之前这两件事在 PC 上不可兼得——Mac 有统一内存但没 CUDA，传统 N 卡有 CUDA 但被显存容量卡死。128GB 统一内存意味着可以本地流畅跑 70B–120B 参数模型，还能做 LoRA 微调、RAG、Agent 自迭代。</p>
-      <p><strong>合作伙伴：</strong>联想、HP、联发科、微软（Windows 原生 Agent 重构）、Adobe（2 倍加速 + 原生 Agent 调用）</p>
+      <p><strong>核心护城河：</strong>统一内存 + 完整 CUDA 生态首次在 PC 上兼得。Adobe 为 RTX Spark 重新设计了 Photoshop/Premiere 架构，创意流程提速最高 2 倍。<strong>联想、HP</strong> 为首批品牌合作方。</p>
     </div>
 
     <div class="product-card">
-      <span class="tag tag-hardware">工作站</span>
+      <span class="tag tag-hardware">桌面超算</span>
       <h3>DGX Station for Windows</h3>
-      <p>桌面级 AI 超级计算机，基于 GB300 Grace Blackwell Ultra Desktop Superchip。适合工厂/开发者在本地跑超大模型。</p>
+      <div class="sub-title">全球最强 Windows 桌面 AI 超级计算机 · 2026 Q4 上市</div>
+      <p>微软合作开发，基于 GB300 Grace Blackwell Ultra Desktop Superchip。可运行万亿参数级 AI 模型，同时运行数百个 Agent。黄仁勋预言："未来有一天，每个家庭都会有一台 AI 超级计算机。"</p>
       <div class="specs">
-        <div class="spec-item">
-          <div class="spec-label">AI 算力</div>
-          <div class="spec-value green">20 PFLOPS FP4</div>
-        </div>
-        <div class="spec-item">
-          <div class="spec-label">内存</div>
-          <div class="spec-value green">748 GB 统一内存</div>
-        </div>
-        <div class="spec-item">
-          <div class="spec-label">内存带宽</div>
-          <div class="spec-value">8 TB/s</div>
-        </div>
-        <div class="spec-item">
-          <div class="spec-label">最大模型</div>
-          <div class="spec-value">1 万亿参数</div>
-        </div>
+        <div class="spec-item"><div class="spec-label">AI 算力</div><div class="spec-value green">20 PFLOPS FP4</div></div>
+        <div class="spec-item"><div class="spec-label">统一内存</div><div class="spec-value green">748 GB</div></div>
+        <div class="spec-item"><div class="spec-label">网络</div><div class="spec-value blue">800Gbps ConnectX-8</div></div>
+        <div class="spec-item"><div class="spec-label">最大模型</div><div class="spec-value">1 万亿参数</div></div>
       </div>
+      <p>可选配 RTX Pro 6000 工作站级 GPU，融合前沿 AI 算力与光线追踪可视化。</p>
     </div>
   </div>
 
@@ -370,59 +191,55 @@
     <div class="section-header">
       <span class="icon">🏭</span>
       <h2>数据中心全面重构：Vera Rubin 时代</h2>
-      <span class="badge">Data Center</span>
+      <span class="badge">Data Center · 全面量产</span>
     </div>
 
     <div class="product-card">
-      <span class="tag tag-hardware">旗舰 GPU 平台</span>
-      <h3>Vera Rubin — 全面量产</h3>
-      <p>Vera Rubin NVLink 72 是下一代 AI 数据中心的核心：72 块 Rubin GPU + 36 颗 Vera CPU 组成一个超级计算单元。<strong>供应链规模是上一代 Grace Blackwell 的两倍，机架组装从 2 小时缩短到 5 分钟。</strong></p>
+      <span class="tag tag-hardware">旗舰平台</span>
+      <h3>Vera Rubin NVLink 72 — 全面投产</h3>
+      <div class="sub-title">40,000 名英伟达工程师参与 · 供应链规模 2× Grace Blackwell</div>
+      <p>专门为运行 AI Agent 设计的完整分布式系统。包括 Vera Rubin NVL72 系统、液冷 Vera CPU 机架、Vera BlueField-4 STX 存储与安全系统、Groq 3 LPX 低延迟推理托架和 Spectrum-X Ethernet Photonics 网络。全台湾超过 150 家供应链生态合作伙伴、数百个工厂参与。机架组装从 2 小时缩短到 5 分钟。</p>
       <div class="specs">
-        <div class="spec-item">
-          <div class="spec-label">架构</div>
-          <div class="spec-value green">NVLink 72</div>
-        </div>
-        <div class="spec-item">
-          <div class="spec-label">GPU 规模</div>
-          <div class="spec-value">72× Rubin GPU</div>
-        </div>
-        <div class="spec-item">
-          <div class="spec-label">CPU 规模</div>
-          <div class="spec-value">36× Vera CPU</div>
-        </div>
-        <div class="spec-item">
-          <div class="spec-label">形态</div>
-          <div class="spec-value">无电缆 / 无软管 / 无风扇</div>
-        </div>
+        <div class="spec-item"><div class="spec-label">GPU 规模</div><div class="spec-value">72× Rubin GPU</div></div>
+        <div class="spec-item"><div class="spec-label">CPU 规模</div><div class="spec-value">36× Vera CPU</div></div>
+        <div class="spec-item"><div class="spec-label">CPU 机架</div><div class="spec-value blue">256 颗全液冷 CPU</div></div>
+        <div class="spec-item"><div class="spec-label">形态</div><div class="spec-value">无电缆 / 无软管 / 无风扇</div></div>
       </div>
-      <p><strong>台湾供应链：</strong>超过 100 万 MGX 机架组件来自台湾 25 个工厂，涉及台积电、SPIL、日月光、Foxconn、广达、纬创、英业达等 500+ 合作伙伴。</p>
+      <p>黄仁勋称 Vera Rubin 的产能爬坡令他非常满意，"目前的订单量已注定它将成为我们公司历史上最快速、最成功的产品发布。"预计 Vera 芯片收入将在本财年末达到 <strong>200 亿美元</strong>，成为第二大销售贡献者。</p>
     </div>
 
     <div class="product-card">
       <span class="tag tag-hardware">CPU 革命</span>
       <h3>Vera CPU — 第一颗专为 Agent 打造的 CPU</h3>
-      <p>"到今天为止，世界上所有的 CPU 都是为人造的。这一刻，Vera CPU 是给智能体用的。"</p>
+      <div class="sub-title">88 核 Olympus Arm · 单片 Mesh 网络 · PCIe Gen6</div>
+      <p>"到今天为止，世界上所有的 CPU 都是为人造的。这一刻，Vera CPU 是给智能体用的。"——传统 CPU 追求每颗插槽的核心数，但在 Agent 时代 CPU 已成为 GPU 利用率的瓶颈，直接影响 token 吞吐量与时延。</p>
       <div class="specs">
-        <div class="spec-item">
-          <div class="spec-label">单核性能</div>
-          <div class="spec-value green">世界第一 IPC</div>
-        </div>
-        <div class="spec-item">
-          <div class="spec-label">总线</div>
-          <div class="spec-value blue">PCIe Gen6</div>
-        </div>
-        <div class="spec-item">
-          <div class="spec-label">内存带宽</div>
-          <div class="spec-value blue">1.2 TB/s LPDDR5X</div>
-        </div>
-        <div class="spec-item">
-          <div class="spec-label">对 x86 优势</div>
-          <div class="spec-value green">SQL 快 3× / 流处理 6×</div>
-        </div>
+        <div class="spec-item"><div class="spec-label">核心</div><div class="spec-value green">88× Olympus Arm 核心</div></div>
+        <div class="spec-item"><div class="spec-label">IPC</div><div class="spec-value blue">每时钟 10 条指令，全球最高</div></div>
+        <div class="spec-item"><div class="spec-label">总线</div><div class="spec-value">PCIe Gen6</div></div>
+        <div class="spec-item"><div class="spec-label">内存带宽</div><div class="spec-value green">1.2 TB/s LPDDR5X</div></div>
+        <div class="spec-item"><div class="spec-label">片上总线</div><div class="spec-value blue">3.4 TB/s</div></div>
+        <div class="spec-item"><div class="spec-label">带宽优势</div><div class="spec-value green">x86 竞品的 2-3 倍</div></div>
       </div>
+      <p><strong>架构革命：</strong>不是分散在多个 Chiplet 上，全部在一个单片 Mesh 网络上，核心间通信比传统 CPU 快 50%，无 chiplet tax、无跨片边界损耗。与 Grace CPU 相比，每核心每周期多执行 50% 指令。与 x86 相比，峰值内存延迟降低 40%。</p>
+      <p><strong>性能对比：</strong>Python 代码分析/编译等 Agent 沙箱性能是 x86 竞品的 1.8 倍。SQL 1TB 基准测试跑出 3 倍速度。纽约证券交易所（NYSE）实时流处理实现 6 倍性能提升。</p>
       <div class="quote">
-        "CPU 是指挥家，GPU 是交响乐团。" — 老黄用一句话定义了 Vera 和 Rubin 的关系。
+        "Vera CPU 是指挥家，GPU 是交响乐团。"
+        <span class="attr">—— 黄仁勋</span>
       </div>
+      <p><strong>首批部署：</strong>Anthropic、OpenAI、SpaceX 三家 AI 巨头率先部署 Vera CPU。Phoronix 评测作者评价："NVIDIA Vera 是英特尔和 AMD x86_64 处理器有史以来最强大的竞争对手。"</p>
+    </div>
+
+    <div class="product-card">
+      <span class="tag tag-infra">AI 工厂</span>
+      <h3>DSX — 从卖芯片到卖整座 AI 工厂</h3>
+      <p>老黄说：RTX 对应 GPU，DGX 对应系统，DSX 对应基础设施。英伟达已升级为一家<strong>基础设施公司</strong>。</p>
+      <div class="quote">
+        "计算即收入。买得越多，赚得越多。Token 已成为盈利的收入单位。"
+        <span class="attr">—— 黄仁勋</span>
+      </div>
+      <p><strong>DSX OS：</strong>模块化、开源、可扩展的 AI 工厂操作系统，负责配置、运营、监控和修复基础设施。<strong>DSX MaxLPS：</strong>与 Vera Rubin 硬件动态功耗特性协同，在相同电力预算下<strong>多提供 40% 的 GPU</strong>，热液冷却在 45℃ 运行，每年可新增数十亿美元营收。AI 工厂每吉瓦成本：200-300 亿美元起步 → 500-600 亿 → 预计 800-1000 亿美元。</p>
+      <p>黄仁勋预言：<strong>到本世纪末，100 吉瓦的 AI 工厂将陆续上线。</strong></p>
     </div>
   </div>
 
@@ -433,58 +250,47 @@
     <div class="section-header">
       <span class="icon">🧠</span>
       <h2>AI 模型与 Agent 生态</h2>
-      <span class="badge">Software</span>
-    </div>
-
-    <div class="product-card">
-      <span class="tag tag-model">世界模型</span>
-      <h3>Cosmos 3 — 全球首个全开源全模态物理 AI 模型</h3>
-      <p>基于突破性 Mixture-of-Transformers 架构，Cosmos 3 是一个 <strong>omnimodel（全模态模型）</strong>，能原生理解和生成文本、图像、视频、环境声音和动作数据。之前 Cosmos 需要多个模型拼凑，现在一个模型搞定。</p>
-      <div class="specs">
-        <div class="spec-item">
-          <div class="spec-label">世界生成</div>
-          <div class="spec-value green">排名第一</div>
-        </div>
-        <div class="spec-item">
-          <div class="spec-label">动作策略</div>
-          <div class="spec-value green">RoboLab/RoboArena 第一</div>
-        </div>
-        <div class="spec-item">
-          <div class="spec-label">训练周期</div>
-          <div class="spec-value green">数月→数天</div>
-        </div>
-        <div class="spec-item">
-          <div class="spec-label">授权</div>
-          <div class="spec-value">完全开源</div>
-        </div>
-      </div>
-      <p><strong>关键能力：</strong>视觉推理 → 生成物理场景 → 输出关节角度、夹爪位置、轨迹点等数值动作数据，让机器人直接执行。同时成立 <strong>NVIDIA Cosmos 联盟</strong>，成员包括思灵机器人、Runway、LTX、Skild AI 等。</p>
-      <p><strong>客户/合作方：</strong>思灵机器人、斗山机器人、LG、三星、Skild AI、理想汽车、Linker Vision、Agile Robots</p>
-    </div>
-
-    <div class="product-card">
-      <span class="tag tag-model">开源大模型</span>
-      <h3>Nemotron 3 Ultra — 英伟达最大开源模型</h3>
-      <p>约 5500 亿总参数，每 token 激活 550 亿参数。英伟达迄今最大的开源模型，定位为 Agent 基座模型。</p>
+      <span class="badge">Software · 全部开源</span>
     </div>
 
     <div class="product-card">
       <span class="tag tag-model">开源模型</span>
-      <h3>Alpamayo 2 Super — 机器人出租车推理模型</h3>
-      <p>320 亿参数（上一代 100 亿的 3 倍），基于 Cosmos 世界基础模型。从单目前视扩展到 360° 全环绕感知，增加 Meta-Action 输出。配套 <strong>AlpaGym</strong>（闭环强化学习框架）、<strong>OmniDreams</strong>（生成式世界模型用于长尾场景模拟）、<strong>Omniverse NuRec</strong>（神经重建）。</p>
+      <h3>Nemotron 3 Ultra — 英伟达迄今最强开源模型</h3>
+      <div class="sub-title">SSM + MoE 混合架构 · 5500 亿总参数</div>
+      <p>全球首个基于<strong>状态空间模型（SSM）+ 专家混合（MoE）</strong>混合架构的开源模型。速度是同级别领先模型的 <strong>5 倍</strong>，完成相同 Agent 任务所需运行成本降低 <strong>30%</strong>。Agent 生产力测试分数超过或打平了智谱 GLM 5.1、月之暗面 Kimi K2.6、阿里 Qwen3.5 三款国产领先模型。英伟达正在研发 Nemotron 4。</p>
+    </div>
+
+    <div class="product-card">
+      <span class="tag tag-model">世界模型</span>
+      <h3>Cosmos 3 — 全球首个全开源全模态物理 AI 世界模型</h3>
+      <div class="sub-title">Mixture-of-Transformers · 视觉推理 + 多模态生成 + 动作预测</div>
+      <p>将视觉推理与跨文本、视频、图像、环境音效和动作的多模态生成整合到一个模型中，帮助开发者创建具有物理上下文的世界数据。VANTAGE-Bench 排行榜排名第一的开放视觉语言模型。所有模型、代码和训练方案已在 Hugging Face 和 GitHub 开源。</p>
+      <p>同时成立 <strong>NVIDIA Cosmos 联盟（Cosmos Coalition）</strong>：Agile Robots、Black Forest Labs、Runway、LightTricks、Skild AI 等与英伟达共同开发下一代 Cosmos。</p>
+      <p><strong>客户：</strong>思灵机器人、斗山机器人、LG、三星、Skild AI、理想汽车、Linker Vision、Agile Robots</p>
+    </div>
+
+    <div class="product-card">
+      <span class="tag tag-model">自动驾驶推理模型</span>
+      <h3>Alpamayo 2 Super + AlpaGym + OmniDreams</h3>
+      <p>320 亿参数（上一代 3 倍），360° 全环绕感知。配套 <strong>AlpaGym</strong>（闭环强化学习框架）、<strong>OmniDreams</strong>（Cosmos 驱动的生成式长尾场景模型）、<strong>Omniverse NuRec</strong>（单 GPU 25ms 内完成真实世界重建渲染）。</p>
     </div>
 
     <div class="product-card">
       <span class="tag tag-platform">Agent 平台</span>
-      <h3>NVIDIA Agent Toolkit — 四层 Agent 系统</h3>
-      <p>老黄在这次 GTC 上拿出了完整的 Agent 基础设施，四层架构：</p>
+      <h3>NVIDIA Agent Toolkit — 四层 Agent 基础设施</h3>
       <div class="specs" style="grid-template-columns: 1fr;">
-        <div class="spec-item"><span class="spec-label">模型层</span><span class="spec-value green">Nemotron 3 Ultra + Cosmos 3</span></div>
-        <div class="spec-item"><span class="spec-label">框架层</span><span class="spec-value">Claude Code / Codex / OpenClaw 等直接运行</span></div>
-        <div class="spec-item"><span class="spec-label">工具层</span><span class="spec-value blue">CUDA-X 全部附带 skills 文件，Agent 自学即用</span></div>
-        <div class="spec-item"><span class="spec-label">运行时层</span><span class="spec-value">OpenShell（开源安全运行时，Apache 2.0）</span></div>
+        <div class="spec-item"><div class="spec-label">模型层</div><div class="spec-value green">Nemotron 3 Ultra + Cosmos 3</div></div>
+        <div class="spec-item"><div class="spec-label">框架层</div><div class="spec-value">Claude Code / Codex / OpenClaw 等直接运行</div></div>
+        <div class="spec-item"><div class="spec-label">工具 / Skills 层</div><div class="spec-value blue">CUDA-X 库全部附带 skills 文件，Agent 自学即用</div></div>
+        <div class="spec-item"><div class="spec-label">安全运行时</div><div class="spec-value">NVIDIA OpenShell（Apache 2.0 开源）</div></div>
       </div>
-      <p>同时发布开源 <strong>NVIDIA OpenShell</strong> 运行时，提供基于策略的安全与隐私治理，支持本地或云端部署。</p>
+      <p>英伟达与 Cadence 合作的芯片设计超级 Agent 可将验证周期从数周压缩到数小时，加速 <strong>40 倍以上</strong>。"英伟达拥有数千名芯片设计师。我们将引入数十万名 Cadence 超级智能体与我们协同工作。"</p>
+    </div>
+
+    <div class="product-card">
+      <span class="tag tag-platform">Skill 生态</span>
+      <h3>开放源代码物理 AI Agent Skills</h3>
+      <p>覆盖 Omniverse、Cosmos、Alpamayo、Metropolis、Isaac、Jetson 全平台。首批采用者：Agile Robots、Cadence、Dassault Systèmes、台达电子、Foxconn、Pegatron、PTC、Siemens、Synopsys、TSMC。</p>
     </div>
   </div>
 
@@ -494,36 +300,36 @@
   <div class="section">
     <div class="section-header">
       <span class="icon">🤖</span>
-      <h2>物理 AI：机器人与自动驾驶</h2>
+      <h2>物理 AI：机器人 + 自动驾驶</h2>
       <span class="badge">Physical AI</span>
     </div>
 
     <div class="product-card">
       <span class="tag tag-robot">人形机器人</span>
-      <h3>Isaac GR00T Reference Humanoid — 全球首个开源人形机器人参考设计</h3>
-      <p>英伟达第一次拿出完整的人形机器人方案，把 "身体 + 大脑 + 软件" 整合进一个开放平台。由宇树科技在 2026 年底生产。</p>
+      <h3>Isaac GR00T 参考人形机器人</h3>
+      <div class="sub-title">宇树 H2 Plus 本体 + Sharpa Wave 灵巧手 + Jetson Thor</div>
+      <p>全球首个开源人形机器人参考设计，开箱即用。黄仁勋开玩笑说这机器人的身高体重"就和我差不多"。2026 年底由宇树科技提供，宇树 G1 也将获得 GR00T 平台支持。</p>
       <div class="specs">
-        <div class="spec-item"><span class="spec-label">身高</span><span class="spec-value">约 1.8 米</span></div>
-        <div class="spec-item"><span class="spec-label">重量</span><span class="spec-value">约 68 公斤</span></div>
-        <div class="spec-item"><span class="spec-label">自由度</span><span class="spec-value green">75 DOF（身体+手）</span></div>
-        <div class="spec-item"><span class="spec-label">手臂扭矩</span><span class="spec-value">120 Nm</span></div>
-        <div class="spec-item"><span class="spec-label">腿部扭矩</span><span class="spec-value">360 Nm</span></div>
-        <div class="spec-item"><span class="spec-label">载荷</span><span class="spec-value">7kg（峰值15kg）</span></div>
+        <div class="spec-item"><div class="spec-label">身高/体重</div><div class="spec-value">1.8 米 / 68 公斤</div></div>
+        <div class="spec-item"><div class="spec-label">自由度</div><div class="spec-value green">75 DOF（身体 31 + 双手 44）</div></div>
+        <div class="spec-item"><div class="spec-label">手臂扭矩</div><div class="spec-value">120 Nm</div></div>
+        <div class="spec-item"><div class="spec-label">载荷</div><div class="spec-value">7kg（峰值 15kg）</div></div>
+        <div class="spec-item"><div class="spec-label">机载算力</div><div class="spec-value blue">Jetson Thor T5000 / 2070 TFLOPS</div></div>
+        <div class="spec-item"><div class="spec-label">续航</div><div class="spec-value">约 3 小时（0.972 kWh）</div></div>
       </div>
-      <p><strong>核心配置：</strong>宇树 H2 Plus 本体 + Sharpa Wave 五指触觉灵巧手 + <strong>NVIDIA Jetson AGX Thor T5000</strong>（Blackwell GPU / 2070 FP4 TFLOPS / 128GB 统一内存）+ Isaac GR00T 开源软件。研究机构包括 Ai2、ETH Zurich、Stanford Robotics Center、UC San Diego 已确认采用。</p>
+      <p><strong>研究机构：</strong>Ai2、ETH Zurich、Stanford Robotics Center、UC San Diego 已确认采用。</p>
     </div>
 
     <div class="product-card">
-      <span class="tag tag-robot">物理 AI Agent</span>
-      <h3>开放源代码物理 AI Agent Skills</h3>
-      <p>英伟达发布了一系列开源物理 AI skills，让 Agent 可以直接调用 Omniverse、Cosmos、Alpamayo、Metropolis、Isaac、Jetson 等平台的能力，自动完成数据生成、仿真、训练、评估和部署。</p>
-      <p><strong>首批采用者：</strong>Agile Robots、Cadence、Dassault Systèmes、台达电子、Foxconn、Pegatron、PTC、Siemens、Synopsys、TSMC</p>
+      <span class="tag tag-infra">智能制造</span>
+      <h3>Factory Operations Blueprint (FOX) — 工厂管理 Agent</h3>
+      <p>基于 NemoClaw、AI-Q Blueprint 和 Nemotron 模型。Foxconn 用其构建 MoMClaw 多 Agent 系统：<strong>根因分析提速 80%、劳动生产效率提升 15%、设备故障率降低 10%</strong>。Foxconn 还在用 Cosmos 视觉 AI 提升一次合格率 3%，用 Isaac 机器人做精密装配。</p>
     </div>
 
     <div class="product-card">
       <span class="tag tag-av">自动驾驶</span>
-      <h3>DRIVE Hyperion — 全球机器人出租车平台</h3>
-      <p>DRIVE Hyperion 平台生态系统重大扩展，面向 L4 级自动驾驶，整合全球主要车企、制造和 AV 软件生态合作伙伴。</p>
+      <h3>DRIVE Hyperion — 全球机器人出租车平台扩张</h3>
+      <p><strong>Foxconn：</strong>在台湾高雄部署 L4 级机器人出租车车队，计划扩展至全亚洲。<strong>VinFast + Autobrains：</strong>面向东南亚市场。<strong>Uber：</strong>将多个 DRIVE Hyperion 车队整合进全球打车网络，慕尼黑项目今年启动。<strong>HUMAIN：</strong>将引入沙特阿拉伯中东市场。</p>
     </div>
   </div>
 
@@ -538,39 +344,60 @@
     </div>
 
     <div class="product-card">
-      <span class="tag tag-infra">AI 工厂</span>
-      <h3>DSX — 从卖芯片到卖整座 AI 工厂</h3>
-      <p>英伟达推出 DSX（Data Center eXperience）——一套 AI 工厂的完整施工蓝图。在 Omniverse 里建数字孪生模拟电力/散热/网络，通电后 DSX OS 接管运营。DSX Max LPS 解决 AI 工厂普遍超配电力 40% 的痛点。</p>
-      <div class="quote">
-        "算力就是营收，算力就是利润。没有营收和利润，就是亏损。买越多，赚越多。"
-        <span class="attr">—— Jensen Huang</span>
-      </div>
-      <p>老黄预言：<strong>到本世纪末，100 吉瓦的 AI 工厂将陆续上线。</strong></p>
-    </div>
-
-    <div class="product-card">
-      <span class="tag tag-infra">智能工厂</span>
-      <h3>Factory Operations Blueprint (FOX) — 工厂管理 Agent</h3>
-      <p>参考设计，用于构建自主工厂管理 Agent，持续监控实时数据并协调专业 Agent 团队。基于 NemoClaw、AI-Q Blueprint 和 Nemotron 模型。DGX Station 工作站级运行。</p>
-      <p><strong>Foxconn 落地效果：</strong>根因分析提速 80%、劳动生产效率提升 15%、设备故障率降低 10%。Foxconn 也在用 DeepHow 视觉 AI + Cosmos 提升一次合格率 3%。</p>
-    </div>
-
-    <div class="product-card">
-      <span class="tag tag-infra">生态扩展</span>
-      <h3>AI Cloud Ecosystem — 六大洲覆盖</h3>
-      <p>NVIDIA AI Cloud 生态加速全球 AI 工厂基础设施建设，覆盖 CoreWeave、Lambda、Nscale 等。新增非洲 Cassava 和南美 Claro，首次实现六大洲覆盖。</p>
-    </div>
-
-    <div class="product-card">
       <span class="tag tag-infra">半导体</span>
-      <h3>TSMC × NVIDIA — AI 进入晶圆厂</h3>
-      <p>台积电将 CUDA-X 库和 AI 模型应用于计算光刻（cuLitho 提升 20-50%）、晶体管仿真（cuEST 提速 50×）、先进制程控制、良率分析和缺陷检测。</p>
+      <h3>TSMC × NVIDIA — AI 全面进入晶圆厂</h3>
+      <p>台积电将 CUDA-X 库和 AI 模型应用于计算光刻（cuLitho 20-50% 提升）、晶体管仿真（cuEST 50× 加速）、先进制程控制、良率分析和缺陷检测。</p>
     </div>
 
     <div class="product-card">
       <span class="tag tag-infra">医疗</span>
-      <h3>Healthy Taiwan — Foxconn + 台湾医疗中心</h3>
-      <p>Foxconn 和台湾顶尖医疗中心部署 NVIDIA 驱动的专用 Agent 团队，推动 AI 驱动的健康系统转型。</p>
+      <h3>Healthy Taiwan — 15 亿美元 AI 健康计划</h3>
+      <p>Foxconn 与台湾主要医疗中心部署 NVIDIA 驱动的专科 Agent（心血管、肿瘤、眼科等）和 NuRobot 护理协作机器人。CoDoctor AI 平台已从试点进入临床运营。覆盖全台 1400 万+ 患者年就诊量。</p>
+    </div>
+
+    <div class="product-card">
+      <span class="tag tag-infra">云计算</span>
+      <h3>AI Cloud 六大洲覆盖</h3>
+      <p>新增非洲 Cassava 和南美 Claro，首次实现六大洲覆盖。合作伙伴：CoreWeave、Lambda、Firmus、IREN、Nscale、Naver Cloud、Yotta 等。</p>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ===================== BONUS: 宇树科技 IPO ===================== -->
+  <div class="section">
+    <div class="section-header">
+      <span class="icon">📈</span>
+      <h2>重要消息：宇树科技科创板过会</h2>
+      <span class="badge">2026.06.01</span>
+    </div>
+
+    <div class="summary-box">
+      <p><span class="big-num">73</span> <span class="meta">天从申报到过会</span></p>
+      <p><span class="big-num blue">42.02</span> <span class="meta">亿元 · 拟募资</span></p>
+      <p style="margin-top: 8px;"><span class="big-num">5,500+</span> <span class="meta">台/年 · 2025 年人形机器人出货量全球第一</span></p>
+      <p><span class="big-num green">32.4%</span> <span class="meta">全球人形机器人市占率</span></p>
+      <p><span class="big-num green">16.99</span> <span class="meta">亿元 · 2025 年营收</span></p>
+      <p><span class="big-num green">5.91</span> <span class="meta">亿元 · 2025 年扣非净利润</span></p>
+    </div>
+
+    <div class="product-card">
+      <span class="tag tag-market">资本市场</span>
+      <h3>宇树科技 IPO 过会：A 股"人形机器人第一股"</h3>
+      <p>3 月 20 日申报科创板获受理，6 月 1 日过会，仅用 <strong>73 天</strong>。拟募资 42.02 亿元，其中 48%（20.22 亿）用于智能机器人模型研发、26%（11.10 亿）用于机器人本体研发、11%（4.45 亿）用于新型产品开发、15%（6.24 亿）用于制造基地建设。全球为数不多的同时实现人形机器人规模化量产与持续盈利的企业。</p>
+      <p><strong>2026 Q1：</strong>营收 4.23 亿元（同比 +68.49%），研发/销售费用大幅增加致扣非净利润由 8483 万降至 4025 万。</p>
+    </div>
+
+    <div class="product-card">
+      <span class="tag tag-market">消费市场</span>
+      <h3>亚洲首店上海静安开业</h3>
+      <div class="sub-title">与 Apple 静安店隔街相望</div>
+      <p>5 月 31 日，宇树科技亚洲首店在上海南京西路久光百货开业，开业首日人气爆棚。截至 6 月 1 日，全国已开业 3 家门店：上海静安体验店、北京王府井直营店、北京京东双井合作体验店。选址策略对标苹果——核心商圈 + 消费电子定位。</p>
+      <div class="specs" style="grid-template-columns: 1fr 1fr;">
+        <div class="spec-item"><div class="spec-label">Go2 机器狗</div><div class="spec-value green">¥9,000 起</div></div>
+        <div class="spec-item"><div class="spec-label">R1 人形机器人</div><div class="spec-value green">¥26,900 起</div></div>
+      </div>
+      <p>四足机器人与人形机器人面向消费与商业领域的合计占比已超七成。应用场景拓展至电网巡检（国网杭州）、消防救援（杭州滨江消防）、商场导览、演唱会舞台等。</p>
     </div>
   </div>
 
@@ -580,46 +407,45 @@
   <div class="section">
     <div class="section-header">
       <span class="icon">📋</span>
-      <h2>GTC Taipei 2026 发布一览</h2>
-      <span class="badge">20+ Announcements</span>
+      <h2>GTC Taipei 2026 完整发布清单</h2>
+      <span class="badge">22+ Announcements</span>
     </div>
     <div class="table-wrap">
       <table>
         <thead>
-          <tr>
-            <th>类别</th>
-            <th>发布</th>
-            <th>一句话</th>
-          </tr>
+          <tr><th>类别</th><th>发布</th><th>核心内容</th></tr>
         </thead>
         <tbody>
-          <tr><td>🔴 消费硬件</td><td><strong>RTX Spark (N1X)</strong></td><td>6144 CUDA + 128GB 统一内存 + CUDA，个人 Agent 电脑</td></tr>
-          <tr><td>🔴 消费硬件</td><td><strong>DGX Station for Windows</strong></td><td>748GB 内存 / 20 PFLOPS，桌面万亿参数模型</td></tr>
-          <tr><td>🔴 数据中心</td><td><strong>Vera Rubin NVLink 72</strong></td><td>全面量产，机架组装 5 分钟，供应链 2× Grace Blackwell</td></tr>
-          <tr><td>🔴 数据中心</td><td><strong>Vera CPU</strong></td><td>第一颗为 Agent 造的 CPU，IPC 世界第一</td></tr>
-          <tr><td>🟢 模型</td><td><strong>Cosmos 3</strong></td><td>全开源全模态物理世界模型，文本/图像/视频/声音/动作 五合一</td></tr>
-          <tr><td>🟢 模型</td><td><strong>Nemotron 3 Ultra</strong></td><td>5500 亿参数开源模型，Agent 基座</td></tr>
-          <tr><td>🟢 模型</td><td><strong>Alpamayo 2 Super</strong></td><td>320 亿参数 VLA 推理模型 + 闭环训练框架</td></tr>
-          <tr><td>🟢 模型</td><td><strong>Cosmos 联盟</strong></td><td>思灵/Runway/Skild AI 等共建下一代世界模型</td></tr>
-          <tr><td>🟣 Agent</td><td><strong>Agent Toolkit</strong></td><td>四层 Agent 基础设施（模型→框架→工具→运行时）</td></tr>
-          <tr><td>🟣 Agent</td><td><strong>OpenShell</strong></td><td>开源安全运行时，策略治理 + 本地/云部署</td></tr>
-          <tr><td>🟣 Agent</td><td><strong>物理 AI Skills</strong></td><td>开源 Agent skills，覆盖 Omniverse/Cosmos/Isaac/Metropolis</td></tr>
-          <tr><td>🟡 机器人</td><td><strong>Isaac GR00T 人形机器人</strong></td><td>宇树生产 + Jetson Thor + Sharpa 手，75 DOF</td></tr>
-          <tr><td>🟡 机器人</td><td><strong>Factory Operations (FOX)</strong></td><td>工厂管理 Agent，Foxconn 根因分析提速 80%</td></tr>
-          <tr><td>🟢 自动驾驶</td><td><strong>DRIVE Hyperion</strong></td><td>L4 机器人出租车平台，全球生态扩展</td></tr>
-          <tr><td>🟠 生态</td><td><strong>DSX AI 工厂</strong></td><td>从卖芯片到卖整座工厂，100GW 规划</td></tr>
-          <tr><td>🟠 生态</td><td><strong>AI Cloud 六大洲</strong></td><td>新增非洲/南美，全球覆盖</td></tr>
-          <tr><td>🟠 生态</td><td><strong>TSMC AI 进厂</strong></td><td>cuLitho 计算光刻 20-50% 提升 + cuEST 50× 仿真</td></tr>
-          <tr><td>🟠 生态</td><td><strong>Healthy Taiwan</strong></td><td>Foxconn + 医疗中心，Agent 驱动健康系统</td></tr>
+          <tr><td>🔴 消费硬件</td><td><strong>RTX Spark (N1X)</strong></td><td>6144 CUDA + 128GB 统一内存 + CUDA · 今年秋季上市</td></tr>
+          <tr><td>🔴 消费硬件</td><td><strong>RTX Spark 笔记本</strong></td><td>14mm 厚 / 1.36kg · 24h 本地跑 Agent</td></tr>
+          <tr><td>🔴 消费硬件</td><td><strong>DGX Station for Windows</strong></td><td>748GB / 20 PFLOPS · 万亿参数模型 · Q4 上市</td></tr>
+          <tr><td>🔴 数据中心</td><td><strong>Vera Rubin NVL72</strong></td><td>全面量产 · 40000 工程师 · 机架 5 分钟组装</td></tr>
+          <tr><td>🔴 数据中心</td><td><strong>Vera CPU</strong></td><td>88核 Olympus · IPC世界第一 · 首个Agent专用CPU</td></tr>
+          <tr><td>🔴 数据中心</td><td><strong>DSX OS + MaxLPS</strong></td><td>AI工厂OS · 相同功耗多40% GPU</td></tr>
+          <tr><td>🟢 模型</td><td><strong>Nemotron 3 Ultra</strong></td><td>SSM+MoE · 5500亿参数 · 5倍速度 · 30%降本</td></tr>
+          <tr><td>🟢 模型</td><td><strong>Cosmos 3</strong></td><td>全开源全模态世界模型 · 五模态合一</td></tr>
+          <tr><td>🟢 模型</td><td><strong>Cosmos 联盟</strong></td><td>Runway / BF Labs / Skild AI 等共建</td></tr>
+          <tr><td>🟢 模型</td><td><strong>Alpamayo 2 Super</strong></td><td>32B VLA · 360°感知 · AlpaGym / OmniDreams</td></tr>
+          <tr><td>🟣 Agent</td><td><strong>Agent Toolkit</strong></td><td>四层架构 · 模型→框架→Skills→安全运行时</td></tr>
+          <tr><td>🟣 Agent</td><td><strong>NVIDIA OpenShell</strong></td><td>开源安全运行时 · Apache 2.0</td></tr>
+          <tr><td>🟣 Agent</td><td><strong>物理 AI Skills</strong></td><td>覆盖全平台的开源 Agent Skills</td></tr>
+          <tr><td>🟣 Agent</td><td><strong>芯片设计超级 Agent</strong></td><td>Cadence 合作 · 验证加速 40×</td></tr>
+          <tr><td>🟡 机器人</td><td><strong>Isaac GR00T 人形机器人</strong></td><td>宇树H2+ · 75 DOF · Jetson Thor · 2026年底交付</td></tr>
+          <tr><td>🟡 机器人</td><td><strong>GR00T 支持宇树 G1</strong></td><td>工作流即将在 GitHub/Hugging Face 开放</td></tr>
+          <tr><td>🟡 机器人</td><td><strong>Factory Operations (FOX)</strong></td><td>Foxconn 落地 · 根因分析快 80%</td></tr>
+          <tr><td>🟢 自动驾驶</td><td><strong>DRIVE Hyperion</strong></td><td>Foxconn高雄/Uber慕尼黑/VinFast东南亚/HUMAIN中东</td></tr>
+          <tr><td>🟠 生态</td><td><strong>AI Cloud 六大洲</strong></td><td>新增非洲 Cassava + 南美 Claro</td></tr>
+          <tr><td>🟠 生态</td><td><strong>TSMC × NVIDIA</strong></td><td>cuLitho/cuEST 全面进入晶圆厂</td></tr>
+          <tr><td>🟠 生态</td><td><strong>Healthy Taiwan</strong></td><td>15亿美元 · Foxconn+医疗中心 · Agent驱动</td></tr>
+          <tr><td>📈 资本市场</td><td><strong>宇树科技 IPO 过会</strong></td><td>73天过会 · 募资42亿 · A股人形机器人第一股</td></tr>
         </tbody>
       </table>
     </div>
   </div>
 
-  <!-- ===================== CLOSING ===================== -->
   <div class="deep-quote">
-    <p>"CPU 重做，PC 重新发明，数据中心重构，软件栈重搭。<br>计算机不再只是为人设计的——<strong>它也是为 Agent 设计的</strong>。"</p>
-    <p class="sub">来源：NVIDIA Newsroom / NVIDIA Blog / 新智元 / 卡兹克 · 整理于 2026.06.01</p>
+    <p>"实用 AI 时代已经到来。<br>AI 现在是利润生成器、GDP 生成器。"</p>
+    <p class="sub">来源：NVIDIA Newsroom / NVIDIA Blog / 智东西 / 新智元 / 潮新闻 · 整理于 2026.06.01</p>
   </div>
 
 </div>
