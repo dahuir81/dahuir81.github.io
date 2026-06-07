@@ -102,6 +102,7 @@ body {
 .calendar-header h2 {
   font-size: 18px;
   font-weight: 600;
+  white-space: nowrap;
 }
 .calendar-header .nav-btn {
   background: none;
@@ -116,6 +117,11 @@ body {
 .calendar-header .nav-btn:hover {
   background: var(--accent);
   border-color: var(--accent);
+}
+.cal-nav {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 .calendar-header .today-btn {
   background: var(--accent);
@@ -507,8 +513,11 @@ body {
   <!-- Calendar -->
   <div class="calendar-wrapper">
     <div class="calendar-header">
-      <button class="nav-btn" onclick="changeMonth(-1)">‹ 上月</button>
-      <h2 id="calTitle">2026年7月</h2>
+      <div class="cal-nav">
+        <button class="nav-btn" onclick="changeMonth(-1)">‹ 上月</button>
+        <h2 id="calTitle">2026年7月</h2>
+        <button class="nav-btn" onclick="changeMonth(1)">下月 ›</button>
+      </div>
       <button class="today-btn" onclick="goToday()">今天</button>
     </div>
     <div class="weekdays">
