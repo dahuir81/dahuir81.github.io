@@ -642,17 +642,40 @@ const DEFAULT_EVENTS = [
 ];
 
 function loadEvents() {
+  const defaults = JSON.parse(JSON.stringify(DEFAULT_EVENTS));
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) {
+    if (raw && !needsRefresh()) {
       const parsed = JSON.parse(raw);
       if (Array.isArray(parsed) && parsed.length > 0) return parsed;
     }
   } catch(e) {}
-  return JSON.parse(JSON.stringify(DEFAULT_EVENTS));
+  // Version mismatch or empty — merge user events with latest defaults
+  let userEvents = [];
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      userEvents = JSON.parse(raw).filter(e =>
+        !defaults.some(d => d.id === e.id)
+      );
+    }
+  } catch(e) {}
+  const merged = [...defaults, ...userEvents];
+  saveEvents(merged);
+  return merged;
+}
+
+const STORAGE_VERSION = 2;
+const VERSION_KEY = 'summer_calendar_version';
+
+function needsRefresh() {
+  return localStorage.getItem(VERSION_KEY) != STORAGE_VERSION;
 }
 
 function saveEvents(events) {
+  localStorage.setItem(VERSION_KEY, STORAGE_VERSION);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(events));
+}
   localStorage.setItem(STORAGE_KEY, JSON.stringify(events));
 }
 
