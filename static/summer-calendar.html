@@ -676,8 +676,6 @@ function saveEvents(events) {
   localStorage.setItem(VERSION_KEY, STORAGE_VERSION);
   localStorage.setItem(STORAGE_KEY, JSON.stringify(events));
 }
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(events));
-}
 
 let events = loadEvents();
 let currentMonth = 6; // 0-indexed, July = 6
