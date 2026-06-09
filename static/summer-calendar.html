@@ -22,11 +22,8 @@
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  line-height: 1.6;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  background: var(--bg); color: var(--text); min-height: 100vh; line-height: 1.6;
 }
 .container { max-width: 860px; margin: 0 auto; padding: 24px 16px; }
 .header { text-align: center; padding: 32px 0 24px; }
@@ -74,12 +71,12 @@ body {
   padding: 16px 20px; background: rgba(108,92,231,0.08); border-bottom: 1px solid var(--border);
 }
 .calendar-header h2 { font-size: 18px; font-weight: 600; white-space: nowrap; }
+.cal-nav { display: flex; align-items: center; gap: 10px; }
 .calendar-header .nav-btn {
   background: none; border: 1px solid var(--border); color: var(--text);
   padding: 6px 14px; border-radius: 8px; cursor: pointer; font-size: 14px; transition: all 0.2s;
 }
 .calendar-header .nav-btn:hover { background: var(--accent); border-color: var(--accent); }
-.cal-nav { display: flex; align-items: center; gap: 10px; }
 .calendar-header .today-btn {
   background: var(--accent); border: 1px solid var(--accent); color: white;
   padding: 6px 14px; border-radius: 8px; cursor: pointer; font-size: 14px; transition: opacity 0.2s;
@@ -94,8 +91,8 @@ body {
 .days { display: grid; grid-template-columns: repeat(7, 1fr); }
 .day-cell {
   position: relative; min-height: 80px; padding: 6px;
-  border-right: 1px solid var(--border); border-bottom: 1px solid var(--border);
-  cursor: pointer; transition: background 0.15s;
+  border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); cursor: pointer;
+  transition: background 0.15s;
 }
 .day-cell:nth-child(7n) { border-right: none; }
 .day-cell:hover { background: rgba(108,92,231,0.06); }
@@ -105,6 +102,7 @@ body {
   background: var(--accent); color: white; border-radius: 50%;
   width: 26px; height: 26px; display: flex; align-items: center; justify-content: center;
 }
+.day-cell.weekend { background: rgba(225,112,85,0.04); }
 .day-cell.weekend .day-num { color: var(--red); opacity: 0.5; }
 .day-num { font-size: 13px; font-weight: 500; margin-bottom: 2px; }
 .day-events { display: flex; flex-direction: column; gap: 2px; }
@@ -116,9 +114,8 @@ body {
 .event-section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
 .event-section-header h3 { font-size: 18px; font-weight: 600; }
 .add-btn {
-  background: var(--accent); border: none; color: white;
-  padding: 8px 18px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 500;
-  transition: opacity 0.2s;
+  background: var(--accent); border: none; color: white; padding: 8px 18px;
+  border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 500; transition: opacity 0.2s;
 }
 .add-btn:hover { opacity: 0.85; }
 .event-cards { display: flex; flex-direction: column; gap: 10px; }
@@ -209,12 +206,15 @@ body {
     <h1>☀️ Noah 暑期课表</h1>
     <p class="subtitle">2026年7月-8月 · 周六周日休息</p>
   </div>
+
   <div class="stats">
     <div class="stat-card"><div class="num" id="statTotal">0</div><div class="label">课程数</div></div>
     <div class="stat-card"><div class="num" id="statDays">0</div><div class="label">上课天数</div></div>
     <div class="stat-card"><div class="num" id="statHours">0</div><div class="label">总学时(h)</div></div>
   </div>
+
   <div class="phase-section"><div class="phase-cards" id="phaseCards"></div></div>
+
   <div class="calendar-wrapper">
     <div class="calendar-header">
       <div class="cal-nav">
@@ -227,86 +227,575 @@ body {
     <div class="weekdays"><span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span></div>
     <div class="days" id="daysGrid"></div>
   </div>
-  <div class="export-all-wrap"><button class="export-all-btn" onclick="exportAllICS()">📅 导出全部活动到日历 (.ics)</button></div>
+
+  <div class="export-all-wrap"><button class="export-all-btn" onclick="exportAllICS()">📅 导出全部日历 (.ics)</button></div>
+
   <div class="event-section">
     <div class="event-section-header"><h3>📋 活动列表</h3><button class="add-btn" onclick="openAddModal()">+ 添加活动</button></div>
     <div class="event-cards" id="eventList"></div>
   </div>
 </div>
+
 <div class="modal-overlay" id="modal">
   <div class="modal">
     <h3 id="modalTitle">添加活动</h3>
     <form id="eventForm" onsubmit="saveEvent(event)">
       <input type="hidden" id="editId">
-      <div class="form-group"><label>活动名称 *</label><input type="text" id="formTitle" placeholder="如：优等生幼小衔接" required></div>
-      <div class="form-group"><label>颜色标签</label><input type="color" id="formColor" value="#6c5ce7"></div>
+      <div class="form-group"><label>活动名称</label><input type="text" id="formTitle" placeholder="如：优等生幼小衔接" required></div>
+      <div class="form-group"><label>颜色</label><input type="color" id="formColor" value="#6c5ce7"></div>
       <div class="form-row">
-        <div class="form-group"><label>开始日期 *</label><input type="date" id="formStart" required></div>
-        <div class="form-group"><label>结束日期 *</label><input type="date" id="formEnd" required></div>
+        <div class="form-group"><label>开始日期</label><input type="date" id="formStart" required></div>
+        <div class="form-group"><label>结束日期</label><input type="date" id="formEnd" required></div>
       </div>
       <div class="checkbox-group"><input type="checkbox" id="formAllDay" checked onchange="toggleTimeInputs()"><label for="formAllDay">全天活动</label></div>
       <div class="form-row" id="timeRow">
         <div class="form-group"><label>开始时间</label><input type="time" id="formStartTime" value="09:00"></div>
         <div class="form-group"><label>结束时间</label><input type="time" id="formEndTime" value="17:00"></div>
       </div>
-      <div class="checkbox-group"><input type="checkbox" id="formWeekdays" checked><label for="formWeekdays">仅工作日（周一到周五）</label></div>
-      <p class="hint" style="margin-bottom:12px;">勾选后自动跳过周末</p>
-      <div class="form-btns"><button type="button" class="btn-cancel" onclick="closeModal()">取消</button><button type="submit" class="btn-primary">✓ 保存</button></div>
+      <div class="checkbox-group"><input type="checkbox" id="formWeekdays" checked><label for="formWeekdays">仅工作日（跳过周末）</label></div>
+      <div class="form-btns"><button type="button" class="btn-cancel" onclick="closeModal()">取消</button><button type="submit" class="btn-primary">保存</button></div>
     </form>
   </div>
 </div>
+
 <div class="toast" id="toast"></div>
+
 <script>
-const STORAGE_KEY='summer_calendar_events_2026';
-const STORAGE_VERSION=4;
-const VERSION_KEY='summer_calendar_version_2026';
-const DEFAULT_EVENTS=[
-  {id:'phase1_rise',title:'优等生幼小衔接',start:'2026-07-06',end:'2026-07-17',allDay:false,startTime:'08:30',endTime:'16:30',weekdaysOnly:true,color:'#6c5ce7'},
-  {id:'phase1_thinking',title:'学而思思维暑期',start:'2026-07-06',end:'2026-07-17',allDay:false,startTime:'18:10',endTime:'20:10',weekdaysOnly:true,color:'#a29bfe'},
-  {id:'phase2_calligraphy',title:'新东方奥体书法正音',start:'2026-07-20',end:'2026-07-31',allDay:false,startTime:'08:20',endTime:'12:30',weekdaysOnly:true,color:'#74b9ff'},
-  {id:'phase3_pinyin',title:'学而思拼音',start:'2026-08-17',end:'2026-08-28',allDay:false,startTime:'10:20',endTime:'12:20',weekdaysOnly:true,color:'#00b894'},
-  {id:'phase3_basketball',title:'篮球',start:'2026-08-17',end:'2026-08-28',allDay:false,startTime:'16:00',endTime:'17:30',weekdaysOnly:true,color:'#fdcb6e'}
+// ============================================================
+// 数据
+// ============================================================
+const STORAGE_KEY = 'summer_calendar_events_2026';
+const STORAGE_VERSION = 5;
+const VERSION_KEY = 'summer_calendar_version_2026';
+
+const DEFAULT_EVENTS = [
+  { id: 'e1', title: '优等生幼小衔接', start: '2026-07-06', end: '2026-07-17', allDay: false, startTime: '08:30', endTime: '16:30', weekdaysOnly: true, color: '#6c5ce7' },
+  { id: 'e2', title: '学而思思维暑期', start: '2026-07-06', end: '2026-07-17', allDay: false, startTime: '18:10', endTime: '20:10', weekdaysOnly: true, color: '#a29bfe' },
+  { id: 'e3', title: '新东方奥体书法正音', start: '2026-07-20', end: '2026-07-31', allDay: false, startTime: '08:20', endTime: '12:30', weekdaysOnly: true, color: '#74b9ff' },
+  { id: 'e4', title: '学而思拼音', start: '2026-08-17', end: '2026-08-28', allDay: false, startTime: '10:20', endTime: '12:20', weekdaysOnly: true, color: '#00b894' },
+  { id: 'e5', title: '篮球', start: '2026-08-17', end: '2026-08-28', allDay: false, startTime: '16:00', endTime: '17:30', weekdaysOnly: true, color: '#fdcb6e' }
 ];
-function loadEvents(){const d=JSON.parse(JSON.stringify(DEFAULT_EVENTS));try{const r=localStorage.getItem(STORAGE_KEY);if(r&&!needsRefresh()){const p=JSON.parse(r);if(Array.isArray(p)&&p.length>0)return p}}catch(e){}saveEvents(d);return d}
-function needsRefresh(){return localStorage.getItem(VERSION_KEY)!=STORAGE_VERSION}
-function saveEvents(e){localStorage.setItem(VERSION_KEY,STORAGE_VERSION);localStorage.setItem(STORAGE_KEY,JSON.stringify(e))}
-let events=loadEvents();
-let currentMonth=6,currentYear=2026;
-function pad(n){return n.toString().padStart(2,'0')}
-function dateStr(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())}
-function parseDate(s){const[y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d)}
-function getDatesBetween(s,e){const r=[];let c=parseDate(s);const ed=parseDate(e);while(c<=ed){r.push(dateStr(c));c.setDate(c.getDate()+1)}return r}
-function isWeekday(d){const w=parseDate(d).getDay();return w>=1&&w<=5}
-function getEventDates(evt){const a=getDatesBetween(evt.start,evt.end);return evt.weekdaysOnly?a.filter(d=>isWeekday(d)):a}
-function minutesSinceMidnight(t){if(!t)return 0;const[h,m]=t.split(':').map(Number);return h*60+m}
-function calcHours(evt){if(evt.allDay){return getEventDates(evt).length*7}const d=getEventDates(evt);const m=minutesSinceMidnight(evt.endTime||'17:00')-minutesSinceMidnight(evt.startTime||'09:00');return Math.round(d.length*(m/60)*10)/10}
-function renderPhases(){const c=document.getElementById('phaseCards');c.innerHTML=[
-{title:'第一阶段',dates:'7/6（一）→ 7/17（五）',tag:'两周一拖二',cls:'tag-phase1',items:[{t:'08:30 - 16:30',n:'优等生幼小衔接'},{t:'18:10 - 20:10',n:'学而思思维暑期'}]},
-{title:'第二阶段',dates:'7/20（一）→ 7/31（五）',tag:'两周·半天',cls:'tag-phase2',items:[{t:'08:20 - 12:30',n:'新东方奥体书法正音'}]},
-{title:'第三阶段',dates:'8/17（一）→ 8/28（五）',tag:'两周·双课',cls:'tag-phase3',items:[{t:'10:20 - 12:20',n:'学而思拼音'},{t:'16:00 - 17:30',n:'篮球'}]}
-].map(p=>'<div class="phase-card"><div class="phase-title">'+p.title+'<span class="tag '+p.cls+'">'+p.tag+'</span></div><div class="phase-dates">'+p.dates+'</div><div class="phase-items">'+p.items.map(i=>'<div class="phase-item"><span class="time">'+i.t+'</span><span class="name">'+i.n+'</span></div>').join('')+'</div></div>').join('')}
-function renderCalendar(){const g=document.getElementById('daysGrid');const t=document.getElementById('calTitle');t.textContent=currentYear+'年'+(currentMonth+1)+'月';const fd=new Date(currentYear,currentMonth,1).getDay();const dim=new Date(currentYear,currentMonth+1,0).getDate();const dip=new Date(currentYear,currentMonth,0).getDate();const td=dateStr(new Date());g.innerHTML='';for(let i=fd-1;i>=0;i--){const c=document.createElement('div');c.className='day-cell other-month';c.innerHTML='<div class="day-num">'+(dip-i)+'</div>';g.appendChild(c)}for(let d=1;d<=dim;d++){const ds=currentYear+'-'+pad(currentMonth+1)+'-'+pad(d);const c=document.createElement('div');c.className='day-cell';if(ds===td)c.classList.add('today');if(isWeekend(ds))c.classList.add('weekend');c.innerHTML='<div class="day-num">'+d+'</div><div class="day-events"></div>';const ec=c.querySelector('.day-events');getEventsForDate(ds).forEach(evt=>{const dot=document.createElement('div');dot.className='day-event-dot';dot.style.background=evt.color;let sn=evt.title;if(sn.length>5)sn=sn.substring(0,4)+'…';dot.textContent=sn;ec.appendChild(dot)});c.addEventListener('click',()=>{document.getElementById('formStart').value=ds;document.getElementById('formEnd').value=ds;openAddModal()});g.appendChild(c)}const tc=fd+dim;const rm=(7-tc%7)%7;for(let d=1;d<=rm;d++){const c=document.createElement('div');c.className='day-cell other-month';c.innerHTML='<div class="day-num">'+d+'</div>';g.appendChild(c)}}
-function changeMonth(delta){currentMonth+=delta;if(currentMonth>11){currentMonth=0;currentYear++}if(currentMonth<0){currentMonth=11;currentYear--}renderCalendar()}
-function goToday(){const t=new Date();currentYear=t.getFullYear();currentMonth=t.getMonth();renderCalendar()}
-function getEventsForDate(ds){return events.filter(evt=>getEventDates(evt).includes(ds))}
-function renderEventList(){const l=document.getElementById('eventList');if(events.length===0){l.innerHTML='<div class="empty-state"><div class="big-icon">🏖️</div><p>还没有活动，点击上方添加活动开始规划吧！</p></div>';updateStats();return}l.innerHTML=events.map(evt=>{const d=getEventDates(evt);const f=d[0]||evt.start;const la=d[d.length-1]||evt.end;const td=d.length;const h=calcHours(evt);const ts=evt.allDay?'全天':evt.startTime+' - '+evt.endTime;return'<div class="event-card"><div class="event-color" style="background:'+evt.color+'"></div><div class="event-info"><div class="event-title">'+esc(evt.title)+'</div><div class="event-date">'+f+' ~ '+la+' · 共'+td+'天</div><div class="event-time">'+ts+' · '+h+'小时</div></div><div class="event-actions"><button class="ical-btn" onclick="exportSingleICS(\''+evt.id+'\')">📅 .ics</button><button class="edit-btn" onclick="openEditModal(\''+evt.id+'\')">✎ 编辑</button><button class="del-btn" onclick="deleteEvent(\''+evt.id+'\')">✕ 删除</button></div></div>'}).join('');updateStats()}
-function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML}
-function updateStats(){document.getElementById('statTotal').textContent=events.length;const ad=new Set();let th=0;events.forEach(evt=>{getEventDates(evt).forEach(d=>ad.add(d));th+=calcHours(evt)});document.getElementById('statDays').textContent=ad.size;document.getElementById('statHours').textContent=Math.round(th*10)/10}
-function toggleTimeInputs(){document.getElementById('timeRow').style.display=document.getElementById('formAllDay').checked?'none':'grid'}
-function openAddModal(){document.getElementById('modalTitle').textContent='添加活动';document.getElementById('editId').value='';document.getElementById('eventForm').reset();document.getElementById('formColor').value='#6c5ce7';document.getElementById('formAllDay').checked=true;document.getElementById('formWeekdays').checked=true;toggleTimeInputs();document.getElementById('modal').classList.add('active')}
-function openEditModal(id){const evt=events.find(e=>e.id===id);if(!evt)return;document.getElementById('modalTitle').textContent='编辑活动';document.getElementById('editId').value=id;document.getElementById('formTitle').value=evt.title;document.getElementById('formColor').value=evt.color||'#6c5ce7';document.getElementById('formStart').value=evt.start;document.getElementById('formEnd').value=evt.end;document.getElementById('formAllDay').checked=evt.allDay;document.getElementById('formStartTime').value=evt.startTime||'09:00';document.getElementById('formEndTime').value=evt.endTime||'17:00';document.getElementById('formWeekdays').checked=evt.weekdaysOnly;toggleTimeInputs();document.getElementById('modal').classList.add('active')}
-function closeModal(){document.getElementById('modal').classList.remove('active')}
-document.getElementById('modal').addEventListener('click',function(e){if(e.target===this)closeModal()});
-function saveEvent(e){e.preventDefault();const id=document.getElementById('editId').value;const title=document.getElementById('formTitle').value.trim();const color=document.getElementById('formColor').value;const start=document.getElementById('formStart').value;const end=document.getElementById('formEnd').value;const allDay=document.getElementById('formAllDay').checked;const st=document.getElementById('formStartTime').value;const et=document.getElementById('formEndTime').value;const wk=document.getElementById('formWeekdays').checked;if(!title||!start||!end){showToast('请填写完整信息','#e17055');return}if(start>end){showToast('结束日期不能早于开始日期','#e17055');return}if(!allDay&&st>=et){showToast('结束时间必须晚于开始时间','#e17055');return}if(id){const idx=events.findIndex(e=>e.id===id);if(idx!==-1)events[idx]={...events[idx],title,color,start,end,allDay,startTime:st,endTime:et,weekdaysOnly:wk}}else{events.push({id:'evt_'+Date.now(),title,color,start,end,allDay,startTime:st,endTime:et,weekdaysOnly:wk})}saveEvents(events);closeModal();renderCalendar();renderEventList();showToast(id?'✅ 活动已更新':'✅ 活动已添加','#00b894')}
-function deleteEvent(id){if(!confirm('确定要删除吗？'))return;events=events.filter(e=>e.id!==id);saveEvents(events);renderCalendar();renderEventList();showToast('🗑️ 已删除','#e17055')}
-function buildICS(evt){const now=new Date();const ns=now.toISOString().replace(/[-:]/g,'').split('.')[0]+'Z';const l=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Tars//CN','CALSCALE:GREGORIAN','METHOD:PUBLISH','X-WR-CALNAME:Noah暑期课表'];const ds=evt.start.replace(/-/g,'');const uid=evt.id+'@summer';if(evt.allDay){l.push('BEGIN:VEVENT');l.push('UID:'+uid);l.push('DTSTART;VALUE=DATE:'+ds);l.push('DTEND;VALUE=DATE:'+evt.end.replace(/-/g,''));l.push('SUMMARY:'+evt.title);l.push('DTSTAMP:'+ns);if(evt.weekdaysOnly)l.push('RRULE:FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR;UNTIL='+evt.end.replace(/-/g,'')+'T235959Z');l.push('END:VEVENT')}else{l.push('BEGIN:VEVENT');l.push('UID:'+uid);l.push('DTSTART;TZID=Asia/Shanghai:'+evt.start.replace(/-/g,'')+'T'+(evt.startTime||'0900').replace(':','')+'00');l.push('DTEND;TZID=Asia/Shanghai:'+evt.end.replace(/-/g,'')+'T'+(evt.endTime||'1700').replace(':','')+'00');l.push('SUMMARY:'+evt.title);l.push('DTSTAMP:'+ns);if(evt.weekdaysOnly)l.push('RRULE:FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR;UNTIL='+evt.end.replace(/-/g,'')+'T235959Z');l.push('END:VEVENT')}l.push('END:VCALENDAR');return l.join('\r\n')}
-function downloadICS(c,f){const b=new Blob([c],{type:'text/calendar;charset=utf-8'});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download=f;document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(u)}
-function exportSingleICS(id){const evt=events.find(e=>e.id===id);if(!evt)return;downloadICS(buildICS(evt),evt.title.replace(/\s+/g,'_')+'_'+evt.start+'.ics');showToast('📅 已导出到日历','#00b894')}
-function exportAllICS(){if(events.length===0){showToast('暂无活动','#e17055');return}const now=new Date();const ns=now.toISOString().replace(/[-:]/g,'').split('.')[0]+'Z';let l=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Tars//CN','CALSCALE:GREGORIAN','METHOD:PUBLISH','X-WR-CALNAME:Noah暑期课表'];events.forEach(evt=>{const ds=evt.start.replace(/-/g,'');const uid=evt.id+'@summer';if(evt.allDay){l.push('BEGIN:VEVENT');l.push('UID:'+uid);l.push('DTSTART;VALUE=DATE:'+ds);l.push('DTEND;VALUE=DATE:'+evt.end.replace(/-/g,''));l.push('SUMMARY:'+evt.title);l.push('DTSTAMP:'+ns);if(evt.weekdaysOnly)l.push('RRULE:FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR;UNTIL='+evt.end.replace(/-/g,'')+'T235959Z');l.push('END:VEVENT')}else{l.push('BEGIN:VEVENT');l.push('UID:'+uid);l.push('DTSTART;TZID=Asia/Shanghai:'+evt.start.replace(/-/g,'')+'T'+(evt.startTime||'0900').replace(':','')+'00');l.push('DTEND;TZID=Asia/Shanghai:'+evt.end.replace(/-/g,'')+'T'+(evt.endTime||'1700').replace(':','')+'00');l.push('SUMMARY:'+evt.title);l.push('DTSTAMP:'+ns);if(evt.weekdaysOnly)l.push('RRULE:FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR;UNTIL='+evt.end.replace(/-/g,'')+'T235959Z');l.push('END:VEVENT')}});l.push('END:VCALENDAR');downloadICS(l.join('\r\n'),'noah_summer_2026.ics');showToast('📅 全部已导出','#00b894')}
-let toastTimer;
-function showToast(msg,color='#00b894'){const t=document.getElementById('toast');t.textContent=msg;t.style.color=color;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),2800)}
-renderPhases();renderCalendar();renderEventList();
-window.addEventListener('beforeunload',()=>saveEvents(events));
+
+// ============================================================
+// 存储
+// ============================================================
+function loadEvents() {
+  const defaults = DEFAULT_EVENTS.map(function(e) { return Object.assign({}, e); });
+  try {
+    var raw = localStorage.getItem(STORAGE_KEY);
+    var ver = localStorage.getItem(VERSION_KEY);
+    if (raw && ver == STORAGE_VERSION) {
+      var parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        return parsed;
+      }
+    }
+  } catch(e) {}
+  saveEvents(defaults);
+  return defaults;
+}
+
+function saveEvents(events) {
+  localStorage.setItem(VERSION_KEY, String(STORAGE_VERSION));
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(events));
+}
+
+var events = loadEvents();
+var currentMonth = 6; // 0-indexed, 6 = July
+var currentYear = 2026;
+
+// ============================================================
+// 工具函数
+// ============================================================
+function pad(n) {
+  return n < 10 ? '0' + n : String(n);
+}
+
+function formatDate(d) {
+  return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+}
+
+function parseISODate(s) {
+  var parts = s.split('-');
+  return new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+}
+
+function getDatesBetween(startStr, endStr) {
+  var result = [];
+  var cur = parseISODate(startStr);
+  var end = parseISODate(endStr);
+  while (cur <= end) {
+    result.push(formatDate(cur));
+    cur.setDate(cur.getDate() + 1);
+  }
+  return result;
+}
+
+function isWeekday(dateStr) {
+  var day = parseISODate(dateStr).getDay();
+  return day >= 1 && day <= 5;
+}
+
+function isWeekend(dateStr) {
+  var day = parseISODate(dateStr).getDay();
+  return day === 0 || day === 6;
+}
+
+function getEventDates(evt) {
+  var allDates = getDatesBetween(evt.start, evt.end);
+  if (evt.weekdaysOnly) {
+    return allDates.filter(isWeekday);
+  }
+  return allDates;
+}
+
+function hoursForEvent(evt) {
+  if (evt.allDay) {
+    return getEventDates(evt).length * 7;
+  }
+  var dates = getEventDates(evt);
+  var sh = parseInt(evt.startTime.split(':')[0]);
+  var sm = parseInt(evt.startTime.split(':')[1]);
+  var eh = parseInt(evt.endTime.split(':')[0]);
+  var em = parseInt(evt.endTime.split(':')[1]);
+  var mins = (eh * 60 + em) - (sh * 60 + sm);
+  return Math.round(dates.length * (mins / 60) * 10) / 10;
+}
+
+function escHtml(s) {
+  var d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+// ============================================================
+// 阶段概览
+// ============================================================
+function renderPhases() {
+  var phases = [
+    { title: '第一阶段', dates: '7/6（一）→ 7/17（五）', tag: '两周一拖二', cls: 'tag-phase1',
+      items: [{ t: '08:30 - 16:30', n: '优等生幼小衔接' }, { t: '18:10 - 20:10', n: '学而思思维暑期' }] },
+    { title: '第二阶段', dates: '7/20（一）→ 7/31（五）', tag: '两周·半天', cls: 'tag-phase2',
+      items: [{ t: '08:20 - 12:30', n: '新东方奥体书法正音' }] },
+    { title: '第三阶段', dates: '8/17（一）→ 8/28（五）', tag: '两周·双课', cls: 'tag-phase3',
+      items: [{ t: '10:20 - 12:20', n: '学而思拼音' }, { t: '16:00 - 17:30', n: '篮球' }] }
+  ];
+  var html = '';
+  for (var i = 0; i < phases.length; i++) {
+    var p = phases[i];
+    html += '<div class="phase-card">';
+    html += '<div class="phase-title">' + p.title + ' <span class="tag ' + p.cls + '">' + p.tag + '</span></div>';
+    html += '<div class="phase-dates">' + p.dates + '</div>';
+    html += '<div class="phase-items">';
+    for (var j = 0; j < p.items.length; j++) {
+      html += '<div class="phase-item"><span class="time">' + p.items[j].t + '</span><span class="name">' + p.items[j].n + '</span></div>';
+    }
+    html += '</div></div>';
+  }
+  document.getElementById('phaseCards').innerHTML = html;
+}
+
+// ============================================================
+// 日历渲染
+// ============================================================
+function renderCalendar() {
+  var grid = document.getElementById('daysGrid');
+  var title = document.getElementById('calTitle');
+  title.textContent = currentYear + '年' + (currentMonth + 1) + '月';
+
+  var firstDay = new Date(currentYear, currentMonth, 1).getDay();
+  var daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+  var daysInPrev = new Date(currentYear, currentMonth, 0).getDate();
+  var todayStr = formatDate(new Date());
+
+  grid.innerHTML = '';
+
+  // 上个月末尾
+  for (var i = firstDay - 1; i >= 0; i--) {
+    var d = daysInPrev - i;
+    var cell = document.createElement('div');
+    cell.className = 'day-cell other-month';
+    cell.innerHTML = '<div class="day-num">' + d + '</div>';
+    grid.appendChild(cell);
+  }
+
+  // 本月
+  for (var d2 = 1; d2 <= daysInMonth; d2++) {
+    var ds = currentYear + '-' + pad(currentMonth + 1) + '-' + pad(d2);
+    var cell2 = document.createElement('div');
+    cell2.className = 'day-cell';
+    if (ds === todayStr) cell2.classList.add('today');
+    if (isWeekend(ds)) cell2.classList.add('weekend');
+
+    var dayEvents = getEventsForDate(ds);
+    var dayHtml = '<div class="day-num">' + d2 + '</div>';
+    if (dayEvents.length > 0) {
+      dayHtml += '<div class="day-events">';
+      for (var k = 0; k < dayEvents.length; k++) {
+        var evt = dayEvents[k];
+        var shortName = evt.title;
+        if (shortName.length > 5) shortName = shortName.substring(0, 4) + '…';
+        dayHtml += '<div class="day-event-dot" style="background:' + evt.color + '">' + escHtml(shortName) + '</div>';
+      }
+      dayHtml += '</div>';
+    }
+    cell2.innerHTML = dayHtml;
+
+    cell2.addEventListener('click', (function(dateStr) {
+      return function() {
+        document.getElementById('formStart').value = dateStr;
+        document.getElementById('formEnd').value = dateStr;
+        openAddModal();
+      };
+    })(ds));
+
+    grid.appendChild(cell2);
+  }
+
+  // 下个月开头补齐
+  var totalCells = firstDay + daysInMonth;
+  var remaining = (7 - (totalCells % 7)) % 7;
+  for (var r = 1; r <= remaining; r++) {
+    var cell3 = document.createElement('div');
+    cell3.className = 'day-cell other-month';
+    cell3.innerHTML = '<div class="day-num">' + r + '</div>';
+    grid.appendChild(cell3);
+  }
+}
+
+function changeMonth(delta) {
+  currentMonth += delta;
+  if (currentMonth > 11) { currentMonth = 0; currentYear++; }
+  if (currentMonth < 0) { currentMonth = 11; currentYear--; }
+  renderCalendar();
+}
+
+function goToday() {
+  var t = new Date();
+  currentYear = t.getFullYear();
+  currentMonth = t.getMonth();
+  renderCalendar();
+}
+
+function getEventsForDate(dateStr) {
+  var result = [];
+  for (var i = 0; i < events.length; i++) {
+    var dates = getEventDates(events[i]);
+    if (dates.indexOf(dateStr) !== -1) {
+      result.push(events[i]);
+    }
+  }
+  return result;
+}
+
+// ============================================================
+// 活动列表
+// ============================================================
+function renderEventList() {
+  var list = document.getElementById('eventList');
+  if (events.length === 0) {
+    list.innerHTML = '<div class="empty-state"><div class="big-icon">🏖️</div><p>还没有活动，点击上方添加活动开始规划吧！</p></div>';
+    updateStats();
+    return;
+  }
+
+  var html = '';
+  for (var i = 0; i < events.length; i++) {
+    var evt = events[i];
+    var dates = getEventDates(evt);
+    var firstDate = dates[0] || evt.start;
+    var lastDate = dates[dates.length - 1] || evt.end;
+    var totalDays = dates.length;
+    var hours = hoursForEvent(evt);
+    var timeStr = evt.allDay ? '全天' : evt.startTime + ' - ' + evt.endTime;
+
+    html += '<div class="event-card">';
+    html += '<div class="event-color" style="background:' + evt.color + '"></div>';
+    html += '<div class="event-info">';
+    html += '<div class="event-title">' + escHtml(evt.title) + '</div>';
+    html += '<div class="event-date">' + firstDate + ' ~ ' + lastDate + ' · 共' + totalDays + '天</div>';
+    html += '<div class="event-time">' + timeStr + ' · ' + hours + '小时</div>';
+    html += '</div>';
+    html += '<div class="event-actions">';
+    html += '<button class="ical-btn" onclick="exportSingleICS(\'' + evt.id + '\')">📅 .ics</button>';
+    html += '<button class="edit-btn" onclick="openEditModal(\'' + evt.id + '\')">✎ 编辑</button>';
+    html += '<button class="del-btn" onclick="deleteEvent(\'' + evt.id + '\')">✕ 删除</button>';
+    html += '</div></div>';
+  }
+  list.innerHTML = html;
+  updateStats();
+}
+
+// ============================================================
+// 统计
+// ============================================================
+function updateStats() {
+  document.getElementById('statTotal').textContent = events.length;
+  var allDates = {};
+  var totalHours = 0;
+  for (var i = 0; i < events.length; i++) {
+    var dates = getEventDates(events[i]);
+    for (var j = 0; j < dates.length; j++) {
+      allDates[dates[j]] = true;
+    }
+    totalHours += hoursForEvent(events[i]);
+  }
+  document.getElementById('statDays').textContent = Object.keys(allDates).length;
+  document.getElementById('statHours').textContent = Math.round(totalHours * 10) / 10;
+}
+
+// ============================================================
+// 模态框
+// ============================================================
+function toggleTimeInputs() {
+  var allDay = document.getElementById('formAllDay').checked;
+  document.getElementById('timeRow').style.display = allDay ? 'none' : 'grid';
+}
+
+function openAddModal() {
+  document.getElementById('modalTitle').textContent = '添加活动';
+  document.getElementById('editId').value = '';
+  document.getElementById('eventForm').reset();
+  document.getElementById('formColor').value = '#6c5ce7';
+  document.getElementById('formAllDay').checked = true;
+  document.getElementById('formWeekdays').checked = true;
+  toggleTimeInputs();
+  document.getElementById('modal').classList.add('active');
+}
+
+function openEditModal(id) {
+  var evt = null;
+  for (var i = 0; i < events.length; i++) {
+    if (events[i].id === id) { evt = events[i]; break; }
+  }
+  if (!evt) return;
+
+  document.getElementById('modalTitle').textContent = '编辑活动';
+  document.getElementById('editId').value = id;
+  document.getElementById('formTitle').value = evt.title;
+  document.getElementById('formColor').value = evt.color || '#6c5ce7';
+  document.getElementById('formStart').value = evt.start;
+  document.getElementById('formEnd').value = evt.end;
+  document.getElementById('formAllDay').checked = evt.allDay;
+  document.getElementById('formStartTime').value = evt.startTime || '09:00';
+  document.getElementById('formEndTime').value = evt.endTime || '17:00';
+  document.getElementById('formWeekdays').checked = evt.weekdaysOnly;
+  toggleTimeInputs();
+  document.getElementById('modal').classList.add('active');
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('active');
+}
+
+document.getElementById('modal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+function saveEvent(e) {
+  e.preventDefault();
+
+  var id = document.getElementById('editId').value;
+  var title = document.getElementById('formTitle').value.trim();
+  var color = document.getElementById('formColor').value;
+  var start = document.getElementById('formStart').value;
+  var end = document.getElementById('formEnd').value;
+  var allDay = document.getElementById('formAllDay').checked;
+  var st = document.getElementById('formStartTime').value;
+  var et = document.getElementById('formEndTime').value;
+  var wk = document.getElementById('formWeekdays').checked;
+
+  if (!title || !start || !end) {
+    showToast('请填写完整信息', '#e17055');
+    return;
+  }
+  if (start > end) {
+    showToast('结束日期不能早于开始日期', '#e17055');
+    return;
+  }
+  if (!allDay && st >= et) {
+    showToast('结束时间必须晚于开始时间', '#e17055');
+    return;
+  }
+
+  if (id) {
+    // 编辑
+    for (var i = 0; i < events.length; i++) {
+      if (events[i].id === id) {
+        events[i].title = title;
+        events[i].color = color;
+        events[i].start = start;
+        events[i].end = end;
+        events[i].allDay = allDay;
+        events[i].startTime = st;
+        events[i].endTime = et;
+        events[i].weekdaysOnly = wk;
+        break;
+      }
+    }
+  } else {
+    events.push({ id: 'evt_' + Date.now(), title: title, color: color, start: start, end: end, allDay: allDay, startTime: st, endTime: et, weekdaysOnly: wk });
+  }
+
+  saveEvents(events);
+  closeModal();
+  renderCalendar();
+  renderEventList();
+  showToast(id ? '已更新' : '已添加', '#00b894');
+}
+
+function deleteEvent(id) {
+  if (!confirm('确定要删除吗？')) return;
+  var newEvents = [];
+  for (var i = 0; i < events.length; i++) {
+    if (events[i].id !== id) newEvents.push(events[i]);
+  }
+  events = newEvents;
+  saveEvents(events);
+  renderCalendar();
+  renderEventList();
+  showToast('已删除', '#e17055');
+}
+
+// ============================================================
+// ICS 导出
+// ============================================================
+function icsContent(evt) {
+  var now = new Date();
+  var nowStr = now.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+  var lines = [
+    'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Tars//CN',
+    'CALSCALE:GREGORIAN', 'METHOD:PUBLISH', 'X-WR-CALNAME:Noah暑期课表'
+  ];
+
+  var dateStart = evt.start.replace(/-/g, '');
+  var dateEnd = evt.end.replace(/-/g, '');
+
+  if (evt.allDay) {
+    lines.push('BEGIN:VEVENT');
+    lines.push('UID:' + evt.id + '@summer');
+    lines.push('DTSTART;VALUE=DATE:' + dateStart);
+    lines.push('DTEND;VALUE=DATE:' + dateEnd);
+    lines.push('SUMMARY:' + evt.title);
+    lines.push('DTSTAMP:' + nowStr);
+    if (evt.weekdaysOnly) {
+      lines.push('RRULE:FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR;UNTIL=' + dateEnd + 'T235959Z');
+    }
+    lines.push('END:VEVENT');
+  } else {
+    var startTime = (evt.startTime || '0900').replace(':', '');
+    var endTime = (evt.endTime || '1700').replace(':', '');
+    lines.push('BEGIN:VEVENT');
+    lines.push('UID:' + evt.id + '@summer');
+    lines.push('DTSTART;TZID=Asia/Shanghai:' + dateStart + 'T' + startTime + '00');
+    lines.push('DTEND;TZID=Asia/Shanghai:' + dateEnd + 'T' + endTime + '00');
+    lines.push('SUMMARY:' + evt.title);
+    lines.push('DTSTAMP:' + nowStr);
+    if (evt.weekdaysOnly) {
+      lines.push('RRULE:FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR;UNTIL=' + dateEnd + 'T235959Z');
+    }
+    lines.push('END:VEVENT');
+  }
+
+  lines.push('END:VCALENDAR');
+  return lines.join('\r\n');
+}
+
+function downloadIcs(content, filename) {
+  var blob = new Blob([content], { type: 'text/calendar;charset=utf-8' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function exportSingleICS(id) {
+  var evt = null;
+  for (var i = 0; i < events.length; i++) {
+    if (events[i].id === id) { evt = events[i]; break; }
+  }
+  if (!evt) return;
+  var name = evt.title.replace(/\s+/g, '_') + '_' + evt.start + '.ics';
+  downloadIcs(icsContent(evt), name);
+  showToast('已导出到日历', '#00b894');
+}
+
+function exportAllICS() {
+  if (events.length === 0) { showToast('暂无活动', '#e17055'); return; }
+
+  var now = new Date();
+  var nowStr = now.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+  var lines = [
+    'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Tars//CN',
+    'CALSCALE:GREGORIAN', 'METHOD:PUBLISH', 'X-WR-CALNAME:Noah暑期课表'
+  ];
+
+  for (var i = 0; i < events.length; i++) {
+    var evt = events[i];
+    var dateStart = evt.start.replace(/-/g, '');
+    var dateEnd = evt.end.replace(/-/g, '');
+
+    if (evt.allDay) {
+      lines.push('BEGIN:VEVENT');
+      lines.push('UID:' + evt.id + '@summer');
+      lines.push('DTSTART;VALUE=DATE:' + dateStart);
+      lines.push('DTEND;VALUE=DATE:' + dateEnd);
+      lines.push('SUMMARY:' + evt.title);
+      lines.push('DTSTAMP:' + nowStr);
+      if (evt.weekdaysOnly) {
+        lines.push('RRULE:FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR;UNTIL=' + dateEnd + 'T235959Z');
+      }
+      lines.push('END:VEVENT');
+    } else {
+      var st = (evt.startTime || '0900').replace(':', '');
+      var et = (evt.endTime || '1700').replace(':', '');
+      lines.push('BEGIN:VEVENT');
+      lines.push('UID:' + evt.id + '@summer');
+      lines.push('DTSTART;TZID=Asia/Shanghai:' + dateStart + 'T' + st + '00');
+      lines.push('DTEND;TZID=Asia/Shanghai:' + dateEnd + 'T' + et + '00');
+      lines.push('SUMMARY:' + evt.title);
+      lines.push('DTSTAMP:' + nowStr);
+      if (evt.weekdaysOnly) {
+        lines.push('RRULE:FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR;UNTIL=' + dateEnd + 'T235959Z');
+      }
+      lines.push('END:VEVENT');
+    }
+  }
+
+  lines.push('END:VCALENDAR');
+  downloadIcs(lines.join('\r\n'), 'noah_summer_2026.ics');
+  showToast('全部已导出到日历', '#00b894');
+}
+
+// ============================================================
+// Toast
+// ============================================================
+var toastTimer = null;
+
+function showToast(msg, color) {
+  if (color === undefined) color = '#00b894';
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.color = color;
+  t.classList.add('show');
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(function() { t.classList.remove('show'); }, 2800);
+}
+
+// ============================================================
+// 初始化
+// ============================================================
+renderPhases();
+renderCalendar();
+renderEventList();
+
+window.addEventListener('beforeunload', function() {
+  saveEvents(events);
+});
 </script>
 </body>
 </html>
