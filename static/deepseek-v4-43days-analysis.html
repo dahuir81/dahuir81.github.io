@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DeepSeek V4 43天推理性能进化深度分析 — SemiAnalysis 精读</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --bg2: #161b22;
+    --bg3: #1c2333;
+    --border: #30363d;
+    --text: #e6edf3;
+    --text2: #8b949e;
+    --accent: #58a6ff;
+    --green: #3fb950;
+    --orange: #d29922;
+    --red: #f85149;
+    --purple: #bc8cff;
+    --pink: #ff7b72;
+    --yellow: #e3b341;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans SC", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.75;
+    font-size: 16px;
+  }
+  .container { max-width: 820px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  /* Header */
+  .header {
+    padding: 48px 0 32px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 40px;
+  }
+  .header .tagline {
+    display: inline-block;
+    background: var(--bg3);
+    color: var(--accent);
+    font-size: 12px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+    letter-spacing: 0.5px;
+  }
+  .header h1 {
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 12px;
+    background: linear-gradient(135deg, #58a6ff, #bc8cff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .header .meta {
+    color: var(--text2);
+    font-size: 14px;
+  }
+  .header .meta a { color: var(--accent); text-decoration: none; }
+  .header .meta a:hover { text-decoration: underline; }
+
+  /* Sections */
+  h2 {
+    font-size: 24px;
+    font-weight: 700;
+    margin: 48px 0 20px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  h2 .hash { color: var(--accent); margin-right: 8px; }
+  h3 {
+    font-size: 19px;
+    font-weight: 600;
+    margin: 28px 0 12px;
+    color: #f0f6fc;
+  }
+  h4 {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 20px 0 8px;
+    color: var(--text2);
+  }
+  p { margin-bottom: 16px; color: var(--text); }
+  strong { color: #f0f6fc; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* Callout boxes */
+  .callout {
+    background: var(--bg2);
+    border-left: 4px solid var(--accent);
+    padding: 16px 20px;
+    margin: 20px 0;
+    border-radius: 0 8px 8px 0;
+    font-size: 15px;
+  }
+  .callout.warn {
+    border-left-color: var(--orange);
+  }
+  .callout.danger {
+    border-left-color: var(--red);
+  }
+  .callout.success {
+    border-left-color: var(--green);
+  }
+  .callout.purple {
+    border-left-color: var(--purple);
+  }
+
+  /* Stats bar */
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    margin: 24px 0;
+  }
+  .stat-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 16px;
+    text-align: center;
+  }
+  .stat-card .num {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  .stat-card .num.green { color: var(--green); }
+  .stat-card .num.orange { color: var(--orange); }
+  .stat-card .num.red { color: var(--red); }
+  .stat-card .num.purple { color: var(--purple); }
+  .stat-card .label {
+    font-size: 13px;
+    color: var(--text2);
+    margin-top: 4px;
+  }
+
+  /* Table */
+  .table-wrap {
+    overflow-x: auto;
+    margin: 20px 0;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+  thead { background: var(--bg3); }
+  th {
+    padding: 12px 14px;
+    text-align: left;
+    font-weight: 600;
+    color: var(--text2);
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(88,166,255,0.04); }
+
+  /* Timeline */
+  .timeline {
+    position: relative;
+    padding-left: 32px;
+    margin: 24px 0;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 11px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--border);
+  }
+  .tl-item {
+    position: relative;
+    margin-bottom: 28px;
+  }
+  .tl-item::before {
+    content: '';
+    position: absolute;
+    left: -21px;
+    top: 6px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 2px solid var(--bg);
+  }
+  .tl-item.day1::before { background: var(--green); }
+  .tl-item.day3::before { background: var(--orange); }
+  .tl-item.day9::before { background: var(--red); }
+  .tl-item.day26::before { background: var(--purple); }
+  .tl-item.day43::before { background: var(--pink); }
+  .tl-date {
+    font-size: 13px;
+    color: var(--text2);
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .tl-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .tl-desc {
+    font-size: 14px;
+    color: var(--text2);
+    line-height: 1.6;
+  }
+  .tl-desc strong { color: var(--text); }
+
+  /* Code inline */
+  code {
+    font-family: "SF Mono", "Fira Code", monospace;
+    font-size: 13px;
+    background: var(--bg3);
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: var(--orange);
+  }
+
+  /* Bullet */
+  ul, ol { margin: 12px 0 16px 20px; }
+  li { margin-bottom: 8px; color: var(--text); }
+
+  /* Section divider */
+  .divider {
+    text-align: center;
+    color: var(--text2);
+    font-size: 20px;
+    margin: 40px 0;
+    letter-spacing: 8px;
+  }
+
+  /* Quote */
+  blockquote {
+    border-left: 3px solid var(--border);
+    padding: 8px 16px;
+    margin: 16px 0;
+    color: var(--text2);
+    font-style: italic;
+  }
+  blockquote strong { color: var(--text); font-style: normal; }
+
+  /* Tag */
+  .tag {
+    display: inline-block;
+    font-size: 12px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-right: 4px;
+  }
+  .tag.cuda { background: #1a3a1a; color: #7ee787; }
+  .tag.amd { background: #3a1a1a; color: #ff7b72; }
+  .tag.huawei { background: #1a2a3a; color: #79c0ff; }
+  .tag.nvidia { background: #2a2a1a; color: #d29922; }
+
+  /* Footer */
+  .footer {
+    margin-top: 60px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    font-size: 13px;
+    color: var(--text2);
+    text-align: center;
+  }
+
+  @media (max-width: 600px) {
+    .container { padding: 24px 16px 60px; }
+    .header h1 { font-size: 24px; }
+    h2 { font-size: 20px; }
+    .stat-row { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Header -->
+  <div class="header">
+    <span class="tagline">📊 SemiAnalysis 精读 · 2026-06-12</span>
+    <h1>DeepSeek V4 43天推理性能进化深度分析</h1>
+    <div class="meta">
+      原文：<a href="https://newsletter.semianalysis.com/p/deepseekv4-16t-day-0-to-day-43-performance" target="_blank">DeepSeekV4 1.6T Day 0 to Day 43 Performance Over Time</a> · SemiAnalysis InferenceX 项目
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stat-row">
+    <div class="stat-card">
+      <div class="num purple">43</div>
+      <div class="label">追踪天数</div>
+    </div>
+    <div class="stat-card">
+      <div class="num green">100×</div>
+      <div class="label">AMD MI355X 最大提升</div>
+    </div>
+    <div class="stat-card">
+      <div class="num orange">3×</div>
+      <div class="label">B300 SGLang < 1周提升</div>
+    </div>
+    <div class="stat-card">
+      <div class="num red">Day 0</div>
+      <div class="label">ROCm / TRT-LLM 翻车</div>
+    </div>
+  </div>
+
+  <!-- 1. Summary -->
+  <h2><span class="hash">#</span>一、文章核心概述</h2>
+  <p>SemiAnalysis 通过其开源项目 <strong>InferenceX</strong>，对 DeepSeek V4 Pro（1.6T 参数，混合 FP4 MoE + FP8 Attention 量化）在发布后 43 天的推理性能演进进行了系统性追踪。核心结论：<strong>开源推理引擎（vLLM / SGLang）的迭代速度远超硬件厂商的闭源方案，但不同硬件生态的软件成熟度差距极其悬殊。</strong></p>
+
+  <p>文章覆盖的硬件 SKU 包括：NVIDIA H200、B200、B300、GB300 NVL72，AMD MI355X，华为 Ascend 950DT，以及 AMD 生态的 ATOM 推理框架。追踪维度涵盖吞吐量、交互延迟、并行策略、量化精度（FP4 vs FP8）、MTP 支持等。</p>
+
+  <div class="callout">
+    <strong>🔍 背景知识：</strong>vLLM 和 SGLang 是目前最主流的两个开源 LLM 推理引擎。两个团队已分别成立公司——Inferact（vLLM）和 RadixArk（SGLang），各融资数亿美元。
+  </div>
+
+  <!-- 2. Architecture -->
+  <h2><span class="hash">#</span>二、DeepSeek V4 架构速览</h2>
+
+  <h3>模型规格</h3>
+  <ul>
+    <li><strong>总参数量：</strong>1.6T（1.6 万亿），MoE 架构</li>
+    <li><strong>量化方案：</strong>原生混合 FP4 MoE + FP8 Attention（MXFP4）</li>
+    <li><strong>隐藏层维度：</strong>7168——这是导致 TensorRT-LLM 翻车的直接原因</li>
+    <li><strong>与 华为昇腾 的 co-design：</strong>文章明确提到 DeepSeek V4 的部分架构设计与 Ascend 推理硬件协同优化</li>
+  </ul>
+
+  <p>通常开源模型发布后，社区需要数周到数月才能把推理性能优化到生产可用水平。DeepSeek V4 的情况特殊之处在于：<strong>CUDA 生态下 Day 0 即可用，但其他硬件生态（ROCm、TRT-LLM）出现了不同程度的翻车。</strong></p>
+
+  <!-- 3. InferenceX -->
+  <h2><span class="hash">#</span>三、InferenceX 项目说明</h2>
+
+  <p>InferenceX 是 SemiAnalysis 发起的开源推理基准测试项目，核心目标是：</p>
+
+  <blockquote>
+    <strong>在模型发布的 Day 0 窗口期，记录每个 SKU 在所有可用框架上的真实性能——不管这些镜像和配置跑得好不好。</strong>这样才能真实追踪改进，而不是只展示最终优化后的"高光时刻"。
+  </blockquote>
+
+  <p>项目获得 OpenAI、Oracle、Microsoft、Weka、PyTorch Foundation、vLLM、SGLang、CoreWeave 等支持。所有数据开源在 <a href="https://github.com/SemiAnalysisAI/InferenceX" target="_blank">GitHub</a>，实时仪表盘在 <a href="https://inferencex.semianalysis.com" target="_blank">inferencex.semianalysis.com</a>。</p>
+
+  <!-- 4. Day 0 -->
+  <h2><span class="hash">#</span>四、Day 0 性能横评——冰火两重天</h2>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>硬件 / 框架</th>
+          <th>Day 0 状态</th>
+          <th>量化精度</th>
+          <th>评价</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="tag cuda">CUDA</span> vLLM</td>
+          <td>✅ 开箱即用</td>
+          <td>原生 FP4+FP8</td>
+          <td>Day 0 完美运行，分布式推理立即可用</td>
+        </tr>
+        <tr>
+          <td><span class="tag cuda">CUDA</span> SGLang</td>
+          <td>✅ 开箱即用</td>
+          <td>原生 FP4+FP8</td>
+          <td>Day 0 完美运行，GB200 disaggregated 也工作</td>
+        </tr>
+        <tr>
+          <td><span class="tag nvidia">NVIDIA</span> TensorRT-LLM</td>
+          <td>❌ 翻车</td>
+          <td>—</td>
+          <td>mHC kernel 硬编码 hidden_size=4096，DSV4 是 7168，产生静默生成损坏</td>
+        </tr>
+        <tr>
+          <td><span class="tag amd">AMD</span> MI355X / ROCm</td>
+          <td>❌ 几乎不可用</td>
+          <td>仅 FP8</td>
+          <td>1-2 tokens/sec/user，低于人类阅读速度；原生 FP4 不支持</td>
+        </tr>
+        <tr>
+          <td><span class="tag amd">AMD</span> ATOM</td>
+          <td>⚠️ 极有限</td>
+          <td>FP8（FP4 fallback）</td>
+          <td>仅 conc=1（KV cache 硬编码单槽），几乎所有热路径走 fallback</td>
+        </tr>
+        <tr>
+          <td><span class="tag huawei">华为</span> Ascend 950DT</td>
+          <td>✅ 有文档支持</td>
+          <td>原生量化</td>
+          <td>文章做了首个 Ascend 950DT 推理性能分析，有专门的 compute/comm 优化</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>TRT-LLM 翻车事件复盘</h3>
+  <div class="callout danger">
+    <strong>静默数据损坏——最危险的一种 Bug</strong><br><br>
+    NVIDIA TensorRT-LLM 的 <code>mhcFusedHcKernel.cu</code> 中硬编码了 <code>FHC_HIDDEN = 4096</code>。DeepSeek V4 Pro 的 hidden_size 是 7168。NVIDIA 工程师遇到报错后，<strong>不是修复代码，而是直接移除了 guard 检查</strong>。结果 kernel 以 4096 的配置编译后接收 7168 的数据——不报错，但悄悄生成错误结果。静默数据损坏持续了一周多才被发现，最终由 SemiAnalysis 提 PR 修复。
+  </div>
+
+  <p>这个案例生动证明了 <strong>原生 SGLang / vLLM 生态的健壮性</strong>——因为它们是社区维护的开源项目，注意力更分散却也更稳健；闭源框架的单一团队反而容易出现这种"修了表面忘根本"的问题。</p>
+
+  <h3>AMD Day 0 到底有多糟</h3>
+  <p>MI355X 是 AMD 最新款数据中心 GPU，但 Day 0 的软件生态几乎是灾难级的：</p>
+  <ul>
+    <li>只能跑 FP8 非原生 checkpoint（原生 FP4+FP8 checkpoint 完全不工作）</li>
+    <li>SGLang 和 vLLM 的分布式推理均不可用</li>
+    <li>唯一能跑的 WIP recipe 来自 AMD 工程师 HaiShaw——性能只有 1-2 tokens/s/user</li>
+    <li>ATOM 框架所有热路径走 fallback：FP4 MoE 被迫走 Triton（AITER 的 fused_moe 在 GFX950 上崩溃），mHC 预投影转 Torch eager（AITER kernel 崩溃）</li>
+  </ul>
+
+  <!-- 5. Timeline -->
+  <h2><span class="hash">#</span>五、43 天演进时间线</h2>
+
+  <div class="timeline">
+
+    <div class="tl-item">
+      <div class="tl-date">Day 0 · 4月25日</div>
+      <div class="tl-title">🚀 DeepSeek V4 Pro 发布</div>
+      <div class="tl-desc">
+        CUDA vLLM / SGLang 立即可用。ROCm 仅 FP8 跑通但不可用。ATOM 仅 conc=1。TRT-LLM 翻车。
+      </div>
+    </div>
+
+    <div class="tl-item day1">
+      <div class="tl-date">Day 1 · 4月26日</div>
+      <div class="tl-title">📈 AMD 首个优化提交——低垂果实</div>
+      <div class="tl-desc">
+        AMD 团队从 FP8 baseline 开始，扫荡了大量 PyTorch-native fallback 路径，替换为 AITER / Triton kernel。<strong>这是整个 43 天中单次提升幅度最大的 commit。</strong>
+      </div>
+    </div>
+
+    <div class="tl-item day3">
+      <div class="tl-date">Day 3 · 4月28日</div>
+      <div class="tl-title">🧠 SGLang 首个 MTP 支持上线</div>
+      <div class="tl-desc">
+        多 Token 预测（MTP）首次在 SGLang 上对 DeepSeek V4 生效。对 memory-bound 小 batch decode 场景带来吞吐量大幅提升。
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-date">Day ~4-5 · 4月29-30日</div>
+      <div class="tl-title">🏭 AMD FP4 权重 MoE 落地</div>
+      <div class="tl-desc">
+        AMD 团队终于让 FP4 权重的 MoE 工作了，MoE expert 从 FP8 切换到原生 FP4（MXFP4），提升 expert-weight 带宽。同时 FlashMLA 和 sparse-attention indexer 从 torch fallback 迁移到 TileLang kernel。
+      </div>
+    </div>
+
+    <div class="tl-item day9">
+      <div class="tl-date">Day 9 · 5月4日</div>
+      <div class="tl-title">🔧 TRT-LLM mHC Kernel 修复——一周多的静默损坏</div>
+      <div class="tl-desc">
+        SemiAnalysis 团队在诊断了一周多后，确认 TRT-LLM 的 fused HC kernel 存在 hidden_size 不匹配问题，提 PR 修复。此时距离发布已过去 9 天。
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-date">Day ~12 · 5月7日</div>
+      <div class="tl-title">⚡ MI355X 引入 AITER mHC Kernel</div>
+      <div class="tl-desc">
+        AITER mHC kernel 落地，这是每个 layer 都在用的核心算子。优化后 <strong>MI355X 首次在低交互场景下超过 H200 性能</strong>。SWA-prepare（windowed attention 的 KV-cache 槽位计算）也从 Triton 获得加速。
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-date">Day ~24 · 5月19日</div>
+      <div class="tl-title">🔥 AMD 最后的 fallback 退役</div>
+      <div class="tl-desc">
+        FlashMLA 从 TileLang 迁移到 Triton，AITER FlyDSL FP4 MoE kernel 落地。启用 fused hash-topk、DSv4 radix attention、fused store-cache、fused WQA/WKV projection、fused paged-compress。并发扫描扩展到 1024。至此 <strong>AMD 性能从 Day 0 提升超过 100 倍</strong>。
+      </div>
+    </div>
+
+    <div class="tl-item day26">
+      <div class="tl-date">Day 26 · 5月21日</div>
+      <div class="tl-title">🎯 AMD 100× 性能里程碑</div>
+      <div class="tl-desc">
+        HaiShaw 领导的 AMD SGLang 工程团队正式达成 <strong>100x+ 吞吐量提升</strong>（对比 Day 0 FP8 baseline），源自经典的第一性原理工程思路——逐个替换 fallback 路径。
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-date">Week 4 · 5月23日左右</div>
+      <div class="tl-title">🧪 MTP 在 AMD 全框架可用</div>
+      <div class="tl-desc">
+        MTP 在 AMD 的所有推理框架上均可工作。但发现 MTP 在 compute-bound 大 batch 场景下反而有负收益——因为 MTP 利用的是 memory-bound decode 的计算空闲。
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-date">Day ~33 · 5月27日</div>
+      <div class="tl-title">📊 ATOM 从单点扩展到全谱系</div>
+      <div class="tl-desc">
+        AITER fix #2916 修复 device-allocation bug，ATOM 恢复使用 AITER kernel。FP4 expert 迁移到 AITER fused MoE，sparse-attention OOM 修复，批处理支持上线。从 conc=1 扩展到 conc 1-512，部分点甚至超过 H200。
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-date">Day ~35 · 5月29日</div>
+      <div class="tl-title">🚄 B300 SGLang 3x / < 1 周</div>
+      <div class="tl-desc">
+        DeepGEMM MegaMoE 落地——grouped FP4 MoE GEMM 保持 expert 驻留，一次 mega-dispatch 替代 per-expert 调用。EP 从 8 切换到 4，不到一周拿到 3x 提升。
+      </div>
+    </div>
+
+    <div class="tl-item day43">
+      <div class="tl-date">Day 43 · 6月2日</div>
+      <div class="tl-title">🏆 GB300 SGLang MTP 拓扑重写——终极提升</div>
+      <div class="tl-desc">
+        核心优化来自 <strong>decode 拓扑重写而非底层算子</strong>：Wide EP 从 8 扩展到 16，预填充 worker 从 1-2 扩展到 4-12 个 per decode worker，并发从 16,384 推到 21,504。Wide EP 是大规模推理的核心杠杆——将权重加载成本分摊到更多 GPU。
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 6. AMD Deep Dive -->
+  <h2><span class="hash">#</span>六、AMD MI355X 100× 提升深度拆解</h2>
+
+  <p>这可能是整篇文章最有信息密度的部分。AMD 从 Day 0 的 1-2 tokens/s/user 到 Day 26 的超过 H200，SemiAnalysis 将提升归因于几个关键阶段：</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>阶段</th>
+          <th>优化动作</th>
+          <th>影响</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Day 0 → 1</td>
+          <td>扫荡 PyTorch-native fallback → 替换为 AITER/Triton kernel</td>
+          <td><strong>最大单次提升</strong></td>
+        </tr>
+        <tr>
+          <td>Day 4-5</td>
+          <td>FP4 权重 MoE 切换；FlashMLA → TileLang；HIP graphs</td>
+          <td>expert-weight 带宽大幅提升</td>
+        </tr>
+        <tr>
+          <td>Day 12</td>
+          <td>AITER mHC kernel 引入（每层核心算子）</td>
+          <td>首次超 H200（低交互场景）</td>
+        </tr>
+        <tr>
+          <td>Day 19</td>
+          <td>SWA-prepare Triton 优化</td>
+          <td>windowed attention 加速</td>
+        </tr>
+        <tr>
+          <td>Day 24</td>
+          <td>FlashMLA → Triton；AITER FlyDSL FP4 MoE；6 个 fused 算子；并发 1024</td>
+          <td>高吞吐端首次铺开</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout success">
+    <strong>经典工程思路：</strong>最好的优化顺序并非从底层 kernel 开始重写，而是先修 fallback 路径、换量化精度、再针对性优化核心算子，最后做边缘优化和融合。AMD 团队走的正是这条路。
+  </div>
+
+  <h3>ATOM 的逆袭</h3>
+  <p>ATOM 是 AMD 生态中另一个推理框架。Day 0 时只能跑 conc=1，几乎每个热路径都走 fallback（KV cache 硬编码单槽、AITER fused_moe 在 GFX950 上崩溃、mHC 预投影靠 Torch eager）。到 Day 33 时，随着 AITER bug 修复、FP4 expert 迁移到 AITER fused MoE、sparse-attention OOM 清理和批处理支持落地，ATOM 从孤点扩展到了 conc 1-512 的完整谱系，部分点甚至超过 H200。</p>
+
+  <p>文章特别提到：<strong>ATOM 目前有零个生产客户。</strong></p>
+
+  <!-- 7. B300 / GB300 -->
+  <h2><span class="hash">#</span>七、B300 / GB300：Wide EP 的力量</h2>
+
+  <h3>B300 SGLang：3× / < 1 周</h3>
+  <ul>
+    <li><strong>DeepGEMM MegaMoE：</strong>grouped FP4 MoE GEMM——保持 expert 在 GPU 上驻留，一次 mega-dispatch 替代逐 expert 调用</li>
+    <li><strong>EP 调优：</strong>从 EP8 切到 EP4</li>
+  </ul>
+
+  <h3>GB300 NVL72：拓扑重写 > Kernel 重写</h3>
+  <div class="callout purple">
+    <strong>核心洞察：</strong>GB300 从 Day 0 到 Day 43 的最大提升，来自 <strong>decode 拓扑重写而非 kernel 或精度优化</strong>。<br><br>
+    Day 0：EP=8，1-2 个 prefill worker，并发上限 16,384<br>
+    Day 43：EP=16，4-12 个 prefill worker per decode worker，并发 21,504<br><br>
+    <strong>Wide EP 是大规模推理的核心杠杆：</strong>更宽的专家并行将权重加载成本分摊到更多 GPU 上，从而大幅提升吞吐量。
+  </div>
+
+  <p>GB300 集群在模型发布时正好故障，CoreWeave 从备件中"挤"出了两台开发 NVL72 机架供社区使用。</p>
+
+  <!-- 8. MTP -->
+  <h2><span class="hash">#</span>八、MTP（Multi-Token Prediction）的收益与边界</h2>
+
+  <ul>
+    <li><strong>Day 3</strong> 由 SGLang 首次支持，<strong>Day 28 左右</strong>在 AMD 全框架可用</li>
+    <li>对 <strong>memory-bound 小 batch decode</strong>（即交互性高、单用户场景）增益显著——利用计算空闲生成 draft token</li>
+    <li>对 <strong>compute-bound 大 batch decode</strong>（高吞吐服务场景）<strong>反而有负收益</strong>——draft token 的额外计算成本超过节省</li>
+    <li>每个硬件/框架的 MTP 最优配置不同，需要独立调优</li>
+  </ul>
+
+  <!-- 9. CUDA Moat -->
+  <h2><span class="hash">#</span>九、CUDA 护城河 vs 生态追赶</h2>
+
+  <div class="stat-row">
+    <div class="stat-card">
+      <div class="num green">Day 0</div>
+      <div class="label">CUDA vLLM/SGLang 可用</div>
+    </div>
+    <div class="stat-card">
+      <div class="num red">Day 9</div>
+      <div class="label">TRT-LLM 修复</div>
+    </div>
+    <div class="stat-card">
+      <div class="num orange">Day 26</div>
+      <div class="label">ROCm 可用 (100x后)</div>
+    </div>
+    <div class="stat-card">
+      <div class="num red">永不</div>
+      <div class="label">ROCm 分布式推理</div>
+    </div>
+  </div>
+
+  <p>文章呈现了一个清晰的层级：</p>
+
+  <ol>
+    <li><strong>第一梯队：CUDA vLLM / SGLang</strong> — Day 0 完美运行，分布式推理即插即用。这是 CUDA 生态厚度的直接体现。</li>
+    <li><strong>第二梯队：华为 Ascend</strong> — 由于 DeepSeek V4 本身就是与 Ascend 协同设计的，Day 0 有文档支持。</li>
+    <li><strong>第三梯队：NVIDIA TRT-LLM</strong> — 讽刺的是英伟达的闭源推理框架反而不如开源社区做得好。翻车一周多，还要外部提 PR。</li>
+    <li><strong>第四梯队：ROCm / ATOM</strong> — Day 0 几乎不可用，但追赶速度极快（26天100x）。不过到 Day 43 依然不支持分布式推理。</li>
+  </ol>
+
+  <!-- 10. Insights -->
+  <h2><span class="hash">#</span>十、商业与投资启示</h2>
+
+  <h3>1. 推理优化才是下一波算力需求的驱动因素</h3>
+  <p>模型发布后，不是"训练完了就完了"——真正的工程投入才刚刚开始。DeepSeek V4 发布后 43 天，数千工程小时的推理调优还在持续。这意味着推理侧的算力需求远比训练侧更持久、更分散。</p>
+
+  <h3>2. CUDA 生态护城河真实存在，但并非不可逾越</h3>
+  <p>Day 0 可用 vs 26 天追赶——CUDA 的领先优势在于生态惯性而非技术壁垒。vLLM 和 SGLang 两个开源推理引擎各自融资数亿美元成立公司，说明开源推理基础设施正在成为一个独立赛道。</p>
+
+  <h3>3. AMD 的软件是最大短板，但追赶速度惊人</h3>
+  <p>100x/26天 确实亮眼，但前提是 Day 0 几乎归零。文章预告将推出《State of AMD 2026》专文。对投资者来说，<strong>AMD 硬件不差，差的是软件生态的 Day 0 支持</strong>——ROCm 能否在下次大模型发布时做到 Day 0 可用，是判断 AMD AI 战略是否成熟的标尺。</p>
+
+  <h3>4. 华为昇腾在静默前进</h3>
+  <p>DeepSeek V4 与 Ascend 的 co-design 关系值得关注。中国在开源模型领域占据主导——不仅 DeepSeek，连 Kimi K2.6 在编程上仍然压着 Nemotron 3 Ultra。</p>
+
+  <h3>5. Wide EP 是规模化推理的关键技术方向</h3>
+  <p>GB300 的最大提升来自拓扑重写而非底层算子优化。Wide EP 把权重加载成本分摊到更多 GPU，是提升性价比的核心杠杆。这对大规模推理部署的架构设计具有深远影响。</p>
+
+  <h3>6. 开源推理引擎的商业化趋势</h3>
+  <p>vLLM → Inferact，SGLang → RadixArk，各自融资数亿美元。开源推理引擎正在从"社区项目"变成"商业化基础设施"。这对 NVIDIA 的闭源 TRT-LLM 构成了长期挑战。</p>
+
+  <!-- Divider -->
+  <div class="divider">· · ·</div>
+
+  <h2><span class="hash">#</span>十一、原文亮点摘录</h2>
+
+  <blockquote>
+    "Nvidia's in house TensorRT-LLM did not work well for DeepSeek v4, and we at SemiAnalysis had to fix their open source mHC kernel launch code."
+    <br>—— SemiAnalysis 帮 NVIDIA 修了 TRT-LLM 的 kernel
+  </blockquote>
+
+  <blockquote>
+    "China currently dominates the open model landscape, with Kimi K2.6 still beating Jensen's Nemotron Committee Coalition's Nemotron 3 Ultra on coding."
+    <br>—— 中国主导开源模型领域
+  </blockquote>
+
+  <blockquote>
+    "ATOM, by the way, currently has zero production customers."
+    <br>—— 一句话暴露了 AMD 推理框架的真实处境
+  </blockquote>
+
+  <blockquote>
+    "The recipe itself was rudimentary: eager on prefill, using NIXL for KV cache transfer. We independently replicated the recipe achieving up to 5x better results than for a B200 run."
+    <br>—— GB200 分布式推理的 Day 0 方案虽然简陋但效果惊艳
+  </blockquote>
+
+  <!-- Footer -->
+  <div class="footer">
+    <p>本文基于 SemiAnalysis Newsletter 公开文章分析撰写</p>
+    <p>数据来源：<a href="https://inferencex.semianalysis.com" target="_blank">InferenceX Dashboard</a> · <a href="https://github.com/SemiAnalysisAI/InferenceX" target="_blank">GitHub Repo</a></p>
+    <p>分析日期：2026-06-12</p>
+  </div>
+
+</div>
+</body>
+</html>
