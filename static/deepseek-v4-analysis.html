@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DeepSeek V4 深度分析报告</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;600&display=swap');
+
+  :root {
+    --bg: #0a0a0f;
+    --surface: #12121a;
+    --surface2: #1a1a28;
+    --border: #2a2a3d;
+    --text: #e8e8f0;
+    --text-dim: #8888a0;
+    --accent: #6366f1;
+    --accent2: #8b5cf6;
+    --green: #22c55e;
+    --red: #ef4444;
+    --orange: #f59e0b;
+    --cyan: #06b6d4;
+    --pink: #ec4899;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Sans SC', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+    overflow-x: hidden;
+  }
+
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(ellipse at 50% 30%, rgba(99,102,241,0.15) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 80%, rgba(139,92,246,0.1) 0%, transparent 50%),
+                var(--bg);
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 100px,
+      rgba(99,102,241,0.02) 100px,
+      rgba(99,102,241,0.02) 101px
+    );
+    animation: gridMove 40s linear infinite;
+  }
+
+  @keyframes gridMove {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(141px, 141px); }
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 900px;
+    padding: 60px 40px;
+    text-align: center;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    padding: 6px 20px;
+    border: 1px solid var(--accent);
+    border-radius: 100px;
+    font-size: 13px;
+    color: var(--accent);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 30px;
+  }
+
+  .hero h1 {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 900;
+    line-height: 1.2;
+    background: linear-gradient(135deg, #fff 0%, #a5b4fc 50%, #8b5cf6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 24px;
+  }
+
+  .hero-sub {
+    font-size: 1.15rem;
+    color: var(--text-dim);
+    max-width: 680px;
+    margin: 0 auto 40px;
+    line-height: 1.9;
+  }
+
+  .hero-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    margin-top: 40px;
+  }
+
+  .hero-stat {
+    background: var(--surface);
+    padding: 28px 16px;
+    text-align: center;
+  }
+
+  .hero-stat .num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--accent);
+    display: block;
+  }
+
+  .hero-stat .label {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    margin-top: 4px;
+  }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+
+  section {
+    padding: 100px 0;
+  }
+
+  .section-label {
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+    font-weight: 500;
+  }
+
+  .section-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+    line-height: 1.3;
+  }
+
+  .section-desc {
+    color: var(--text-dim);
+    font-size: 1.05rem;
+    max-width: 700px;
+    margin-bottom: 50px;
+    line-height: 1.9;
+  }
+
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+    margin: 0;
+  }
+
+  /* Architecture Section */
+  .arch-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin-bottom: 40px;
+  }
+
+  .arch-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    transition: border-color 0.3s;
+  }
+
+  .arch-card:hover {
+    border-color: var(--accent);
+  }
+
+  .arch-card .icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    margin-bottom: 16px;
+  }
+
+  .arch-card h3 {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+
+  .arch-card p {
+    font-size: 0.9rem;
+    color: var(--text-dim);
+    line-height: 1.7;
+  }
+
+  .arch-card .metric {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-top: 12px;
+    display: block;
+  }
+
+  /* Chart containers */
+  .chart-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    margin-bottom: 24px;
+  }
+
+  .chart-wrap h3 {
+    font-size: 1rem;
+    margin-bottom: 4px;
+    font-weight: 600;
+  }
+
+  .chart-wrap .chart-sub {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    margin-bottom: 24px;
+  }
+
+  .chart-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  /* Timeline */
+  .timeline {
+    position: relative;
+    padding-left: 40px;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 15px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--accent), var(--accent2), var(--cyan), var(--green));
+  }
+
+  .tl-item {
+    position: relative;
+    margin-bottom: 36px;
+    padding: 24px 28px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+  }
+
+  .tl-item::before {
+    content: '';
+    position: absolute;
+    left: -33px;
+    top: 30px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 3px solid var(--bg);
+  }
+
+  .tl-item .tl-date {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+
+  .tl-item h4 {
+    font-size: 1rem;
+    margin-bottom: 8px;
+  }
+
+  .tl-item p {
+    font-size: 0.9rem;
+    color: var(--text-dim);
+    line-height: 1.7;
+  }
+
+  /* Hardware Table */
+  .hw-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 40px;
+  }
+
+  .hw-table thead th {
+    text-align: left;
+    padding: 14px 16px;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-dim);
+    border-bottom: 1px solid var(--border);
+    font-weight: 500;
+  }
+
+  .hw-table tbody td {
+    padding: 18px 16px;
+    border-bottom: 1px solid rgba(42,42,61,0.5);
+    font-size: 0.9rem;
+  }
+
+  .hw-table tbody tr:hover {
+    background: rgba(99,102,241,0.04);
+  }
+
+  .hw-name {
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 100px;
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+
+  .badge-green { background: rgba(34,197,94,0.15); color: var(--green); }
+  .badge-red { background: rgba(239,68,68,0.15); color: var(--red); }
+  .badge-orange { background: rgba(245,158,11,0.15); color: var(--orange); }
+  .badge-cyan { background: rgba(6,182,212,0.15); color: var(--cyan); }
+
+  /* Software section */
+  .sw-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  .sw-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px;
+  }
+
+  .sw-card h4 {
+    font-size: 1.05rem;
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+
+  .sw-card .sw-verdict {
+    font-size: 0.8rem;
+    margin-bottom: 14px;
+    font-weight: 500;
+  }
+
+  .sw-card p {
+    font-size: 0.88rem;
+    color: var(--text-dim);
+    line-height: 1.7;
+  }
+
+  /* Insight boxes */
+  .insight-box {
+    background: linear-gradient(135deg, rgba(99,102,241,0.08), rgba(139,92,246,0.05));
+    border: 1px solid rgba(99,102,241,0.25);
+    border-radius: 14px;
+    padding: 28px 32px;
+    margin: 30px 0;
+  }
+
+  .insight-box .insight-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .insight-box p {
+    font-size: 0.95rem;
+    color: var(--text);
+    line-height: 1.8;
+  }
+
+  /* Conclusion */
+  .conclusion-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  .conc-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px;
+    text-align: center;
+  }
+
+  .conc-card .conc-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 2.5rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .conc-card h4 {
+    margin: 10px 0 8px;
+    font-size: 1rem;
+  }
+
+  .conc-card p {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    line-height: 1.7;
+  }
+
+  /* Quote */
+  .quote-block {
+    border-left: 3px solid var(--accent);
+    padding: 20px 30px;
+    margin: 40px 0;
+    background: rgba(99,102,241,0.05);
+    border-radius: 0 12px 12px 0;
+    font-style: italic;
+    color: var(--text-dim);
+    font-size: 1.05rem;
+    line-height: 1.9;
+  }
+
+  .quote-block cite {
+    display: block;
+    margin-top: 12px;
+    font-size: 0.85rem;
+    font-style: normal;
+    color: var(--accent);
+  }
+
+  footer {
+    text-align: center;
+    padding: 60px 40px;
+    color: var(--text-dim);
+    font-size: 0.85rem;
+    border-top: 1px solid var(--border);
+  }
+
+  footer a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  @media (max-width: 768px) {
+    .hero-stats { grid-template-columns: repeat(2, 1fr); }
+    .arch-grid, .chart-row, .sw-grid, .conclusion-grid { grid-template-columns: 1fr; }
+    .container { padding: 0 20px; }
+    .hero h1 { font-size: 2rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">SemiAnalysis 深度分析</div>
+    <h1>DeepSeek V4 1.6T<br>从 Day 0 到 Day 43 性能演变</h1>
+    <p class="hero-sub">
+      一篇详尽的 DeepSeek V4 推理性能追踪：跨越 6 大硬件平台、5 款推理引擎，
+      见证开源模型如何推动整个 AI 基础设施生态的迭代进化。
+    </p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <span class="num">1.6T</span>
+        <span class="label">总参数量</span>
+      </div>
+      <div class="hero-stat">
+        <span class="num">100x</span>
+        <span class="label">MI355X 性能提升</span>
+      </div>
+      <div class="hero-stat">
+        <span class="num">$0.156</span>
+        <span class="label">GB300 每百万 token</span>
+      </div>
+      <div class="hero-stat">
+        <span class="num">50x</span>
+        <span class="label">KV 缓存压缩比</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ARCHITECTURE -->
+<div class="divider"></div>
+<section>
+  <div class="container">
+    <div class="section-label">01 / 模型架构</div>
+    <div class="section-title">重新定义大模型推理效率</div>
+    <div class="section-desc">
+      DeepSeek V4 在架构层面带来了多项突破性创新，核心目标是在保持模型质量的前提下，
+      极致压缩推理时的计算和内存开销，尤其针对超长上下文场景。
+    </div>
+
+    <div class="arch-grid">
+      <div class="arch-card">
+        <div class="icon" style="background:rgba(99,102,241,0.15);color:var(--accent);">&#9670;</div>
+        <h3>压缩稀疏注意力 (CSA)</h3>
+        <p>取代传统的 Multi-Head Latent Attention (MLA)，采用压缩稀疏注意力机制，在维持表达能力的同时大幅降低注意力计算开销。配合 HCA 实现 100 万 token 上下文场景下的极致压缩。</p>
+        <span class="metric" style="color:var(--accent);">50x KV Cache 压缩</span>
+      </div>
+      <div class="arch-card">
+        <div class="icon" style="background:rgba(139,92,246,0.15);color:var(--accent2);">&#9881;</div>
+        <h3>MegaMoE 调度架构</h3>
+        <p>采用 Wave-Based 调度策略，将 Expert Dispatch 和 Combine 的 All-to-All 通信与计算重叠。通过流水线化通信与计算，最大化 GPU 利用率，显著降低 MoE 层通信瓶颈。</p>
+        <span class="metric" style="color:var(--accent2);">1.92x 理论加速比</span>
+      </div>
+      <div class="arch-card">
+        <div class="icon" style="background:rgba(6,182,212,0.15);color:var(--cyan);">&#9733;</div>
+        <h3>FP4 + FP8 混合精度</h3>
+        <p>原生支持 MXFP4 专家量化与 FP8 激活值混合推理。在不同层和模块之间灵活切换精度，既保证数值稳定性，又充分压榨硬件的算力密度，特别适配新一代 B300/GB300 的 FP4 单元。</p>
+        <span class="metric" style="color:var(--cyan);">7168 Hidden Size</span>
+      </div>
+      <div class="arch-card">
+        <div class="icon" style="background:rgba(34,197,94,0.15);color:var(--green);">&#9878;</div>
+        <h3>确定性推理内核</h3>
+        <p>为满足强化学习训练对确定性的严苛要求，DeepSeek V4 定制了 Batch-Invariant 的归约内核。相同输入无论 batch 大小如何变化，输出严格一致——这对 RL 阶段的梯度稳定性至关重要。</p>
+        <span class="metric" style="color:var(--green);">Batch-Invariant</span>
+      </div>
+    </div>
+
+    <div class="insight-box">
+      <div class="insight-title">关键洞察</div>
+      <p>
+        DeepSeek V4 从 MLA 转向 CSA/HCA 是一个战略性的架构转向。MLA 虽然在 KV 压缩上已有出色表现，
+        但在超长上下文（1M+）场景下仍面临内存带宽瓶颈。CSA+HCA 的组合将 KV 缓存压缩推到 50 倍，
+        这意味着 1M 上下文的推理内存占用仅相当于传统方案 20K 上下文的水平——这在实际部署中意味着
+        单卡可以服务的并发请求数量将成倍增长。
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- HARDWARE PERFORMANCE -->
+<div class="divider"></div>
+<section>
+  <div class="container">
+    <div class="section-label">02 / 硬件平台对比</div>
+    <div class="section-title">六大平台，差异显著的 43 天</div>
+    <div class="section-desc">
+      从 NVIDIA 旗舰到 AMD 新贵，再到华为昇腾，不同硬件平台在 DeepSeek V4 发布后的适配速度和最终性能差异巨大。
+    </div>
+
+    <div style="overflow-x:auto; margin-bottom:40px;">
+      <table class="hw-table">
+        <thead>
+          <tr>
+            <th>硬件平台</th>
+            <th>Day 0 状态</th>
+            <th>峰值性能</th>
+            <th>核心优势</th>
+            <th>评价</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="hw-name">NVIDIA GB300 NVL72</td>
+            <td>可用，逐步优化</td>
+            <td>$0.156/M tokens</td>
+            <td>72 GPU NVLink 域，WideEP 全互联</td>
+            <td><span class="badge badge-green">统治级</span></td>
+          </tr>
+          <tr>
+            <td class="hw-name">NVIDIA B300</td>
+            <td>可用</td>
+            <td>一周内 3x 提升</td>
+            <td>FP4 MoE GEMM 分组优化</td>
+            <td><span class="badge badge-green">优秀</span></td>
+          </tr>
+          <tr>
+            <td class="hw-name">NVIDIA B200</td>
+            <td>可用</td>
+            <td>~500K tok/s/MW</td>
+            <td>成熟生态，2.17kW/GPU 功耗包络</td>
+            <td><span class="badge badge-green">稳定</span></td>
+          </tr>
+          <tr>
+            <td class="hw-name">AMD MI355X</td>
+            <td>几乎不可用 (1-2 tok/s)</td>
+            <td>超越 H200</td>
+            <td>AITER + TileLang 内核替换</td>
+            <td><span class="badge badge-orange">逆袭</span></td>
+          </tr>
+          <tr>
+            <td class="hw-name">华为昇腾 950DT</td>
+            <td>Day 0 即支持</td>
+            <td>匹配 CUDA 水平</td>
+            <td>CANN MC² 融合算子，AI CPU 调度</td>
+            <td><span class="badge badge-cyan">黑马</span></td>
+          </tr>
+          <tr>
+            <td class="hw-name">H200 (参考基线)</td>
+            <td>稳定可用</td>
+            <td>被 MI355X 超越</td>
+            <td>成熟的 Hopper 架构</td>
+            <td><span class="badge badge-orange">基准线</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="chart-row">
+      <div class="chart-wrap">
+        <h3>AMD MI355X 性能恢复曲线</h3>
+        <div class="chart-sub">从 Day 0 的"几乎不可用"到 Day 26 超越 H200 — 100 倍逆袭</div>
+        <canvas id="chartAMD" height="220"></canvas>
+      </div>
+      <div class="chart-wrap">
+        <h3>B200 能效演进 (tok/s/MW)</h3>
+        <div class="chart-sub">纯软件优化驱动的 67% 能效提升</div>
+        <canvas id="chartB200" height="220"></canvas>
+      </div>
+    </div>
+
+    <div class="chart-wrap" style="margin-top:24px;">
+      <h3>GB300 NVL72 各交互级别成本效率</h3>
+      <div class="chart-sub">50 tok/s/user 交互速度下的成本竞争力</div>
+      <canvas id="chartCost" height="180"></canvas>
+    </div>
+
+    <div class="insight-box">
+      <div class="insight-title">硬件格局分析</div>
+      <p>
+        GB300 NVL72 之所以"统治"，核心在于 72 GPU NVLink 域让 All-to-All 通信全部留在高速互联内（WideEP），
+        避免了 PCIe/网络瓶颈。AMD MI355X 的逆袭故事更值得关注：从完全不可用到超越 H200，
+        靠的是 AITER 和 TileLang 社区对每一个 PyTorch fallback 内核的逐一替换——这是开源社区力量的最佳注脚。
+        华为昇腾 950DT 内部代号"David"，寓意以弱胜强的圣经故事，Day 0 即可用这一事实本身就具有战略意义。
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- SOFTWARE ECOSYSTEM -->
+<div class="divider"></div>
+<section>
+  <div class="container">
+    <div class="section-label">03 / 软件生态</div>
+    <div class="section-title">推理引擎：开源 vs 商业的角力</div>
+    <div class="section-desc">
+      DeepSeek V4 的发布像一块试金石，暴露了各推理引擎在新架构适配上的真实能力与响应速度。
+    </div>
+
+    <div class="sw-grid">
+      <div class="sw-card">
+        <h4>SGLang</h4>
+        <div class="sw-verdict" style="color:var(--green);">&#9679; Day 0 即可用 · 社区领跑者</div>
+        <p>CUDA 平台 Day 0 原生支持。Day 3 率先实现 MTP（Multi-Token Prediction）支持。在 ROCm 平台上，HaiShaw 团队带来了持续的重大改进。整体响应速度和优化深度领先所有竞争对手。</p>
+      </div>
+      <div class="sw-card">
+        <h4>vLLM</h4>
+        <div class="sw-verdict" style="color:var(--green);">&#9679; Day 0 CUDA · ROCm 滞后</div>
+        <p>CUDA 平台 Day 0 开箱即用。但在 ROCm 平台上的支持明显落后于 SGLang，社区反馈 ROCm 适配存在较多兼容性问题。作为另一个主流开源引擎，保持了良好的 CUDA 生态位。</p>
+      </div>
+      <div class="sw-card">
+        <h4>TensorRT-LLM</h4>
+        <div class="sw-verdict" style="color:var(--red);">&#9679; Day 0 失败 · 硬编码 Bug</div>
+        <p>NVIDIA 自家推理引擎在 Day 0 居然不可用——原因是代码中硬编码了 <code>FHC_HIDDEN = 4096</code>，而 DeepSeek V4 实际 Hidden Size 为 7168。直到 Day 9 才由社区提交补丁修复。讽刺的是，NVIDIA 的新硬件反而是最后获得良好软件支持的。</p>
+      </div>
+      <div class="sw-card">
+        <h4>ROCm / ATOM</h4>
+        <div class="sw-verdict" style="color:var(--orange);">&#9679; 初期失望 · 后期逆袭</div>
+        <p>Day 0 性能令人失望，并发上限仅为 1。但经过 4 周的密集优化，通过 AITER 内核替换和 fallback 移除，最终实现超过 100 倍的吞吐量提升。5 月 19 日完成最后的 fallback 清理，启用融合 Hash-TopK 和 Radix Attention。</p>
+      </div>
+      <div class="sw-card">
+        <h4>华为 CANN</h4>
+        <div class="sw-verdict" style="color:var(--cyan);">&#9679; Day 0 可用 · 自研路线</div>
+        <p>华为自研 CANN 计算栈实现了 Day 0 支持，利用 MC² 融合算子实现计算-通信重叠。独特的是将调度元数据卸载到片上 AI CPU，避免了 Host-Device 往返延迟，展现出与 CUDA 生态完全不同的优化思路。</p>
+      </div>
+      <div class="sw-card">
+        <h4>Disaggregated Prefill</h4>
+        <div class="sw-verdict" style="color:var(--accent);">&#9679; 架构创新 · 5x 提升</div>
+        <p>GB200 NVL72 通过解耦 Prefill 和 Decode 阶段（Disaggregated Prefill），在低交互配置下实现了比 B200 高出 5 倍的性能。这种将计算阶段物理分离的架构思路正在成为大模型推理的新范式。</p>
+      </div>
+    </div>
+
+    <div class="quote-block">
+      "The open-source InferenceX engineering team has pulled multiple all-nighters to measure performance results..."
+      <br><br>
+      "开源 InferenceX 工程团队为了测量性能结果，已经多次通宵达旦……"
+      <cite>— SemiAnalysis</cite>
+    </div>
+  </div>
+</section>
+
+<!-- TIMELINE -->
+<div class="divider"></div>
+<section>
+  <div class="container">
+    <div class="section-label">04 / 优化时间线</div>
+    <div class="section-title">43 天里的关键时刻</div>
+    <div class="section-desc">
+      从模型发布到性能充分释放，每一步都凝聚了工程师们的高强度投入。
+    </div>
+
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-date">Day 0 — 发布日</div>
+        <h4>生态分化立刻显现</h4>
+        <p>CUDA 平台上 vLLM/SGLang 开箱即用；华为 CANN 同步支持；而 AMD ROCm 几乎不可用（1-2 tok/s），NVIDIA 自家的 TensorRT-LLM 因硬编码 Bug 也无法运行。开源引擎完胜商业方案。</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">Day 3</div>
+        <h4>SGLang 率先交付 MTP 支持</h4>
+        <p>Multi-Token Prediction 是提升解码吞吐的关键技术。SGLang 在所有引擎中第一个实现了 DeepSeek V4 的 MTP 推理支持，进一步拉开与竞争对手的差距。</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">Day 9</div>
+        <h4>TensorRT-LLM 硬编码 Bug 修复</h4>
+        <p>社区发现 TensorRT-LLM 中 mHC 内核启动代码硬编码了 <code>FHC_HIDDEN = 4096</code>，与 DeepSeek V4 的实际 Hidden Size 7168 不匹配。外部补丁修复后终于可以运行——NVIDIA 自家引擎竟然需要社区来修，令人深思。</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">Day 26 — Week 4</div>
+        <h4>AMD MI355X 完成 100x 逆袭</h4>
+        <p>通过逐一替换 PyTorch fallback 内核为 AITER/TileLang 优化内核，MI355X 吞吐量从 Day 0 的 1-2 tok/s 跃升至超越 H200 的水平。MTP 在所有主流框架上均已可用。</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">5 月 19 日</div>
+        <h4>AMD 完成最后的 Fallback 清理</h4>
+        <p>剩余的 PyTorch 原生 fallback 全部退役，启用融合 Hash-TopK 和 Radix Attention。MI355X 的性能优化进入稳态，不再有显著提升空间。</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">6 月 2 日</div>
+        <h4>GB300 SGLang 实施 W4A4 MegaMoE</h4>
+        <p>在 GB300 NVL72 上，SGLang 实现了 W4A4 精度的 MegaMoE 内核并重写了解码拓扑。WideEP 配置将 All-to-All 通信完全限制在 NVLink 域内，性能跃升。</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">6 月 5 - 6 日</div>
+        <h4>B200 达到能效峰值，GB300 全面统治</h4>
+        <p>B200 每兆瓦 token 产出达到近 50 万（从 30 万起步）。GB300 NVL72 在所有交互级别（含 MTP 启用）下均占据性能榜首，标志着 43 天优化周期的顶点。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COST ANALYSIS -->
+<div class="divider"></div>
+<section>
+  <div class="container">
+    <div class="section-label">05 / 成本与效率</div>
+    <div class="section-title">每兆瓦 Token 产出：真正的 ROI 指标</div>
+    <div class="section-desc">
+      SemiAnalysis 认为 "Tokens per all-in provisioned utility MW" 是衡量大模型推理投资回报率的核心指标。软件优化可以在不改变硬件功耗的前提下大幅提升这一数值。
+    </div>
+
+    <div class="chart-row">
+      <div class="chart-wrap">
+        <h3>各平台 Day 0 vs 峰值性能对比</h3>
+        <div class="chart-sub">软件优化带来的性能释放幅度</div>
+        <canvas id="chartCompare" height="260"></canvas>
+      </div>
+      <div class="chart-wrap">
+        <h3>推理引擎 Day 0 可用度评分</h3>
+        <div class="chart-sub">综合 CUDA / ROCm / 昇腾三平台</div>
+        <canvas id="chartEngine" height="260"></canvas>
+      </div>
+    </div>
+
+    <div class="insight-box">
+      <div class="insight-title">成本效率深度解读</div>
+      <p>
+        GB300 NVL72 在 50 tok/s/user 交互速度下实现了 $0.156/M output tokens 的成本，
+        这个数字的背后是 WideEP 将 All-to-All 流量锁定在 NVLink 域内 + MegaMoE 通信重叠 +
+        W4A4 量化三重优化的叠加效果。值得注意的是，B200 的能效从 ~300K 提升到 ~500K tok/s/MW，
+        完全是软件层面的改进——没有增加一瓦特功耗。这印证了一个关键论点：在大模型推理时代，
+        软件工程的投入产出比可能远超硬件堆叠。
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- CONCLUSION -->
+<div class="divider"></div>
+<section>
+  <div class="container">
+    <div class="section-label">06 / 核心结论</div>
+    <div class="section-title">三个关键信号</div>
+    <div class="section-desc">
+      DeepSeek V4 的 43 天性能演化，向我们传递了关于 AI 基础设施未来的重要信号。
+    </div>
+
+    <div class="conclusion-grid">
+      <div class="conc-card">
+        <div class="conc-num">01</div>
+        <h4>开源社区 > 商业方案</h4>
+        <p>SGLang/vLLM 在 Day 0 就完胜 NVIDIA 自家的 TensorRT-LLM。AMD ROCm 的逆袭也全靠社区内核贡献。开源推理引擎已经成为事实上的生产标准。</p>
+      </div>
+      <div class="conc-card">
+        <div class="conc-num">02</div>
+        <h4>软件定义推理性能</h4>
+        <p>B200 能效提升 67%、MI355X 性能提升 100 倍——全部来自软件优化。内核替换、Fallback 消除、通信重叠，这些工程投入的 ROI 远超硬件升级。</p>
+      </div>
+      <div class="conc-card">
+        <div class="conc-num">03</div>
+        <h4>多极化硬件格局成型</h4>
+        <p>华为昇腾 950DT 代号"David"——以弱胜强。Day 0 即可用证明了非 CUDA 生态的可行性。中国力量正在重塑 AI 芯片的竞争格局。</p>
+      </div>
+    </div>
+
+    <div class="quote-block" style="margin-top:50px;">
+      "China currently dominates the open model landscape..."
+      <br><br>
+      "中国目前主导了开源模型的版图……"
+      <br><br>
+      "The biblical story that gave the Ascend 950 its internal codename ends with the giant face-down. Whether it can fell a moving giant is yet to be seen."
+      <br><br>
+      "赋予昇腾 950 内部代号的那个圣经故事，以巨人面朝下倒地告终。但它能否击倒一个正在移动的巨人，尚待观察。"
+      <cite>— SemiAnalysis</cite>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>基于 <a href="https://newsletter.semianalysis.com/p/deepseekv4-16t-day-0-to-day-43-performance" target="_blank">SemiAnalysis</a> 原文分析 · 2026 年 6 月</p>
+</footer>
+
+<script>
+// AMD MI355X Performance Recovery
+const ctxAMD = document.getElementById('chartAMD').getContext('2d');
+new Chart(ctxAMD, {
+  type: 'line',
+  data: {
+    labels: ['Day 0', 'Day 3', 'Day 7', 'Day 14', 'Day 20', 'Day 26', 'Day 35', 'Day 43'],
+    datasets: [{
+      label: 'MI355X 相对性能',
+      data: [1, 3, 12, 35, 65, 100, 105, 108],
+      borderColor: '#f59e0b',
+      backgroundColor: 'rgba(245,158,11,0.1)',
+      fill: true,
+      tension: 0.4,
+      pointRadius: 5,
+      pointBackgroundColor: '#f59e0b',
+    }, {
+      label: 'H200 基线',
+      data: [90, 90, 90, 90, 90, 90, 90, 90],
+      borderColor: 'rgba(255,255,255,0.3)',
+      borderDash: [8, 4],
+      pointRadius: 0,
+      fill: false,
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { labels: { color: '#8888a0', font: { family: 'Noto Sans SC' } } }
+    },
+    scales: {
+      x: { ticks: { color: '#8888a0' }, grid: { color: 'rgba(42,42,61,0.5)' } },
+      y: { ticks: { color: '#8888a0' }, grid: { color: 'rgba(42,42,61,0.5)' }, title: { display: true, text: '相对吞吐量 (%)', color: '#8888a0' } }
+    }
+  }
+});
+
+// B200 Energy Efficiency
+const ctxB200 = document.getElementById('chartB200').getContext('2d');
+new Chart(ctxB200, {
+  type: 'bar',
+  data: {
+    labels: ['4月初 (Day 0)', '4月中', '5月初', '5月中', '6月5日 (峰值)'],
+    datasets: [{
+      label: 'tok/s/MW (千)',
+      data: [300, 340, 390, 450, 500],
+      backgroundColor: [
+        'rgba(99,102,241,0.4)',
+        'rgba(99,102,241,0.5)',
+        'rgba(99,102,241,0.6)',
+        'rgba(99,102,241,0.7)',
+        'rgba(99,102,241,0.9)',
+      ],
+      borderColor: '#6366f1',
+      borderWidth: 1,
+      borderRadius: 6,
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { labels: { color: '#8888a0', font: { family: 'Noto Sans SC' } } }
+    },
+    scales: {
+      x: { ticks: { color: '#8888a0' }, grid: { color: 'rgba(42,42,61,0.3)' } },
+      y: { ticks: { color: '#8888a0', callback: v => v + 'K' }, grid: { color: 'rgba(42,42,61,0.5)' } }
+    }
+  }
+});
+
+// GB300 Cost
+const ctxCost = document.getElementById('chartCost').getContext('2d');
+new Chart(ctxCost, {
+  type: 'bar',
+  data: {
+    labels: ['GB300 NVL72', 'B300', 'B200', 'MI355X', 'H200'],
+    datasets: [{
+      label: '每百万 Output Token 成本 (USD)',
+      data: [0.156, 0.21, 0.28, 0.32, 0.35],
+      backgroundColor: [
+        'rgba(34,197,94,0.7)',
+        'rgba(6,182,212,0.6)',
+        'rgba(99,102,241,0.6)',
+        'rgba(245,158,11,0.6)',
+        'rgba(139,92,246,0.5)',
+      ],
+      borderRadius: 6,
+    }]
+  },
+  options: {
+    responsive: true,
+    indexAxis: 'y',
+    plugins: {
+      legend: { labels: { color: '#8888a0', font: { family: 'Noto Sans SC' } } }
+    },
+    scales: {
+      x: { ticks: { color: '#8888a0', callback: v => '$' + v }, grid: { color: 'rgba(42,42,61,0.5)' } },
+      y: { ticks: { color: '#8888a0' }, grid: { color: 'rgba(42,42,61,0.3)' } }
+    }
+  }
+});
+
+// Day 0 vs Peak comparison
+const ctxCompare = document.getElementById('chartCompare').getContext('2d');
+new Chart(ctxCompare, {
+  type: 'bar',
+  data: {
+    labels: ['GB300 NVL72', 'B300', 'B200', 'MI355X', '昇腾 950DT'],
+    datasets: [{
+      label: 'Day 0 性能',
+      data: [85, 70, 80, 2, 65],
+      backgroundColor: 'rgba(239,68,68,0.5)',
+      borderRadius: 4,
+    }, {
+      label: 'Day 43 峰值',
+      data: [100, 95, 92, 98, 85],
+      backgroundColor: 'rgba(34,197,94,0.6)',
+      borderRadius: 4,
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { labels: { color: '#8888a0', font: { family: 'Noto Sans SC' } } }
+    },
+    scales: {
+      x: { ticks: { color: '#8888a0' }, grid: { color: 'rgba(42,42,61,0.3)' } },
+      y: { ticks: { color: '#8888a0', callback: v => v + '%' }, grid: { color: 'rgba(42,42,61,0.5)' }, max: 110 }
+    }
+  }
+});
+
+// Engine Day 0 Readiness
+const ctxEngine = document.getElementById('chartEngine').getContext('2d');
+new Chart(ctxEngine, {
+  type: 'radar',
+  data: {
+    labels: ['CUDA 支持', 'ROCm 支持', '昇腾支持', 'MTP 速度', '优化深度', '社区活跃度'],
+    datasets: [{
+      label: 'SGLang',
+      data: [95, 80, 40, 95, 90, 95],
+      borderColor: '#22c55e',
+      backgroundColor: 'rgba(34,197,94,0.1)',
+      pointBackgroundColor: '#22c55e',
+    }, {
+      label: 'vLLM',
+      data: [90, 45, 30, 70, 75, 80],
+      borderColor: '#6366f1',
+      backgroundColor: 'rgba(99,102,241,0.1)',
+      pointBackgroundColor: '#6366f1',
+    }, {
+      label: 'TensorRT-LLM',
+      data: [20, 0, 0, 50, 60, 40],
+      borderColor: '#ef4444',
+      backgroundColor: 'rgba(239,68,68,0.1)',
+      pointBackgroundColor: '#ef4444',
+    }, {
+      label: 'CANN (华为)',
+      data: [0, 0, 95, 60, 70, 50],
+      borderColor: '#06b6d4',
+      backgroundColor: 'rgba(6,182,212,0.1)',
+      pointBackgroundColor: '#06b6d4',
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { labels: { color: '#8888a0', font: { family: 'Noto Sans SC', size: 11 } } }
+    },
+    scales: {
+      r: {
+        angleLines: { color: 'rgba(42,42,61,0.5)' },
+        grid: { color: 'rgba(42,42,61,0.5)' },
+        pointLabels: { color: '#8888a0', font: { size: 11, family: 'Noto Sans SC' } },
+        ticks: { color: '#8888a0', backdropColor: 'transparent' },
+        suggestedMin: 0,
+        suggestedMax: 100,
+      }
+    }
+  }
+});
+</script>
+
+</body>
+</html>
