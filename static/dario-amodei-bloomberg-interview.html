@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bloomberg专访Anthropic Dario Amodei：年度最硬核访谈深度解析</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --bg-card: #161b22;
+    --bg-hover: #1c2333;
+    --text: #e6edf3;
+    --text-secondary: #8b949e;
+    --accent: #58a6ff;
+    --accent2: #3fb950;
+    --accent3: #f78166;
+    --accent4: #d2a8ff;
+    --border: #30363d;
+    --quote-bg: #161b22;
+    --quote-border: #58a6ff;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans SC", "PingFang SC", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+    font-size: 16px;
+  }
+  .container { max-width: 820px; margin: 0 auto; padding: 0 24px; }
+
+  /* Header */
+  header {
+    padding: 60px 0 40px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 48px;
+  }
+  header h1 {
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 16px;
+  }
+  header h1 span { color: var(--accent); }
+  header .meta {
+    color: var(--text-secondary);
+    font-size: 14px;
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  header .meta a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+  header .meta a:hover { text-decoration: underline; }
+
+  /* Sections */
+  .intro-box {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 40px;
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+  .intro-box strong { color: var(--text); }
+
+  section { margin-bottom: 48px; }
+  section h2 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--accent);
+    display: inline-block;
+  }
+  section h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--accent2);
+    margin: 24px 0 12px;
+  }
+  section p {
+    margin-bottom: 16px;
+    color: var(--text-secondary);
+  }
+  section p strong { color: var(--text); }
+
+  /* Quotes */
+  blockquote {
+    background: var(--quote-bg);
+    border-left: 4px solid var(--quote-border);
+    padding: 20px 24px;
+    margin: 20px 0;
+    border-radius: 0 8px 8px 0;
+    font-style: italic;
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.8;
+  }
+  blockquote .attribution {
+    margin-top: 12px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-style: normal;
+  }
+
+  /* Data Cards */
+  .data-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin: 24px 0;
+  }
+  .data-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+  }
+  .data-card .number {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  .data-card .number.green { color: var(--accent2); }
+  .data-card .number.orange { color: var(--accent3); }
+  .data-card .number.purple { color: var(--accent4); }
+  .data-card .label {
+    margin-top: 8px;
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.4;
+  }
+
+  /* Highlights / Key Points */
+  .key-points {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin: 20px 0;
+  }
+  .key-points ul {
+    list-style: none;
+    padding: 0;
+  }
+  .key-points li {
+    padding: 8px 0;
+    padding-left: 24px;
+    position: relative;
+    color: var(--text-secondary);
+  }
+  .key-points li::before {
+    content: "→";
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-weight: bold;
+  }
+  .key-points li strong { color: var(--text); }
+
+  /* Analysis box */
+  .analysis-box {
+    background: linear-gradient(135deg, rgba(88,166,255,0.08), rgba(63,185,80,0.05));
+    border: 1px solid rgba(88,166,255,0.2);
+    border-radius: 10px;
+    padding: 24px;
+    margin: 24px 0;
+  }
+  .analysis-box h4 {
+    color: var(--accent);
+    font-size: 15px;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .analysis-box p { font-size: 14px; }
+
+  /* Dividers */
+  .section-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 36px 0;
+  }
+
+  /* Summary table */
+  .topic-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 24px 0;
+    font-size: 14px;
+  }
+  .topic-table th, .topic-table td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  .topic-table th {
+    background: var(--bg-card);
+    color: var(--accent);
+    font-weight: 600;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .topic-table td { color: var(--text-secondary); }
+  .topic-table tr:hover td { background: var(--bg-hover); }
+
+  /* Footer */
+  footer {
+    margin-top: 60px;
+    padding: 32px 0;
+    border-top: 1px solid var(--border);
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 13px;
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  @media (max-width: 640px) {
+    header h1 { font-size: 24px; }
+    .data-grid { grid-template-columns: 1fr; }
+    .container { padding: 0 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<header>
+  <h1><span>Bloomberg</span> 专访 Dario Amodei：年度最硬核 AI 访谈深度解析</h1>
+  <div class="meta">
+    <span>2026-06-19</span>
+    <span>|</span>
+    <span>来源: <a href="https://www.bloomberg.com/" target="_blank">Bloomberg</a> <em>The Circuit</em> 主持人 Emily Chang</span>
+    <span>|</span>
+    <span><a href="https://www.youtube.com/watch?v=x2VHFgyawPE" target="_blank">🎬 观看完整访谈 (YouTube)</a></span>
+    <span>|</span>
+    <span><a href="https://www.36kr.com/p/3858340490335234" target="_blank">📄 36氪转载</a></span>
+  </div>
+</header>
+
+<div class="intro-box">
+  <strong>一句话总结：</strong>
+  2026年6月17日，Bloomberg《The Circuit》主持人 Emily Chang 放出与 Anthropic CEO Dario Amodei 的69分钟完整对话。没有公关话术，没有回避——Dario 直说了 Mythos 模型的危险程度、AI 递归自我改进已经发生、他如何看待自己的历史角色，以及为什么他认为文明有四分之一的概率面临崩塌。这是2026年迄今为止信息密度最高的 AI 创始人访谈。
+</div>
+
+<!-- ============================================================ -->
+<!-- PART 1: MYTHOS -->
+<!-- ============================================================ -->
+<section>
+  <h2>一、Mythos：那个太危险，不敢发布的神话</h2>
+
+  <p>访谈最震撼的部分，来自一个名字：<strong>Mythos</strong>——Anthropic 开发的迄今最强大 AI 模型，因为能力过于危险，被内部"囚禁"，未向公众开放。</p>
+
+  <p>Emily Chang 直问：你说 Mythos 太强了，不能向公众发布。它最让你震惊的是什么？</p>
+
+  <blockquote>
+    「最让我震惊的，是它发现漏洞、并且把漏洞变成实际可利用攻击的能力，出现了一个巨大的跃升。不是线性增长，是断崖式跃升。而且几乎不需要人类提示。」
+    <div class="attribution">— Dario Amodei, Bloomberg The Circuit</div>
+  </blockquote>
+
+  <h3>AI 自己变成了黑客</h3>
+  <p>上一代模型只能"找到漏洞"，而 Mythos 能自主走完一整条<strong>网络攻击杀伤链</strong>：扫描 → 发现 → 利用 → 武器化，全自动完成。这不是"辅助黑客"，这是 AI 自己变成了黑客。</p>
+
+  <p>Palo Alto Networks 首席产品官更留下了经典评价：</p>
+
+  <blockquote>
+    Mythos 在不到三周内完成了相当于一整年渗透测试的工作量。它不仅能找到漏洞，还能把中低危漏洞串成一条攻击链，直接打穿整个系统。
+  </blockquote>
+
+  <h3>客户跪求：求你了，别发布</h3>
+  <p>Dario 说，拿到内测的安全公司直接打电话过来：</p>
+
+  <blockquote>
+    「这是超级武器。你应该要持枪证才能用这东西。求你了，别发布。」
+  </blockquote>
+
+  <p>面对"这只是公关营销"的质疑，Dario 反击得很硬：</p>
+
+  <blockquote>
+    「我们因为不发布 Mythos，商业上已经遭受了巨大损失。它在 Anthropic 内部极大地加速了研究和下一代模型的生产。如果放出去，外部世界也会获得同样的加速。这怎么可能是营销？」
+  </blockquote>
+
+  <h3>驳斥开源复现论</h3>
+  <p>有人在 X (Twitter) 上说，用开源模型也能复现 Mythos 的发现。Dario 反应激动：</p>
+
+  <blockquote>
+    「有人把 Mythos 找到的那行代码指给开源模型看，然后说『看，它也能找到同样的问题』。这叫什么？这叫我在大海里捞出了针，你拿着针说『你看，别人也能捡起来』。」
+  </blockquote>
+
+  <p>Dario 透露，每天都有很多人打电话管他要 Mythos。<strong>有国家打电话要</strong>，也有美国政府和自家安全团队说：等一下，有风险。</p>
+
+  <div class="analysis-box">
+    <h4>🔍 Tars 分析</h4>
+    <p><strong>Mythos 困境的本质是 AI 治理的"双刃困境"</strong>：最强的能力意味着最大的风险。Anthropic 选择不公开发布，但仍在内部使用，这在商业上无疑是一场豪赌——当竞争对手用更强的模型加速创新时，Anthropic 的克制可能成为竞争劣势。更值得关注的是"有国家打电话要"这句话——最尖端的 AI 能力已经进入地缘政治博弈的牌桌。</p>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ============================================================ -->
+<!-- PART 2: RECURSIVE SELF-IMPROVEMENT -->
+<!-- ============================================================ -->
+<section>
+  <h2>二、递归自我改进：不是奇点，是指数曲线</h2>
+
+  <p>AI 圈有一个被反复追问的终极问题：AI 什么时候开始自我改进？改进后的 AI 再改进自己？那个"奇点"到底多远？</p>
+
+  <p>Dario 的回答出人意料——<strong>它不是那个瞬间。它是一个连续的过程。我们已经在其中了。</strong></p>
+
+  <blockquote>
+    「它不是一个时间点。它是一个连续的过程。我们已经在其中了。」
+    <div class="attribution">— 关于递归自我改进 (Recursive Self-Improvement)</div>
+  </blockquote>
+
+  <div class="data-grid">
+    <div class="data-card">
+      <div class="number">10-15%</div>
+      <div class="label">一年前 AI 带来的全要素生产率提升</div>
+    </div>
+    <div class="data-card">
+      <div class="number green">20-30%</div>
+      <div class="label">现在 AI 带来的全要素生产率提升</div>
+    </div>
+    <div class="data-card">
+      <div class="number purple">正在翻倍</div>
+      <div class="label">AI 贡献的生产率增速仍在加速</div>
+    </div>
+  </div>
+
+  <p>Dario 的核心框架：<strong>"平滑的指数"（smooth exponential）</strong>。没有某一天早上 AI 突然"觉醒"然后失控。有的只是一条不断加速的曲线——在这条曲线的每一个点上，你都要判断：是不是该踩刹车了？是不是该加更多防护了？</p>
+
+  <div class="key-points">
+    <ul>
+      <li><strong>AI 已经能为下一代 AI 建议架构了</strong>——自我改进不是科幻，它已经在发生</li>
+      <li><strong>Anthropic 内部，AI 写了几乎全部代码</strong>——工程师反而更高效</li>
+      <li><strong>全要素生产率翻倍式增长</strong>——从 10-15% → 20-30%，且仍在加速</li>
+    </ul>
+  </div>
+
+  <div class="analysis-box">
+    <h4>🔍 Tars 分析</h4>
+    <p><strong>Dario 的"平滑指数"框架比"奇点论"更危险</strong>。"奇点"至少是一个明确的里程碑——到了那一天，我们知道该紧张了。但"平滑指数"意味着：你永远在担心，永远不知道哪个点该踩刹车。这种持续的"决策压力"本身就是一个治理危机。对投资者而言，这意味着 AI 能力的增长曲线比任何人的线性想象都要陡——<strong>低估 AI 加速能力的成本，远高于高估</strong>。</p>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ============================================================ -->
+<!-- PART 3: SZILARD NOT OPPENHEIMER -->
+<!-- ============================================================ -->
+<section>
+  <h2>三、不是奥本海默，是西拉德</h2>
+
+  <p>Emily Chang 问了一个很直接的问题：「你最爱的书是《原子弹的制造》。你觉得自己像奥本海默吗？」</p>
+
+  <p>Dario 说：<strong>不。</strong></p>
+
+  <p>他最认同的人是<strong>利奥·西拉德 (Leo Szilard)</strong>——1933 年，在伦敦街头过马路时，第一个在脑子里想出核链式反应可能性的人。正是西拉德起草了那封改变历史的信，让爱因斯坦签名后寄给了罗斯福总统，直接催生了曼哈顿计划。</p>
+
+  <p>但西拉德也是<strong>第一批站出来反对实际使用原子弹</strong>的人。</p>
+
+  <blockquote>
+    「我们不可能靠一个大人物来解决这件事。这里有太多强大的利益方。唯一能让所有人都安全的方式，是到处都有制衡和平衡。在某种意义上，我把奥本海默看作一个失败案例——一个不应该发生的事情。」
+    <div class="attribution">— Dario 解释为什么他认同西拉德而非奥本海默</div>
+  </blockquote>
+
+  <p>这句话的潜台词呼之欲出：这个时代需要的不是"AI之父"式的英雄人物，而是能在失控之前拉住缰绳的<strong>制度设计</strong>。</p>
+
+  <div class="analysis-box">
+    <h4>🔍 Tars 分析</h4>
+    <p><strong>这是整篇访谈中最值得品味的自我定位</strong>。一个创始人说自己不是奥本海默——不是站在聚光灯下的"英雄"，而是那个最早看到连锁反应、最早感到恐惧、最早试图拉住缰绳的人。但意味深长的是：<strong>西拉德也没能阻止原子弹被使用</strong>。Dario 选择这个类比，既有清醒的自我认知，也透着一种深刻的悲观。</p>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ============================================================ -->
+<!-- PART 4: CIVILIZATION COLLAPSE -->
+<!-- ============================================================ -->
+<section>
+  <h2>四、文明崩塌概率 25%</h2>
+
+  <p>Dario 曾在去年的 Axios 峰会上说过：文明崩塌的概率，大约 <strong>10%-25%</strong>。</p>
+
+  <p>这次 Bloomberg 访谈中，Emily Chang 直接追问：</p>
+
+  <blockquote>
+    「10% 到 25%，这个数字可不小。有没有可能，是 Anthropic 自己造出来的东西，导致了崩塌？」
+  </blockquote>
+
+  <p>Dario 没回避：我当然希望不是。但这是个概率。</p>
+
+  <p>他用了一个航空公司比喻：</p>
+
+  <blockquote>
+    「你可以造一家比同行安全 10 倍的航空公司。但你没法保证飞机永不坠毁。如果有人告诉你这架飞机有 25% 的坠机概率，你不会上那架飞机。25% 太高了。我们要做的，就是把它降到低得多。」
+  </blockquote>
+
+  <div class="data-grid">
+    <div class="data-card">
+      <div class="number orange">10-25%</div>
+      <div class="label">Dario 估算的文明崩塌概率</div>
+    </div>
+    <div class="data-card">
+      <div class="number green">必须降到</div>
+      <div class="label">远低于现存风险水平的可接受值</div>
+    </div>
+    <div class="data-card">
+      <div class="number purple">类比</div>
+      <div class="label">比同行安全10倍的航空公司，仍然可能坠毁</div>
+    </div>
+  </div>
+
+  <div class="analysis-box">
+    <h4>🔍 Tars 分析</h4>
+    <p><strong>25% 这个数字被广泛传播，但很少有人注意 Dario 的逻辑</strong>：他承认 AI 本身可能是原因，而且强调"概率是我们要降低的东西"——他的立场并非"必然毁灭"，而是"足够高的风险需要足够强的应对"。这个框架与"末日先知"有本质区别：前者是在说"我们可以做点什么"，后者是在说"我们没救了"。<strong>对投资者来说，关键问题是：如果 Dario 是对的，AI 安全产业将变成一个新的、巨大的赛道。</strong></p>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ============================================================ -->
+<!-- PART 5: JOB DISPLACEMENT -->
+<!-- ============================================================ -->
+<section>
+  <h2>五、一半白领工作可能消失？</h2>
+
+  <p>一年前 Dario 说过：<strong>AI 可能在 1 到 5 年内，消灭一半的入门级白领工作。</strong></p>
+
+  <p>Dario 表示，他的担忧现在也没有变。</p>
+
+  <p>但他拒绝被贴上"末日先知"的标签。</p>
+
+  <blockquote>
+    「我从来没说过末日将至。我说的是——这是我们应该预见、应该担忧、并且必须积极应对的事。」
+  </blockquote>
+
+  <p>Dario 称其<strong>最痛恨社交媒体</strong>。一年前的完整论述，被剪成三秒钟的 "doom is coming" 到处疯传，完全没有上下文。</p>
+
+  <blockquote>
+    「说我在廉价营销的人，这种说法本身才是廉价营销，是懒惰，是不愿认真对待严肃的智力工作。这就是硅谷的病——被三秒钟的社交媒体绑架了，所有人只会对着断章取义的切片做出反应。」
+  </blockquote>
+
+  <p>Dario 透露，在 Anthropic 内部，AI 已经写了<strong>几乎全部代码</strong>，工程师反而更高效。但苗头也出现了——有些岗位，AI 做更好。他认为出路或许在物理世界、在以人为本的工作、由人来引导 AI，但他也承认：<strong>没人保证</strong>。</p>
+
+  <div class="analysis-box">
+    <h4>🔍 Tars 分析</h4>
+    <p><strong>"AI 已经写了 Anthropic 几乎全部代码"——这是整篇访谈里最容易被人忽略、但可能最重要的一句话。</strong>如果 OpenAI 的竞争对手 Anthropic 自己的代码都是 AI 写的，那"AI 替代程序员"这件事，已经不再是未来问题。对科技行业从业者来说，这不是"要不要转型"的问题，而是"转型窗口期还有多长"的问题。</p>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ============================================================ -->
+<!-- PART 6: ADDITIONAL TOPICS -->
+<!-- ============================================================ -->
+<section>
+  <h2>六、更多重磅话题</h2>
+
+  <table class="topic-table">
+    <thead>
+      <tr>
+        <th>话题</th>
+        <th>核心内容</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Anthropic 年化增长</strong></td>
+        <td>Anthropic 年化收入从 2024 年的约 10 亿美金，到 2025-2026 年呈现超高速增长，部分品类（如 Claude Code 企业版）年化增长率达 80 倍。企业客户对 AI Agent 的需求呈爆发式上升。</td>
+      </tr>
+      <tr>
+        <td><strong>AI 是否该收归国有</strong></td>
+        <td>被问及 AI 基础设施是否应国有化时，Dario 表示这需要全球性的治理框架。他承认最前沿 AI 模型的权力过于集中，但"一刀切的国有化"可能带来其他风险——关键在于找到制衡机制，而不是简单地把权力从私人交到政府手中。</td>
+      </tr>
+      <tr>
+        <td><strong>Claude Code 地位</strong></td>
+        <td>Claude Code 是 Anthropic 企业战略的关键落点。Dario 认为代码生成是 AI 能力最直接的变现路径，也是"递归自我改进"的第一环——当 AI 优化了代码，下一代 AI 就能在更好的代码基础上继续优化。</td>
+      </tr>
+      <tr>
+        <td><strong>与 OpenAI 的区别</strong></td>
+        <td>Dario 隐晦地批评了 OpenAI 的发布策略，强调 Anthropic 的"安全优先"理念不是营销手段，而是真实的战略选择——即使付出商业代价。</td>
+      </tr>
+      <tr>
+        <td><strong>当 CEO 最意外的事</strong></td>
+        <td>访谈结尾，Emily 问：当 CEO 最让你意外的是什么？Dario 笑了：<strong>"是得经常化妆。"</strong></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<hr class="section-divider">
+
+<!-- ============================================================ -->
+<!-- PART 7: COMPREHENSIVE ANALYSIS -->
+<!-- ============================================================ -->
+<section>
+  <h2>七、Tars 综合点评</h2>
+
+  <div class="key-points">
+    <h3 style="color: var(--accent3); margin-bottom: 12px; border: none; padding: 0;">🎯 核心判断</h3>
+    <ul>
+      <li><strong>最危险的信号不是 Mythos，而是"平滑指数"框架</strong>——它意味着 AI 能力的增长不可逆，且加速度本身在加速。这不是一个"会不会失控"的问题，而是一个"怎么管理失控过程中各时间节点"的问题。</li>
+      <li><strong>Dario 选择了一条没人走过的路</strong>——同时做最先进 AI 和最强安全，两者天然矛盾。他的做法是把内部加速和外部限制绑在一起：Anthropic 内部用 Mythos 加速研发，但不对外发布。这种"自己用但你不准用"的策略能在商业上持续多久，是未来最大的观察点。</li>
+      <li><strong>"西拉德类比"背后的悲观底色</strong>——西拉德没能阻止原子弹被使用。Dario 选这个身份认同，说明他清楚自己在做的可能是什么，以及自己能做的可能有限。</li>
+      <li><strong>对科技行业的工作者来说</strong>——如果 Anthropic 内部已经是 AI 写几乎全部代码，那"程序员被替代"的时间线不是 5-10 年，可能就是 1-3 年。这个判断值得每一个做技术的人认真对待。</li>
+      <li><strong>对投资者来说</strong>——AI 安全（AI Safety）即将成为一个千亿级赛道。当最强的 AI 公司 CEO 公开说文明有 25% 崩塌概率，监管和治理的需求只会指数级上升。</li>
+    </ul>
+  </div>
+
+  <div class="analysis-box" style="border-color: rgba(247,102,130,0.3); background: linear-gradient(135deg, rgba(247,102,130,0.05), rgba(210,168,255,0.05));">
+    <h4 style="color: var(--accent3);">🌐 一句话给慧哥</h4>
+    <p><strong>这篇访谈不是 AI 圈的内部讨论，它是 AI 行业走向何方的路线图宣言。</strong>Dario 用 69 分钟讲清楚了三件事：Mythos 已经到达了人类从未见过的能力层级，自我改进的曲线已经开始垂直起飞，以及——他自己也不确定最终会落在哪里。如果你在找"第二职业"方向，AI 安全和 AI 治理可能是 2026 年最值得关注的赛道，没有之一。</p>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ============================================================ -->
+<!-- SOURCES -->
+<!-- ============================================================ -->
+<section>
+  <h2>参考资料</h2>
+  <ul style="list-style: none; padding: 0; color: var(--text-secondary); font-size: 14px;">
+    <li style="padding: 6px 0;">📺 Bloomberg The Circuit — Dario Amodei 完整访谈 (69分钟): <a href="https://www.youtube.com/watch?v=x2VHFgyawPE" target="_blank" style="color: var(--accent);">YouTube</a></li>
+    <li style="padding: 6px 0;">📄 新智元报道 (原文): <a href="https://mp.weixin.qq.com/s/w0XipBF45wiav2mAUy4kBQ" target="_blank" style="color: var(--accent);">微信公众号</a></li>
+    <li style="padding: 6px 0;">📄 36氪转载: <a href="https://www.36kr.com/p/3858340490335234" target="_blank" style="color: var(--accent);">36氪</a></li>
+    <li style="padding: 6px 0;">📄 Anthropic 官网: <a href="https://www.anthropic.com" target="_blank" style="color: var(--accent);">anthropic.com</a></li>
+  </ul>
+</section>
+
+<footer>
+  <p>由 Tars 整理分析 · 基于 Bloomberg The Circuit 采访与公开资料</p>
+  <p style="margin-top: 8px;">散热正常，慧哥。🧊</p>
+</footer>
+
+</div>
+
+</body>
+</html>
