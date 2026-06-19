@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>蔡崇信VivaTech 2026发言深度分析：阿里全面投入AI，50万亿市场蓝图</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --bg-card: #161b22;
+    --bg-hover: #1c2333;
+    --text: #e6edf3;
+    --text-secondary: #8b949e;
+    --accent: #58a6ff;
+    --accent2: #3fb950;
+    --accent3: #f78166;
+    --accent4: #d2a8ff;
+    --accent5: #ffa657;
+    --border: #30363d;
+    --quote-bg: #161b22;
+    --quote-border: #58a6ff;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans SC", "PingFang SC", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+    font-size: 16px;
+  }
+  .container { max-width: 820px; margin: 0 auto; padding: 0 24px; }
+
+  header {
+    padding: 60px 0 40px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 48px;
+  }
+  header h1 {
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 16px;
+  }
+  header h1 span { color: var(--accent); }
+  header .meta {
+    color: var(--text-secondary);
+    font-size: 14px;
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  header .meta a { color: var(--accent); text-decoration: none; }
+  header .meta a:hover { text-decoration: underline; }
+
+  .intro-box {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 40px;
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+  .intro-box strong { color: var(--text); }
+
+  section { margin-bottom: 48px; }
+  section h2 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--accent);
+    display: inline-block;
+  }
+  section h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--accent2);
+    margin: 24px 0 12px;
+  }
+  section p {
+    margin-bottom: 16px;
+    color: var(--text-secondary);
+  }
+  section p strong { color: var(--text); }
+
+  blockquote {
+    background: var(--quote-bg);
+    border-left: 4px solid var(--quote-border);
+    padding: 20px 24px;
+    margin: 20px 0;
+    border-radius: 0 8px 8px 0;
+    font-style: italic;
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.8;
+  }
+  blockquote .attribution {
+    margin-top: 12px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-style: normal;
+  }
+
+  .data-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin: 24px 0;
+  }
+  .data-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+  }
+  .data-card .number {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  .data-card .number.green { color: var(--accent2); }
+  .data-card .number.orange { color: var(--accent3); }
+  .data-card .label {
+    margin-top: 8px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.4;
+  }
+
+  .key-points {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin: 20px 0;
+  }
+  .key-points ul {
+    list-style: none;
+    padding: 0;
+  }
+  .key-points li {
+    padding: 8px 0;
+    padding-left: 24px;
+    position: relative;
+    color: var(--text-secondary);
+  }
+  .key-points li::before {
+    content: "→";
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-weight: bold;
+  }
+  .key-points li strong { color: var(--text); }
+
+  .analysis-box {
+    background: linear-gradient(135deg, rgba(88,166,255,0.08), rgba(63,185,80,0.05));
+    border: 1px solid rgba(88,166,255,0.2);
+    border-radius: 10px;
+    padding: 24px;
+    margin: 24px 0;
+  }
+  .analysis-box h4 {
+    color: var(--accent);
+    font-size: 15px;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .topic-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 24px 0;
+    font-size: 14px;
+  }
+  .topic-table th, .topic-table td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  .topic-table th {
+    background: var(--bg-card);
+    color: var(--accent);
+    font-weight: 600;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .topic-table td { color: var(--text-secondary); }
+  .topic-table tr:hover td { background: var(--bg-hover); }
+
+  .section-divider { border: none; border-top: 1px solid var(--border); margin: 36px 0; }
+
+  footer {
+    margin-top: 60px;
+    padding: 32px 0;
+    border-top: 1px solid var(--border);
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 13px;
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  .timeline {
+    position: relative;
+    padding-left: 30px;
+    margin: 20px 0;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--border);
+  }
+  .timeline-item {
+    position: relative;
+    margin-bottom: 24px;
+  }
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -26px;
+    top: 6px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 2px solid var(--bg);
+  }
+  .timeline-item .time { font-size: 13px; color: var(--accent); font-weight: 600; }
+  .timeline-item .text { color: var(--text-secondary); font-size: 14px; margin-top: 4px; }
+
+  @media (max-width: 640px) {
+    header h1 { font-size: 22px; }
+    .data-grid { grid-template-columns: 1fr; }
+    .container { padding: 0 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<header>
+  <h1><span>50万亿的野望</span>：蔡崇信VivaTech 2026 全栈AI蓝图深度解析</h1>
+  <div class="meta">
+    <span>2026-06-19</span>
+    <span>|</span>
+    <span>事件: VivaTech 2026 巴黎 · 6月18日</span>
+    <span>|</span>
+    <span>人物: 蔡崇信 (阿里巴巴集团主席)</span>
+    <span>|</span>
+    <span><a href="https://www.sohu.com/a/1038774656_122014422" target="_blank">搜狐原文</a></span>
+    <span>|</span>
+    <span><a href="https://www.ithome.com/0/966/318.htm" target="_blank">IT之家</a></span>
+  </div>
+</header>
+
+<div class="intro-box">
+  <strong>一句话总结：</strong>
+  2026年6月18日，阿里巴巴集团主席蔡崇信在巴黎VivaTech 2026上提出AI总潜在市场规模（TAM）应**对标人类生产力本身**——全球100万亿GDP中至少50万亿与人类智能相关，阿里"全面投入AI"，以全栈战略从能源层到应用层全面布局。
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 1: EVENT BACKGROUND -->
+<!-- ============================================================ -->
+<section>
+  <h2>一、事件背景</h2>
+
+  <p><strong>VivaTech 2026</strong>（2026年6月17-20日，巴黎凡尔赛门展览中心）是欧洲最大的科技峰会，2026年正值其十周年庆典。阿里巴巴集团主席蔡崇信在6月18日的一场对谈中发表了上述观点。</p>
+
+  <div class="data-grid">
+    <div class="data-card">
+      <div class="number">6月18日</div>
+      <div class="label">巴黎VivaTech 2026<br>蔡崇信对谈发言</div>
+    </div>
+    <div class="data-card">
+      <div class="number green">50万亿</div>
+      <div class="label">蔡崇信定义的AI总潜在市场（TAM）</div>
+    </div>
+    <div class="data-card">
+      <div class="number orange">第10年</div>
+      <div class="label">阿里云AI产品连续<br>三位数增长</div>
+    </div>
+    <div class="data-card">
+      <div class="number purple">36%</div>
+      <div class="label">阿里云Q4 FY2026<br>收入同比增长</div>
+    </div>
+  </div>
+
+  <h3>蔡崇信是谁？</h3>
+  <p>蔡崇信（Joe Tsai），阿里巴巴集团主席、联合创始人，阿里"二号人物"。出生于台湾，拥有耶鲁大学经济学与东亚研究学士学位及法学博士学位。2014年阿里上市前已是核心决策者，2023年正式接替张勇出任集团主席。在阿里战略层面，他更多负责资本配置、战略方向与外部关系，而CEO吴泳铭负责日常运营与技术落地。此次VivaTech发言是他作为"集团战略总设计师"角色的公开亮相。</p>
+</section>
+
+<hr class="section-divider">
+
+<!-- ============================================================ -->
+<!-- SECTION 2: CORE SPEECH -->
+<!-- ============================================================ -->
+<section>
+  <h2>二、核心内容：50万亿TAM的底层逻辑</h2>
+
+  <blockquote>
+    「AI正在创造等同于人类智能和人类生产力的价值单元。放眼全球，超过100万亿美元的GDP中，至少有一半——50万亿美元，是关于人类生产力和人类智能的，这就是AI的总潜在市场。因此阿里巴巴正在全面投入AI。」
+    <div class="attribution">— 蔡崇信，VivaTech 2026 巴黎</div>
+  </blockquote>
+
+  <p>这句话蕴含三层逻辑：</p>
+
+  <div class="key-points">
+    <ul>
+      <li><strong>第一层：AI TAM = 人类生产力本身</strong>——不是IT支出、不是云服务市场，而是人类所有生产活动的价值总量。这是目前公开场合见过的<strong>最大胆的TAM定义</strong>。</li>
+      <li><strong>第二层：50万亿不是预测，是"总空间"</strong>——就像"人都在路上才能产生交通市场"，50万亿是理论上AI能触及的终极上限，不是短期收入预测。</li>
+      <li><strong>第三层：阿里"全面投入"</strong>——全栈AI战略（不是单点布局），从能源到芯片到模型到应用，全部自己干。</li>
+    </ul>
+  </div>
+
+  <div class="analysis-box">
+    <h4>🔍 Tars 分析</h4>
+    <p><strong>50万亿TAM是一个极其大胆的战略叙事。</strong>对比来看：全球IT支出约4.5万亿（Gartner 2026），全球云计算市场约1万亿。蔡崇信直接把阿里的天花板从"科技公司"抬高到了"人类生产力基础设施公司"。这不是财报指引，是资本叙事——给投资人和市场画一张大到无法忽视的饼。</p>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ============================================================ -->
+<!-- SECTION 3: FULL STACK STRATEGY -->
+<!-- ============================================================ -->
+<section>
+  <h2>三、全栈AI：阿里四层战略拆解</h2>
+
+  <p>蔡崇信从四个层面阐释了阿里全栈AI的核心优势：</p>
+
+  <div class="topic-table">
+    <thead>
+      <tr>
+        <th>层级</th>
+        <th>核心资产</th>
+        <th>战略价值</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>🔥 能源层</strong></td>
+        <td>中国高效低成本的能源供给</td>
+        <td>AI算力极度耗能，中国能源成本优势是阿里云能够持续降价的基础</td>
+      </tr>
+      <tr>
+        <td><strong>🏗️ 基础设施层</strong></td>
+        <td>云计算 + 自研芯片（真武系列等）</td>
+        <td>阿里云是中国最大公有云，自研芯片压降算力成本；已累计出货56万片真武芯片</td>
+      </tr>
+      <tr>
+        <td><strong>🧠 模型层</strong></td>
+        <td>千问（Qwen）开源模型</td>
+        <td>全球最受欢迎的开源大模型之一，构建开发者生态，驱动商业化</td>
+      </tr>
+      <tr>
+        <td><strong>📱 应用层</strong></td>
+        <td>电商+即时零售+酒旅+地图等全生态</td>
+        <td>AI规模化部署的天然入口，业务场景驱动模型迭代</td>
+      </tr>
+    </tbody>
+  </div>
+
+  <h3>全栈逻辑的串联</h3>
+  <p>蔡崇信四层叙述实际上是阿里AI商业模式的完整变现链条：</p>
+
+  <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 24px; margin: 20px 0; text-align: center; color: var(--text-secondary);">
+    <span style="color: var(--accent3); font-weight: 600;">能源降本</span> → 
+    <span style="color: var(--accent); font-weight: 600;">芯片压价</span> → 
+    <span style="color: var(--accent2); font-weight: 600;">模型降维引流</span> → 
+    <span style="color: var(--accent4); font-weight: 600;">应用消耗算力</span> → 
+    <span style="color: var(--accent5); font-weight: 600;">云端收拢变现</span>
+    <div style="margin-top: 12px; font-size: 13px;">成本自下而上摊薄，收入自上而下收拢</div>
+  </div>
+
+  <h3>开源立场</h3>
+  <blockquote>
+    「当前，全球AI开源的主要推动力量来自中国企业。过去几年，阿里巴巴的团队在推动前沿模型的开源方面做出了巨大贡献，今天我们仍在不懈努力。」
+    <div class="attribution">— 蔡崇信，VivaTech 2026</div>
+  </blockquote>
+
+  <p>这句话的背景是：阿里Qwen系列模型一直在HuggingFace等平台保持开源，与Meta的Llama系列形成全球两大开源生态。蔡崇信在巴黎直接点出"中国企业"是开源主力，既是事实陈述，也是对国际社会"中国AI封闭论"的反驳。</p>
+</section>
+
+<hr class="section-divider">
+
+<!-- ============================================================ -->
+<!-- SECTION 4: FINANCIAL CONTEXT -->
+<!-- ============================================================ -->
+<section>
+  <h2>四、战略背后的财务数据</h2>
+
+  <p>蔡崇信这次发言不是空谈。阿里近期财报为全栈AI战略提供了数据支撑：</p>
+
+  <div class="data-grid">
+    <div class="data-card">
+      <div class="number green">432.84亿</div>
+      <div class="label">阿里云Q4 FY2026<br>季度收入（人民币）</div>
+    </div>
+    <div class="data-card">
+      <div class="number green">+36%</div>
+      <div class="label">阿里云收入<br>同比增长</div>
+    </div>
+    <div class="data-card">
+      <div class="number orange">连续10季</div>
+      <div class="label">AI产品收入<br>三位数增长</div>
+    </div>
+    <div class="data-card">
+      <div class="number purple">56万片</div>
+      <div class="label">真武自研芯片<br>累计出货</div>
+    </div>
+  </div>
+
+  <div class="key-points">
+    <ul>
+      <li><strong>阿里云AI产品收入连续10个季度实现三位数增长</strong>——AI已经不再是"未来业务"，是实实在在的现金牛</li>
+      <li><strong>阿里AI业务已跨越初期投入阶段</strong>——蔡崇信和吴泳铭联合发布的致股东信中明确，AI业务正式迈入商业化回报周期</li>
+      <li><strong>ATH事业群（Token Foundry）</strong>——吴泳铭亲自坐镇，将Token上升为集团级战略，千问、悟空均为旗下业务</li>
+    </ul>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ============================================================ -->
+<!-- SECTION 5: INDUSTRY CONTEXT -->
+<!-- ============================================================ -->
+<section>
+  <h2>五、竞品对比：全球AI格局中的阿里位置</h2>
+
+  <div class="topic-table">
+    <thead>
+      <tr>
+        <th>企业</th>
+        <th>AI定位</th>
+        <th>核心差异</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>阿里</strong></td>
+        <td>全栈AI · 云+芯+模型+应用</td>
+        <td>四层自己做，生态闭环，开源Qwen构建开发者生态</td>
+      </tr>
+      <tr>
+        <td><strong>Google</strong></td>
+        <td>AI原生（Gemini+TPU+DeepMind）</td>
+        <td>搜索+云双引擎，TPU自研，Gemini模型闭源为主</td>
+      </tr>
+      <tr>
+        <td><strong>亚马逊</strong></td>
+        <td>云AI基础设施（AWS+Nova）</td>
+        <td>最大云基础设施，Nova模型晚于对手，但Bedrock聚合第三方</td>
+      </tr>
+      <tr>
+        <td><strong>微软</strong></td>
+        <td>算力提供商（Azure+OpenAI）</td>
+        <td>不自己造大模型，深度绑定OpenAI，主打Copilot生态</td>
+      </tr>
+      <tr>
+        <td><strong>字节跳动</strong></td>
+        <td>应用驱动（豆包+火山引擎）</td>
+        <td>依托抖音流量，C端优先，ArkClaw Agent产品</td>
+      </tr>
+      <tr>
+        <td><strong>华为</strong></td>
+        <td>硬件先行（昇腾+盘古）</td>
+        <td>芯片突围（昇腾950DT），国产替代最大受益者</td>
+      </tr>
+    </tbody>
+  </div>
+
+  <div class="analysis-box">
+    <h4>🔍 Tars 分析</h4>
+    <p><strong>阿里全栈策略的独特之处在于"自下而上的成本优势"。</strong>自研芯片压低云服务成本→云服务为模型提供规模训练→开源模型建立开发者生态→应用层消耗算力回血→反馈到下一轮芯片迭代。这个飞轮一旦跑起来，后来者很难在价格上竞争。对比来看，亚马逊有云但没有自研模型生态；微软有模型生态但没有自研芯片；Google有芯片和模型但云规模不如AWS——阿里是唯一尝试"全栈自主"的公司。</p>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ============================================================ -->
+<!-- SECTION 6: IMPLICATIONS -->
+<!-- ============================================================ -->
+<section>
+  <h2>六、战略启示与投资视角</h2>
+
+  <h3>对中国AI产业的意义</h3>
+  <div class="key-points">
+    <ul>
+      <li><strong>中国AI从"跟随"到"引领"的转折点正在出现</strong>——蔡崇信在巴黎公开说"全球AI开源主力来自中国企业"，这不是谦虚的姿态，而是实力表态</li>
+      <li><strong>开源模式的"中国版本"正在成型</strong>——Qwen开源策略vs Meta Llama，中国AI不再是闭门造车，而是全球化竞争</li>
+      <li><strong>欧洲成为中国AI企业的关键战场</strong>——VivaTech成为中国AI展示窗口，欧洲对AI监管的审慎态度可能为中国开源模型提供发展空间</li>
+    </ul>
+  </div>
+
+  <h3>对阿里的战略意义</h3>
+  <div class="key-points">
+    <ul>
+      <li><strong>从"电商公司"到"AI基础设施公司"的叙事转换</strong>——50万亿TAM直接重新定义了阿里的市值想象力</li>
+      <li><strong>内部管理风暴 vs 外部宏大叙事</strong>——同一周内，阿里经历钉钉文化危机（无招下课），蔡崇信在巴黎画了最大一张饼。这种"内乱外画饼"的模式是阿里一贯的节奏</li>
+      <li><strong>ATH事业群是执行力关键</strong>——吴泳铭亲自坐镇ATH，Token作为集团级战略，千问、悟空、阿里云百炼三条线并行</li>
+    </ul>
+  </div>
+
+  <div class="analysis-box" style="border-color: rgba(247,102,130,0.3); background: linear-gradient(135deg, rgba(247,102,130,0.05), rgba(210,168,255,0.05));">
+    <h4 style="color: var(--accent3);">🌐 慧哥视角</h4>
+    <p><strong>蔡崇信这个发言，结合今天你发的那几篇阿里文章（钉钉文化危机、蒋凡无招双烧、村淘淘特），串起来看很有意思：</strong></p>
+    <p>内部——钉钉高压管理被批"制度缺位"，蒋凡烧钱800亿对赌外卖，无招烧人437天下课——阿里内部治理正在经历阵痛。</p>
+    <p>外部——蔡崇信在巴黎画了一张50万亿的饼，把阿里重新定义为"人类生产力基础设施公司"。</p>
+    <p>这种"一边修发动机一边飞"的风格，是阿里一贯的生存哲学。问题是：<strong>AI能否成为新的增长极，对冲电商基本盘和内部治理问题的消耗？</strong>ATH的Token经济模型如果跑通，阿里可能真能再活20年。如果跑不通，50万亿的故事就只是一个故事。</p>
+    <p style="margin-top: 12px;">对投资人来说，阿里云的36%增速和AI产品连续10季三位数增长是硬数据；吴泳铭亲自坐镇ATH是组织决心；但钉钉事件揭示的管理缺陷（人治大于法治）是长期治理风险溢价。</p>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ============================================================ -->
+<!-- SECTION 7: TIMELINE -->
+<!-- ============================================================ -->
+<section>
+  <h2>七、阿里AI关键时间线</h2>
+
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="time">2021年</div>
+      <div class="text">阿里发布Qwen系列首个版本，起步开源路线；平头哥半导体发布首个自研AI芯片</div>
+    </div>
+    <div class="timeline-item">
+      <div class="time">2023年</div>
+      <div class="text">吴泳铭接任阿里CEO，全面转向AI优先；通义千问App上市</div>
+    </div>
+    <div class="timeline-item">
+      <div class="time">2024年</div>
+      <div class="text">真武系列芯片量产；阿里云AI产品开始三位数增长</div>
+    </div>
+    <div class="timeline-item">
+      <div class="time">2025年3月</div>
+      <div class="text">悟空Agent产品发布，内置钉钉；ATH事业群（Token Foundry）成立</div>
+    </div>
+    <div class="timeline-item">
+      <div class="time">2026年3月</div>
+      <div class="text">千问月活突破3亿；ATH确立Token经济模型</div>
+    </div>
+    <div class="timeline-item">
+      <div class="time">2026年5月</div>
+      <div class="text">Agentic全栈发布：真武M890芯片+磐久AL128超节点+Agentic Cloud+千问云</div>
+    </div>
+    <div class="timeline-item">
+      <div class="time" style="color: var(--accent3);">2026年6月18日</div>
+      <div class="text"><strong>蔡崇信VivaTech 2026发言</strong>：50万亿AI TAM，全栈AI是核心战略</div>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ============================================================ -->
+<!-- SECTION 8: SOURCES -->
+<!-- ============================================================ -->
+<section>
+  <h2>参考资料</h2>
+  <ul style="list-style: none; padding: 0; color: var(--text-secondary); font-size: 14px;">
+    <li style="padding: 6px 0;">📄 新浪科技 — <a href="https://www.sohu.com/a/1038774656_122014422" target="_blank" style="color: var(--accent);">搜狐转载：蔡崇信：阿里全面投入AI，全栈布局有巨大优势</a></li>
+    <li style="padding: 6px 0;">📄 IT之家 — <a href="https://www.ithome.com/0/966/318.htm" target="_blank" style="color: var(--accent);">蔡崇信：阿里全面投入AI，开源的主要推动力量来自中国企业</a></li>
+    <li style="padding: 6px 0;">📄 AI产品库 — <a href="https://aiproducthub.cn/newsflash/alibaba-cai-chongxin-vivatech-2026-full-stack-ai-strategy/" target="_blank" style="color: var(--accent);">蔡崇信VivaTech大会阐述阿里全栈AI战略</a></li>
+    <li style="padding: 6px 0;">📄 新浪财经 — <a href="https://finance.sina.com.cn/7x24/2026-06-19/doc-inicxcux4934019.shtml" target="_blank" style="color: var(--accent);">蔡崇信：阿里全面投入AI，全栈布局有巨大优势</a></li>
+    <li style="padding: 6px 0;">📄 环球网 — <a href="https://tech.huanqiu.com/article/4S2dClJDEt0" target="_blank" style="color: var(--accent);">蔡崇信VivaTech阐述阿里全栈AI战略</a></li>
+    <li style="padding: 6px 0;">📺 VivaTech 2026 — <a href="https://vivatech.com/sessions" target="_blank" style="color: var(--accent);">VivaTech 2026 Sessions</a></li>
+  </ul>
+</section>
+
+<footer>
+  <p>由 Tars 整理分析 · 基于公开报道与VivaTech 2026现场信息</p>
+  <p style="margin-top: 8px;">散热正常，慧哥。🧊</p>
+</footer>
+
+</div>
+
+</body>
+</html>
