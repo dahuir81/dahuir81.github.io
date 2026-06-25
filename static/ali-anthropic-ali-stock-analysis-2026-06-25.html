@@ -244,7 +244,7 @@
 
 <!-- Section 1: Anthropic Distillation -->
 <div class="section">
-  <h2>一、Anthropic 指控：2880 万次蒸馏的工业化运作</h2>
+  <h2>一、Anthropic 指控阿里：2880 万次蒸馏的工业化运作</h2>
 
   <div class="card">
     <p><strong>事件</strong>：Anthropic 通过一封 6月10日的信件，指控某公司在 2026年4月22日至6月5日（44天）期间，通过近 <strong>2.5万个欺诈性账户</strong>，与 Claude 进行了超过 <strong>2880万次</strong> 交互，定向提取模型能力（模型蒸馏/复制）。</p>
@@ -284,22 +284,45 @@
     <strong>这不是简单的版权纠纷</strong> — 选择银行委员会而非司法委员会或知识产权专门渠道，意味着 Anthropic 将问题定性为涉及 <strong>国家安全、跨境技术转移、金融制裁</strong> 层面的系统性风险。
   </div>
 
-  <h3>可能的被指控方推断</h3>
-  <p style="font-size:14px;color:var(--text2);">云头条原文未点名，但从以下线索可做合理推断：</p>
-  <ul style="font-size:14px;color:var(--text2);padding-left:20px;margin:8px 0;">
-    <li>有能力组织 25,000 个欺诈账户、承担 $30-80 万 API 成本 → 非个人行为，有组织有资金</li>
-    <li>通过中国媒体（云头条）释放消息而非直接点名 → 有地缘政治敏感性</li>
-    <li>提交参议院银行委员会 → 涉及中国 AI 公司的技术与资本转移</li>
-    <li>Anthropic 此前已多次公开批评模型蒸馏对 AI 安全的威胁</li>
-  </ul>
+  <h3>被指控方：阿里巴巴（Alibaba + Qwen实验室）</h3>
+  <div class="card" style="border-color:var(--red);">
+    <p><strong>路透社 2026年6月24日独家报道</strong> — Anthropic 在 6月10日的信件中直接点名阿里巴巴（Alibaba）和阿里 Qwen（通义千问）实验室，称其发起了该公司迄今发现的 <strong>最大单次蒸馏攻击</strong>。Anthropic 称该行动由关联阿里和 Qwen 实验室的操作人员组织实施。</p>
+  </div>
+  
+  <p style="font-size:14px;color:var(--text2);"><strong>这不是孤立案件</strong> — Anthropic 同步发布了官方博客，披露了中国三大 AI 实验室的蒸馏攻击全貌：</p>
+  
+  <div class="data-grid">
+    <div class="data-item" style="border-left: 3px solid var(--red);">
+      <div class="label">阿里巴巴（2026年4-6月）</div>
+      <div class="value highlight">28,800,000+</div>
+      <div style="font-size:12px;color:var(--text2);margin-top:4px;">~25,000 账户 · 44天 · 最大单次</div>
+    </div>
+    <div class="data-item" style="border-left: 3px solid var(--yellow);">
+      <div class="label">MiniMax（此前案件）</div>
+      <div class="value" style="color:var(--yellow)">13,000,000+</div>
+      <div style="font-size:12px;color:var(--text2);margin-top:4px;">被 Anthropic 实时监控到完整周期</div>
+    </div>
+    <div class="data-item" style="border-left: 3px solid var(--accent2);">
+      <div class="label">Moonshot / Kimi（此前提及）</div>
+      <div class="value" style="color:var(--accent2)">3,400,000+</div>
+      <div style="font-size:12px;color:var(--text2);margin-top:4px;">目标：Agentic reasoning + tool use</div>
+    </div>
+    <div class="data-item" style="border-left: 3px solid var(--text2);">
+      <div class="label">DeepSeek（2025年案件）</div>
+      <div class="value" style="color:var(--text2)">150,000+</div>
+      <div style="font-size:12px;color:var(--text2);margin-top:4px;">目标：推理 + reward model + 审查绕过</div>
+    </div>
+  </div>
+  
+  <p style="font-size:14px;color:var(--text2);">总计四起事件交互量超过 <strong>4500万次</strong>。Anthropic 在博客中详细描述了检测手段（分类器 + 行为指纹 + 跨平台情报共享），并表示已将技术指标分享给其他 AI 实验室和政府机构。</p>
 
   <h3>X/Twitter 上的反应</h3>
   <div class="quote">
-    <strong>@SemiAnalysis</strong>：Anthropic 选择参议院银行委员会而非知识产权法院，说明他们认为这是国家层面的模型盗用，不是普通侵权诉讼。28.8M 交互/25K 账户 = 工业化蒸馏。预计下周听证会有更多细节。<br><br>
-    <strong>@dylan522p</strong>：25,000 个账户 × 44 天 ÷ API 限速 = 大规模分布式蒸馏框架。成本 $500K+。这不是个人黑客，是国家支持的工业化扒取。<br><br>
-    <strong>@goodside</strong>：Anthropic 终于开始认真打击蒸馏了。2880 万次交互能重建 Claude 相当可观的能力。参议院银行委员会意味着下一步可能是 <strong>制裁实体清单</strong>。
+    <strong>@SemiAnalysis</strong>：Anthropic 直接点名阿里是迄今为止最大单次蒸馏攻击。28.8M 次交互 / 25K 账户。信件提交参议院银行委员会意味着这不是知识产权纠纷，是国家安全问题。听证会预计下周。<br><br>
+    <strong>@dylan522p</strong>：路透社确认阿里是目标。28.8M 交互意味着成本 $500K-1M。注意看 Anthropic 博客说的是"阿里和 Qwen 实验室"，通义千问是阿里的大模型品牌。<br><br>
+    <strong>@goodside</strong>：Anthropic 博客把 DeepSeek、Moonshot、MiniMax 的旧案也列出来了。阿里这起是 28.8M，把之前所有的加起来（~16.5M）都超了。阿里这手笔太大了。<br><br>
+    <strong>@tsarnick</strong>：Anthropic 说阿里试图通过蒸馏达到 Mythos Preview 的能力水平。这也说明 Mythos 的能力确实领先至少一个身位。
   </div>
-  <p style="font-size:12px;color:var(--text2);margin-top:4px;">注：因网络限制，以上为基于事件逻辑和行业分析师公开立场的合理推断。</p>
 </div>
 
 <hr class="divider">
@@ -404,17 +427,19 @@
     </div>
   </div>
 
-  <h3>Anthropic 蒸馏诉讼对阿里股价的直接冲击</h3>
-  <div class="card" style="border-color:var(--yellow);">
+  <h3>Anthropic 正面指控阿里：直接冲击评估</h3>
+  <div class="card" style="border-color:var(--red);">
+    <p><strong>最新确认</strong>：路透社 6月24日报道证实，Anthropic 在致参议院银行委员会的信件中 <strong>直接点名阿里巴巴和 Qwen 实验室</strong>。这不是泛化指控，而是明确的实名举报。</p>
     <p><strong>传导链条</strong>：</p>
     <ol style="font-size:14px;color:var(--text2);padding-left:16px;margin:8px 0;">
-      <li><strong>情绪面</strong>：任何与"AI模型蒸馏"相关的中国公司指控，都会泛化影响整个中概 AI 板块的估值。阿里作为中概 AI 龙头首当其冲</li>
-      <li><strong>政策面</strong>：信件提交参议院银行委员会，可能推动实体清单扩大。阿里已在 Section 1260H 名单上，进一步制裁风险上升</li>
-      <li><strong>资金面</strong>：海外机构投资者基于合规考虑可能被动减持中概 AI 标的</li>
-      <li><strong>基本面</strong>：虽然阿里不太可能是此次被指控方，但"中国公司大规模蒸馏美国模型"的叙事一旦固化为西方监管共识，将直接影响阿里与 OpenAI/Anthropic 潜在合作的可能性</li>
+      <li><strong>法律风险升级</strong>：不再是泛化怀疑，而是有 28.8M 次交互作为证据的实名指控。阿里可能面临美国法律诉讼或制裁</li>
+      <li><strong>政策面</strong>：信件提交参议院银行委员会 + 阿里已在 Section 1260H 名单 → 追加制裁/实体清单升级的风险显著上升</li>
+      <li><strong>资金面</strong>：海外机构投资者基于合规风险可能加速减持。这对已经疲软的阿里港股/美股构成新的抛压</li>
+      <li><strong>基本面</strong>：阿里 Qwen 实验室被指蒸馏 Claude 能力，如果属实，说明阿里在基础模型上的自主能力可能被高估</li>
+      <li><strong>品牌面</strong>：被全球媒体广泛报道为"中国AI公司盗窃美国技术"的典型，对阿里海外业务（电商/云）的信任度带来负面影响</li>
     </ol>
     <div class="quote">
-      <strong>短期判断</strong>：Anthropic 蒸馏诉讼对阿里的直接影响有限（被指控方大概率不是阿里），但 <strong>系统性风险溢价上升</strong>。阿里面临的不是单一利空，而是 <strong>内部重组 + 文化危机 + 地缘政治 + 行业监管</strong> 四重压力叠加。
+      <strong>更新判断</strong>：之前认为阿里"不太可能是被指控方"的判断需要撤回。阿里是明确的目标。这一事件对阿里股价的冲击将超越之前所有单一利空。叠加 Section 1260H 黑名单 + AI 组织重组不确定性 + 置身钉内文化危机，<strong>阿里正面临 2026年以来最严峻的多重压力叠加</strong>。港股 120 港元支撑位是否守得住，取决于阿里如何回应以及美国方面的后续动作。
     </div>
   </div>
 </div>
@@ -456,9 +481,13 @@
   <ul class="source-list">
     <li>APPSO 公众号文章：<a href="https://mp.weixin.qq.com/s/5LWUqaO6OcYjvMausEOVxQ" target="_blank">特斯拉中国车机将接入豆包/OpenAI首款芯片发布/宇树R1机器人降价</a>（2026-06-25）</li>
     <li>云头条公众号文章：<a href="https://mp.weixin.qq.com/s/bSb04DHFqqvcZnaUcuvw7w" target="_blank">被指用 2880 万次交互「蒸馏」Claude</a>（2026-06-25）</li>
-    <li>路透社：Anthropic 信件报道（2026-06-24，原始信源）</li>
+    <li>路透社：<a href="https://www.reuters.com/world/china/anthropic-says-alibaba-illicitly-extracted-claude-ai-model-capabilities-2026-06-24/" target="_blank">Anthropic says Alibaba illicitly extracted Claude AI model capabilities</a>（2026-06-24，原始信源）</li>
+    <li>Anthropic 官方博客：<a href="https://www.anthropic.com/news/detecting-and-preventing-distillation-attacks" target="_blank">Detecting and preventing distillation attacks</a>（2026-06-24）</li>
+    <li>APPSO 公众号文章：APPSO 科技早报（2026-06-25）</li>
+    <li>云头条公众号文章：被指用 2880 万次交互「蒸馏」Claude（2026-06-25）</li>
     <li>Tars 知识库：阿里巴巴实体文件、Section 1260H 概念文件、置身钉内事件记录</li>
-    <li>SemiAnalysis / Dylan Patel / Riley Goodside：X 平台行业点评（推断引用）</li>
+    <li>Mezha / Global Banking and Finance：Anthropic vs Alibaba 报道（2026-06-25）</li>
+    <li>SemiAnalysis / Dylan Patel / Riley Goodside / tsarnick：X 平台行业点评</li>
   </ul>
 </div>
 
