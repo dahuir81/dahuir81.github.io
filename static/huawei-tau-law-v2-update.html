@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>韬（τ）定律 V2：华为半导体时间缩微理论完整版解读</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --bg-card: #1a1d28;
+    --bg-card-alt: #1e2230;
+    --text: #e1e4eb;
+    --text-secondary: #8b90a1;
+    --red: #ff4d4f;
+    --gold: #f5a623;
+    --blue: #4b8bff;
+    --green: #34d399;
+    --purple: #a78bfa;
+    --cyan: #22d3ee;
+    --border: #2a2e3e;
+    --max-width: 900px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Noto Sans SC", system-ui, sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.7; -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: var(--max-width); margin: 0 auto; padding: 0 20px; }
+
+  .hero {
+    background: linear-gradient(135deg, #1a0f0f 0%, #1a1d28 40%, #0f1a1a 70%, #14101f 100%);
+    padding: 52px 0 34px; text-align: center; border-bottom: 1px solid var(--border);
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 15% 30%, rgba(255,77,79,.12) 0%, transparent 50%),
+                radial-gradient(ellipse at 85% 40%, rgba(34,211,238,.12) 0%, transparent 50%);
+    pointer-events: none;
+  }
+  .hero h1 {
+    font-size: 1.7rem; font-weight: 800;
+    background: linear-gradient(135deg, #ff4d4f, #f5a623, #22d3ee);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    position: relative;
+  }
+  .hero .subtitle { color: var(--text-secondary); font-size: .92rem; margin-top: 10px; position: relative; }
+  .meta-bar { display: flex; justify-content: center; gap: 8px; margin-top: 16px; flex-wrap: wrap; position: relative; }
+  .meta-bar .badge { display: inline-flex; align-items: center; gap: 4px; font-size: .75rem; padding: 4px 12px; border-radius: 20px; background: var(--bg-card); border: 1px solid var(--border); color: var(--text-secondary); }
+
+  section { padding: 30px 0; }
+  .section-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+
+  .stat-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .stat-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 16px 8px; text-align: center; }
+  .stat-box .v { font-size: 1.4rem; font-weight: 800; }
+  .stat-box .l { font-size: .66rem; color: var(--text-secondary); margin-top: 4px; line-height: 1.4; }
+
+  /* V1 vs V2 compare */
+  .cmp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .cmp-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .cmp-card .cmp-head { padding: 12px 16px; font-weight: 700; font-size: .95rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+  .cmp-card.v1 .cmp-head { background: linear-gradient(135deg, rgba(139,144,161,.15), transparent); }
+  .cmp-card.v2 .cmp-head { background: linear-gradient(135deg, rgba(255,77,79,.15), transparent); }
+  .cmp-card .cmp-body { padding: 12px 16px; }
+  .spec-row { display: flex; justify-content: space-between; gap: 10px; padding: 6px 0; font-size: .8rem; border-bottom: 1px solid var(--border); }
+  .spec-row:last-child { border-bottom: none; }
+  .spec-row .label { color: var(--text-secondary); flex-shrink: 0; }
+  .spec-row .value { font-weight: 600; text-align: right; }
+  .value.red { color: var(--red); }
+  .value.green { color: var(--green); }
+
+  /* Timeline */
+  .timeline { position: relative; padding-left: 34px; }
+  .timeline::before { content: ''; position: absolute; left: 13px; top: 4px; bottom: 4px; width: 2px; background: var(--border); }
+  .timeline-item { position: relative; margin-bottom: 16px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 12px 16px; }
+  .timeline-item::before { content: ''; position: absolute; left: -25px; top: 16px; width: 11px; height: 11px; border-radius: 50%; background: var(--bg); border: 2px solid var(--blue); }
+  .timeline-item.now::before { border-color: var(--red); background: var(--red); box-shadow: 0 0 8px rgba(255,77,79,.6); }
+  .timeline-item.future::before { border-color: var(--gold); }
+  .timeline-item .th { display: flex; justify-content: space-between; align-items: center; margin-bottom: 3px; flex-wrap: wrap; gap: 4px; }
+  .timeline-item .name { font-weight: 700; font-size: .92rem; }
+  .timeline-item .date { font-size: .74rem; color: var(--text-secondary); }
+  .timeline-item .desc { font-size: .82rem; color: var(--text-secondary); line-height: 1.6; }
+  .timeline-item .desc strong { color: var(--text); }
+
+  /* Insight cards */
+  .insight-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .insight-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 16px; position: relative; overflow: hidden; }
+  .insight-card .num { font-size: 2rem; font-weight: 800; opacity: .15; position: absolute; top: 4px; right: 12px; }
+  .insight-card h4 { font-size: .92rem; margin-bottom: 6px; padding-right: 30px; }
+  .insight-card p { font-size: .82rem; color: var(--text-secondary); line-height: 1.6; }
+  .insight-card p strong { color: var(--text); }
+
+  /* Roadmap tables */
+  .table-wrap { overflow-x: auto; border-radius: 10px; border: 1px solid var(--border); }
+  table { width: 100%; border-collapse: collapse; font-size: .82rem; min-width: 560px; }
+  thead th { padding: 10px 12px; text-align: left; font-weight: 600; background: var(--bg-card-alt); border-bottom: 1px solid var(--border); white-space: nowrap; }
+  tbody td { padding: 9px 12px; border-bottom: 1px solid var(--border); background: var(--bg-card); }
+  tbody tr:last-child td { border-bottom: none; }
+  td.now-row { color: var(--red); font-weight: 700; }
+  .pill { display: inline-flex; align-items: center; gap: 4px; font-size: .7rem; font-weight: 700; padding: 2px 9px; border-radius: 10px; }
+  .pill.ga { background: rgba(52,211,153,.15); color: var(--green); }
+  .pill.tape { background: rgba(245,166,35,.15); color: var(--gold); }
+  .pill.future { background: rgba(139,144,161,.15); color: var(--text-secondary); }
+
+  /* Compare vs Moore */
+  .vs-wrap { display: grid; grid-template-columns: 1fr auto 1fr; gap: 14px; align-items: center; }
+  .vs-col { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 18px; }
+  .vs-col h5 { font-size: .95rem; margin-bottom: 10px; }
+  .vs-col p { font-size: .8rem; color: var(--text-secondary); margin-bottom: 6px; }
+  .vs-badge { font-size: 1.3rem; color: var(--text-secondary); text-align: center; }
+  @media (max-width: 640px) { .vs-wrap { grid-template-columns: 1fr; } .vs-badge { transform: rotate(90deg); } }
+
+  .takeaway { background: linear-gradient(135deg, #1a1d28, #241a1a); border: 1px solid rgba(255,77,79,.3); border-radius: 14px; padding: 26px; text-align: center; }
+  .takeaway .icon { font-size: 1.8rem; margin-bottom: 8px; }
+  .takeaway p { font-size: .95rem; line-height: 1.8; color: var(--text); }
+  .takeaway strong { color: var(--red); }
+  .takeaway .quote { font-size: 1.15rem; font-weight: 700; color: var(--gold); margin-top: 10px; }
+
+  .footer { text-align: center; padding: 22px 0 40px; color: var(--text-secondary); font-size: .78rem; border-top: 1px solid var(--border); margin-top: 10px; }
+  .src-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 10px; }
+  .src-row a { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 4px 12px; font-size: .72rem; color: var(--blue); text-decoration: none; }
+
+  @media (max-width: 640px) {
+    .cmp-grid, .insight-grid { grid-template-columns: 1fr; }
+    .stat-strip { grid-template-columns: 1fr 1fr; }
+    .hero h1 { font-size: 1.25rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="container">
+    <h1>韬（τ）定律 V2 完整版</h1>
+    <p class="subtitle">华为半导体"时间缩微理论"从框架走向工程实证</p>
+    <div class="meta-bar">
+      <span class="badge">📅 2026-07-03 ChinaXiv发布</span>
+      <span class="badge">👩‍🔬 何庭波 · 华为半导体业务部总裁</span>
+      <span class="badge">📄 8章完整体系</span>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- Stat strip -->
+<section>
+  <div class="stat-strip">
+    <div class="stat-box"><div class="v" style="color:var(--red)">238</div><div class="l">MTr/mm²<br>晶体管密度(3D)</div></div>
+    <div class="stat-box"><div class="v" style="color:var(--gold)">41%</div><div class="l">CPU核心<br>能效提升</div></div>
+    <div class="stat-box"><div class="v" style="color:var(--cyan)">3.1GHz</div><div class="l">麒麟2026<br>最高频率</div></div>
+    <div class="stat-box"><div class="v" style="color:var(--purple)">1.5μm</div><div class="l">混合键合<br>间距</div></div>
+  </div>
+</section>
+
+<!-- V1 vs V2 -->
+<section>
+  <h2 class="section-title">📑 V1 → V2 升级了什么</h2>
+  <div class="cmp-grid">
+    <div class="cmp-card v1">
+      <div class="cmp-head">⚪ V1（2026-05-25）</div>
+      <div class="cmp-body">
+        <div class="spec-row"><span class="label">发布场合</span><span class="value">ICSC 2026主旨演讲</span></div>
+        <div class="spec-row"><span class="label">内容形态</span><span class="value">框架性论述，零散章节</span></div>
+        <div class="spec-row"><span class="label">数据支撑</span><span class="value">概念性，无实测数据</span></div>
+        <div class="spec-row"><span class="label">路线图</span><span class="value">仅提及麒麟/昇腾方向</span></div>
+      </div>
+    </div>
+    <div class="cmp-card v2">
+      <div class="cmp-head">🔴 V2（2026-07-03）</div>
+      <div class="cmp-body">
+        <div class="spec-row"><span class="label">发布场合</span><span class="value">ChinaXiv预发布平台</span></div>
+        <div class="spec-row"><span class="label">内容形态</span><span class="value red">整合为8章完整体系</span></div>
+        <div class="spec-row"><span class="label">数据支撑</span><span class="value red">首次公开量产实测数据</span></div>
+        <div class="spec-row"><span class="label">路线图</span><span class="value red">全场景细化 + 齿比新概念</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Timeline -->
+<section>
+  <h2 class="section-title">🗓️ 时间线</h2>
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="th"><span class="name">V1论文发布</span><span class="date">2026-05-25</span></div>
+      <div class="desc">何庭波在ICSC 2026主旨演讲提出韬定律，论文《面向多层级电子系统的时间缩微理论》首发</div>
+    </div>
+    <div class="timeline-item">
+      <div class="th"><span class="name">徐直军专访解读</span><span class="date">05-31</span></div>
+      <div class="desc">华为轮值董事长详解逻辑折叠："折叠是把一张白纸折起来，堆叠是把两张纸叠在一起"</div>
+    </div>
+    <div class="timeline-item">
+      <div class="th"><span class="name">CITI研报跟进</span><span class="date">05-26</span></div>
+      <div class="desc">花旗发布《The New Tauism》研报，梳理六大技术支柱与产业链受益顺序</div>
+    </div>
+    <div class="timeline-item now">
+      <div class="th"><span class="name">V2论文发布</span><span class="date">07-03</span></div>
+      <div class="desc"><strong>ChinaXiv更新V2版</strong>，补充麒麟2026实测数据、8章完整体系、全场景路线图</div>
+    </div>
+    <div class="timeline-item future">
+      <div class="th"><span class="name">首款完整"韬芯片"</span><span class="date">2026秋季</span></div>
+      <div class="desc">麒麟手机芯片发布，何庭波称性能/集成度/晶体管密度相比2025年"跳跃性"提升</div>
+    </div>
+    <div class="timeline-item future">
+      <div class="th"><span class="name">1.4nm等效密度</span><span class="date">2031</span></div>
+      <div class="desc">基于韬定律的高端芯片晶体管密度目标达到1.4纳米制程同等水平</div>
+    </div>
+  </div>
+</section>
+
+<!-- Insights -->
+<section>
+  <h2 class="section-title">💡 五条关键解读</h2>
+  <div class="insight-grid">
+    <div class="insight-card">
+      <div class="num" style="color:var(--red)">01</div>
+      <h4>从"讲故事"到"晒数据"</h4>
+      <p>V2首次公开麒麟2026 vs 9030 Pro的电压、频率、功耗、面积实测对比。<strong>241MTr/mm²密度、41%能效提升不再是PPT概念</strong>，而是可验证的工程数字。</p>
+    </div>
+    <div class="insight-card">
+      <div class="num" style="color:var(--gold)">02</div>
+      <h4>"齿比"（gear ratio）新概念</h4>
+      <p>当混合键合间距接近顶层金属布线尺寸，3D设计从<strong>"宏块级离散优化"</strong>跃迁到<strong>"单元级连续优化"</strong>，理论上可实现全局最优垂直逻辑划分。</p>
+    </div>
+    <div class="insight-card">
+      <div class="num" style="color:var(--blue)">03</div>
+      <h4>麒麟2026策略保守</h4>
+      <p>逻辑折叠只选择性应用于关键路径，TSV仅从顶层金属下移一层。<strong>留足迭代空间</strong>——2027年将有更深度的折叠应用与更高频率。</p>
+    </div>
+    <div class="insight-card">
+      <div class="num" style="color:var(--green)">04</div>
+      <h4>昇腾同步纳入路线图</h4>
+      <p>AI端明确昇腾910C(2025)→950(2026)→<strong>990(2030引入逻辑折叠)</strong>的迭代节奏，韬定律不止服务手机芯片，也是华为AI算力自主路线的底层支撑。</p>
+    </div>
+    <div class="insight-card" style="grid-column: span 2;">
+      <div class="num" style="color:var(--purple)">05</div>
+      <h4>不依赖先进制程，只和设计封装有关</h4>
+      <p>韬定律的核心价值在于<strong>与晶圆代工制程无关</strong>——2nm晶圆代工报价已达3万美元/片，埃级工艺高达4.5万美元/片。徐直军原话："如果只按台积电的路径走，我们可能一直追不上，通过时间缩微说不定可以把三代差距弥补上，还有可能超越。"</p>
+    </div>
+  </div>
+</section>
+
+<!-- Kirin Roadmap -->
+<section>
+  <h2 class="section-title">📱 麒麟芯片路线图</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>年份</th><th>型号</th><th>架构</th><th>频率</th><th>状态</th></tr></thead>
+      <tbody>
+        <tr><td>2023</td><td>Kirin 9000s</td><td>Planar</td><td>2.6GHz</td><td><span class="pill ga">量产</span></td></tr>
+        <tr><td>2024</td><td>Kirin 9020</td><td>Planar</td><td>2.65GHz</td><td><span class="pill ga">量产</span></td></tr>
+        <tr><td>2025</td><td>Kirin 9030 Pro</td><td>Planar</td><td>2.75GHz</td><td><span class="pill ga">量产</span></td></tr>
+        <tr style="background:rgba(255,77,79,.06);"><td class="now-row">2026</td><td class="now-row">Kirin 2026</td><td class="now-row">LogicFolding</td><td class="now-row">3.1GHz</td><td><span class="pill tape">流片 · 首个韬芯片</span></td></tr>
+        <tr><td>2027</td><td>Kirin 2027</td><td>LogicFolding</td><td>3.39GHz</td><td><span class="pill tape">流片</span></td></tr>
+        <tr><td>2028</td><td>Kirin 2028</td><td>LogicFolding</td><td>3.71GHz</td><td><span class="pill future">预流片</span></td></tr>
+        <tr><td>2029</td><td>Kirin 2029</td><td>LogicFolding</td><td>4.0GHz</td><td><span class="pill future">预流片</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="font-size:.72rem;color:var(--text-secondary);margin-top:8px;">数据来源：CITI《The New Tauism》研报</p>
+</section>
+
+<!-- vs Moore -->
+<section>
+  <h2 class="section-title">⚖️ 韬定律 vs 摩尔定律</h2>
+  <div class="vs-wrap">
+    <div class="vs-col">
+      <h5 style="color:var(--text-secondary)">🔬 摩尔定律</h5>
+      <p><strong style="color:var(--text)">核心路径</strong>：几何缩微</p>
+      <p><strong style="color:var(--text)">驱动因素</strong>：制程节点推进</p>
+      <p><strong style="color:var(--text)">瓶颈</strong>：物理极限 + 成本红利消退</p>
+      <p><strong style="color:var(--text)">依赖</strong>：EUV / High-NA光刻机</p>
+    </div>
+    <div class="vs-badge">⚡</div>
+    <div class="vs-col" style="border-color:rgba(255,77,79,.3)">
+      <h5 style="color:var(--red)">🧬 韬定律</h5>
+      <p><strong style="color:var(--text)">核心路径</strong>：时间缩微</p>
+      <p><strong style="color:var(--text)">驱动因素</strong>：系统级时延优化</p>
+      <p><strong style="color:var(--text)">瓶颈</strong>：待验证</p>
+      <p><strong style="color:var(--text)">依赖</strong>：仅与设计和封装有关</p>
+    </div>
+  </div>
+</section>
+
+<!-- Takeaway -->
+<section>
+  <div class="takeaway">
+    <div class="icon">🎯</div>
+    <p>V2版最大的意义不是理论升级，而是<strong>把韬定律从"演讲PPT"变成"可被同行验证的工程论文"</strong>——公开实测数据、细化路线图，是在向产业界证明这条非摩尔路径真的能跑通，而不只是应对制裁的话术。</p>
+    <div class="quote">"这个加速度，只会越来越好" — 何庭波</div>
+  </div>
+</section>
+
+</div>
+
+<div class="footer">
+  <div class="container">
+    <p>综合第一财经 · IT之家 · CITI研报 · 半导体行业观察多方信源</p>
+    <div class="src-row">
+      <a href="https://finance.sina.com.cn/stock/t/2026-07-04/doc-inifrhua3297719.shtml" target="_blank">新浪财经</a>
+      <a href="https://www.ithome.com/0/954/778.htm" target="_blank">IT之家</a>
+      <a href="https://www.163.com/dy/article/L109SO2Q0511B8LM.html" target="_blank">网易</a>
+      <a href="https://tech.ifeng.com/c/8uU0ClRo7JU" target="_blank">凤凰网</a>
+    </div>
+    <p style="margin-top:10px;">由 Tars 整理 · 2026-07-04 · <a href="https://dahuir81.github.io" target="_blank">慧哥的博客</a></p>
+  </div>
+</div>
+
+</body>
+</html>
