@@ -117,12 +117,39 @@
   .takeaway strong { color: var(--red); }
   .takeaway .quote { font-size: 1.15rem; font-weight: 700; color: var(--gold); margin-top: 10px; }
 
+  /* Debate: bull vs bear */
+  .debate-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .debate-col { border-radius: 12px; padding: 4px; }
+  .debate-col.bull { background: linear-gradient(180deg, rgba(52,211,153,.08), transparent); border: 1px solid rgba(52,211,153,.2); }
+  .debate-col.bear { background: linear-gradient(180deg, rgba(255,77,79,.08), transparent); border: 1px solid rgba(255,77,79,.2); }
+  .debate-head { text-align: center; font-weight: 700; font-size: .92rem; padding: 10px; }
+  .debate-head.bull { color: var(--green); }
+  .debate-head.bear { color: var(--red); }
+  .media-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 9px; padding: 12px 14px; margin: 8px; }
+  .media-card .outlet { display: inline-block; font-size: .66rem; font-weight: 700; padding: 2px 8px; border-radius: 10px; margin-bottom: 6px; }
+  .o-reg { background: rgba(255,77,79,.15); color: #ff7875; }
+  .o-omdia { background: rgba(245,166,35,.15); color: var(--gold); }
+  .o-alpha { background: rgba(167,139,250,.15); color: var(--purple); }
+  .o-nv { background: rgba(52,211,153,.15); color: var(--green); }
+  .o-scmp { background: rgba(75,139,255,.15); color: var(--blue); }
+  .o-trend { background: rgba(34,211,238,.15); color: var(--cyan); }
+  .o-hw { background: rgba(255,77,79,.15); color: #ff7875; }
+  .o-nick { background: rgba(245,166,35,.15); color: var(--gold); }
+  .media-card p { font-size: .8rem; color: var(--text-secondary); line-height: 1.55; }
+  .media-card p .say { color: var(--text); font-style: italic; }
+
+  /* Controversy callout */
+  .controversy { background: linear-gradient(135deg, rgba(255,77,79,.08), rgba(245,166,35,.06)); border: 1px solid rgba(245,166,35,.3); border-radius: 12px; padding: 18px 20px; margin-top: 14px; }
+  .controversy .ctitle { font-weight: 700; font-size: .9rem; color: var(--gold); margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+  .controversy p { font-size: .82rem; color: var(--text-secondary); line-height: 1.6; }
+  .controversy p strong { color: var(--text); }
+
   .footer { text-align: center; padding: 22px 0 40px; color: var(--text-secondary); font-size: .78rem; border-top: 1px solid var(--border); margin-top: 10px; }
   .src-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 10px; }
   .src-row a { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 4px 12px; font-size: .72rem; color: var(--blue); text-decoration: none; }
 
   @media (max-width: 640px) {
-    .cmp-grid, .insight-grid { grid-template-columns: 1fr; }
+    .cmp-grid, .insight-grid, .debate-grid { grid-template-columns: 1fr; }
     .stat-strip { grid-template-columns: 1fr 1fr; }
     .hero h1 { font-size: 1.25rem; }
   }
@@ -284,11 +311,60 @@
   </div>
 </section>
 
+<!-- Overseas media -->
+<section>
+  <h2 class="section-title">🌍 海外媒体怎么看</h2>
+  <div class="debate-grid">
+    <div class="debate-col bull">
+      <div class="debate-head bull">👍 认可 / 中性</div>
+      <div class="media-card">
+        <span class="outlet o-scmp">南华早报 SCMP</span>
+        <p>称其为<span class="say">"自主半导体生态的重要里程碑"</span>——在不依赖尖端光刻的前提下缩小与台积电、三星的差距，是绕开EUV限制的可行路径。</p>
+      </div>
+      <div class="media-card">
+        <span class="outlet o-trend">TrendForce</span>
+        <p>这是<span class="say">"首个由中国提出、意图指导全球半导体演进的原则"</span>；摩尔定律已面临物理极限与经济回报递减的双重压力。</p>
+      </div>
+      <div class="media-card">
+        <span class="outlet o-hw">华为官方(EN)</span>
+        <p>定位为<span class="say">"在晶体管密度与系统性能上实现突破"</span>的新范式，2031年目标做到1.4nm等效密度。</p>
+      </div>
+      <div class="media-card">
+        <span class="outlet o-nick">业界昵称</span>
+        <p>部分同行称之为<span class="say">"Her's Law"（何氏定律）</span>——类比摩尔定律以Gordon Moore命名，是对何庭波的致敬。</p>
+      </div>
+    </div>
+    <div class="debate-col bear">
+      <div class="debate-head bear">👎 质疑 / 看空</div>
+      <div class="media-card">
+        <span class="outlet o-reg">The Register</span>
+        <p>标题直接开炮：<span class="say">"看起来不像摩尔定律，更像营销"</span>——认为多是把已有行业趋势（先进封装、3D集成、chiplet）重新包装。</p>
+      </div>
+      <div class="media-card">
+        <span class="outlet o-omdia">Omdia · Manoj Sukumaran</span>
+        <p><span class="say">"2031年1.4nm等效并非制程节点声明"</span>：华为仍卡在7nm，靠混合键合把逻辑die叠起来堆密度，不等同于台积电/Intel真正的1.4nm晶体管。</p>
+      </div>
+      <div class="media-card">
+        <span class="outlet o-nv">黄仁勋 · NVIDIA</span>
+        <p><span class="say">"华为这个的确是创新，但台积电3D封装已经领先了十年。"</span></p>
+      </div>
+      <div class="media-card">
+        <span class="outlet o-alpha">SemiconAlpha</span>
+        <p>灵魂拷问：<span class="say">"是绝境求生、真突破，还是两者皆是？"</span>——承认技术含量，但强调制裁背景下的动机色彩。</p>
+      </div>
+    </div>
+  </div>
+  <div class="controversy">
+    <div class="ctitle">🔥 核心争议：238 MTr/mm² 之争</div>
+    <p>多空双方的分歧点其实只有一个：这个密度<strong>是"真实晶体管密度"，还是"3D封装堆叠出来的等效密度"</strong>？华为强调逻辑折叠是"整体设计的电路级折叠"（一栋楼装电梯），批评者则视其为"把两颗die叠起来"（两栋楼搭天桥）。V2公开实测数据，正是华为对这个质疑的正面回应。</p>
+  </div>
+</section>
+
 <!-- Takeaway -->
 <section>
   <div class="takeaway">
     <div class="icon">🎯</div>
-    <p>V2版最大的意义不是理论升级，而是<strong>把韬定律从"演讲PPT"变成"可被同行验证的工程论文"</strong>——公开实测数据、细化路线图，是在向产业界证明这条非摩尔路径真的能跑通，而不只是应对制裁的话术。</p>
+    <p>V2版最大的意义不是理论升级，而是<strong>把韬定律从"演讲PPT"变成"可被同行验证的工程论文"</strong>——公开实测数据正面回应"堆密度"质疑。海外多空分歧的本质，是<strong>技术路径认可</strong>与<strong>制裁动机质疑</strong>的交织：没人否认逻辑折叠有创新，争的是它能否真正替代先进制程。</p>
     <div class="quote">"这个加速度，只会越来越好" — 何庭波</div>
   </div>
 </section>
@@ -297,12 +373,14 @@
 
 <div class="footer">
   <div class="container">
-    <p>综合第一财经 · IT之家 · CITI研报 · 半导体行业观察多方信源</p>
+    <p>综合国内(第一财经·IT之家·CITI研报)与海外(SCMP·The Register·TrendForce·Omdia)多方信源</p>
     <div class="src-row">
-      <a href="https://finance.sina.com.cn/stock/t/2026-07-04/doc-inifrhua3297719.shtml" target="_blank">新浪财经</a>
       <a href="https://www.ithome.com/0/954/778.htm" target="_blank">IT之家</a>
-      <a href="https://www.163.com/dy/article/L109SO2Q0511B8LM.html" target="_blank">网易</a>
-      <a href="https://tech.ifeng.com/c/8uU0ClRo7JU" target="_blank">凤凰网</a>
+      <a href="https://finance.sina.com.cn/stock/t/2026-07-04/doc-inifrhua3297719.shtml" target="_blank">新浪财经</a>
+      <a href="https://www.scmp.com/tech/article/3354710/" target="_blank">SCMP</a>
+      <a href="https://www.theregister.com/systems/2026/05/26/huaweis-chip-law-looks-less-like-moore-and-more-like-marketing/" target="_blank">The Register</a>
+      <a href="https://www.trendforce.com/news/2026/05/26/news-huawei-unveils-new-semiconductor-principle-tau-%CF%84-scaling-law/" target="_blank">TrendForce</a>
+      <a href="https://www.huawei.com/en/news/2026/5/ieee-iscas-tau-scaling" target="_blank">Huawei EN</a>
     </div>
     <p style="margin-top:10px;">由 Tars 整理 · 2026-07-04 · <a href="https://dahuir81.github.io" target="_blank">慧哥的博客</a></p>
   </div>
