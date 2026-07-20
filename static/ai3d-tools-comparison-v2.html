@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 3D手办创作工具对比 2026</title>
+<style>
+:root {
+  --bg: #0f1117;
+  --card: #1a1d27;
+  --card2: #222639;
+  --accent: #6c5ce7;
+  --accent2: #a29bfe;
+  --green: #00b894;
+  --orange: #fdcb6e;
+  --red: #ff7675;
+  --blue: #74b9ff;
+  --pink: #fd79a8;
+  --text: #e8e8ec;
+  --text2: #9b9db3;
+  --border: #2d3042;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  line-height: 1.7;
+  padding: 0;
+}
+.container { max-width: 1000px; margin: 0 auto; padding: 16px; }
+
+header {
+  text-align: center;
+  padding: 36px 16px 24px;
+  background: linear-gradient(135deg, #0f1117 0%, #1a1d27 50%, #0f1117 100%);
+  border-bottom: 1px solid var(--border);
+}
+header h1 { font-size: 1.6em; font-weight: 700; }
+header h1 span { color: var(--accent2); }
+header p { color: var(--text2); font-size: 0.85em; margin-top: 6px; }
+.meta { font-size: 0.75em; color: var(--text2); margin-top: 8px; }
+
+/* Navigator */
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 20px;
+}
+.nav a {
+  color: var(--text2);
+  font-size: 0.78em;
+  text-decoration: none;
+  padding: 4px 10px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  transition: all 0.2s;
+}
+.nav a:hover { border-color: var(--accent); color: var(--accent2); }
+
+.section-title {
+  font-size: 1.2em;
+  font-weight: 700;
+  margin: 28px 0 14px;
+  padding-left: 10px;
+  border-left: 3px solid var(--accent);
+}
+
+/* Cards */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px;
+  margin-bottom: 12px;
+}
+.card.highlight {
+  border-color: var(--accent);
+  background: linear-gradient(135deg, var(--card) 0%, rgba(108,92,231,0.08) 100%);
+}
+
+/* Tool cards */
+.tool-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+@media (min-width: 700px) {
+  .tool-grid { grid-template-columns: 1fr 1fr; }
+}
+.tool-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+  position: relative;
+  transition: border-color 0.2s;
+}
+.tool-card:hover { border-color: var(--accent); }
+.tool-card .tag {
+  display: inline-block;
+  font-size: 0.65em;
+  padding: 1px 7px;
+  border-radius: 5px;
+  margin-left: 4px;
+  vertical-align: middle;
+  font-weight: 600;
+}
+.tag-vpn { background: rgba(255,118,117,0.15); color: var(--red); }
+.tag-cn { background: rgba(0,184,148,0.15); color: var(--green); }
+.tag-best { background: rgba(108,92,231,0.2); color: var(--accent2); }
+.tag-free { background: rgba(253,203,110,0.15); color: var(--orange); }
+.tag-pay { background: rgba(116,185,255,0.15); color: var(--blue); }
+.tag-ipad { background: rgba(253,121,168,0.15); color: var(--pink); }
+.tag-web { background: rgba(0,184,148,0.12); color: var(--green); }
+
+.tool-card h3 {
+  font-size: 1em;
+  margin-bottom: 3px;
+}
+.tool-card .url {
+  font-size: 0.72em;
+  color: var(--text2);
+  margin-bottom: 8px;
+}
+.tool-card .price {
+  font-size: 1.1em;
+  font-weight: 700;
+  color: var(--green);
+  margin: 6px 0 3px;
+}
+.tool-card .price-detail {
+  font-size: 0.78em;
+  color: var(--text2);
+  margin-bottom: 10px;
+}
+.tool-card ul {
+  list-style: none;
+  padding: 0;
+}
+.tool-card ul li {
+  font-size: 0.82em;
+  padding: 3px 0;
+  padding-left: 16px;
+  position: relative;
+  color: var(--text2);
+}
+.tool-card ul li.pro  { color: var(--green); }
+.tool-card ul li.con  { color: var(--orange); }
+.tool-card ul li.warn { color: #d63031; }
+.tool-card ul li.pro::before  { content: "✓"; position: absolute; left: 0; color: var(--green); }
+.tool-card ul li.con::before  { content: "△"; position: absolute; left: 0; color: var(--orange); }
+.tool-card ul li.warn::before { content: "✗"; position: absolute; left: 0; color: var(--red); }
+
+/* Table */
+.table-wrap {
+  overflow-x: auto;
+  margin: 12px 0;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82em;
+}
+th {
+  text-align: left;
+  padding: 8px 10px;
+  background: var(--card2);
+  border-bottom: 2px solid var(--accent);
+  white-space: nowrap;
+  font-weight: 600;
+  font-size: 0.85em;
+}
+td {
+  padding: 7px 10px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+tr:hover td { background: rgba(108,92,231,0.04); }
+.cell-yes { color: var(--green); text-align: center; font-weight:600; }
+.cell-mid { color: var(--orange); text-align: center; }
+.cell-no { color: var(--red); text-align: center; }
+.cell-dr { text-align: center; }
+
+/* Recommendation box */
+.rec-box {
+  background: linear-gradient(135deg, rgba(108,92,231,0.1), rgba(0,184,148,0.06));
+  border: 1px solid var(--accent);
+  border-radius: 10px;
+  padding: 18px;
+  margin: 16px 0;
+}
+.rec-box h4 { color: var(--accent2); margin-bottom: 8px; font-size:0.95em; }
+.rec-box ol, .rec-box ul { padding-left: 18px; }
+.rec-box li { margin-bottom: 6px; font-size:0.88em; }
+
+/* Flow */
+.flow { 
+  background: var(--card2); border-radius: 8px; padding: 14px; margin: 10px 0; font-size:0.85em;
+}
+.flow code {
+  background: rgba(108,92,231,0.15);
+  color: var(--accent2);
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-family: "SF Mono","Menlo",monospace;
+  font-size:0.9em;
+}
+
+/* Kids table */
+.kids-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  margin: 12px 0;
+}
+@media (min-width:600px) {
+  .kids-grid { grid-template-columns: 1fr 1fr; }
+}
+.kids-card {
+  background: var(--card2);
+  border-radius: 8px;
+  padding: 14px;
+}
+.kids-card h4 { font-size:0.9em; margin-bottom:4px; }
+.kids-card .age { font-size:0.78em; color: var(--text2); margin-bottom:6px; }
+.kids-card p { font-size:0.82em; color: var(--text2); }
+
+/* Verdict */
+.verdict {
+  background: linear-gradient(135deg, #1a1d27, #0f1117);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 22px;
+  margin: 24px 0;
+  text-align: center;
+}
+.verdict h3 { font-size:1.2em; margin-bottom:6px; }
+.verdict .big { font-size:1.05em; color: var(--green); font-weight:700; margin:6px 0; }
+.verdict .sub { color: var(--text2); font-size:0.82em; margin-top:6px; }
+
+footer {
+  text-align: center;
+  padding: 24px 16px;
+  color: var(--text2);
+  font-size:0.72em;
+  border-top: 1px solid var(--border);
+  margin-top: 28px;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>AI <span>3D</span> 手办创作工具</h1>
+  <p>从入门到出模型的全链路对比 · 2026年7月</p>
+  <div class="meta">🎯 适合慧哥：拓竹X2D + 创意手办 + 奥特曼上色 + 小朋友入门</div>
+</header>
+
+<div class="container">
+
+<div class="nav">
+  <a href="#ai-tools">🤖 AI生成工具</a>
+  <a href="#edit-tools">✏️ 修改&上色工具</a>
+  <a href="#kids">👶 小朋友入门</a>
+  <a href="#compare">📊 全维度对比</a>
+  <a href="#flow">⚙️ 工作流推荐</a>
+  <a href="#verdict">🏆 最终建议</a>
+</div>
+
+<!-- ==================== 1. AI 生成工具 ==================== -->
+<h2 class="section-title" id="ai-tools">🤖 AI 3D生成工具（文字/图片→3D模型）</h2>
+
+<div class="tool-grid">
+
+<!-- Meshy -->
+<div class="tool-card">
+  <h3>Meshy</h3>
+  <span class="tag tag-vpn">需代理</span>
+  <span class="tag tag-best">手办首选</span>
+  <div class="url">meshy.ai</div>
+  <div class="price">Free / Pro ¥145/月</div>
+  <div class="price-detail">Premium ¥435/月 · Ultra ¥725/月 · 免费版100积分/月（仅图片→3D）</div>
+  <ul>
+    <li class="pro">角色/手办3D打印通过率97%，行业最高</li>
+    <li class="pro">一键发送到Bambu Studio（唯一有此功能的AI工具）</li>
+    <li class="pro">支持3MF导出（保留颜色信息，配合多色打印）</li>
+    <li class="pro">500+动画预设 + 自动骨骼绑定</li>
+    <li class="con">免费版锁了文字生成，只有图片→3D</li>
+    <li class="con">积分月月清零，不累积</li>
+    <li class="warn">国内需翻墙，走Stripe支付</li>
+  </ul>
+</div>
+
+<!-- Tripo -->
+<div class="tool-card">
+  <h3>Tripo <span class="tag tag-vpn">需代理</span> <span class="tag tag-best">性价比之选</span></h3>
+  <div class="url">tripo3d.ai</div>
+  <div class="price">Free / Pro ¥86/月（年付¥82/月）</div>
+  <div class="price-detail">Basic免费（300积分/月）· Pro ¥86-143/月 · Advanced ¥360/月 · Premium ¥1006/月</div>
+  <ul>
+    <li class="pro">免费版文字/图片→3D都能用！300积分/月约7个带纹理模型</li>
+    <li class="pro">生成最快，~30秒出模型</li>
+    <li class="pro">年付Pro低至¥82/月，3000积分/月</li>
+    <li class="pro">拓扑干净，自动修复能力强</li>
+    <li class="con">手办细节精度略逊于Meshy</li>
+    <li class="con">不支持3MF导出</li>
+    <li class="con">国内访问不稳定，时好时坏</li>
+  </ul>
+</div>
+
+<!-- 腾讯混元 -->
+<div class="tool-card">
+  <h3>腾讯混元3D <span class="tag tag-cn">国内直连</span> <span class="tag tag-free">免费体验</span></h3>
+  <div class="url">3d.hunyuan.tencent.com</div>
+  <div class="price">免费体验 / API按量</div>
+  <div class="price-detail">在线版免费 · API按调用量计费</div>
+  <ul>
+    <li class="pro">腾讯出品，国内直连，速度极快</li>
+    <li class="pro">支持文字→3D、图片→3D、八视图→3D</li>
+    <li class="pro">支持纹理生成、3D动画</li>
+    <li class="pro">有API可集成工作流</li>
+    <li class="con">手办成型精度还在优化中</li>
+    <li class="con">社区生态远不如Meshy/Tripo</li>
+    <li class="con">腾讯产品惯例：先免费养用户，后续可能收费</li>
+  </ul>
+</div>
+
+<!-- Rodin / CSM / Hitem3D 合并为一张 -->
+<div class="tool-card">
+  <h3>Hyper3D Rodin <span class="tag tag-vpn">需代理</span></h3>
+  <div class="url">hyper3d.ai</div>
+  <div class="price">Free / Pro ¥108/月</div>
+  <div class="price-detail">免费5积分（基本只能试一次）</div>
+  <ul>
+    <li class="pro">纹理质量最高（4K PBR，100亿参数Gen-2）</li>
+    <li class="warn">模型不优化3D打印，每个需20-40分钟Blender修复</li>
+    <li class="warn">免费版仅5积分，等于没有</li>
+  </ul>
+</div>
+
+<div class="tool-card">
+  <h3>Hitem3D <span class="tag tag-vpn">需代理</span></h3>
+  <div class="url">hitem3d.com</div>
+  <div class="price">Freemium</div>
+  <ul>
+    <li class="pro">分辨率1536³最高，适合精细微缩模型</li>
+    <li class="con">不支持文字→3D，只有图片→3D</li>
+    <li class="con">用户少，教程少</li>
+  </ul>
+</div>
+
+</div>
+
+<!-- 免费体验对比 -->
+<div class="card highlight" style="margin-top:6px;">
+  <div style="font-size:0.9em;">
+    <strong>💡 免费版怎么试？</strong><br><br>
+    <strong>Tripo</strong>（300积分/月）→ 文字描述出模型，试试奥特曼雏形 ← <strong style="color:var(--green);">推荐你先试这个</strong><br>
+    <strong>腾讯混元3D</strong> → 国内直连免费体验，文字/图片都能试<br>
+    <strong>Meshy</strong> → 100积分/月，给已有STL上色够用
+  </div>
+</div>
+
+<!-- ==================== 2. 修改&上色工具 ==================== -->
+<h2 class="section-title" id="edit-tools">✏️ 修改STL & 上色工具</h2>
+
+<div class="tool-grid">
+
+<div class="tool-card">
+  <h3>Blender <span class="tag tag-free">免费</span> <span class="tag tag-best">最强</span></h3>
+  <div class="url">blender.org</div>
+  <div class="price">¥0</div>
+  <div class="price-detail">完全免费开源</div>
+  <ul>
+    <li class="pro">功能最强：修改STL形状、雕刻、上色全都能做</li>
+    <li class="pro">顶点绘制模式直接给STL上色，不需要UV贴图</li>
+    <li class="pro">社区教程最多，遇到问题都能搜到答案</li>
+    <li class="con">学习曲线陡峭，界面复杂</li>
+    <li class="con">做简单修模大材小用</li>
+  </ul>
+</div>
+
+<div class="tool-card">
+  <h3>Shapr3D <span class="tag tag-ipad">iPad/电脑</span> <span class="tag tag-pay">¥2150/年</span></h3>
+  <div class="url">shapr3d.com</div>
+  <div class="price">免费（有限制）/ Pro ¥2150/年</div>
+  <div class="price-detail">免费版仅2个项目+低分辨率导出（圆变六边形）</div>
+  <ul>
+    <li class="pro">界面极简，iPad+Pencil推拉建模超直觉</li>
+    <li class="pro">内置教学，小朋友也能上手</li>
+    <li class="con">不能给STL上色</li>
+    <li class="con">自由曲线/人体造型做起来很笨拙（CAD性质决定）</li>
+    <li class="warn">免费版导出低分辨率，3D打印没法用</li>
+    <li class="warn">¥2150/年不便宜</li>
+  </ul>
+</div>
+
+<div class="tool-card">
+  <h3>Tinkercad <span class="tag tag-web">网页</span> <span class="tag tag-free">免费</span></h3>
+  <div class="url">tinkercad.com</div>
+  <div class="price">¥0</div>
+  <div class="price-detail">完全免费，拖积木式建模</div>
+  <ul>
+    <li class="pro">完全免费，零门槛，拖拽组合</li>
+    <li class="pro">适合8岁+入门3D思维</li>
+    <li class="pro">可导入STL并做基础修改</li>
+    <li class="con">只能做几何体组合，做不了复杂手办</li>
+    <li class="con">精细度有限</li>
+  </ul>
+</div>
+
+<div class="tool-card">
+  <h3>Nomad Sculpt <span class="tag tag-ipad">iPad</span> <span class="tag tag-free">买断¥158</span></h3>
+  <div class="url">nomadsculpt.com</div>
+  <div class="price">¥158 买断</div>
+  <div class="price-detail">iPad一次性购买，无订阅</div>
+  <ul>
+    <li class="pro">像捏橡皮泥一样做手办，非常直觉</li>
+    <li class="pro">一次买断，无订阅压力</li>
+    <li class="pro">导出STL可3D打印</li>
+    <li class="con">功能虽然强大但比Shapr3D复杂</li>
+    <li class="con">不能直接修改已有STL的局部形状</li>
+    <li class="con">12岁以下小朋友需要大人带着学</li>
+  </ul>
+</div>
+
+</div>
+
+<!-- ==================== 3. 小朋友入门 ==================== -->
+<h2 class="section-title" id="kids">👶 小朋友3D入门路线图</h2>
+
+<div class="card">
+  <div style="font-size:0.88em;margin-bottom:12px;">
+    <strong>核心原则：</strong>每个阶段只学当前需要的工具，不一步到位上Blender
+  </div>
+
+  <div class="kids-grid">
+    <div class="kids-card">
+      <h4>🧩 Tinkercad</h4>
+      <div class="age">推荐年龄：8-12岁 · ⭐ 难度最低</div>
+      <p>网页拖积木式建模。完全免费，不用安装。适合小朋友理解"3D就是搭积木"的概念，可以做简单模型直接导出STL打印。</p>
+    </div>
+    <div class="kids-card">
+      <h4>✏️ Shapr3D（教育版）</h4>
+      <div class="age">推荐年龄：10-14岁 · ⭐⭐</div>
+      <p>有iPad+Pencil的话非常直觉。用edu邮箱可申请免费教育版（解锁全部功能）。适合做机械造型、机器人类的项目。</p>
+    </div>
+    <div class="kids-card">
+      <h4>🎨 Nomad Sculpt</h4>
+      <div class="age">推荐年龄：12+岁 · ⭐⭐⭐</div>
+      <p>¥158买断，iPad上捏泥巴。适合喜欢画画的小朋友，做出来的手办有手工质感。导出STL可直接3D打印。</p>
+    </div>
+    <div class="kids-card">
+      <h4>💻 Blender</h4>
+      <div class="age">推荐年龄：14+岁 · ⭐⭐⭐⭐⭐</div>
+      <p>终极工具，免费。但需要一定数学空间想象力。建议小朋友先玩前面几个，对3D建模产生兴趣后再过渡到Blender。</p>
+    </div>
+  </div>
+
+  <div class="flow" style="margin-top:12px;">
+    <strong>推荐路线：</strong><br>
+    <code>Tinkercad（搭积木入门）</code> → <code>Shapr3D教育版（CAD思维）</code> → <code>Nomad Sculpt（雕刻手感）</code> → <code>Blender（专业级）</code><br>
+    <span style="color:var(--text2);font-size:0.8em;">每个阶段至少玩半年，不着急跳级</span>
+  </div>
+</div>
+
+<!-- ==================== 4. 全维度对比表 ==================== -->
+<h2 class="section-title" id="compare">📊 全维度对比</h2>
+
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+  <th>对比维度</th>
+  <th>Meshy Pro</th>
+  <th>Tripo Pro</th>
+  <th>腾讯混元</th>
+  <th>Blender</th>
+  <th>Shapr3D</th>
+  <th>Tinkercad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong>文字→3D</strong></td>
+  <td class="cell-yes">✓</td>
+  <td class="cell-yes">✓</td>
+  <td class="cell-yes">✓</td>
+  <td class="cell-no">—</td>
+  <td class="cell-no">—</td>
+  <td class="cell-no">—</td>
+</tr>
+<tr>
+  <td><strong>图片→3D</strong></td>
+  <td class="cell-yes">✓</td>
+  <td class="cell-yes">✓</td>
+  <td class="cell-yes">✓</td>
+  <td class="cell-no">—</td>
+  <td class="cell-no">—</td>
+  <td class="cell-no">—</td>
+</tr>
+<tr>
+  <td><strong>修改STL形状</strong></td>
+  <td class="cell-no">✗</td>
+  <td class="cell-no">✗</td>
+  <td class="cell-no">✗</td>
+  <td class="cell-yes">✅ 强</td>
+  <td class="cell-mid">△ 弱</td>
+  <td class="cell-mid">△ 基础</td>
+</tr>
+<tr>
+  <td><strong>STL上色</strong></td>
+  <td class="cell-yes">AI纹理</td>
+  <td class="cell-yes">AI纹理</td>
+  <td class="cell-mid">△ 基础</td>
+  <td class="cell-yes">顶点绘制</td>
+  <td class="cell-no">✗</td>
+  <td class="cell-no">✗</td>
+</tr>
+<tr>
+  <td><strong>3MF导出</strong></td>
+  <td class="cell-yes">✓</td>
+  <td class="cell-no">✗</td>
+  <td class="cell-no">✗</td>
+  <td class="cell-yes">✓</td>
+  <td class="cell-yes">✓</td>
+  <td class="cell-no">✗</td>
+</tr>
+<tr>
+  <td><strong>手办/角色能力</strong></td>
+  <td class="cell-yes">⭐⭐⭐⭐⭐</td>
+  <td class="cell-mid">⭐⭐⭐⭐</td>
+  <td class="cell-mid">⭐⭐⭐</td>
+  <td class="cell-yes">⭐⭐⭐⭐⭐</td>
+  <td class="cell-no">⭐⭐</td>
+  <td class="cell-no">⭐</td>
+</tr>
+<tr>
+  <td><strong>Bambu Studio集成</strong></td>
+  <td class="cell-yes">一键发送</td>
+  <td class="cell-no">✗</td>
+  <td class="cell-no">✗</td>
+  <td class="cell-no">✗</td>
+  <td class="cell-no">✗</td>
+  <td class="cell-no">✗</td>
+</tr>
+<tr>
+  <td><strong>国内网络</strong></td>
+  <td class="cell-no">❌需代理</td>
+  <td class="cell-mid">⚠️不稳定</td>
+  <td class="cell-yes">✅直连</td>
+  <td class="cell-yes">✅离线</td>
+  <td class="cell-yes">✅离线可用</td>
+  <td class="cell-mid">⚠️需注册</td>
+</tr>
+<tr>
+  <td><strong>学习成本</strong></td>
+  <td class="cell-yes">低</td>
+  <td class="cell-yes">低</td>
+  <td class="cell-yes">低</td>
+  <td class="cell-no">极高</td>
+  <td class="cell-mid">中</td>
+  <td class="cell-yes">极低</td>
+</tr>
+<tr>
+  <td><strong>价格</strong></td>
+  <td>¥145/月</td>
+  <td>¥86-143/月</td>
+  <td>免费/按量</td>
+  <td>¥0</td>
+  <td>¥2150/年</td>
+  <td>¥0</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<!-- ==================== 5. 工作流推荐 ==================== -->
+<h2 class="section-title" id="flow">⚙️ 工作流推荐</h2>
+
+<!-- 方案A -->
+<div class="rec-box" style="border-color:var(--green);">
+  <h4>🏆 方案A：纯AI流水线（推荐，最省事）</h4>
+  <div class="flow">
+    <code>Meshy Pro</code>（文字描述→生成带纹理手办）→ <code>一键发送Bambu Studio</code> → <code>切片打印</code><br>
+    <span style="color:var(--text2);font-size:0.8em;">全程不需要开Blender。适合「我想要一个xx角色，直接出实物」的场景</span>
+  </div>
+  <div style="margin-top:8px;font-size:0.82em;color:var(--text2);">
+    ✅ 最快出实物 · ✅ 自动上色 · ✅ 适合不修模<br>
+    ❌ 需付费 · ❌ 需代理 · ❌ 生成结果偶尔需要微调
+  </div>
+</div>
+
+<!-- 方案B -->
+<div class="rec-box" style="border-color:var(--orange);">
+  <h4>💰 方案B：免费/低成本工作流</h4>
+  <div class="flow">
+    <code>Tripo免费版</code>（文字描述→出模型雏形）→ <code>下载STL</code> → <code>Blender顶点绘制</code>（修形+上色）→ <code>导出STL</code> → <code>Bambu Studio</code> → <code>打印</code>
+  </div>
+  <div style="margin-top:8px;font-size:0.82em;color:var(--text2);">
+    ✅ 几乎零成本 · ✅ 对最终效果控制力强<br>
+    ❌ 需要学一点Blender基础 · ❌ 流程耗时较长
+  </div>
+</div>
+
+<!-- 方案C -->
+<div class="rec-box" style="border-color:var(--blue);">
+  <h4>🇨🇳 方案C：纯国内方案</h4>
+  <div class="flow">
+    <code>腾讯混元3D</code>（文字/图片→生成模型）→ <code>下载STL</code> → <code>Blender修模上色</code> → <code>导出STL</code> → <code>Bambu Studio</code> → <code>打印</code>
+  </div>
+  <div style="margin-top:8px;font-size:0.82em;color:var(--text2);">
+    ✅ 国内直连 · ✅ 不用代理 · ✅ 目前免费<br>
+    ❌ 模型精度还需时间迭代
+  </div>
+</div>
+
+<!-- ==================== 6. 版权说明 ==================== -->
+<h2 class="section-title">⚠️ 关于奥特曼版权</h2>
+<div class="card">
+  <div style="font-size:0.85em;">
+    <p><strong>生成阶段：</strong>Meshy/Tripo不会主动检测你传的是不是版权角色。但条款上明确禁止上传侵权内容。</p>
+    <p><strong>使用阶段：</strong></p>
+    <ul style="padding-left:18px;margin:6px 0;">
+      <li>🟢 自己打印一个放家里 → 几乎零风险（没有版权方会起诉个人自用）</li>
+      <li>🟡 送朋友 → 灰色地带，严格说算分发</li>
+      <li>🔴 挂闲鱼卖 / 批量销售 → 明确侵权（圆谷/新创华有中国代理）</li>
+    </ul>
+    <p><strong style="color:var(--green);">安全替代方案：</strong>用文字描述生成"致敬风格"原创角色，换个配色和花纹，既有奥特曼的感觉又没有版权包袱。</p>
+  </div>
+</div>
+
+<!-- ==================== 7. 最终建议 ==================== -->
+<div class="verdict" id="verdict">
+  <h3>🏆 最终建议</h3>
+  <div class="big">第一步：去 Tripo 免费版试文字生3D，看能不能出你要的效果</div>
+  <div class="big" style="color:var(--blue);">第二步：效果满意 → 考虑 Meshy Pro（手办质量最强 + Bambu Studio直通）</div>
+  <div class="big" style="color:var(--orange);">或者 预算有限 → Tripo Pro 年付（¥82/月）</div>
+  <div class="big" style="color:var(--green);">或者 不想折腾代理 → 先玩腾讯混元3D</div>
+  <div class="sub">小朋友想学3D → 8-12岁Tinkercad → 10-14岁Shapr3D教育版 → 12+岁Nomad Sculpt → 过渡到Blender</div>
+</div>
+
+<div class="card" style="text-align:center;font-size:0.85em;">
+  三个工具 <strong style="color:var(--green);">不冲突</strong>：<br>
+  Meshy 出成品 → Tripo 快速迭代 → 腾讯混元 国内兜底<br>
+  先试免费的，再决定掏不掏钱
+</div>
+
+<footer>
+  数据来源：各工具官网及第三方评测 · 2026年7月 · 价格以官网为准<br>
+  为慧哥整理 · Tars 🤖 🧊
+</footer>
+
+</div>
+
+</body>
+</html>
