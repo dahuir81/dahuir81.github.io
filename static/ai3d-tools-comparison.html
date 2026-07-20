@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 3D模型生成工具横向对比 2026</title>
+<style>
+:root {
+  --bg: #0f1117;
+  --card: #1a1d27;
+  --card2: #222639;
+  --accent: #6c5ce7;
+  --accent2: #a29bfe;
+  --green: #00b894;
+  --orange: #fdcb6e;
+  --red: #ff7675;
+  --blue: #74b9ff;
+  --text: #e8e8ec;
+  --text2: #9b9db3;
+  --border: #2d3042;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  line-height: 1.7;
+  padding: 0;
+}
+.container { max-width: 1100px; margin: 0 auto; padding: 20px; }
+header {
+  text-align: center;
+  padding: 48px 20px 32px;
+  background: linear-gradient(135deg, #0f1117 0%, #1a1d27 50%, #0f1117 100%);
+  border-bottom: 1px solid var(--border);
+}
+header h1 { font-size: 2em; font-weight: 700; margin-bottom: 8px; }
+header h1 span { color: var(--accent2); }
+header p { color: var(--text2); font-size: 0.95em; max-width: 600px; margin: 0 auto; }
+.meta {
+  margin-top: 12px;
+  font-size: 0.82em;
+  color: var(--text2);
+}
+.section-title {
+  font-size: 1.4em;
+  font-weight: 700;
+  margin: 40px 0 20px;
+  padding-left: 12px;
+  border-left: 3px solid var(--accent);
+}
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 16px;
+}
+.card.highlight {
+  border-color: var(--accent);
+  background: linear-gradient(135deg, var(--card) 0%, rgba(108,92,231,0.08) 100%);
+}
+
+/* Tool cards */
+.tool-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+@media (min-width: 700px) {
+  .tool-grid { grid-template-columns: 1fr 1fr; }
+}
+.tool-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  position: relative;
+  transition: border-color 0.2s;
+}
+.tool-card:hover { border-color: var(--accent); }
+.tool-card .badge {
+  display: inline-block;
+  font-size: 0.7em;
+  padding: 2px 8px;
+  border-radius: 6px;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+.badge-cn { background: rgba(0,184,148,0.2); color: var(--green); }
+.badge-vpn { background: rgba(255,118,117,0.15); color: var(--red); }
+.badge-best { background: rgba(108,92,231,0.2); color: var(--accent2); }
+.tool-card h3 {
+  font-size: 1.1em;
+  margin-bottom: 4px;
+}
+.tool-card .url {
+  font-size: 0.78em;
+  color: var(--text2);
+  margin-bottom: 12px;
+  word-break: break-all;
+}
+.tool-card .price {
+  font-size: 1.3em;
+  font-weight: 700;
+  color: var(--green);
+  margin: 8px 0 4px;
+}
+.tool-card .price-detail {
+  font-size: 0.82em;
+  color: var(--text2);
+  margin-bottom: 12px;
+}
+.tool-card ul {
+  list-style: none;
+  padding: 0;
+}
+.tool-card ul li {
+  font-size: 0.85em;
+  padding: 4px 0;
+  padding-left: 18px;
+  position: relative;
+  color: var(--text2);
+}
+.tool-card ul li::before {
+  content: "▸";
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+}
+.tool-card ul li.good { color: var(--green); }
+.tool-card ul li.good::before { content: "✓"; color: var(--green); }
+.tool-card ul li.bad { color: var(--orange); }
+.tool-card ul li.bad::before { content: "△"; color: var(--orange); }
+
+/* Table */
+.table-wrap {
+  overflow-x: auto;
+  margin: 16px 0;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88em;
+}
+th {
+  text-align: left;
+  padding: 10px 12px;
+  background: var(--card2);
+  border-bottom: 2px solid var(--accent);
+  white-space: nowrap;
+  font-weight: 600;
+}
+td {
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+tr:hover td { background: rgba(108,92,231,0.04); }
+.cell-yes { color: var(--green); text-align: center; }
+.cell-mid { color: var(--orange); text-align: center; }
+.cell-no { color: var(--red); text-align: center; }
+.cell-center { text-align: center; }
+
+/* Recommendation box */
+.recommend-box {
+  background: linear-gradient(135deg, rgba(108,92,231,0.12), rgba(0,184,148,0.08));
+  border: 1px solid var(--accent);
+  border-radius: 12px;
+  padding: 24px;
+  margin: 24px 0;
+}
+.recommend-box h3 { color: var(--accent2); margin-bottom: 12px; }
+.recommend-box ol {
+  padding-left: 20px;
+}
+.recommend-box ol li {
+  margin-bottom: 10px;
+  line-height: 1.6;
+}
+.recommend-box ol li strong { color: var(--accent2); }
+
+/* Feature comparison */
+.feature-compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 16px 0;
+}
+@media (max-width: 600px) {
+  .feature-compare { grid-template-columns: 1fr; }
+}
+.feature-item {
+  background: var(--card2);
+  border-radius: 8px;
+  padding: 14px;
+}
+.feature-item h4 {
+  font-size: 0.85em;
+  color: var(--text2);
+  margin-bottom: 4px;
+}
+.feature-item .val {
+  font-size: 0.95em;
+  font-weight: 600;
+}
+
+/* Verdict */
+.verdict {
+  background: linear-gradient(135deg, #1a1d27 0%, #0f1117 100%);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 28px;
+  margin: 32px 0;
+  text-align: center;
+}
+.verdict h2 { font-size: 1.5em; margin-bottom: 8px; }
+.verdict .big {
+  font-size: 1.2em;
+  color: var(--green);
+  font-weight: 700;
+}
+.verdict .sub {
+  color: var(--text2);
+  font-size: 0.88em;
+  margin-top: 8px;
+}
+.flow-box {
+  background: var(--card2);
+  border-radius: 8px;
+  padding: 16px;
+  margin: 12px 0;
+  font-size: 0.88em;
+}
+.flow-box code {
+  background: rgba(108,92,231,0.15);
+  color: var(--accent2);
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-family: "SF Mono", "Menlo", monospace;
+  font-size: 0.9em;
+}
+footer {
+  text-align: center;
+  padding: 32px 20px;
+  color: var(--text2);
+  font-size: 0.78em;
+  border-top: 1px solid var(--border);
+  margin-top: 40px;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>AI <span>3D</span> 模型生成工具横向对比</h1>
+  <p>面向手办创作、STL上色、3D打印场景，2026年7月最新数据</p>
+  <div class="meta">📅 2026年7月更新 | 🎯 关注国内网络可用性 | 🖨️ 侧重3D打印输出质量</div>
+</header>
+
+<div class="container">
+
+<!-- ===================== 场景定位 ===================== -->
+<h2 class="section-title">🎯 你的使用场景</h2>
+<div class="card highlight">
+  <ul style="list-style:none;padding:0;">
+    <li style="padding:4px 0;">✅ <strong>创意手办制作</strong> — 从文字/图片生成可打印的3D模型</li>
+    <li style="padding:4px 0;">✅ <strong>STL模型上色</strong> — 为已有模型批量或精细上色</li>
+    <li style="padding:4px 0;">✅ <strong>国内网络友好</strong> — 不求速度快但求不用折腾代理</li>
+    <li style="padding:4px 0;">✅ <strong>预算可控</strong> — 愿意付费但希望花在刀刃上</li>
+  </ul>
+</div>
+
+<!-- ===================== 工具总览 ===================== -->
+<h2 class="section-title">🛠️ 工具总览</h2>
+
+<div class="tool-grid">
+
+<div class="tool-card">
+  <h3>Meshy <span class="badge badge-vpn">需代理</span> <span class="badge badge-best">打印首选</span></h3>
+  <div class="url">meshy.ai</div>
+  <div class="price">¥145+/月</div>
+  <div class="price-detail">Free: 100积分/月 | Pro: ¥145/月（1000积分）<br>Premium: ¥435/月 | Ultra: ¥725/月</div>
+  <ul>
+    <li class="good">手办/角色模型 3D打印通过率97%</li>
+    <li class="good">一键发送到 Bambu Studio（唯一有此功能的AI工具）</li>
+    <li class="good">支持 3MF 导出（保留颜色信息）</li>
+    <li class="good">500+动画预设 + 自动骨骼绑定</li>
+    <li class="good">文字/图片/多视图 均可输入</li>
+    <li class="bad">每月积分不累积，过期清零</li>
+    <li class="bad">免费版模型 CC BY 4.0 公开许可</li>
+    <li class="bad">国内需翻墙访问，支付走Stripe</li>
+  </ul>
+</div>
+
+<div class="tool-card">
+  <h3>Tripo <span class="badge badge-vpn">需代理</span> <span class="badge badge-best">性价比</span></h3>
+  <div class="url">tripo3d.ai</div>
+  <div class="price">¥86+/月</div>
+  <div class="price-detail">Basic: 免费（300积分） | Pro: ¥86/月（年付 ¥82/月）<br>Advanced: ¥215/月（年付） | Premium: ¥605/月（年付）</div>
+  <ul>
+    <li class="good">生成速度最快，30秒内出模型</li>
+    <li class="good">免费版300积分/月，可生成约7个带纹理模型</li>
+    <li class="good">拓扑干净，自动修复能力强</li>
+    <li class="good">中文官网，对华语用户相对友好</li>
+    <li class="good">Pro版 $11.94/月（年付），性价比最高</li>
+    <li class="bad">角色/手办细节精度不如 Meshy</li>
+    <li class="bad">不支持 3MF 导出</li>
+    <li class="bad">国内访问速度波动较大</li>
+  </ul>
+</div>
+
+<div class="tool-card">
+  <h3>腾讯混元3D <span class="badge badge-cn">国内直连</span></h3>
+  <div class="url">3d.hunyuan.tencent.com</div>
+  <div class="price">免费 + API按量</div>
+  <div class="price-detail">在线版：免费体验 | API：按调用量计费</div>
+  <ul>
+    <li class="good">腾讯出品，国内直连，速度极快</li>
+    <li class="good">支持文本、图片、八视图等多种输入</li>
+    <li class="good">支持3D动画生成和纹理生成</li>
+    <li class="good">支持智能拓扑优化、自动UV展开</li>
+    <li class="good">有 API 可集成到工作流</li>
+    <li class="bad">在线创作平台功能仍在迭代中</li>
+    <li class="bad">模型输出精度对精细手办场景还在优化</li>
+    <li class="bad">社区生态和模板数量远不及 Meshy/Tripo</li>
+  </ul>
+</div>
+
+<div class="tool-card">
+  <h3>Hyper3D Rodin <span class="badge badge-vpn">需代理</span></h3>
+  <div class="url">hyper3d.ai</div>
+  <div class="price">¥108+/月</div>
+  <div class="price-detail">Free: 5积分 | Pro: ¥108/月</div>
+  <ul>
+    <li class="good">纹理质量最高（4K PBR，100亿参数 Gen-2）</li>
+    <li class="good">文字和图片都能输入</li>
+    <li class="bad">生成的模型网格不优化3D打印，需大量修复</li>
+    <li class="bad">每个模型需20-40分钟 Blender 修复</li>
+    <li class="bad">免费版仅5积分，基本只能测试</li>
+    <li class="bad">国内需翻墙</li>
+  </ul>
+</div>
+
+<div class="tool-card">
+  <h3>CSM AI (3D[AI]) <span class="badge badge-vpn">需代理</span></h3>
+  <div class="url">csm.ai</div>
+  <div class="price">¥145+/月</div>
+  <div class="price-detail">免费额度很少 | 付费从 $20/月起</div>
+  <ul>
+    <li class="good">支持图片和视频输入</li>
+    <li class="good">支持将模型拆分为可分离部件</li>
+    <li class="bad">3D打印输出质量一般</li>
+    <li class="bad">定价偏高，性价比不如 Tripo</li>
+    <li class="bad">国内访问不稳定</li>
+  </ul>
+</div>
+
+<div class="tool-card">
+  <h3>Hitem3D <span class="badge badge-vpn">需代理</span></h3>
+  <div class="url">hitem3d.com</div>
+  <div class="price">Freemium</div>
+  <div class="price-detail">免费额度可用 | 具体付费方案官网查看</div>
+  <ul>
+    <li class="good">分辨率最高（1536³），适合精细微缩模型</li>
+    <li class="good">以3D打印为优先设计的架构</li>
+    <li class="bad">不支持文字转3D</li>
+    <li class="bad">用户社区较小</li>
+    <li class="bad">国内需翻墙</li>
+  </ul>
+</div>
+
+</div>
+
+<!-- ===================== 核心能力对比表 ===================== -->
+<h2 class="section-title">📊 核心能力对比</h2>
+
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+  <th>对比维度</th>
+  <th>Meshy</th>
+  <th>Tripo</th>
+  <th>腾讯混元3D</th>
+  <th>Hyper3D Rodin</th>
+  <th>CSM</th>
+  <th>Hitem3D</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong>文字→3D</strong></td>
+  <td class="cell-yes">✓</td>
+  <td class="cell-yes">✓</td>
+  <td class="cell-yes">✓</td>
+  <td class="cell-yes">✓</td>
+  <td class="cell-no">✗</td>
+  <td class="cell-no">✗</td>
+</tr>
+<tr>
+  <td><strong>图片→3D</strong></td>
+  <td class="cell-yes">✓</td>
+  <td class="cell-yes">✓</td>
+  <td class="cell-yes">✓</td>
+  <td class="cell-yes">✓</td>
+  <td class="cell-yes">✓</td>
+  <td class="cell-yes">✓</td>
+</tr>
+<tr>
+  <td><strong>STL导出</strong></td>
+  <td class="cell-yes">✓</td>
+  <td class="cell-yes">✓</td>
+  <td class="cell-yes">✓</td>
+  <td class="cell-yes">✓</td>
+  <td class="cell-yes">✓</td>
+  <td class="cell-yes">✓</td>
+</tr>
+<tr>
+  <td><strong>3MF导出</strong></td>
+  <td class="cell-yes">✓</td>
+  <td class="cell-no">✗</td>
+  <td class="cell-no">✗</td>
+  <td class="cell-no">✗</td>
+  <td class="cell-no">✗</td>
+  <td class="cell-no">✗</td>
+</tr>
+<tr>
+  <td><strong>自动上色/纹理</strong></td>
+  <td class="cell-yes">✓ PBR</td>
+  <td class="cell-yes">✓ HD</td>
+  <td class="cell-mid">△ 基础</td>
+  <td class="cell-yes">✓ 4K PBR</td>
+  <td class="cell-yes">✓</td>
+  <td class="cell-yes">✓</td>
+</tr>
+<tr>
+  <td><strong>手办打印质量</strong></td>
+  <td class="cell-yes">⭐⭐⭐⭐⭐</td>
+  <td class="cell-mid">⭐⭐⭐⭐</td>
+  <td class="cell-mid">⭐⭐⭐</td>
+  <td class="cell-no">⭐⭐</td>
+  <td class="cell-no">⭐⭐</td>
+  <td class="cell-yes">⭐⭐⭐⭐⭐</td>
+</tr>
+<tr>
+  <td><strong>生成速度</strong></td>
+  <td class="cell-mid">~2min</td>
+  <td class="cell-yes">~30s</td>
+  <td class="cell-mid">~1min</td>
+  <td class="cell-mid">~1min</td>
+  <td class="cell-no">较慢</td>
+  <td class="cell-mid">~1min</td>
+</tr>
+<tr>
+  <td><strong>免费额度价值</strong></td>
+  <td class="cell-mid">100积分/月（约5次）</td>
+  <td class="cell-yes">300积分/月（约7次）</td>
+  <td class="cell-yes">免费体验</td>
+  <td class="cell-no">5积分（约1次）</td>
+  <td class="cell-no">极少</td>
+  <td class="cell-mid">中等</td>
+</tr>
+<tr>
+  <td><strong>国内网络</strong></td>
+  <td class="cell-no">❌ 需代理</td>
+  <td class="cell-mid">⚠️ 不稳定</td>
+  <td class="cell-yes">✅ 直连</td>
+  <td class="cell-no">❌ 需代理</td>
+  <td class="cell-no">❌ 需代理</td>
+  <td class="cell-no">❌ 需代理</td>
+</tr>
+<tr>
+  <td><strong>Bambu Studio集成</strong></td>
+  <td class="cell-yes">✅ 一键发送</td>
+  <td class="cell-no">✗</td>
+  <td class="cell-no">✗</td>
+  <td class="cell-no">✗</td>
+  <td class="cell-no">✗</td>
+  <td class="cell-no">✗</td>
+</tr>
+<tr>
+  <td><strong>付费起步价</strong></td>
+  <td class="cell-center">¥145/月</td>
+  <td class="cell-center">¥86/月（年付）</td>
+  <td class="cell-center">按量计费</td>
+  <td class="cell-center">¥108/月</td>
+  <td class="cell-center">¥145/月</td>
+  <td class="cell-center">待查</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<!-- ===================== 针对性对比 ===================== -->
+<h2 class="section-title">🧩 手办创作专项对比</h2>
+
+<div class="feature-compare">
+  <div class="feature-item">
+    <h4>手办模型细节精度</h4>
+    <div class="val" style="color:var(--green);">🥇 Meshy > Hitem3D > Tripo</div>
+    <div style="font-size:0.78em;color:var(--text2);margin-top:4px;">Meshy角色模型通过率97%，细节保留最好</div>
+  </div>
+  <div class="feature-item">
+    <h4>STL上色便利度</h4>
+    <div class="val" style="color:var(--green);">🥇 Meshy > Tripo > Rodin</div>
+    <div style="font-size:0.78em;color:var(--text2);margin-top:4px;">Meshy支持3MF保留颜色+一键Bambu Studio</div>
+  </div>
+  <div class="feature-item">
+    <h4>学习成本（免Blender）</h4>
+    <div class="val" style="color:var(--green);">🥇 Meshy > Tripo > 腾讯混元</div>
+    <div style="font-size:0.78em;color:var(--text2);margin-top:4px;">Meshy直接把模型发到切片软件，无需中间环节</div>
+  </div>
+  <div class="feature-item">
+    <h4>国内网络友好度</h4>
+    <div class="val" style="color:var(--green);">🥇 腾讯混元3D > Tripo > Meshy</div>
+    <div style="font-size:0.78em;color:var(--text2);margin-top:4px;">腾讯直连速度最快，Tripo国内可用但波动</div>
+  </div>
+</div>
+
+<!-- ===================== 推荐方案 ===================== -->
+<h2 class="section-title">💡 推荐方案</h2>
+
+<div class="recommend-box">
+  <h3>🏆 综合推荐：Meshy Pro（¥145/月）</h3>
+  <p style="color:var(--green);margin-bottom:12px;">如果你的拓竹X2D经常用，这是最佳选择</p>
+  <ol>
+    <li><strong>一键打印流程</strong> — Meshy → Bambu Studio（一键发送），中间不需要 Blender 修模、不需要手动导 STL，创作到打印全自动化</li>
+    <li><strong>手办质量行业第一</strong> — 角色模型3D打印通过率97%，55%的模型零修复直接打印，产出奥特曼这种精细手办最合适</li>
+    <li><strong>支持3MF导出</strong> — 保留颜色信息，配合X2D多色打印直接在切片软件里看到上色效果</li>
+    <li><strong>免费版可用</strong> — 100积分/月够试10次，先体验再决定是否付费</li>
+  </ol>
+</div>
+
+<div class="recommend-box" style="border-color:var(--green);background:linear-gradient(135deg,rgba(0,184,148,0.1),rgba(0,0,0,0));">
+  <h3 style="color:var(--green);">💰 性价比之选：Tripo Pro 年付（¥82/月）</h3>
+  <ol>
+    <li><strong>年付仅¥82/月</strong> — 3000积分/月，是Meshy的3倍，每个带纹理模型成本更低</li>
+    <li><strong>生成速度最快</strong> — 30秒出模，适合快速迭代设计思路</li>
+    <li><strong>免费版也慷慨</strong> — 300积分/月，可生成约7个模型，白嫖党首选</li>
+    <li><strong>国内有时能直连</strong> — 国内访问比Meshy稳定，在某些地区不需要代理</li>
+    <li><strong>注意</strong> — 手办细节精度略逊于Meshy，需要接受一定的后处理</li>
+  </ol>
+</div>
+
+<div class="recommend-box" style="border-color:var(--blue);background:linear-gradient(135deg,rgba(116,185,255,0.1),rgba(0,0,0,0));">
+  <h3 style="color:var(--blue);">🇨🇳 国内首选：腾讯混元3D</h3>
+  <ol>
+    <li><strong>国内直连速度最快</strong> — 腾讯云，不用代理，零延迟</li>
+    <li><strong>当前免费体验</strong> — 建议先上去试试，看输出质量能否接受</li>
+    <li><strong>后续可能涨价</strong> — 腾讯API产品通常是"先用免费养用户，再逐步收费"</li>
+    <li><strong>能力在快速迭代</strong> — 刚出到2.5版本，每月都在更新</li>
+  </ol>
+</div>
+
+<!-- ===================== 工作流建议 ===================== -->
+<h2 class="section-title">⚙️ 工作流建议</h2>
+
+<div class="card">
+  <h3 style="margin-bottom:12px;">方案A：纯AI工作流（推荐，最省事）</h3>
+  <div class="flow-box">
+    <strong>Meshy</strong>（文字/图片描述 → 生成3D模型带纹理） → <strong>一键发送到 Bambu Studio</strong> → <strong>切片打印</strong><br>
+    <span style="color:var(--text2);font-size:0.85em;">全程不需要打开 Blender，适合只想快速出实物</span>
+  </div>
+
+  <h3 style="margin:20px 0 12px;">方案B：AI + 简单后期</h3>
+  <div class="flow-box">
+    <strong>Tripo/腾讯混元</strong>（生成基础模型） → <strong>Meshy</strong>（重新纹理/上色） → <strong>Bambu Studio</strong> → <strong>打印</strong><br>
+    <span style="color:var(--text2);font-size:0.85em;">适合需要先用Tripo快速出壳型，再交给Meshy优化纹理</span>
+  </div>
+
+  <h3 style="margin:20px 0 12px;">方案C：AI + Blender 精细修模</h3>
+  <div class="flow-box">
+    <strong>Meshy/Tripo</strong>（生成模型） → 下载STL → <strong>Blender顶点绘制</strong>（局部补色/修细节） → <strong>导出STL</strong> → <strong>切片打印</strong><br>
+    <span style="color:var(--text2);font-size:0.85em;">适合有修改需求的场景，比如给奥特曼加签名、改武器造型</span>
+  </div>
+</div>
+
+<!-- ===================== 关于上色 ===================== -->
+<h2 class="section-title">🎨 针对「STL上色」的专项建议</h2>
+
+<div class="card">
+  <div class="feature-compare" style="grid-template-columns:1fr;">
+    <div class="feature-item">
+      <h4>给已有的STL奥特曼上色，最佳路径：</h4>
+      <div style="margin-top:8px;line-height:1.8;">
+        <strong>方法A（最快）</strong>：用 <strong>Meshy</strong> 的 AI Texturing 功能 → 上传你的 STL → 用文字描述"红银配色奥特曼，红色身体，银色条纹" → 自动上色 → 导出3MF（带颜色）→ 直接打印<br><br>
+        <strong>方法B（0元方案）</strong>：Meshy 免费版有100积分，给几个 STL 上色完全够用（纹理任务消耗较少积分）<br><br>
+        <strong>方法C（离线方案）</strong>：Blender 顶点绘制模式（前面试过的），虽然费手但免费且不依赖网络
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== 最终结论 ===================== -->
+<div class="verdict">
+  <h2>📌 总结</h2>
+  <div class="big">如果你用拓竹 X2D + 做手办 → Meshy Pro</div>
+  <div class="big" style="color:var(--blue);">如果你在意性价比 + 国内访问 → Tripo 年付 Pro</div>
+  <div class="big" style="color:var(--green);">如果你想先免费试水 → 腾讯混元3D + Meshy免费版</div>
+  <div class="sub">三个都不冲突，可以先用腾讯混元和Meshy免费版体验，确定能产出你要的效果再买付费版</div>
+</div>
+
+<footer>
+  数据来源：各官网及第三方评测（2026年7月）。价格可能随时变动，以官网为准。<br>
+  为慧哥整理 · AI 3D手办创作工具对比
+</footer>
+
+</div>
+
+</body>
+</html>
