@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>字节为什么缺席？2026 WAIC 深度观察</title>
+<style>
+:root {
+  --bg: #0f0f14;
+  --card: #1a1a24;
+  --border: #2a2a3a;
+  --text: #e0e0ea;
+  --text-dim: #8888a0;
+  --accent: #6c8cff;
+  --accent-dim: #4a6adf;
+  --highlight: #ffcd6c;
+  --green: #4ade80;
+  --pink: #f472b6;
+  --orange: #fb923c;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.8;
+  padding-bottom: 60px;
+}
+.wrap {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+/* header */
+.header {
+  text-align: center;
+  padding: 48px 0 36px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 40px;
+}
+.header .tag {
+  display: inline-block;
+  background: rgba(108,140,255,0.12);
+  color: var(--accent);
+  font-size: 12px;
+  padding: 4px 14px;
+  border-radius: 20px;
+  margin-bottom: 16px;
+  letter-spacing: 0.5px;
+}
+.header h1 {
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.35;
+  margin-bottom: 12px;
+}
+.header .meta {
+  color: var(--text-dim);
+  font-size: 13px;
+}
+.header .meta span { margin: 0 6px; }
+/* highlight box */
+.callout {
+  background: linear-gradient(135deg, rgba(108,140,255,0.06), rgba(108,140,255,0.02));
+  border: 1px solid rgba(108,140,255,0.15);
+  border-left: 3px solid var(--accent);
+  border-radius: 8px;
+  padding: 20px 24px;
+  margin-bottom: 32px;
+  font-size: 15px;
+  color: var(--text-dim);
+}
+.callout strong { color: var(--text); }
+/* section */
+.section {
+  margin-bottom: 40px;
+}
+.section h2 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section h2 .num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.section h3 {
+  font-size: 17px;
+  font-weight: 600;
+  margin: 20px 0 10px;
+  color: var(--accent);
+}
+.section p {
+  margin-bottom: 14px;
+  font-size: 15px;
+  color: var(--text-dim);
+}
+.section p strong { color: var(--text); }
+/* company card */
+.company-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 24px;
+  margin-bottom: 20px;
+}
+.company-card .title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.company-card .title-row .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.company-card .title-row .name {
+  font-size: 18px;
+  font-weight: 700;
+}
+.company-card .title-row .route {
+  font-size: 12px;
+  padding: 2px 10px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.06);
+  color: var(--text-dim);
+}
+.company-card p {
+  font-size: 14px;
+  color: var(--text-dim);
+  line-height: 1.7;
+  margin-bottom: 10px;
+}
+.company-card p strong { color: var(--text); }
+.company-card .highlight-item {
+  background: rgba(108,140,255,0.04);
+  border-left: 2px solid var(--accent-dim);
+  padding: 10px 14px;
+  margin: 10px 0;
+  font-size: 13px;
+  color: var(--text-dim);
+  border-radius: 0 6px 6px 0;
+}
+.company-card .data-point {
+  display: inline-block;
+  background: rgba(74,222,128,0.1);
+  color: var(--green);
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+}
+/* consensus cards */
+.consensus-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+.consensus-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 20px;
+}
+.consensus-card .icon {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+.consensus-card h4 {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.consensus-card p {
+  font-size: 13px;
+  color: var(--text-dim);
+  line-height: 1.7;
+}
+/* trend box */
+.trend-box {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin: 16px 0;
+}
+.trend-item {
+  flex: 1;
+  min-width: 200px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+}
+.trend-item .emoji { font-size: 20px; margin-bottom: 6px; }
+.trend-item h5 { font-size: 14px; margin-bottom: 6px; }
+.trend-item p { font-size: 12px; color: var(--text-dim); line-height: 1.6; }
+/* divider */
+.divider {
+  height: 1px;
+  background: var(--border);
+  margin: 40px 0;
+}
+/* footer */
+.footer {
+  text-align: center;
+  padding: 32px 0;
+  color: var(--text-dim);
+  font-size: 12px;
+  border-top: 1px solid var(--border);
+  margin-top: 40px;
+}
+.footer a { color: var(--accent); text-decoration: none; }
+/* responsive */
+@media (max-width: 600px) {
+  .header h1 { font-size: 22px; }
+  .company-card { padding: 18px; }
+  .trend-box { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+<div class="header">
+  <div class="tag">2026 · 世界人工智能大会</div>
+  <h1>字节为什么缺席？<br>2026 WAIC 深度观察</h1>
+  <div class="meta">
+    <span>📅 2026-07-21</span>
+    <span>·</span>
+    <span>📖 基于虎嗅报道整理</span>
+  </div>
+</div>
+
+<div class="callout">
+  <strong>核心发现：</strong>2026 年 WAIC 行业共识从"比谁技术更强"转向"比谁更懂人"。字节跳动依旧缺席，未设独立展台。AI 下半场，竞争重心彻底从模型层转向应用层——参会企业齐刷刷挤在落地的"检票口"。
+</div>
+
+<!-- 字节缺席 -->
+<div class="section">
+  <h2><span class="num">●</span> 字节跳动：缺席的"大象"</h2>
+  <p>逛完"三地四馆"会发现，<strong>字节跳动是本届 WAIC 最显眼的缺席者</strong>——未设置官方独立展台。这并非技术实力问题。字节旗下豆包大模型日调用量已从 2024 年 5 月的 1200 亿 tokens 飙升至 2026 年的数万亿级别，覆盖数亿用户。</p>
+  <p>但在 WAIC 这样的行业主场缺席，折射出一个微妙信号：<strong>字节不打算在"行业共识"层面参与竞争，而是埋头在自己的流量生态里闷声做大。</strong>当腾讯、网易、MiniMax 等纷纷亮出落地成果时，字节选择用产品说话，而不是用展台较量。</p>
+</div>
+
+<!-- 三条路径 -->
+<div class="section">
+  <h2><span class="num">1</span> 三条分化路径</h2>
+  <p>以腾讯、网易、MiniMax、B 站、小红书、知乎六家为样本，清晰划出三条落地路线。</p>
+
+  <div class="company-card">
+    <div class="title-row">
+      <span class="dot" style="background:#6c8cff;"></span>
+      <span class="name">腾讯</span>
+      <span class="route">全栈铺"牌"</span>
+    </div>
+    <p><strong>定位：</strong>把智能体（Agent）做成下一代生产力基础设施。从底层混元大模型，到 WorkBuddy、CodeBuddy，再延伸到具身智能，全栈布局只有一个主线。</p>
+    <p><strong>混元 Hy3</strong>不走堆参数老路，主打高性价比。发布一周即登顶 OpenRouter 全球大模型调用量总榜。</p>
+    <p><strong>WorkBuddy</strong>发布仅四个月，成为国内 DAU 最高办公效率智能体。2026Q2 数据显示国内 PC 端 AI 原生办公市场 6 月单月访问量破 2000 万，超第二、第三位总和。</p>
+    <p><strong>具身智能：</strong>HyVLA-0.5 已在日化品工厂实测，作业成功率超 95%，新增 SKU 适配不到 3 天。</p>
+    <div class="highlight-item">💡 <strong>SkillHub + SkillPay：</strong>7.8 万个 AI 技能 + 支付体系，首次打通技能分发、调用、支付全链路——复刻 App Store 逻辑的生态模式。</div>
+  </div>
+
+  <div class="company-card">
+    <div class="title-row">
+      <span class="dot" style="background:#fb923c;"></span>
+      <span class="name">网易</span>
+      <span class="route">深挖场景</span>
+    </div>
+    <p><strong>网易灵动</strong>（工程机械具身智能）：推出"灵载"装载机器人、"灵掘"挖掘机器人，已在全国超百个项目常态化运营。</p>
+    <p>跑通三类可复制规模模式：<strong>"人机混编"→ "牧羊人"一人多机 → "黑灯工地"</strong>（无光源全自主作业，效率超人工 120%，能耗降低 15%）。</p>
+    <p>关键优势：<strong>"即插即用"</strong>，无需对场地大规模改造。</p>
+    <p><strong>网易智企</strong>（企业级 AI）：围绕安全治理（Agent Guard）、组织协作（帝王蟹 ClawHive）、业务增长（AI 私域助理 / AI 客服 / 销售宝）三场景提供一站式方案。</p>
+    <div class="highlight-item">💡 网易的 AI 打法的核心：<strong>强调工程体系而非单点技术</strong>——从"能力涌现"到"生产力兑现"，中间隔着一整套让 AI 能上岗、能交付、能被信任的工程系统。</div>
+  </div>
+
+  <div class="company-card">
+    <div class="title-row">
+      <span class="dot" style="background:#f472b6;"></span>
+      <span class="name">内容社区</span>
+      <span class="route">用户创造力释放</span>
+    </div>
+    <p><strong>B站：</strong>每月超 <span class="data-point">1.9 亿</span>用户在站内观看 AI 相关内容。AI 创造公开赛一个月近 5000 份投稿，形成"UP 主创新 → 社区传播 → 产业对接"的完整生态。</p>
+    <p><strong>小红书：</strong>RED Skill、Vibe Coding、Builder Hub——内测一个月涌现 <span class="data-point">7300+</span> 原创技能，过去一年超 <span class="data-point">16 万</span> AI 开发者活跃，科技创作者规模增长 <span class="data-point">200%+</span>。核心优势："内容即分发"——用户刷到笔记直接使用 AI 技能，无需跳转。</p>
+    <p><strong>知乎：</strong>聚集 <span class="data-point">2100 万</span> AI 相关用户，沉淀 <span class="data-point">5717 万</span>条 AI 内容。战略价值在于开放数据基建——将十余年专业语料转化为高可信数据服务。</p>
+    <div class="highlight-item">💡 三家逻辑高度统一：AI 大幅拉低创作门槛，平台核心价值是给所有有创造力的人提供舞台。</div>
+  </div>
+
+  <div class="company-card">
+    <div class="title-row">
+      <span class="dot" style="background:#4ade80;"></span>
+      <span class="name">MiniMax</span>
+      <span class="route">创业生存样本</span>
+    </div>
+    <p>六家样本里处境最特殊——没有大厂流量，没有内容平台基本盘，唯一筹码是技术。</p>
+    <p><strong>M3 大模型：</strong>自研 MSA 稀疏注意力架构，总参数 428B、激活仅 <span class="data-point">23B</span>，最高支持 <span class="data-point">1M tokens</span> 长上下文。完成国内外主流芯片 Day 0 适配。</p>
+    <p><strong>产品端：</strong>聚焦开发者与创作者——Code 编程助手 + Hub 多模态工作台，AI 调度执行，人负责创意决策。</p>
+    <p><strong>商业化：</strong>不做终端硬件与场景，只输出 AI 能力。搭载 M3 的消费级机器狗预售销售额近亿元。已覆盖 3 亿个人用户、全球百万级企业客户。</p>
+    <div class="highlight-item">💡 <strong>"自研技术 + 轻量产品 + 生态合作"</strong>——轻资产渗透模式，避开了烧钱的 C 端流量战，为大厂夹缝中的 AI 创业公司提供了生存范本。</div>
+  </div>
+</div>
+
+<!-- 三大共识 -->
+<div class="section">
+  <h2><span class="num">2</span> AI 行业三大共识</h2>
+  <p>剥开产品与营销表层，本届 WAIC 正形成三大清晰共识：</p>
+
+  <div class="consensus-grid">
+    <div class="consensus-card">
+      <div class="icon">🎯</div>
+      <h4>竞争重心：模型层 → 应用层</h4>
+      <p>去年展台 C 位是参数榜和跑分屏；今年没人再争参数，所有人都在算 ROI。模型基础能力已跨过可用性门槛，用户选择标准从"跑分高低"转为"产品好不好用"。AI 从技术研发上半场进入应用落地下半场。</p>
+    </div>
+    <div class="consensus-card">
+      <div class="icon">🧠</div>
+      <h4>智能体是落地核心载体</h4>
+      <p>大模型只是"大脑"，智能体给大脑装上手脚。行业对智能体认知分三层：最浅层=对话+工具调用；中间层=任务规划+多步执行；最深层=长期记忆+自主决策+环境交互。认知差距本质上是对 AI 落地理解的差距。</p>
+    </div>
+    <div class="consensus-card">
+      <div class="icon">🌿</div>
+      <h4>生态价值远胜单点产品</h4>
+      <p>AI 产品没有明确边界，没有企业能覆盖所有场景。配套机制——支付体系、分成规则、版权保护、质量审核——才是生态跑通的核心。判断生态繁荣的唯一指标：<strong>开发者能不能赚到钱</strong>。腾讯 SkillHub + SkillPay 第一次跑通开发者的变现路径。</p>
+    </div>
+  </div>
+</div>
+
+<!-- 深层趋势 -->
+<div class="section">
+  <h2><span class="num">3</span> 更深层的行业转向</h2>
+
+  <div class="trend-box">
+    <div class="trend-item">
+      <div class="emoji">🤖</div>
+      <h5>具身智能走向产业化</h5>
+      <p>去年清一色机器人跳舞、端咖啡；今年大量工业落地案例集中涌现，上下游分工逐渐清晰。</p>
+    </div>
+    <div class="trend-item">
+      <div class="emoji">📱</div>
+      <h5>端侧 AI 加速普及</h5>
+      <p>AI 眼镜、耳机、NAS、机器人——越来越多硬件搭载原生 AI 能力，从云端下沉到端侧。</p>
+    </div>
+    <div class="trend-item">
+      <div class="emoji">🧑‍💻</div>
+      <h5>青年创造者成主力军</h5>
+      <p>00 后甚至 05 后大量出现在黑客松、创作者榜单。小红书入围者中最小开发者仅 12 岁。</p>
+    </div>
+  </div>
+
+  <p style="font-size:14px; color:var(--text-dim); margin-top:8px;">AI 原住民对技术的理解与上一代完全不同，当他们成为产业主力，整个行业的面貌都将面临重构。</p>
+</div>
+
+<div class="divider"></div>
+
+<!-- 结语 -->
+<div class="callout" style="border-left-color:var(--highlight);">
+  <strong style="color:var(--highlight);">写在最后：</strong> AI 行业终于从"天上"落到了"地上"。2025 年的大会更像技术秀，观众看得兴奋却觉得和自己关系不大；2026 年所有人都在聊具体场景、可量化的效率提升、已跑通的落地案例。技术的价值，永远要落地到具体的需求里。<br><br>
+  AI 下半场的竞争核心：<strong>比谁更懂人</strong>——更懂用户的真实需求，更懂场景的底层逻辑。<br><br>
+  2026 年 WAIC 叩问行业的母题：<strong>你到底为用户创造了什么价值？</strong>答案不在展台上，不在 PPT 里，在每一个用户真实的工作流与生活里。
+</div>
+
+<div class="footer">
+  <p>基于虎嗅黄青春 WAIC 报道整理 · 2026-07-21</p>
+  <p>原文：虎嗅《WAIC挤满了补票的"老登"》</p>
+  <p style="margin-top: 6px;"><a href="https://dahuir81.github.io/">🌐 dahuir81.github.io</a></p>
+</div>
+
+</div>
+
+</body>
+</html>
