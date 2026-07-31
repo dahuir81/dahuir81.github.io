@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LPO / NPO / CPO 区别：AI 数据中心光互连的三种路线</title>
+<style>
+  :root {
+    --bg: #0b0f17;
+    --bg-card: #111827;
+    --border: #1f2a3d;
+    --text: #e5e9f0;
+    --text-dim: #8b97a8;
+    --accent: #4da3ff;
+    --accent2: #76b900;
+    --warn: #f5a623;
+    --radius: 14px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    line-height: 1.75;
+    padding: 40px 20px 80px;
+  }
+  .wrap { max-width: 860px; margin: 0 auto; }
+  header { text-align: center; margin-bottom: 44px; }
+  .kicker {
+    display: inline-block;
+    font-size: 13px;
+    letter-spacing: 2px;
+    color: var(--accent);
+    border: 1px solid rgba(77,163,255,.4);
+    padding: 4px 14px;
+    border-radius: 999px;
+    margin-bottom: 20px;
+    background: rgba(77,163,255,.08);
+  }
+  h1 {
+    font-size: 31px;
+    line-height: 1.35;
+    font-weight: 700;
+    margin-bottom: 16px;
+    background: linear-gradient(120deg, #ffffff 0%, #a8b8d0 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .subtitle { color: var(--text-dim); font-size: 16px; }
+  h2 {
+    font-size: 22px;
+    margin: 46px 0 20px;
+    padding-left: 14px;
+    border-left: 4px solid var(--accent);
+  }
+  p { margin-bottom: 16px; }
+  .lead {
+    font-size: 17.5px;
+    background: linear-gradient(135deg, rgba(77,163,255,.12), rgba(118,185,0,.10));
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px 26px;
+    margin-bottom: 10px;
+  }
+  .lead strong { color: var(--accent); }
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin: 24px 0;
+  }
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    transition: transform .2s ease, border-color .2s ease;
+  }
+  .card:hover { transform: translateY(-3px); }
+  .card.c1 { border-top: 3px solid #4da3ff; }
+  .card.c2 { border-top: 3px solid #f5a623; }
+  .card.c3 { border-top: 3px solid #76b900; }
+  .card .icon { font-size: 28px; margin-bottom: 8px; }
+  .card h3 { font-size: 17px; margin-bottom: 4px; }
+  .card .en { color: var(--text-dim); font-size: 12.5px; margin-bottom: 10px; }
+  .card p { font-size: 13.8px; color: var(--text-dim); margin: 0; }
+  .tag {
+    display: inline-block;
+    font-size: 11.5px;
+    padding: 2px 10px;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+  .tag-lpo { background: rgba(77,163,255,.15); color: #4da3ff; }
+  .tag-npo { background: rgba(245,166,35,.15); color: #f5a623; }
+  .tag-cpo { background: rgba(118,185,0,.15); color: #76b900; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin: 24px 0;
+    font-size: 14px;
+  }
+  th {
+    background: #1a2334;
+    text-align: left;
+    padding: 13px 14px;
+    font-weight: 600;
+    color: #c9d4e4;
+    white-space: nowrap;
+  }
+  td {
+    padding: 12px 14px;
+    border-top: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .dim { color: var(--text-dim); }
+  .hl-blue { color: #4da3ff; font-weight: 600; }
+  .hl-green { color: #76b900; font-weight: 600; }
+  .hl-orange { color: #f5a623; font-weight: 600; }
+  .point-list { list-style: none; margin: 20px 0; }
+  .point-list li {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 22px;
+    margin-bottom: 12px;
+  }
+  .point-list li strong { display: block; margin-bottom: 4px; font-size: 15.5px; }
+  .point-list li span { color: var(--text-dim); font-size: 14px; }
+  .verdict {
+    background: linear-gradient(135deg, rgba(77,163,255,.13), rgba(118,185,0,.10));
+    border: 1px solid rgba(77,163,255,.35);
+    border-radius: var(--radius);
+    padding: 26px 28px;
+    margin-top: 40px;
+    text-align: center;
+    font-size: 18.5px;
+    font-weight: 600;
+  }
+  .verdict small { display: block; margin-top: 10px; font-size: 13.5px; color: var(--text-dim); font-weight: 400; }
+  footer { margin-top: 60px; text-align: center; color: var(--text-dim); font-size: 13px; }
+  @media (max-width: 720px) {
+    .cards { grid-template-columns: 1fr; }
+    h1 { font-size: 24px; }
+    th, td { padding: 9px 10px; font-size: 12.5px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="kicker">光互连 · 技术路线图</div>
+    <h1>LPO / NPO / CPO：AI 数据中心<br>光互连的三种路线，一张图看懂</h1>
+    <div class="subtitle">当传统可插拔光模块扛不住带宽与功耗，业界押注的三条进化路径</div>
+  </header>
+
+  <div class="lead">
+    一句话结论：三种方案解决的是同一个问题——<strong>AI 集群带宽爆炸后，光模块的功耗、成本和信号完整性怎么破</strong>。
+    LPO 是「<strong>现在赚钱</strong>」的务实改良，CPO 是「<strong>将来洗牌</strong>」的终极方案，NPO 是夹在中间的过渡路线。
+  </div>
+
+  <h2>先看背景：为什么光互连要革命</h2>
+  <p>AI 大模型集群把交换带宽从 400G 推向 800G、1.6T，传统可插拔光模块（QSFP-DD / OSFP）里必须装一颗 DSP 芯片来补偿信号，结果就是：<strong>功耗飙升、成本高企、信号路径太长</strong>。一颗 800G 模块的功耗可以到 14-18W，一座万卡集群光模块就是几千颗，电费惊人。于是业界沿「把光引擎往交换芯片越挪越近」的思路，分化出三条路线。</p>
+
+  <h2>三种方案速览</h2>
+  <div class="cards">
+    <div class="card c1">
+      <div class="tag tag-lpo">当下主力 · 已量产</div>
+      <div class="icon">🔌</div>
+      <h3>LPO</h3>
+      <div class="en">Linear-drive Pluggable Optics<br>线性驱动可插拔光模块</div>
+      <p>还是可插拔模块，但拆掉模块内的 DSP，改用线性驱动直连，靠交换芯片侧 SerDes 做均衡。</p>
+    </div>
+    <div class="card c2">
+      <div class="tag tag-npo">过渡路线 · 厂商试水</div>
+      <div class="icon">🧩</div>
+      <h3>NPO</h3>
+      <div class="en">Near-Packaged Optics<br>近封装光学</div>
+      <p>把光引擎从模块里挪出来，放到交换芯片的封装基板上、芯片旁边，缩短电信号路径。</p>
+    </div>
+    <div class="card c3">
+      <div class="tag tag-cpo">终局方案 · 小批量</div>
+      <div class="icon">💡</div>
+      <h3>CPO</h3>
+      <div class="en">Co-Packaged Optics<br>共封装光学</div>
+      <p>光引擎直接与交换芯片封装在一起（2.5D 同基板），电信号路径最短，功耗和延迟最低。</p>
+    </div>
+  </div>
+
+  <h2>核心对比表</h2>
+  <table>
+    <tr>
+      <th>维度</th>
+      <th>传统可插拔（DSP）</th>
+      <th>LPO</th>
+      <th>NPO</th>
+      <th>CPO</th>
+    </tr>
+    <tr>
+      <td><strong>光引擎位置</strong></td>
+      <td>可插拔模块内</td>
+      <td>可插拔模块内</td>
+      <td class="hl-orange">交换芯片封装基板上</td>
+      <td class="hl-green">交换芯片封装内部</td>
+    </tr>
+    <tr>
+      <td><strong>模块内 DSP</strong></td>
+      <td>有</td>
+      <td class="hl-blue">去掉（线性直驱）</td>
+      <td>无（光引擎移出）</td>
+      <td>无（光引擎移出）</td>
+    </tr>
+    <tr>
+      <td><strong>功耗</strong></td>
+      <td>高（基准）</td>
+      <td class="hl-blue">降 30%~50%</td>
+      <td>较低</td>
+      <td class="hl-green">最低</td>
+    </tr>
+    <tr>
+      <td><strong>电信号路径</strong></td>
+      <td>长</td>
+      <td>长</td>
+      <td>中</td>
+      <td class="hl-green">最短</td>
+    </tr>
+    <tr>
+      <td><strong>可维护性</strong></td>
+      <td class="hl-green">最好（热拔插）</td>
+      <td>好（热拔插）</td>
+      <td>中</td>
+      <td>差（坏了整片换）</td>
+    </tr>
+    <tr>
+      <td><strong>技术/工艺难度</strong></td>
+      <td>低</td>
+      <td>中（考验 SerDes）</td>
+      <td>中高</td>
+      <td class="hl-green">最高（良率是坎）</td>
+    </tr>
+    <tr>
+      <td><strong>传输距离</strong></td>
+      <td>远（DSP 补偿强）</td>
+      <td class="dim">受限，以短距为主</td>
+      <td>中短距</td>
+      <td>短距（机柜内为主）</td>
+    </tr>
+    <tr>
+      <td><strong>成熟度（2026）</strong></td>
+      <td class="hl-green">完全成熟</td>
+      <td class="hl-blue">800G 量产放量</td>
+      <td class="hl-orange">早期试水</td>
+      <td class="hl-orange">小批量商用</td>
+    </tr>
+    <tr>
+      <td><strong>产业主导者</strong></td>
+      <td>光模块厂</td>
+      <td>光模块厂</td>
+      <td>设备厂 + 光模块厂</td>
+      <td class="hl-green">芯片厂（博通等）</td>
+    </tr>
+  </table>
+
+  <h2>三条路线各自的算盘</h2>
+  <ul class="point-list">
+    <li>
+      <strong class="hl-blue">LPO：省掉 DSP，性价比立竿见影</strong>
+      <span>一颗高速 DSP 芯片成本不低，去掉它模块功耗直接降三到五成、成本显著下降、延迟更低。代价是把信号均衡的压力甩给了交换芯片的 SerDes——主机侧必须够强。800G LPO 已经量产，1.6T LPO 正在路上。这是光模块厂最愿意推的路线，因为<strong>产品形态没变，他们依然是主角</strong>。</span>
+    </li>
+    <li>
+      <strong class="hl-orange">NPO：折中方案，位置尴尬</strong>
+      <span>光引擎挪到基板上，比 LPO 更进一步，又比 CPO 工艺简单、可维护性好一些。但两头不讨好：性能不如 CPO，成本和量产难度又高于 LPO。多数厂商把它当技术储备，市场存在感偏弱，<strong>存在被直接跳过的可能</strong>。</span>
+    </li>
+    <li>
+      <strong class="hl-green">CPO：终极形态，产业大洗牌</strong>
+      <span>光引擎和交换芯片做进同一个封装，带宽密度、功耗、延迟全面最优，是超大规模数据中心的长期答案。代价是工艺和良率极难、光引擎不可维护、整条产业链要重构。博通基于 CPO 的 51.2T 交换芯片已经小批量出货，<strong>一旦规模商用，传统可插拔光模块的市场逻辑会被颠覆</strong>。</span>
+    </li>
+  </ul>
+
+  <h2>商业视角：谁赚钱、谁受伤</h2>
+  <ul class="point-list">
+    <li>
+      <strong>短期（2025-2027）：LPO 是业绩主战场</strong>
+      <span>800G LPO 订单放量，头部光模块厂商直接受益；1.6T 光模块进入送样与验证期。这是「看得见的增长」。</span>
+    </li>
+    <li>
+      <strong>中期（2027-2030）：CPO 开始抢蛋糕</strong>
+      <span>博通、Marvell 等芯片厂主导 CPO，交换机形态从「插模块」变成「整机光互联」。光模块厂的角色从主角变成配件商，<strong>产业话语权向芯片厂转移</strong>。</span>
+    </li>
+    <li>
+      <strong>投资与生意启示</strong>
+      <span>LPO 赚的是当下的钱，CPO 炒的是未来的预期。国产阵营（光模块厂、华为/中兴等设备厂）在 LPO 上全球领先，在 CPO 上落后博通约一代——这既是风险，也是国产替代的故事空间。</span>
+    </li>
+  </ul>
+
+  <div class="verdict">
+    LPO 是改良，NPO 是过渡，CPO 是革命。
+    <small>对从业者而言：先吃 LPO 的利润，再赌 CPO 的生态位——两边都不能缺席。</small>
+  </div>
+
+  <footer>光互连技术科普 · 2026-07</footer>
+
+</div>
+</body>
+</html>
