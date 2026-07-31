@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BlueField-3 vs ConnectX-6/7：NVIDIA 网卡与 DPU 的区别</title>
+<style>
+  :root {
+    --bg: #0b0f17;
+    --bg-card: #111827;
+    --bg-card-hover: #16202f;
+    --border: #1f2a3d;
+    --text: #e5e9f0;
+    --text-dim: #8b97a8;
+    --accent: #76b900;
+    --accent2: #4da3ff;
+    --warn: #f5a623;
+    --radius: 14px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    line-height: 1.75;
+    padding: 40px 20px 80px;
+  }
+  .wrap { max-width: 820px; margin: 0 auto; }
+  header { text-align: center; margin-bottom: 48px; }
+  .kicker {
+    display: inline-block;
+    font-size: 13px;
+    letter-spacing: 2px;
+    color: var(--accent);
+    border: 1px solid rgba(118,185,0,.4);
+    padding: 4px 14px;
+    border-radius: 999px;
+    margin-bottom: 20px;
+    background: rgba(118,185,0,.08);
+  }
+  h1 {
+    font-size: 32px;
+    line-height: 1.35;
+    font-weight: 700;
+    margin-bottom: 16px;
+    background: linear-gradient(120deg, #ffffff 0%, #a8b8d0 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .subtitle { color: var(--text-dim); font-size: 16px; }
+  h2 {
+    font-size: 22px;
+    margin: 48px 0 20px;
+    padding-left: 14px;
+    border-left: 4px solid var(--accent);
+  }
+  p { margin-bottom: 16px; color: var(--text); }
+  .lead {
+    font-size: 18px;
+    background: linear-gradient(135deg, rgba(77,163,255,.12), rgba(118,185,0,.10));
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px 26px;
+    margin-bottom: 12px;
+  }
+  .lead strong { color: var(--accent2); }
+  .analogy {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 24px 0;
+  }
+  .analogy-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px;
+    transition: transform .2s ease, border-color .2s ease;
+  }
+  .analogy-card:hover { transform: translateY(-3px); border-color: var(--accent2); }
+  .analogy-card .icon { font-size: 30px; margin-bottom: 10px; }
+  .analogy-card h3 { font-size: 16px; margin-bottom: 8px; }
+  .analogy-card p { color: var(--text-dim); font-size: 14px; margin: 0; }
+  .tag {
+    display: inline-block;
+    font-size: 12px;
+    padding: 2px 10px;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+  .tag-nic { background: rgba(77,163,255,.15); color: var(--accent2); }
+  .tag-dpu { background: rgba(118,185,0,.15); color: var(--accent); }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin: 24px 0;
+    font-size: 15px;
+  }
+  th {
+    background: #1a2334;
+    text-align: left;
+    padding: 14px 16px;
+    font-weight: 600;
+    color: #c9d4e4;
+    white-space: nowrap;
+  }
+  td {
+    padding: 13px 16px;
+    border-top: 1px solid var(--border);
+    color: var(--text);
+    vertical-align: top;
+  }
+  td.dim { color: var(--text-dim); }
+  .hl { color: var(--accent); font-weight: 600; }
+  .hl2 { color: var(--accent2); font-weight: 600; }
+  .point-list { list-style: none; margin: 20px 0; }
+  .point-list li {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 22px;
+    margin-bottom: 12px;
+  }
+  .point-list li strong { color: var(--accent2); display: block; margin-bottom: 4px; font-size: 16px; }
+  .point-list li span { color: var(--text-dim); font-size: 14.5px; }
+  .verdict {
+    background: linear-gradient(135deg, rgba(118,185,0,.14), rgba(77,163,255,.10));
+    border: 1px solid rgba(118,185,0,.35);
+    border-radius: var(--radius);
+    padding: 26px 28px;
+    margin-top: 40px;
+    text-align: center;
+    font-size: 19px;
+    font-weight: 600;
+  }
+  .verdict small { display: block; margin-top: 10px; font-size: 13.5px; color: var(--text-dim); font-weight: 400; }
+  footer { margin-top: 60px; text-align: center; color: var(--text-dim); font-size: 13px; }
+  @media (max-width: 640px) {
+    .analogy { grid-template-columns: 1fr; }
+    h1 { font-size: 25px; }
+    th, td { padding: 10px 12px; font-size: 13.5px; }
+    .wrap { padding: 0; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="kicker">网络硬件 · 一图看懂</div>
+    <h1>BlueField-3 与 ConnectX-6/7：<br>NVIDIA 网卡和 DPU 到底差在哪？</h1>
+    <div class="subtitle">三张卡、两个物种：一个负责「把数据送进门」，一个负责「进门之前把活干完」</div>
+  </header>
+
+  <div class="lead">
+    一句话结论：<strong>ConnectX-6 / CX7 是纯网卡（SmartNIC）</strong>，干的是高速传输的活；
+    <strong>BlueField-3 是 DPU（数据处理单元）</strong>，是「网卡 + ARM CPU + 可编程引擎」三合一的片上系统，干的是网络入口处的计算卸载。
+  </div>
+
+  <h2>先打个比方</h2>
+  <div class="analogy">
+    <div class="analogy-card">
+      <div class="tag tag-nic">ConnectX 系列</div>
+      <div class="icon">🏁</div>
+      <h3>高速公路收费站</h3>
+      <p>只管把数据快速放行，功能出厂定死，专注极致带宽和低延迟。</p>
+    </div>
+    <div class="analogy-card">
+      <div class="tag tag-dpu">BlueField-3</div>
+      <div class="icon">🛂</div>
+      <h3>收费站 + 服务区 + 检查站</h3>
+      <p>车进门先安检、卸货、分流，主机的 CPU 全程不用操心，还能按需自定义服务。</p>
+    </div>
+  </div>
+
+  <h2>核心规格对比</h2>
+  <table>
+    <tr>
+      <th>维度</th>
+      <th>ConnectX-6</th>
+      <th>ConnectX-7</th>
+      <th>BlueField-3</th>
+    </tr>
+    <tr>
+      <td><strong>定位</strong></td>
+      <td>SmartNIC 网卡</td>
+      <td>SmartNIC 网卡</td>
+      <td class="hl">DPU 数据处理单元</td>
+    </tr>
+    <tr>
+      <td><strong>速率</strong></td>
+      <td>200Gb/s<br><span class="dim">HDR / 200G</span></td>
+      <td class="hl2">400Gb/s<br><span class="dim">NDR / 400G</span></td>
+      <td class="hl2">400Gb/s<br><span class="dim">NDR / 400G</span></td>
+    </tr>
+    <tr>
+      <td><strong>PCIe 接口</strong></td>
+      <td>PCIe 4.0</td>
+      <td class="hl2">PCIe 5.0 x16</td>
+      <td class="hl2">PCIe 5.0 x16</td>
+    </tr>
+    <tr>
+      <td><strong>核心部件</strong></td>
+      <td>转发 ASIC</td>
+      <td>转发 ASIC</td>
+      <td class="hl">转发 ASIC + 16 核 ARM CPU<br>+ 8 通道 DDR5 内存</td>
+    </tr>
+    <tr>
+      <td><strong>可编程性</strong></td>
+      <td>固定硬件卸载</td>
+      <td>固定硬件卸载（更全）</td>
+      <td class="hl">完全可编程<br><span class="dim">支持 DOCA 软件框架</span></td>
+    </tr>
+    <tr>
+      <td><strong>典型场景</strong></td>
+      <td class="dim">上一代主力，二手市场量大</td>
+      <td>AI 训练集群、大模型标配</td>
+      <td>云厂商 / 运营商 / 金融的<br>网络虚拟化、存储、安全卸载</td>
+    </tr>
+  </table>
+
+  <h2>三个关键差异</h2>
+  <ul class="point-list">
+    <li>
+      <strong>① 芯片架构不同</strong>
+      <span>CX6/CX7 是专用转发芯片，功能出厂定死，只支持固定的硬件卸载（RoCE、NVMe-oF 等）；BF3 是完整的 SoC 片上系统，网卡里装了一台微型服务器，客户可以自己写程序跑在上面。</span>
+    </li>
+    <li>
+      <strong>② 卸载能力量级不同</strong>
+      <span>CX7 只能卸载网络协议栈；BF3 能把 Open vSwitch、防火墙、分布式存储（NVMe-oF）整套搬到网卡上，主机 CPU 占用率可以显著下降，这是「网卡」和「DPU」的分水岭。</span>
+    </li>
+    <li>
+      <strong>③ 价格差一个数量级</strong>
+      <span>CX6 如今在二手市场几百到一两千元就能淘到；CX7 是当前主流新卡；BF3 单卡价格可以顶好几张 CX7，定位完全不同。</span>
+    </li>
+  </ul>
+
+  <h2>怎么选：商业视角</h2>
+  <ul class="point-list">
+    <li>
+      <strong>跑 AI 训练 / 组高性能集群 → ConnectX-7</strong>
+      <span>NVIDIA GPU 集群的标配网卡，极致带宽 + 低延迟，性价比最高，是当前 AI 算力建设的主流选择。</span>
+    </li>
+    <li>
+      <strong>做云、运营商、金融大项目 → BlueField-3</strong>
+      <span>「算力卸载」「网络虚拟化下沉」「安全前置」是它讲得动的故事，方案价值高、客单价高。</span>
+    </li>
+    <li>
+      <strong>预算敏感 / 实验室 / 二手市场 → ConnectX-6</strong>
+      <span>大量退役卡流入市场，组 200G 内网性价比极高，是 Homelab 和中小公司的捡漏选项。</span>
+    </li>
+  </ul>
+
+  <div class="verdict">
+    CX7 是给 GPU 当「快递员」的，BF3 是给数据中心当「管家」的。
+    <small>关注国产算力替代的读者，可以留意昇腾生态中对应的智能网卡与 DPU 布局，逻辑完全相通。</small>
+  </div>
+
+  <footer>网络硬件科普 · 2026-07</footer>
+
+</div>
+</body>
+</html>
