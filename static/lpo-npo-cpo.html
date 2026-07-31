@@ -169,6 +169,52 @@
   <h2>先看背景：为什么光互连要革命</h2>
   <p>AI 大模型集群把交换带宽从 400G 推向 800G、1.6T，传统可插拔光模块（QSFP-DD / OSFP）里必须装一颗 DSP 芯片来补偿信号，结果就是：<strong>功耗飙升、成本高企、信号路径太长</strong>。一颗 800G 模块的功耗可以到 14-18W，一座万卡集群光模块就是几千颗，电费惊人。于是业界沿「把光引擎往交换芯片越挪越近」的思路，分化出三条路线。</p>
 
+  <h2>先认识 OE：xPO 的共同主角</h2>
+  <p>聊 xPO 之前，先认识里面的核心零件——<strong>OE（Optical Engine，光引擎）</strong>。它是光电转换单元，由三部分组成：</p>
+  <ul class="point-list">
+    <li>
+      <strong>光芯片（激光器 + 探测器）</strong>
+      <span>负责电信号与光信号的互相转换，是 OE 的心脏。</span>
+    </li>
+    <li>
+      <strong>电芯片（Driver + TIA）</strong>
+      <span>负责驱动激光器发光、放大接收到的信号。</span>
+    </li>
+    <li>
+      <strong>光学组件（透镜、光纤耦合）</strong>
+      <span>负责把光高效耦合进、出光纤。</span>
+    </li>
+  </ul>
+  <p>LPO / NPO / CPO 改变的从来不是 OE 本身，而是<strong>「OE 放在哪、怎么跟交换芯片连」</strong>——同一颗 OE，四个不同的家：</p>
+  <table>
+    <tr>
+      <th>方案</th>
+      <th>OE 的安装位置</th>
+      <th>模块里还有什么</th>
+    </tr>
+    <tr>
+      <td><strong>传统可插拔</strong></td>
+      <td>可插拔模块内</td>
+      <td>OE + DSP（信号补偿芯片）</td>
+    </tr>
+    <tr>
+      <td><strong class="hl-blue">LPO</strong></td>
+      <td>可插拔模块内</td>
+      <td class="hl-blue">只有 OE（DSP 拆掉，线性直驱）</td>
+    </tr>
+    <tr>
+      <td><strong class="hl-orange">NPO</strong></td>
+      <td class="hl-orange">交换芯片封装基板上（芯片旁）</td>
+      <td>无模块，OE 焊在板上</td>
+    </tr>
+    <tr>
+      <td><strong class="hl-green">CPO</strong></td>
+      <td class="hl-green">交换芯片封装内部（2.5D 同基板）</td>
+      <td>无模块，OE 与芯片共封装</td>
+    </tr>
+  </table>
+  <p>一句话：<strong>OE 是能力，xPO 是座位</strong>——能力在自己手里，但坐哪儿、谁说了算，由 xPO 决定。记住这条，下面的商业视角就好理解了。</p>
+
   <h2>三种方案速览</h2>
   <div class="cards">
     <div class="card c1">
