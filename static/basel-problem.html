@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>巴塞尔问题：为什么 1 + 1/4 + 1/9 + … = π²/6？</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --card: #161b26;
+    --card2: #1c2333;
+    --text: #e6edf3;
+    --dim: #9aa7b8;
+    --accent: #58a6ff;
+    --gold: #f0b429;
+    --green: #3fb950;
+    --pink: #f778ba;
+    --purple: #a371f7;
+    --red: #f85149;
+    --radius: 16px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    line-height: 1.8;
+    padding: 0 16px 80px;
+  }
+  .wrap { max-width: 820px; margin: 0 auto; }
+  header {
+    text-align: center;
+    padding: 56px 0 36px;
+    background: radial-gradient(ellipse at top, #1b2a4a 0%, var(--bg) 65%);
+    border-radius: 0 0 24px 24px;
+  }
+  .kicker { color: var(--gold); letter-spacing: 4px; font-size: 14px; font-weight: 700; }
+  h1 { font-size: clamp(26px, 4.5vw, 40px); margin: 12px 0 8px; line-height: 1.3; }
+  h1 .pi { color: var(--accent); }
+  .subtitle { color: var(--dim); font-size: 16px; }
+  .big-formula {
+    margin: 24px auto 0;
+    background: var(--card);
+    border: 1px solid #2a3550;
+    border-radius: var(--radius);
+    padding: 20px 16px;
+    font-size: clamp(18px, 3.2vw, 26px);
+    font-weight: 700;
+    max-width: 640px;
+    font-family: "STIX Two Math", "Times New Roman", serif;
+  }
+  .big-formula .equals { color: var(--gold); }
+
+  section { margin-top: 40px; }
+  .card {
+    background: var(--card);
+    border: 1px solid #232d42;
+    border-radius: var(--radius);
+    padding: 24px 22px;
+    margin-bottom: 20px;
+  }
+  .card h2 {
+    font-size: 20px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .card h2 .num {
+    background: linear-gradient(135deg, var(--accent), var(--purple));
+    color: #fff;
+    width: 30px; height: 30px;
+    border-radius: 9px;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 15px; flex-shrink: 0;
+  }
+  .card p { margin-bottom: 12px; color: #d7dee8; }
+  .card p:last-child { margin-bottom: 0; }
+  .em { color: var(--gold); font-weight: 700; }
+  .hl { color: var(--accent); font-weight: 700; }
+  .green { color: var(--green); font-weight: 700; }
+  .pink { color: var(--pink); font-weight: 700; }
+
+  .formula {
+    background: var(--card2);
+    border-left: 4px solid var(--accent);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin: 14px 0;
+    font-family: "STIX Two Math", "Times New Roman", serif;
+    font-size: 17px;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  .formula.gold { border-left-color: var(--gold); }
+  .formula.green { border-left-color: var(--green); }
+  .formula.pink { border-left-color: var(--pink); }
+  .formula .fraction { display: inline-block; text-align: center; vertical-align: middle; }
+  .formula .fraction .top { display: block; border-bottom: 1.5px solid currentColor; padding: 0 4px; }
+  .formula .fraction .bottom { display: block; padding: 0 4px; }
+
+  .tip {
+    background: #1a2a1e;
+    border: 1px solid #2d4a33;
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin: 14px 0;
+    color: #a8d5ad;
+    font-size: 15px;
+  }
+  .tip strong { color: var(--green); }
+
+  /* 互动区 */
+  .interactive {
+    background: linear-gradient(160deg, #131c2e, var(--card));
+    border: 1px solid #2a3550;
+    border-radius: var(--radius);
+    padding: 24px;
+    margin: 20px 0;
+  }
+  .interactive h3 { color: var(--accent); margin-bottom: 8px; font-size: 17px; }
+  .sum-display {
+    font-size: clamp(24px, 5vw, 34px);
+    font-weight: 800;
+    font-family: "STIX Two Math", "Times New Roman", serif;
+    text-align: center;
+    padding: 10px 0 4px;
+  }
+  .sum-display .target { color: var(--dim); font-size: 0.55em; font-weight: 400; }
+  .sum-display .target b { color: var(--green); }
+  .slider-row { display: flex; align-items: center; gap: 14px; margin: 14px 0 6px; flex-wrap: wrap; }
+  .slider-row label { color: var(--dim); font-size: 14px; white-space: nowrap; }
+  .slider-row input[type=range] { flex: 1; min-width: 200px; accent-color: var(--accent); height: 6px; }
+  .n-badge {
+    background: var(--accent);
+    color: #04101f;
+    font-weight: 800;
+    border-radius: 8px;
+    padding: 2px 12px;
+    font-size: 15px;
+    white-space: nowrap;
+  }
+  .bars { display: flex; align-items: flex-end; gap: 2px; height: 90px; margin-top: 12px; }
+  .bars .bar { background: linear-gradient(to top, var(--accent), var(--purple)); border-radius: 2px 2px 0 0; min-width: 2px; }
+  .bar-label { color: var(--dim); font-size: 12px; margin-top: 4px; text-align: center; }
+
+  canvas { width: 100%; height: auto; display: block; border-radius: 10px; background: #0a0e16; border: 1px solid #232d42; margin: 12px 0; }
+  .canvas-caption { color: var(--dim); font-size: 13px; text-align: center; margin-top: 6px; }
+
+  .story {
+    background: #241d12;
+    border: 1px solid #4a3a1a;
+    border-radius: 12px;
+    padding: 16px 18px;
+    margin: 14px 0;
+  }
+  .story strong { color: var(--gold); }
+
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 640px) { .grid2 { grid-template-columns: 1fr; } }
+  .mini {
+    background: var(--card2);
+    border-radius: 12px;
+    padding: 16px;
+    border: 1px solid #232d42;
+  }
+  .mini h4 { color: var(--accent); margin-bottom: 6px; font-size: 15px; }
+
+  ul.clean { list-style: none; }
+  ul.clean li { padding-left: 26px; position: relative; margin-bottom: 10px; color: #d7dee8; }
+  ul.clean li::before {
+    content: "✦";
+    position: absolute; left: 2px;
+    color: var(--gold);
+  }
+
+  .finale {
+    text-align: center;
+    padding: 30px 20px;
+    background: linear-gradient(160deg, #1b2a4a, #241d12);
+    border: 1px solid #2a3550;
+    border-radius: var(--radius);
+  }
+  .finale .big { font-size: clamp(22px, 4.5vw, 32px); font-weight: 800; margin-bottom: 8px; }
+  .finale .big .pi { color: var(--accent); }
+  .footer-note { text-align: center; color: var(--dim); font-size: 13px; margin-top: 36px; }
+
+  .btn-play {
+    background: var(--accent);
+    color: #04101f;
+    border: none;
+    border-radius: 8px;
+    padding: 6px 16px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-right: 8px;
+  }
+  .btn-play:hover { background: #79c0ff; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="kicker">给小朋友的数学侦探故事</div>
+    <h1>巴塞尔问题：为什么<br><span class="pi">1 + 1/4 + 1/9 + …</span> = <span class="pi">π²/6</span>？</h1>
+    <p class="subtitle">一个让数学家苦恼了 90 年的谜题，被 28 岁的欧拉用"大胆想象"解开</p>
+    <div class="big-formula">
+      <span class="fraction"><span class="top">1</span><span class="bottom">1²</span></span>
+      &nbsp;+&nbsp;
+      <span class="fraction"><span class="top">1</span><span class="bottom">2²</span></span>
+      &nbsp;+&nbsp;
+      <span class="fraction"><span class="top">1</span><span class="bottom">3²</span></span>
+      &nbsp;+&nbsp;
+      <span class="fraction"><span class="top">1</span><span class="bottom">4²</span></span>
+      &nbsp;+&nbsp; …&nbsp;&nbsp;
+      <span class="equals">=</span>&nbsp;&nbsp;
+      <span class="fraction"><span class="top">π²</span><span class="bottom">6</span></span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- 问题 -->
+  <section>
+    <div class="card">
+      <h2><span class="num">1</span>先来玩一个加法游戏</h2>
+      <p>我们从 <b>1</b> 开始，然后加上 <b>1/4</b>（也就是 0.25），再加上 <b>1/9</b>（约 0.111），再加 <b>1/16</b>（0.0625）……</p>
+      <p>规律是：每一项的分母是 <span class="hl">1²、2²、3²、4²……</span>（也就是 1×1、2×2、3×3、4×4……）。</p>
+      <p>这些数越来越小，像一块块越来越小的饼干。问题是：<span class="em">如果一直加下去，总数会停在哪里？</span></p>
+
+      <div class="interactive">
+        <h3>🧪 你来试试：拖动滑块，看总和怎么增长</h3>
+        <div class="sum-display">
+          <span id="sumValue">1.000000</span>
+          <span class="target">（目标：<b>π²/6 ≈ 1.644934</b>）</span>
+        </div>
+        <div class="slider-row">
+          <label>加到第</label>
+          <input type="range" id="nSlider" min="1" max="200" value="10">
+          <span class="n-badge" id="nBadge">n = 10</span>
+        </div>
+        <div class="bars" id="bars"></div>
+        <div class="bar-label">每根柱子的高度 = 1/n²（第 n 个分数的"大小"），把所有柱子加起来就是总和</div>
+        <div style="margin-top:12px">
+          <button class="btn-play" id="btnPlay">▶ 自动播放加到 200 项</button>
+          <span id="playHint" style="color:var(--dim);font-size:13px"></span>
+        </div>
+      </div>
+
+      <p>你会看到：不管加到多少项，总和都<span class="hl">永远不会超过 1.645</span>，它慢慢地、稳稳地靠近一个神秘数字——<span class="em">1.644934…</span></p>
+      <p>这个数字有个大名鼎鼎的身份：<span class="green">π²/6</span>。把圆周率 π 自己乘自己，再除以 6！</p>
+    </div>
+  </section>
+
+  <!-- 惊人之处 -->
+  <section>
+    <div class="card">
+      <h2><span class="num">2</span>哪里奇怪？π 是"圆的"，怎么跑进"平方数"里了？</h2>
+      <p>π ≈ 3.14159，它是<span class="hl">圆的周长 ÷ 直径</span>，是"圆"的专属数字。</p>
+      <p>而我们的问题里全是 <span class="hl">1、4、9、16…</span> 这些平方数，一个圆都没有，一个三角形都没有。</p>
+      <p>就像你拿做蛋糕的配方，居然算出了火箭的燃料——<span class="em">风马牛不相及的东西，怎么会变成同一个答案？</span></p>
+      <p>这正是当年全世界数学家抓狂的原因。1696 年有人提出这个问题（因为提出者来自瑞士的巴塞尔城，所以叫<span class="hl">巴塞尔问题</span>），结果 90 年里没人能回答。</p>
+
+      <div class="story">
+        <strong>📜 历史小故事：</strong>1735 年，瑞士一位 28 岁的年轻数学家——<b>莱昂哈德·欧拉</b>——宣布自己解出来了。更神奇的是，他用的方法大胆得让前辈们直摇头：<span class="em">他把"无穷大"当成普通的多项式来算</span>。数学界后来花了很长时间才证明：欧拉，你是对的。
+      </div>
+    </div>
+  </section>
+
+  <!-- 热身 -->
+  <section>
+    <div class="card">
+      <h2><span class="num">3</span>热身：会"拆开"的多项式</h2>
+      <p>欧拉破案的第一件武器，是你可能见过的"因式分解"。别被名字吓到，它其实很简单。</p>
+      <p>先看一个普通的多项式：</p>
+      <div class="formula">x² − 5x + 6 = (x − 2)(x − 3)</div>
+      <p>你可以在心里展开验证：(x − 2)(x − 3) = x² − 3x − 2x + 6 = x² − 5x + 6 ✔</p>
+      <p>注意一件有意思的事：<span class="em">这个多项式在 x = 2 和 x = 3 时等于 0</span>（因为 2−2=0，3−3=0）。我们把这样的 x 叫做多项式的<span class="hl">"零点"</span>。</p>
+      <div class="tip">
+        <strong>💡 关键规律：</strong>知道一个多项式的"零点"，就能把它拆成"（x − 零点1）×（x − 零点2）× …"的样子。反过来，拆开了，就知道它的每个零件长什么样。
+      </div>
+      <p>欧拉的疯狂想法是：<span class="pink">sin x 这种"波浪函数"，是不是也可以当做一个"无限长的多项式"来拆？</span></p>
+    </div>
+  </section>
+
+  <!-- sin 图像 -->
+  <section>
+    <div class="card">
+      <h2><span class="num">4</span>认识 sin x：一条会画波浪的曲线</h2>
+      <p>sin x 是三角函数家族的一员，它画出来的图像像大海的波浪，上上下下，永远不停（角度用"弧度"来量，一圈是 2π ≈ 6.28）。</p>
+      <canvas id="sinCanvas" width="780" height="260"></canvas>
+      <div class="canvas-caption">sin x 的图像：波浪在 x = ±π、±2π、±3π …… 处穿过 x 轴（红点），这些就是它的"零点"</div>
+      <p>注意看红点：sin x 的零点在 <span class="hl">±π, ±2π, ±3π, ±4π ……</span>，一个接一个，像路灯一样均匀排列。</p>
+      <p>如果 sin x 真是"无限长的多项式"，那它的零点这么多，拆开来的因式也得有这么多！</p>
+    </div>
+  </section>
+
+  <!-- 欧拉推理 -->
+  <section>
+    <div class="card">
+      <h2><span class="num">5</span>欧拉的破案现场（四步推理）</h2>
+
+      <p><b>第 1 步：</b>把 sin x 写成"无限长的多项式"（这叫泰勒展开，欧拉时代的前辈们已经会了）：</p>
+      <div class="formula">sin x = x − <span class="fraction"><span class="top">x³</span><span class="bottom">3!</span></span> + <span class="fraction"><span class="top">x⁵</span><span class="bottom">5!</span></span> − <span class="fraction"><span class="top">x⁷</span><span class="bottom">7!</span></span> + …</div>
+      <div class="tip"><strong>📌 小知识：</strong>3! 读作"3 的阶乘"，意思是 3×2×1 = 6。所以 3! = 6，5! = 5×4×3×2×1 = 120。</div>
+      <p>两边都除以 x（这样更方便，因为 x² 的"位置"会更明显）：</p>
+      <div class="formula gold">
+        <span class="fraction"><span class="top">sin x</span><span class="bottom">x</span></span>
+        = 1 − <span class="fraction"><span class="top">x²</span><span class="bottom">6</span></span>
+        + <span class="fraction"><span class="top">x⁴</span><span class="bottom">120</span></span>
+        − <span class="fraction"><span class="top">x⁶</span><span class="bottom">5040</span></span>
+        + …
+      </div>
+      <p style="color:var(--dim);font-size:14px">（注意：x³ ÷ x = x²，x⁵ ÷ x = x⁴，依此类推。以后我们只关心 x² 前面的那个数，它叫"x² 的系数"，这里是 <b style="color:var(--gold)">−1/6</b>。）</p>
+
+      <p><b>第 2 步（大胆假设）：</b>普通多项式按零点拆开，sin x 也照做！sin x 的零点在 ±nπ（n = 1, 2, 3, …），所以：</p>
+      <div class="formula green">
+        <span class="fraction"><span class="top">sin x</span><span class="bottom">x</span></span>
+        = (1 − <span class="fraction"><span class="top">x²</span><span class="bottom">π²</span></span>)
+        × (1 − <span class="fraction"><span class="top">x²</span><span class="bottom">(2π)²</span></span>)
+        × (1 − <span class="fraction"><span class="top">x²</span><span class="bottom">(3π)²</span></span>)
+        × ……
+      </div>
+      <p>检查一下：当 x = π 时，第一个括号里是 1 − π²/π² = 0，整个乘积变成 0 ✔。当 x = 2π 时，第二个括号归零 ✔。每个零点都被"照顾"到了！</p>
+
+      <p><b>第 3 步（展开找 x²）：</b>把右边乘开。想得到 x²，就要在<span class="hl">其中一个括号里取"−x²/(nπ)²"这一项，其他括号都取 1</span>（因为两个括号都取 x² 就变成 x⁴ 了，太"高"了）。所以：</p>
+      <div class="formula pink">
+        x² 的系数 = −<span class="fraction"><span class="top">1</span><span class="bottom">π²</span></span> − <span class="fraction"><span class="top">1</span><span class="bottom">(2π)²</span></span> − <span class="fraction"><span class="top">1</span><span class="bottom">(3π)²</span></span> − … = −<span class="fraction"><span class="top">1</span><span class="bottom">π²</span></span> × (1 + <span class="fraction"><span class="top">1</span><span class="bottom">4</span></span> + <span class="fraction"><span class="top">1</span><span class="bottom">9</span></span> + <span class="fraction"><span class="top">1</span><span class="bottom">16</span></span> + …)
+      </div>
+
+      <p><b>第 4 步（对答案）：</b>同一个"人"（sin x / x），x² 的系数必须是一样的！</p>
+      <ul class="clean">
+        <li>从第 1 步知道：x² 的系数 = <span class="em">−1/6</span></li>
+        <li>从第 3 步知道：x² 的系数 = <span class="em">−(1/π²) × (1 + 1/4 + 1/9 + …)</span></li>
+        <li>两边相等：−1/6 = −(1/π²) × S （S 就是我们的总和）</li>
+      </ul>
+      <p>解这个方程：两边都乘 π²，再乘 −1，得到 <span class="green">S = π²/6</span>。</p>
+
+      <div class="finale" style="margin-top:18px">
+        <div class="big">1 + <span class="fraction"><span class="top">1</span><span class="bottom">4</span></span> + <span class="fraction"><span class="top">1</span><span class="bottom">9</span></span> + <span class="fraction"><span class="top">1</span><span class="bottom">16</span></span> + … = <span class="pi">π²/6</span> ≈ 1.644934</div>
+        <p style="color:var(--dim)">侦探结案！🔎</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 验证 -->
+  <section>
+    <div class="card">
+      <h2><span class="num">6</span>怎么知道欧拉没算错？</h2>
+      <p>刚才你亲手拖了滑块：加到 200 项时，总和已经非常接近 1.644934。而 π²/6 = 3.14159² ÷ 6 ≈ 1.644934。</p>
+      <p>两个完全不同的计算路径，撞出了同一个数字——<span class="em">这不是巧合，这是真相</span>。</p>
+      <p>不过，欧拉的"无限多项式当普通多项式拆"在当时太超前了，很多数学家说："等等，这能随便拆吗？" 后来一代又一代数学家严格证明了：<span class="hl">欧拉是对的</span>。数学就是这样：先大胆猜，再小心证。</p>
+    </div>
+  </section>
+
+  <!-- 用处 -->
+  <section>
+    <div class="card">
+      <h2><span class="num">7</span>这个答案有什么用？（物理彩蛋）</h2>
+      <div class="grid2">
+        <div class="mini">
+          <h4>💡 光的亮度</h4>
+          <p style="font-size:14px">离灯泡越远，光越暗，亮度按"距离的平方"衰减。把一排小灯泡的亮度加起来，就会冒出 π²/6 这个数。</p>
+        </div>
+        <div class="mini">
+          <h4>🔊 声音的传播</h4>
+          <p style="font-size:14px">声音能量也按距离平方衰减。音乐厅里混响的"叠加"计算，和平方倒数之和一个道理。</p>
+        </div>
+        <div class="mini">
+          <h4>🌉 桥梁的震动</h4>
+          <p style="font-size:14px">工程师研究桥梁被风吹动、被脚步踩动时，也常常遇到"1/n² 求和"——原来 π 藏在工程里。</p>
+        </div>
+        <div class="mini">
+          <h4>🎲 欧拉后来还算了</h4>
+          <p style="font-size:14px">1 + 1/16 + 1/81 + … = π⁴/90 ≈ 1.0823。同样的方法，威力无穷！</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 总结 -->
+  <section>
+    <div class="card">
+      <h2><span class="num">8</span>一句话记住它</h2>
+      <p style="font-size:17px">把 <span class="hl">sin x</span> 当成一个"零点在 ±nπ 的无限多项式"来拆开，再看 x² 前面的数——<span class="em">平方数的倒数之和 = π²/6</span>。</p>
+      <p style="color:var(--dim);font-size:15px">数学家欧拉用"大胆想象 + 小心验证"，把圆的秘密和数字的秘密连在了一起。下次看到波浪、看到 π，别忘了这里面可能藏着平方数的故事哦。🌊</p>
+    </div>
+  </section>
+
+  <div class="footer-note">一份给小学生的数学侦探笔记 · 巴塞尔问题（Basel Problem）</div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  // ---------- 累加器 ----------
+  var slider = document.getElementById("nSlider");
+  var nBadge = document.getElementById("nBadge");
+  var sumValue = document.getElementById("sumValue");
+  var bars = document.getElementById("bars");
+  var btnPlay = document.getElementById("btnPlay");
+  var playHint = document.getElementById("playHint");
+  var playing = false;
+  var animTimer = null;
+
+  function render(n) {
+    // 总和
+    var s = 0;
+    for (var i = 1; i <= n; i++) s += 1 / (i * i);
+    sumValue.textContent = s.toFixed(6);
+    nBadge.textContent = "n = " + n;
+
+    // 柱子
+    bars.innerHTML = "";
+    var maxN = 200;
+    var show = Math.min(n, maxN);
+    // 太密时只画前 60 根 + 均匀抽样，保持可读
+    var step = show > 60 ? Math.ceil(show / 60) : 1;
+    var count = 0;
+    for (var k = 1; k <= show; k += step) {
+      var h = (1 / (k * k)) / 1 * 82; // 最大高度约 82px（第一根 1 → 82px）
+      var bar = document.createElement("div");
+      bar.className = "bar";
+      bar.style.height = Math.max(2, h) + "px";
+      bar.style.flexGrow = "1";
+      bar.style.maxWidth = "14px";
+      bar.title = "1/" + k + "² = " + (1 / (k * k)).toFixed(4);
+      bars.appendChild(bar);
+      count++;
+    }
+  }
+
+  slider.addEventListener("input", function () {
+    if (playing) stopPlay();
+    render(parseInt(slider.value, 10));
+  });
+
+  function play() {
+    playing = true;
+    btnPlay.textContent = "⏸ 暂停";
+    playHint.textContent = "";
+    var n = parseInt(slider.value, 10);
+    if (n >= 200) n = 1;
+    animTimer = setInterval(function () {
+      n += 1;
+      if (n > 200) {
+        stopPlay();
+        playHint.textContent = "加到 200 项啦！总和 1.644934，和 π²/6 已经一模一样～";
+        return;
+      }
+      slider.value = n;
+      render(n);
+    }, 20);
+  }
+
+  function stopPlay() {
+    playing = false;
+    clearInterval(animTimer);
+    animTimer = null;
+    btnPlay.textContent = "▶ 自动播放加到 200 项";
+  }
+
+  btnPlay.addEventListener("click", function () {
+    if (playing) { stopPlay(); playHint.textContent = ""; }
+    else play();
+  });
+
+  render(10);
+
+  // ---------- sin 图像 ----------
+  var canvas = document.getElementById("sinCanvas");
+  var ctx = canvas.getContext("2d");
+  var W = canvas.width, H = canvas.height;
+  var dpr = window.devicePixelRatio || 1;
+  canvas.style.width = "100%";
+  // 用 CSS 宽度适配，重新按显示尺寸设置画布像素以保持清晰
+  function resize() {
+    var cssW = canvas.clientWidth;
+    var cssH = cssW * (H / W);
+    canvas.width = Math.round(cssW * dpr);
+    canvas.height = Math.round(cssH * dpr);
+    canvas.style.height = cssH + "px";
+    draw();
+  }
+
+  function draw() {
+    var w = canvas.width, h = canvas.height;
+    ctx.clearRect(0, 0, w, h);
+    var padX = 30, padTop = 24, padBot = 34;
+    var plotW = w - padX * 2;
+    var plotH = h - padTop - padBot;
+    var xMin = -3.5 * Math.PI, xMax = 3.5 * Math.PI;
+    var yMax = 1.15;
+
+    function X(x) { return padX + ((x - xMin) / (xMax - xMin)) * plotW; }
+    function Y(y) { return padTop + (1 - y / yMax) * (plotH / 2); }
+
+    // 网格 + 零轴
+    ctx.strokeStyle = "rgba(88,166,255,0.15)";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(0, Y(0)); ctx.lineTo(w, Y(0)); ctx.stroke();
+    for (var gx = -3; gx <= 3; gx++) {
+      var gxx = gx * Math.PI;
+      ctx.beginPath();
+      ctx.moveTo(X(gxx), padTop - 8);
+      ctx.lineTo(X(gxx), h - padBot + 8);
+      ctx.stroke();
+    }
+
+    // 曲线
+    ctx.strokeStyle = "#58a6ff";
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    var steps = 500;
+    for (var i = 0; i <= steps; i++) {
+      var x = xMin + (i / steps) * (xMax - xMin);
+      var y = Math.sin(x);
+      if (i === 0) ctx.moveTo(X(x), Y(y));
+      else ctx.lineTo(X(x), Y(y));
+    }
+    ctx.stroke();
+
+    // 零点红点
+    ctx.fillStyle = "#f85149";
+    for (var n = -3; n <= 3; n++) {
+      if (n === 0) continue;
+      var zx = X(n * Math.PI);
+      ctx.beginPath();
+      ctx.arc(zx, Y(0), 5, 0, Math.PI * 2);
+      ctx.fill();
+      // 标签
+      ctx.fillStyle = "#f0b429";
+      ctx.font = "13px sans-serif";
+      ctx.textAlign = "center";
+      var label = n === 1 ? "π" : n === -1 ? "−π" : n === 2 ? "2π" : n === -2 ? "−2π" : n === 3 ? "3π" : "−3π";
+      ctx.fillText(label, zx, Y(0) + 20);
+      ctx.fillStyle = "#f85149";
+    }
+
+    // 轴标签
+    ctx.fillStyle = "#9aa7b8";
+    ctx.font = "12px sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText("x 轴：0 在中间，单位是 π", w / 2, h - 8);
+    ctx.textAlign = "left";
+    ctx.fillText("y = sin x", 8, padTop - 6);
+  }
+
+  window.addEventListener("resize", resize);
+  resize();
+})();
+</script>
+
+</body>
+</html>
