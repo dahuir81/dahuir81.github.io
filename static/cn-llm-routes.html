@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>分岔路：中国大模型的两条技术路线之争</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --card: #161b26;
+    --card2: #1c2333;
+    --text: #e6edf3;
+    --dim: #9aa7b8;
+    --accent: #58a6ff;
+    --gold: #f0b429;
+    --green: #3fb950;
+    --pink: #f778ba;
+    --purple: #a371f7;
+    --red: #f85149;
+    --radius: 16px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    line-height: 1.85;
+    padding: 0 16px 80px;
+  }
+  .wrap { max-width: 820px; margin: 0 auto; }
+  header {
+    text-align: center;
+    padding: 56px 0 36px;
+    background: radial-gradient(ellipse at top, #1b2a4a 0%, var(--bg) 65%);
+    border-radius: 0 0 24px 24px;
+  }
+  .kicker { color: var(--gold); letter-spacing: 4px; font-size: 14px; font-weight: 700; }
+  h1 { font-size: clamp(26px, 4.5vw, 38px); margin: 12px 0 10px; line-height: 1.35; }
+  h1 .r1 { color: var(--accent); }
+  h1 .r2 { color: var(--green); }
+  .subtitle { color: var(--dim); font-size: 16px; max-width: 640px; margin: 0 auto; }
+
+  section { margin-top: 40px; }
+  .card {
+    background: var(--card);
+    border: 1px solid #232d42;
+    border-radius: var(--radius);
+    padding: 24px 22px;
+    margin-bottom: 20px;
+  }
+  .card h2 { font-size: 20px; margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+  .card h2 .num {
+    background: linear-gradient(135deg, var(--accent), var(--purple));
+    color: #fff; width: 30px; height: 30px; border-radius: 9px;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 15px; flex-shrink: 0;
+  }
+  .card p { margin-bottom: 12px; color: #d7dee8; }
+  .card p:last-child { margin-bottom: 0; }
+  .em { color: var(--gold); font-weight: 700; }
+  .hl { color: var(--accent); font-weight: 700; }
+  .green { color: var(--green); font-weight: 700; }
+  .pink { color: var(--pink); font-weight: 700; }
+
+  .formula {
+    background: var(--card2); border-left: 4px solid var(--accent); border-radius: 10px;
+    padding: 14px 16px; margin: 14px 0; font-size: 16px; overflow-x: auto;
+  }
+
+  .tip {
+    background: #1a2a1e; border: 1px solid #2d4a33; border-radius: 12px;
+    padding: 14px 16px; margin: 14px 0; color: #a8d5ad; font-size: 15px;
+  }
+  .tip strong { color: var(--green); }
+
+  /* 路线双卡 */
+  .routes { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 18px 0; }
+  @media (max-width: 680px) { .routes { grid-template-columns: 1fr; } }
+  .route {
+    border-radius: var(--radius); padding: 20px 18px; border: 1px solid #232d42;
+  }
+  .route-a { background: linear-gradient(165deg, #14213d, #161b26); border-top: 4px solid var(--accent); }
+  .route-b { background: linear-gradient(165deg, #14301d, #161b26); border-top: 4px solid var(--green); }
+  .route h3 { font-size: 17px; margin-bottom: 4px; }
+  .route-a h3 { color: var(--accent); }
+  .route-b h3 { color: var(--green); }
+  .route .tagline { color: var(--dim); font-size: 13px; margin-bottom: 10px; }
+  .route ul { list-style: none; }
+  .route li { padding-left: 22px; position: relative; margin-bottom: 8px; font-size: 14.5px; color: #d7dee8; }
+  .route-a li::before { content: "▸"; position: absolute; left: 2px; color: var(--accent); }
+  .route-b li::before { content: "▸"; position: absolute; left: 2px; color: var(--green); }
+  .route .models { margin-top: 10px; font-size: 13px; color: var(--dim); }
+
+  table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 14.5px; }
+  th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid #232d42; }
+  th { color: var(--dim); font-weight: 700; background: var(--card2); }
+  td:first-child { color: var(--dim); white-space: nowrap; }
+  .cell-a { color: var(--accent); }
+  .cell-b { color: var(--green); }
+
+  /* 互动：prefill 占比 */
+  .interactive {
+    background: linear-gradient(160deg, #131c2e, var(--card));
+    border: 1px solid #2a3550; border-radius: var(--radius);
+    padding: 24px; margin: 20px 0;
+  }
+  .interactive h3 { color: var(--accent); margin-bottom: 6px; font-size: 17px; }
+  .interactive .hint { color: var(--dim); font-size: 13px; margin-bottom: 14px; }
+  .slider-row { display: flex; align-items: center; gap: 14px; margin: 16px 0 8px; flex-wrap: wrap; }
+  .slider-row label { color: var(--dim); font-size: 14px; white-space: nowrap; }
+  .slider-row input[type=range] { flex: 1; min-width: 200px; accent-color: var(--accent); height: 6px; }
+  .n-badge {
+    background: var(--accent); color: #04101f; font-weight: 800;
+    border-radius: 8px; padding: 2px 12px; font-size: 14px; white-space: nowrap;
+  }
+  .cost-bars { margin-top: 14px; }
+  .cost-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .cost-label { width: 110px; font-size: 13px; color: var(--dim); flex-shrink: 0; }
+  .cost-track { flex: 1; background: #0a0e16; border-radius: 8px; height: 30px; position: relative; overflow: hidden; }
+  .cost-fill { height: 100%; border-radius: 8px; transition: width 0.15s; display: flex; align-items: center; padding-left: 10px; font-size: 13px; font-weight: 700; color: #04101f; white-space: nowrap; }
+  .fill-a { background: linear-gradient(90deg, #58a6ff, #a371f7); }
+  .fill-b { background: linear-gradient(90deg, #3fb950, #56d364); }
+  .verdict {
+    margin-top: 14px; padding: 12px 16px; border-radius: 10px; font-size: 15px; font-weight: 700;
+    background: #1a2a1e; color: var(--green); border: 1px solid #2d4a33;
+  }
+  .verdict.warn { background: #2a2114; color: var(--gold); border-color: #4a3a1a; }
+  .axis-note { display: flex; justify-content: space-between; color: var(--dim); font-size: 12px; margin-top: 4px; }
+
+  .verdict strong { font-size: 16px; }
+
+  .verdict-box { border: 1px solid #2a3550; border-left: 4px solid var(--gold); border-radius: 12px; padding: 16px 18px; margin: 16px 0; background: #241d12; }
+  .verdict-box p { color: #e6d9b8; }
+  .verdict-box strong { color: var(--gold); }
+
+  .footer-note { text-align: center; color: var(--dim); font-size: 13px; margin-top: 36px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="kicker">AI 架构观察 · 2026</div>
+    <h1>分岔路：中国大模型的两条<br><span class="r1">技术路线之争</span></h1>
+    <p class="subtitle">同一个赛场、同一个目标，头部模型厂却做出了截然相反的架构选择。谁押对了下一个时代？</p>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- 引子 -->
+  <section>
+    <div class="card">
+      <h2><span class="num">1</span>2026 年夏天，开源模型出现了分水岭</h2>
+      <p>Kimi K3 发布即登顶开源模型排行榜，却让整个技术圈愣了一下：<span class="em">它的架构路线，和其他所有头部选手都不一样</span>。</p>
+      <p>一边是月之暗面押注<span class="hl">「线性注意力 + MLA」</span>，追求"作答飞快"；另一边是 DeepSeek、智谱 GLM、MiniMax、MiMo 集体押注<span class="green">「GQA + 稀疏注意力」</span>，追求"读题便宜"。</p>
+      <p>这不是细节之争。它决定了：<span class="em">同样的算力，你的模型在什么场景下更省钱、更快、更能打</span>。</p>
+    </div>
+  </section>
+
+  <!-- 两条路线 -->
+  <section>
+    <div class="card">
+      <h2><span class="num">2</span>两条路线的技术选择</h2>
+
+      <div class="routes">
+        <div class="route route-a">
+          <h3>路线 A：Kimi K3（月之暗面）</h3>
+          <div class="tagline">押注：长输出推理 / 作答快</div>
+          <ul>
+            <li><b>KDA 线性注意力</b>：把"每次翻全部历史"变成"边聊边记笔记"，注意力成本从平方级降到线性级</li>
+            <li><b>与 MLA 按 3:1 混合</b>：保留部分全注意力保质量，KDA 顺带替代位置编码</li>
+            <li><b>自研 FlashKDA 内核</b>：decode 阶段计算与内存都是常数级——上下文再长，作答成本不涨</li>
+          </ul>
+          <div class="models">代表：Kimi K3（已开源权重）</div>
+        </div>
+        <div class="route route-b">
+          <h3>路线 B：GQA 稀疏注意力阵营</h3>
+          <div class="tagline">押注：Agent 工具调用 / 读题快</div>
+          <ul>
+            <li><b>基于 GQA 架构</b>：共享 Key/Value，大幅压缩注意力缓存</li>
+            <li><b>稀疏/压缩注意力</b>：只"翻需要的旧账"，跳过不重要的历史，读题（prefill）阶段又快又省</li>
+            <li><b>各家自研变体</b>：压缩稀疏注意力（CSA）、HySparse 等，方向一致、实现各异</li>
+          </ul>
+          <div class="models">代表：DeepSeek V4、GLM 5.2、MiniMax M3、MiMo V3</div>
+        </div>
+      </div>
+
+      <div class="tip">
+        <strong>💡 一句话人话版：</strong>模型干活分两段——<b>读题</b>（prefill，读你的提示词和上下文）和<b>作答</b>（decode，一个字一个字往外蹦）。路线 A 把"作答"做到极致便宜，路线 B 把"读题"做到极致便宜。麻烦在于：<span class="em">不同场景，读题和作答的比例完全不同</span>。
+      </div>
+    </div>
+  </section>
+
+  <!-- 对比表 -->
+  <section>
+    <div class="card">
+      <h2><span class="num">3</span>正面交锋：一张表看懂差距</h2>
+      <table>
+        <tr><th>维度</th><th class="cell-a">路线 A：K3（MLA 系）</th><th class="cell-b">路线 B：GQA 稀疏系</th></tr>
+        <tr><td>注意力机制</td><td class="cell-a">KDA 线性注意力 + MLA</td><td class="cell-b">GQA + 稀疏/压缩注意力</td></tr>
+        <tr><td>decode（作答）成本</td><td class="cell-a">常数级，极低</td><td class="cell-b">低，随上下文可控增长</td></tr>
+        <tr><td>prefill（读题）成本</td><td class="cell-a">偏高（MLA 压缩的代价）</td><td class="cell-b">低，agent 高频读题友好</td></tr>
+        <tr><td>长上下文</td><td class="cell-a">KV 缓存固定大小，友好</td><td class="cell-b">依赖稀疏策略支撑</td></tr>
+        <tr><td>Agent 工作负载</td><td class="cell-a">⚠️ 净亏（读题贵）</td><td class="cell-b">✅ 友好</td></tr>
+        <tr><td>KV 缓存实测</td><td class="cell-a">前缀缓存需粗粒度快照，并非宣传的恒定</td><td class="cell-b">常规管理，无额外坑</td></tr>
+      </table>
+      <p style="color:var(--dim);font-size:13.5px">注：decode/prefill 成本为架构特性描述，非具体跑分。</p>
+    </div>
+  </section>
+
+  <!-- 互动 -->
+  <section>
+    <div class="card">
+      <h2><span class="num">4</span>核心变量：你到底是"读题多"还是"作答多"？</h2>
+      <p>拖动滑块，模拟不同工作负载下两条路线的相对成本（<span style="color:var(--dim)">示意模型，非实测数据</span>）：</p>
+
+      <div class="interactive">
+        <h3>🧪 负载模拟器：prefill 占比 × 路线成本</h3>
+        <div class="hint">prefill 占比 = 总计算量中"读题"占的比例。写长文、长对话 → 占比低；Agent 反复看工具结果、多次调用 → 占比高。</div>
+        <div class="slider-row">
+          <label>prefill 占比</label>
+          <input type="range" id="pfSlider" min="0" max="100" value="60">
+          <span class="n-badge" id="pfBadge">60%</span>
+        </div>
+        <div class="cost-bars">
+          <div class="cost-row">
+            <div class="cost-label">路线 A（K3）</div>
+            <div class="cost-track"><div class="cost-fill fill-a" id="barA" style="width:0%">…</div></div>
+          </div>
+          <div class="cost-row">
+            <div class="cost-label">路线 B（GQA 系）</div>
+            <div class="cost-track"><div class="cost-fill fill-b" id="barB" style="width:0%">…</div></div>
+          </div>
+        </div>
+        <div class="verdict" id="verdict">…</div>
+        <div class="axis-note"><span>← 长输出推理 / 长对话为主</span><span>Agent 工具调用为主 →</span></div>
+      </div>
+
+      <div class="verdict-box">
+        <p><strong>关键转折点：</strong>当"读题"占比超过约三分之一，GQA 稀疏路线的总成本就开始优于 MLA 路线——而 <span class="em">Agent 场景的读题占比恰恰在快速升高</span>（一次任务多次调用、每次都要消化工具返回结果）。这就是这场路线之争的胜负手。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 本质 -->
+  <section>
+    <div class="card">
+      <h2><span class="num">5</span>为什么说是"路线之争"，而不是细节差异？</h2>
+      <p><b>第一，它押的是时代。</b>2024 年大家比"谁能写更长的文章"，decode 为王；2026 年大家在比"谁能更好地调用工具、跑完一个任务"，<span class="hl">prefill 占比一路走高</span>。架构选型本质是对未来负载形态的下注。</p>
+      <p><b>第二，它决定成本曲线的形状。</b>同样的算力预算，路线 A 适合"高并发长输出"，路线 B 适合"高并发短任务 + Agent"。选错路线，同等规模下推理成本可能差出数倍。</p>
+      <p><b>第三，它影响生态。</b>自研推理内核（FlashKDA 已开源）说明头部厂商开始把"推理栈"当核心竞争力——路线之争会传导到芯片适配、框架优化、云服务定价。</p>
+    </div>
+  </section>
+
+  <!-- 前瞻 -->
+  <section>
+    <div class="card">
+      <h2><span class="num">6</span>三个值得盯的信号</h2>
+      <ul style="list-style:none">
+        <li style="padding-left:26px;position:relative;margin-bottom:12px"><span style="position:absolute;left:2px">🔭</span><b>信号一：下一代模型会不会"改旗易帜"。</b>业内已有分析预判 K3 的继任者将替换 MLA。若成真，等于头部玩家公开承认：Agent 负载已主导架构设计。</li>
+        <li style="padding-left:26px;position:relative;margin-bottom:12px"><span style="position:absolute;left:2px">🔭</span><b>信号二：Agent 基准上的成本对比。</b>别只看排行榜分数，看同任务下的推理成本与延迟——那是两条路线真实的性价比。</li>
+        <li style="padding-left:26px;position:relative;margin-bottom:12px"><span style="position:absolute;left:2px">🔭</span><b>信号三：推理内核的开源节奏。</b>FlashKDA、各类稀疏内核陆续开源，谁的内核被生态采用，谁的路线就赢了半个身位。</li>
+      </ul>
+      <div class="tip" style="margin-top:16px">
+        <strong>💡 给使用者的建议：</strong>别问"哪个模型最强"，问"<span class="em">我的负载是读题多还是作答多</span>"——长输出生成选 A 系，Agent 工具调用选 B 系，混跑就按占比配比。
+      </div>
+    </div>
+  </section>
+
+  <div class="footer-note">AI 架构观察 · 中国大模型技术路线之争 · 2026-08</div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var slider = document.getElementById("pfSlider");
+  var badge = document.getElementById("pfBadge");
+  var barA = document.getElementById("barA");
+  var barB = document.getElementById("barB");
+  var verdict = document.getElementById("verdict");
+
+  // 示意成本模型（非实测）：相对单位
+  // 路线A：prefill 单价 2.0，decode 单价 0.5
+  // 路线B：prefill 单价 1.0，decode 单价 1.0
+  var A_PRE = 2.0, A_DEC = 0.5;
+  var B_PRE = 1.0, B_DEC = 1.0;
+
+  function render() {
+    var x = parseInt(slider.value, 10) / 100; // prefill 占比
+    var costA = A_PRE * x + A_DEC * (1 - x);
+    var costB = B_PRE * x + B_DEC * (1 - x);
+    var max = Math.max(costA, costB, 1);
+    var pctA = Math.round(costA / max * 100);
+    var pctB = Math.round(costB / max * 100);
+
+    badge.textContent = Math.round(x * 100) + "%";
+    barA.style.width = pctA + "%";
+    barA.textContent = costA.toFixed(2);
+    barB.style.width = pctB + "%";
+    barB.textContent = costB.toFixed(2);
+
+    var diff = Math.abs(costA - costB).toFixed(2);
+    if (costA < costB) {
+      verdict.className = "verdict";
+      verdict.innerHTML = "✅ 路线 A（K3）总成本更低（便宜 " + diff + "）——适合长输出推理、长对话场景";
+    } else if (costB < costA) {
+      verdict.className = "verdict warn";
+      verdict.innerHTML = "⚠️ 路线 B（GQA 稀疏系）总成本更低（便宜 " + diff + "）——适合 Agent、工具调用等高频读题场景";
+    } else {
+      verdict.className = "verdict";
+      verdict.innerHTML = "⚖️ 两条路线成本持平（约 33% 读题占比的转折点）";
+    }
+  }
+
+  slider.addEventListener("input", render);
+  render();
+})();
+</script>
+
+</body>
+</html>
