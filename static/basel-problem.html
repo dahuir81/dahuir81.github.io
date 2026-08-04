@@ -197,6 +197,13 @@
     margin-right: 8px;
   }
   .btn-play:hover { background: #79c0ff; }
+  .card h3 { color: var(--accent); margin: 20px 0 8px; font-size: 16px; }
+  .lh-stats { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+  .lh-stat { background: var(--card2); border: 1px solid #232d42; border-radius: 10px; padding: 8px 14px; font-size: 13px; color: var(--dim); }
+  .lh-stat b { color: var(--text); font-size: 15px; }
+  .lh-stat .ok { color: var(--green); font-weight: 700; }
+  .inv-eq { text-align: center; font-size: 16px; font-weight: 800; margin-top: 10px; }
+  .inv-eq .good { color: var(--green); }
 </style>
 </head>
 <body>
@@ -301,7 +308,7 @@
   <!-- 欧拉推理 -->
   <section>
     <div class="card">
-      <h2><span class="num">5</span>欧拉的破案现场（四步推理）</h2>
+      <h2><span class="num">5</span>方法一：欧拉的破案现场（四步推理）</h2>
 
       <p><b>第 1 步：</b>把 sin x 写成"无限长的多项式"（这叫泰勒展开，欧拉时代的前辈们已经会了）：</p>
       <div class="formula">sin x = x − <span class="fraction"><span class="top">x³</span><span class="bottom">3!</span></span> + <span class="fraction"><span class="top">x⁵</span><span class="bottom">5!</span></span> − <span class="fraction"><span class="top">x⁷</span><span class="bottom">7!</span></span> + …</div>
@@ -346,20 +353,109 @@
     </div>
   </section>
 
+  <!-- 方法二：光的证明 -->
+  <section>
+    <div class="card">
+      <h2><span class="num">6</span>方法二：用光来破案（比欧拉更直观！）</h2>
+      <p>这一招来自瑞典数学家约翰·韦斯特伦德（Johan Wästlund），3Blue1Brown 把它做成了超漂亮的动画。它只需要两件武器：<span class="hl">光</span> 和 <span class="hl">勾股定理</span>。</p>
+
+      <h3>🔦 第一件武器：光的定律</h3>
+      <p>灯塔越远越暗：距离变成 2 倍，亮度只剩 1/4；距离变成 3 倍，亮度只剩 1/9。公式：<span class="em">亮度 = 1 ÷ 距离²</span>。</p>
+      <div class="formula">1 + <span class="fraction"><span class="top">1</span><span class="bottom">4</span></span> + <span class="fraction"><span class="top">1</span><span class="bottom">9</span></span> + … ＝ “距离 1、2、3… 的一排灯塔的亮度之和”</div>
+
+      <h3>📐 第二件武器：逆勾股定理</h3>
+      <p>直角三角形 ABC，直角顶点 C 站着观察者，A、B 各有一座灯塔。从 C 向 AB 作垂线，垂足 X。</p>
+      <p><span class="em">神奇的事：C 看到的两座灯塔亮度之和 ＝ 一座放在 X 的灯塔的亮度！</span></p>
+      <div class="formula gold"><span class="fraction"><span class="top">1</span><span class="bottom">a²</span></span> + <span class="fraction"><span class="top">1</span><span class="bottom">b²</span></span> = <span class="fraction"><span class="top">1</span><span class="bottom">h²</span></span>　（a、b 是两条直角边，h 是垂线 CX）</div>
+      <div class="tip">
+        <strong>💡 为什么？两步就够：</strong><br>
+        ① 三角形面积 = a×b÷2 = c×h÷2，所以 a×b = c×h<br>
+        ② 勾股定理：a² + b² = c²<br>
+        然后 1/a² + 1/b² = (a²+b²) ÷ (a×b)² = c² ÷ (c×h)² = 1/h² ✔
+      </div>
+
+      <div class="interactive">
+        <h3>🧪 逆勾股定理实验室：拖动滑块，让观察者 C 转一转</h3>
+        <canvas id="invCanvas" width="780" height="300"></canvas>
+        <div class="slider-row">
+          <label>观察者 C 的角度</label>
+          <input type="range" id="invSlider" min="10" max="80" value="40">
+          <span class="n-badge" id="invAng">40°</span>
+        </div>
+        <div class="lh-stats">
+          <span class="lh-stat">直角边 a = <b id="invA">0</b></span>
+          <span class="lh-stat">直角边 b = <b id="invB">0</b></span>
+          <span class="lh-stat">垂线 h = <b id="invH">0</b></span>
+          <span class="lh-stat">1/a² + 1/b² = <b id="invSum">0</b></span>
+          <span class="lh-stat">1/h² = <b id="invHval">0</b></span>
+        </div>
+        <div class="inv-eq"><span id="invEq" class="good">✓ 两个数始终相等！</span></div>
+      </div>
+
+      <h3>💡 一个灯塔拆成两个（亮度不变）</h3>
+      <p>观察者 P 站在圆形轨道上，前方一颗灯塔 R。画一个周长翻倍的大圆，放两颗灯塔 B₁、B₂（大圆的直径两端）。</p>
+      <p>圆的知识告诉我们：<span class="hl">直径对着的圆周角是直角</span>，所以 ∠B₁PB₂ = 90°；而 PR 正好垂直于 B₁B₂（用同一个圆的小知识可以证出来）。</p>
+      <p>逆勾股定理出手：<span class="em">P 收到两颗灯塔的光 ＝ 收到原来那颗灯塔的光！</span>新圆周长翻倍，P 还是站在“两颗灯塔的正中间”。</p>
+
+      <h3>🔁 拆了又拆：2 → 4 → 8 → 16 → 32 → 64…</h3>
+      <p>每拆一次，灯塔数量翻倍、圆周长翻倍，而 P 处收到的总亮度<span class="green">分毫不变</span>！</p>
+
+      <div class="interactive">
+        <h3>🧪 灯塔拆分大实验：点“拆！”试试，或一口气拆到 64</h3>
+        <canvas id="lhCanvas" width="780" height="300"></canvas>
+        <div class="slider-row">
+          <button class="btn-play" id="lhSplit">🔦 拆成 2 倍！</button>
+          <button class="btn-play" id="lhAuto" style="background:var(--gold)">▶ 一口气拆到 64</button>
+          <button class="btn-play" id="lhLine" style="background:var(--purple)">🌌 拆到无限大（直线）</button>
+          <button class="btn-play" id="lhReset" style="background:#6e7681">↺ 重置</button>
+        </div>
+        <div class="lh-stats">
+          <span class="lh-stat">灯塔数 N = <b id="lhN">1</b></span>
+          <span class="lh-stat">圆周长 = <b id="lhC">1</b></span>
+          <span class="lh-stat">半径 = <b id="lhR">0.159</b></span>
+          <span class="lh-stat">P 处总亮度 = <b id="lhL">…</b></span>
+        </div>
+        <div class="slider-row" id="lhLineRow" style="display:none">
+          <label>直线上的灯塔：从 P 往两边各数</label>
+          <input type="range" id="lhSlider" min="1" max="60" value="10">
+          <span class="n-badge" id="lhM">m = 10</span>
+        </div>
+        <div class="inv-eq"><span id="lhEq" style="color:var(--green);font-weight:700">亮度守恒！永远是 π² ≈ 9.8696</span></div>
+      </div>
+
+      <h3>🌌 无限大圆 = 一条直线</h3>
+      <p>拆无穷多次之后，圆变得无限大。从 P 附近看，<span class="hl">巨大的圆弧就像一条笔直的切线</span>！</p>
+      <p>灯塔们均匀地排在直线上，间距 1，位置在 ±0.5、±1.5、±2.5、±3.5…（P 站在 0 处）。</p>
+      <p>直线上所有灯塔的亮度之和（动画里那个数）＝ <span class="em">π²</span>！</p>
+
+      <h3>🎯 收尾换算（三步）</h3>
+      <ul class="clean">
+        <li><b>①</b> 1/0.5² + 1/1.5² + 1/2.5² + … = 4 × (1 + 1/9 + 1/25 + …)（因为 1/0.5² = 4，1/1.5² = 4/9，1/2.5² = 4/25…）</li>
+        <li><b>②</b> 所以“奇数平方倒数之和” = π² ÷ 8</li>
+        <li><b>③</b> 全部平方数 = 奇数部分 + 偶数部分，而偶数部分 = (全部) ÷ 4 → 解个小方程：全部 = π²/6！🎉</li>
+      </ul>
+
+      <div class="finale" style="margin-top:18px">
+        <div class="big">同样的答案：<span class="pi">π²/6</span> ≈ 1.644934</div>
+        <p style="color:var(--dim)">灯塔侦探也结案了！🔦</p>
+      </div>
+    </div>
+  </section>
+
   <!-- 验证 -->
   <section>
     <div class="card">
-      <h2><span class="num">6</span>怎么知道欧拉没算错？</h2>
+      <h2><span class="num">7</span>怎么知道没算错？</h2>
       <p>刚才你亲手拖了滑块：加到 200 项时，总和已经非常接近 1.644934。而 π²/6 = 3.14159² ÷ 6 ≈ 1.644934。</p>
-      <p>两个完全不同的计算路径，撞出了同一个数字——<span class="em">这不是巧合，这是真相</span>。</p>
-      <p>不过，欧拉的"无限多项式当普通多项式拆"在当时太超前了，很多数学家说："等等，这能随便拆吗？" 后来一代又一代数学家严格证明了：<span class="hl">欧拉是对的</span>。数学就是这样：先大胆猜，再小心证。</p>
+      <p>更妙的是，我们用<span class="hl">两条完全不同的路</span>得到了同一个数：<span class="em">方法一拆 sin x，方法二拆灯塔</span>——一个用波浪，一个用光，都撞出 π²/6。</p>
+      <p>这不是巧合，这是真相。数学就是这样：先大胆猜，再小心证。</p>
     </div>
   </section>
 
   <!-- 用处 -->
   <section>
     <div class="card">
-      <h2><span class="num">7</span>这个答案有什么用？（物理彩蛋）</h2>
+      <h2><span class="num">8</span>这个答案有什么用？（物理彩蛋）</h2>
       <div class="grid2">
         <div class="mini">
           <h4>💡 光的亮度</h4>
@@ -384,9 +480,10 @@
   <!-- 总结 -->
   <section>
     <div class="card">
-      <h2><span class="num">8</span>一句话记住它</h2>
-      <p style="font-size:17px">把 <span class="hl">sin x</span> 当成一个"零点在 ±nπ 的无限多项式"来拆开，再看 x² 前面的数——<span class="em">平方数的倒数之和 = π²/6</span>。</p>
-      <p style="color:var(--dim);font-size:15px">数学家欧拉用"大胆想象 + 小心验证"，把圆的秘密和数字的秘密连在了一起。下次看到波浪、看到 π，别忘了这里面可能藏着平方数的故事哦。🌊</p>
+      <h2><span class="num">9</span>一句话记住它</h2>
+      <p style="font-size:17px"><span class="hl">方法一（欧拉）</span>：把 sin x 当成"零点在 ±nπ 的无限多项式"来拆开，看 x² 前面的数——得到 π²/6。</p>
+      <p style="font-size:17px"><span class="hl">方法二（灯塔）</span>：一颗灯塔拆成两颗、亮度不变，拆到无限多颗、排成一条直线——得到同一个 π²/6。</p>
+      <p style="color:var(--dim);font-size:15px">两位"侦探"用完全不同的路，撞出同一个答案。下次看到波浪、看到灯塔、看到 π，别忘了这里面可能藏着平方数的故事哦。🌊</p>
     </div>
   </section>
 
@@ -553,6 +650,314 @@
 
   window.addEventListener("resize", resize);
   resize();
+})();
+
+// ========== 灯塔与观察者的通用绘图 ==========
+function drawLighthouse(ctx, x, y, r) {
+  ctx.save();
+  ctx.fillStyle = "#f0b429";
+  ctx.shadowColor = "rgba(240,180,41,0.85)";
+  ctx.shadowBlur = 16;
+  ctx.beginPath();
+  ctx.arc(x, y, r, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.restore();
+  ctx.strokeStyle = "rgba(240,180,41,0.35)";
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.arc(x, y, r * 2.2, 0, Math.PI * 2);
+  ctx.stroke();
+}
+
+function drawObserver(ctx, x, y) {
+  ctx.fillStyle = "#ffffff";
+  ctx.beginPath();
+  ctx.arc(x, y, 6, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.strokeStyle = "#58a6ff";
+  ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  ctx.arc(x, y, 10, 0, Math.PI * 2);
+  ctx.stroke();
+}
+
+// ========== 方法二：逆勾股定理实验室 ==========
+(function () {
+  var canvas = document.getElementById("invCanvas");
+  if (!canvas) return;
+  var ctx = canvas.getContext("2d");
+  var slider = document.getElementById("invSlider");
+  var angBadge = document.getElementById("invAng");
+  var el = {
+    a: document.getElementById("invA"),
+    b: document.getElementById("invB"),
+    h: document.getElementById("invH"),
+    sum: document.getElementById("invSum"),
+    hv: document.getElementById("invHval"),
+    eq: document.getElementById("invEq")
+  };
+  var W = 780, H = 300;
+  canvas.width = W;
+  canvas.height = H;
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    var midX = W / 2, baseY = 216;
+    var R = 200;
+    var ang = parseFloat(slider.value) * Math.PI / 180;
+    var Ax = midX - R, Ay = baseY;
+    var Bx = midX + R, By = baseY;
+    var Cx = midX + R * Math.cos(ang), Cy = baseY - R * Math.sin(ang);
+    var Xx = Cx, Xy = baseY;
+
+    var a = Math.hypot(Cx - Bx, Cy - By) / 100;
+    var b = Math.hypot(Cx - Ax, Cy - Ay) / 100;
+    var h = (baseY - Cy) / 100;
+    var s = 1 / (a * a) + 1 / (b * b);
+    var hv = 1 / (h * h);
+
+    // 底边 AB
+    ctx.strokeStyle = "rgba(154,167,184,0.6)";
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(Ax - 40, Ay);
+    ctx.lineTo(Bx + 40, By);
+    ctx.stroke();
+    // 三角形
+    ctx.strokeStyle = "#58a6ff";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(Ax, Ay);
+    ctx.lineTo(Cx, Cy);
+    ctx.lineTo(Bx, By);
+    ctx.closePath();
+    ctx.stroke();
+    // 垂线 CX（虚线）
+    ctx.strokeStyle = "#f0b429";
+    ctx.lineWidth = 2;
+    ctx.setLineDash([6, 5]);
+    ctx.beginPath();
+    ctx.moveTo(Cx, Cy);
+    ctx.lineTo(Xx, Xy);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    // 直角标记（C 处）
+    ctx.strokeStyle = "rgba(88,166,255,0.8)";
+    ctx.lineWidth = 1.5;
+    var sx = Math.cos(ang), sy = -Math.sin(ang);
+    var tx = -sy, ty = sx;
+    var q = 15;
+    ctx.beginPath();
+    ctx.moveTo(Cx + sx * q, Cy + sy * q);
+    ctx.lineTo(Cx + sx * q + tx * q, Cy + sy * q + ty * q);
+    ctx.lineTo(Cx + tx * q, Cy + ty * q);
+    ctx.stroke();
+
+    // 灯塔 A、B
+    drawLighthouse(ctx, Ax, Ay, 9);
+    ctx.fillStyle = "#e6edf3";
+    ctx.font = "bold 14px sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText("灯塔 A", Ax, Ay + 32);
+    drawLighthouse(ctx, Bx, By, 9);
+    ctx.fillText("灯塔 B", Bx, By + 32);
+    // 垂足 X（等效灯塔）
+    drawLighthouse(ctx, Xx, Xy, 8);
+    ctx.fillStyle = "#3fb950";
+    ctx.fillText("X（一颗就顶两颗）", Xx, Xy + 28);
+    // 观察者 C
+    drawObserver(ctx, Cx, Cy);
+    ctx.fillStyle = "#e6edf3";
+    ctx.fillText("观察者 C", Cx, Cy - 24);
+    // 标签 a、b、h
+    ctx.fillStyle = "#9aa7b8";
+    ctx.font = "13px sans-serif";
+    ctx.fillText("b", (Cx + Ax) / 2 - 10, (Cy + Ay) / 2 + 6);
+    ctx.fillText("a", (Cx + Bx) / 2 + 8, (Cy + By) / 2 + 6);
+    ctx.fillText("h", (Cx + Xx) / 2 - 22, (Cy + Xy) / 2);
+
+    // 数值
+    el.a.textContent = a.toFixed(2);
+    el.b.textContent = b.toFixed(2);
+    el.h.textContent = h.toFixed(2);
+    el.sum.textContent = s.toFixed(4);
+    el.hv.textContent = hv.toFixed(4);
+    var ok = Math.abs(s - hv) < 0.002;
+    el.eq.textContent = ok ? "✓ 1/a² + 1/b² = 1/h²，两个数始终相等！" : "… 正在相等中…";
+    el.eq.className = ok ? "good" : "";
+    angBadge.textContent = Math.round(parseFloat(slider.value)) + "°";
+  }
+
+  slider.addEventListener("input", draw);
+  draw();
+})();
+
+// ========== 方法二：灯塔拆分大实验 ==========
+(function () {
+  var canvas = document.getElementById("lhCanvas");
+  if (!canvas) return;
+  var ctx = canvas.getContext("2d");
+  var W = 780, H = 300;
+  canvas.width = W;
+  canvas.height = H;
+
+  var btnSplit = document.getElementById("lhSplit");
+  var btnAuto = document.getElementById("lhAuto");
+  var btnLine = document.getElementById("lhLine");
+  var btnReset = document.getElementById("lhReset");
+  var lineRow = document.getElementById("lhLineRow");
+  var lineSlider = document.getElementById("lhSlider");
+  var mBadge = document.getElementById("lhM");
+  var elN = document.getElementById("lhN");
+  var elC = document.getElementById("lhC");
+  var elR = document.getElementById("lhR");
+  var elL = document.getElementById("lhL");
+  var elEq = document.getElementById("lhEq");
+  var PIX = Math.PI * Math.PI;
+  var state = { N: 1, mode: "circle", m: 10 };
+  var timer = null;
+
+  function drawCircle() {
+    ctx.clearRect(0, 0, W, H);
+    var px = W / 2, py = H / 2;
+    var N = state.N;
+    var rReal = N / (2 * Math.PI); // 真实半径（相邻灯塔弧长 = 1）
+    var target = 20 + 20 * Math.log2(N); // 屏幕半径
+    // 圆：过 P，圆心在 P 左侧
+    ctx.strokeStyle = "rgba(88,166,255,0.4)";
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.arc(px - target, py, target, 0, Math.PI * 2);
+    ctx.stroke();
+    // 灯塔：从 P 起，弧长 = k - 1/2（P 站在两灯塔正中间）
+    var total = 0;
+    for (var k = 0; k < N; k++) {
+      var s = k - 0.5;
+      var theta = s / rReal;
+      var lx = px + target * (Math.cos(theta) - 1);
+      var ly = py + target * Math.sin(theta);
+      var d = 2 * rReal * Math.sin(Math.abs(theta) / 2);
+      total += 1 / (d * d);
+      drawLighthouse(ctx, lx, ly, N > 16 ? 4 : 6);
+    }
+    drawObserver(ctx, px, py);
+    ctx.fillStyle = "#e6edf3";
+    ctx.font = "13px sans-serif";
+    ctx.textAlign = "left";
+    ctx.fillText("观察者 P", px + 16, py - 14);
+
+    elN.textContent = N;
+    elC.textContent = N.toFixed(0) + "（单位）";
+    elR.textContent = rReal.toFixed(3);
+    elL.innerHTML = total.toFixed(4) + " <span class='ok'>= π²</span>";
+    elEq.textContent = "亮度守恒！拆多少次都是 π² ≈ 9.8696 ✓";
+    lineRow.style.display = "none";
+  }
+
+  function drawLine() {
+    ctx.clearRect(0, 0, W, H);
+    var py = H / 2, px0 = W / 2;
+    var scale = 22; // 每单位像素
+    var m = state.m;
+    // 切线（无限大圆的"直线"）
+    ctx.strokeStyle = "rgba(88,166,255,0.45)";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(15, py);
+    ctx.lineTo(W - 15, py);
+    ctx.stroke();
+    // 灯塔在 ±0.5, ±1.5, ±2.5 …
+    var total = 0;
+    for (var n = -m; n <= m; n++) {
+      var pos = n - 0.5;
+      var d = Math.abs(pos);
+      total += 1 / (d * d);
+      drawLighthouse(ctx, px0 + pos * scale, py, 6);
+    }
+    drawObserver(ctx, px0, py);
+    ctx.fillStyle = "#e6edf3";
+    ctx.font = "13px sans-serif";
+    ctx.textAlign = "left";
+    ctx.fillText('观察者 P（站在“直线”上）', px0 + 16, py - 14);
+    ctx.textAlign = "center";
+    ctx.fillStyle = "#3fb950";
+    ctx.font = "bold 15px sans-serif";
+    ctx.fillText("部分和 = " + total.toFixed(4) + "　（π² = " + PIX.toFixed(4) + "）", W / 2, 30);
+
+    elN.textContent = 2 * m + 1;
+    elC.textContent = "∞（直线）";
+    elR.textContent = "∞";
+    elL.innerHTML = total.toFixed(4) + " <span class='ok'>→ π²</span>";
+    elEq.textContent = total / PIX > 0.999 ? "✓ 几乎就是 π² 了！" : "还在逼近 π²… 继续往两边拖 →";
+    lineRow.style.display = "flex";
+    mBadge.textContent = "m = " + m;
+  }
+
+  function render() {
+    if (state.mode === "circle") drawCircle();
+    else drawLine();
+  }
+
+  btnSplit.addEventListener("click", function () {
+    if (state.mode === "line") { state.N = 1; state.mode = "circle"; }
+    if (state.N < 64) {
+      state.N *= 2;
+      render();
+    }
+    if (state.N >= 64) btnSplit.textContent = "拆到顶啦（64 颗）";
+  });
+
+  btnAuto.addEventListener("click", function () {
+    if (timer) {
+      clearInterval(timer);
+      timer = null;
+      btnAuto.textContent = "▶ 一口气拆到 64";
+      return;
+    }
+    state.mode = "circle";
+    if (state.N >= 64) { state.N = 1; btnSplit.textContent = "🔦 拆成 2 倍！"; }
+    btnAuto.textContent = "⏸ 暂停";
+    timer = setInterval(function () {
+      if (state.N < 64) {
+        state.N *= 2;
+        render();
+      } else {
+        clearInterval(timer);
+        timer = null;
+        btnAuto.textContent = "▶ 一口气拆到 64";
+        btnSplit.textContent = "拆到顶啦（64 颗）";
+      }
+    }, 550);
+  });
+
+  btnLine.addEventListener("click", function () {
+    if (timer) {
+      clearInterval(timer);
+      timer = null;
+      btnAuto.textContent = "▶ 一口气拆到 64";
+    }
+    state.mode = "line";
+    render();
+  });
+
+  btnReset.addEventListener("click", function () {
+    if (timer) {
+      clearInterval(timer);
+      timer = null;
+      btnAuto.textContent = "▶ 一口气拆到 64";
+    }
+    state.N = 1;
+    state.mode = "circle";
+    btnSplit.textContent = "🔦 拆成 2 倍！";
+    render();
+  });
+
+  lineSlider.addEventListener("input", function () {
+    state.m = parseInt(lineSlider.value, 10);
+    if (state.mode === "line") render();
+  });
+
+  render();
 })();
 </script>
 
