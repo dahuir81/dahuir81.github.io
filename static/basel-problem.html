@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>巴塞尔问题：为什么 1 + 1/4 + 1/9 + … = π²/6？</title>
+<title>巴塞尔问题：为什么 1/1² + 1/2² + 1/3² + … = π²/6？</title>
 <style>
   :root {
     --bg: #0d1117;
@@ -234,7 +234,7 @@
   <section>
     <div class="card">
       <h2><span class="num">1</span>先来玩一个加法游戏</h2>
-      <p>我们从 <b>1</b> 开始，然后加上 <b>1/4</b>（也就是 0.25），再加上 <b>1/9</b>（约 0.111），再加 <b>1/16</b>（0.0625）……</p>
+      <p>我们从 <b>1/1²</b>（也就是 1）开始，然后加上 <b>1/2²</b>（也就是 1/4 = 0.25），再加上 <b>1/3²</b>（约 0.111），再加 <b>1/4²</b>（0.0625）……</p>
       <p>规律是：每一项的分母是 <span class="hl">1²、2²、3²、4²……</span>（也就是 1×1、2×2、3×3、4×4……）。</p>
       <p>这些数越来越小，像一块块越来越小的饼干。问题是：<span class="em">如果一直加下去，总数会停在哪里？</span></p>
 
@@ -267,7 +267,7 @@
     <div class="card">
       <h2><span class="num">2</span>哪里奇怪？π 是"圆的"，怎么跑进"平方数"里了？</h2>
       <p>π ≈ 3.14159，它是<span class="hl">圆的周长 ÷ 直径</span>，是"圆"的专属数字。</p>
-      <p>而我们的问题里全是 <span class="hl">1、4、9、16…</span> 这些平方数，一个圆都没有，一个三角形都没有。</p>
+      <p>而我们的问题里全是 <span class="hl">1、4、9、16…</span> 这些平方数的倒数，一个圆都没有，一个三角形都没有。</p>
       <p>就像你拿做蛋糕的配方，居然算出了火箭的燃料——<span class="em">风马牛不相及的东西，怎么会变成同一个答案？</span></p>
       <p>这正是当年全世界数学家抓狂的原因。1696 年有人提出这个问题（因为提出者来自瑞士的巴塞尔城，所以叫<span class="hl">巴塞尔问题</span>），结果 90 年里没人能回答。</p>
 
@@ -341,13 +341,13 @@
       <p><b>第 4 步（对答案）：</b>同一个"人"（sin x / x），x² 的系数必须是一样的！</p>
       <ul class="clean">
         <li>从第 1 步知道：x² 的系数 = <span class="em">−1/6</span></li>
-        <li>从第 3 步知道：x² 的系数 = <span class="em">−(1/π²) × (1 + 1/4 + 1/9 + …)</span></li>
+        <li>从第 3 步知道：x² 的系数 = <span class="em">−(1/π²) × (1/1² + 1/2² + 1/3² + …)</span></li>
         <li>两边相等：−1/6 = −(1/π²) × S （S 就是我们的总和）</li>
       </ul>
       <p>解这个方程：两边都乘 π²，再乘 −1，得到 <span class="green">S = π²/6</span>。</p>
 
       <div class="finale" style="margin-top:18px">
-        <div class="big">1 + <span class="fraction"><span class="top">1</span><span class="bottom">4</span></span> + <span class="fraction"><span class="top">1</span><span class="bottom">9</span></span> + <span class="fraction"><span class="top">1</span><span class="bottom">16</span></span> + … = <span class="pi">π²/6</span> ≈ 1.644934</div>
+        <div class="big"><span class="fraction"><span class="top">1</span><span class="bottom">1²</span></span> + <span class="fraction"><span class="top">1</span><span class="bottom">2²</span></span> + <span class="fraction"><span class="top">1</span><span class="bottom">3²</span></span> + <span class="fraction"><span class="top">1</span><span class="bottom">4²</span></span> + … = <span class="pi">π²/6</span> ≈ 1.644934</div>
         <p style="color:var(--dim)">侦探结案！🔎</p>
       </div>
     </div>
@@ -361,7 +361,7 @@
 
       <h3>🔦 第一件武器：光的定律</h3>
       <p>灯塔越远越暗：距离变成 2 倍，亮度只剩 1/4；距离变成 3 倍，亮度只剩 1/9。公式：<span class="em">亮度 = 1 ÷ 距离²</span>。</p>
-      <div class="formula">1 + <span class="fraction"><span class="top">1</span><span class="bottom">4</span></span> + <span class="fraction"><span class="top">1</span><span class="bottom">9</span></span> + … ＝ “距离 1、2、3… 的一排灯塔的亮度之和”</div>
+      <div class="formula"><span class="fraction"><span class="top">1</span><span class="bottom">1²</span></span> + <span class="fraction"><span class="top">1</span><span class="bottom">2²</span></span> + <span class="fraction"><span class="top">1</span><span class="bottom">3²</span></span> + … ＝ “距离 1、2、3… 的一排灯塔的亮度之和”</div>
 
       <h3>📐 第二件武器：逆勾股定理</h3>
       <p>直角三角形 ABC，直角顶点 C 站着观察者，A、B 各有一座灯塔。从 C 向 AB 作垂线，垂足 X。</p>
