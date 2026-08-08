@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0b0f1a">
+<title>司龄计算器 · 工作天数统计</title>
+<style>
+:root{
+  --bg:#0b0f1a; --card:#141a2b; --card2:#1a2238; --line:#26304d;
+  --text:#e8ecf8; --sub:#8b96b5; --acc:#4f8cff; --acc2:#38d9a9;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{
+  background:radial-gradient(1200px 600px at 80% -10%,#1b2a55 0%,var(--bg) 55%);
+  color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","HarmonyOS Sans","Microsoft YaHei",sans-serif;
+  min-height:100vh;display:flex;justify-content:center;padding:32px 16px 64px;
+}
+.wrap{width:100%;max-width:820px}
+header{text-align:center;margin-bottom:26px}
+h1{font-size:28px;letter-spacing:2px;background:linear-gradient(90deg,#7fb2ff,#38d9a9);-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{color:var(--sub);margin-top:8px;font-size:14px}
+.card{background:linear-gradient(160deg,var(--card),var(--card2));border:1px solid var(--line);border-radius:16px;padding:22px;margin-bottom:16px;box-shadow:0 8px 30px rgba(0,0,0,.35)}
+label{display:block;color:var(--sub);font-size:13px;margin-bottom:8px}
+.row{display:flex;gap:12px;flex-wrap:wrap}
+.field{flex:1;min-width:200px}
+input[type=date]{
+  width:100%;background:#0e1424;border:1px solid var(--line);border-radius:10px;
+  color:var(--text);padding:12px 14px;font-size:16px;outline:none;font-family:inherit;
+}
+input[type=date]:focus{border-color:var(--acc)}
+input[type=date]::-webkit-calendar-picker-indicator{filter:invert(.7);cursor:pointer}
+.err{color:#ff8a8a;font-size:13px;margin-top:10px;display:none}
+.big{text-align:center;padding:30px 22px 26px}
+.big .num{
+  font-size:66px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1.1;
+  background:linear-gradient(90deg,#7fb2ff,#38d9a9);-webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.big .lbl{color:var(--sub);margin-top:8px;font-size:14px}
+.big .tenure{color:var(--text);font-size:20px;margin-top:16px;font-weight:600}
+.big .tenure small{color:var(--sub);font-size:13px;font-weight:400;margin-left:6px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
+.stat{background:#0e1424;border:1px solid var(--line);border-radius:12px;padding:16px;text-align:center}
+.stat .v{font-size:26px;font-weight:700;color:var(--acc2);font-variant-numeric:tabular-nums}
+.stat .v.hot{color:var(--acc)}
+.stat .k{color:var(--sub);font-size:12px;margin-top:6px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:11px 8px;text-align:left;border-bottom:1px solid var(--line)}
+th{color:var(--sub);font-weight:500;font-size:12px}
+td.milestone{font-variant-numeric:tabular-nums;text-align:right;color:var(--acc2);font-weight:600}
+td.milestone.past{color:var(--sub);font-weight:400}
+.note{color:var(--sub);font-size:12px;line-height:1.9;margin-top:12px}
+footer{text-align:center;color:#5a6480;font-size:12px;margin-top:24px}
+@media (max-width:480px){
+  .big .num{font-size:52px}
+  h1{font-size:23px}
+  .card{padding:18px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>司龄计算器</h1>
+    <p class="sub">输入入职日期，统计工作总天数</p>
+  </header>
+
+  <div class="card">
+    <div class="row">
+      <div class="field">
+        <label for="start">入职日期</label>
+        <input type="date" id="start">
+      </div>
+      <div class="field">
+        <label for="end">截止日期（默认今天）</label>
+        <input type="date" id="end">
+      </div>
+    </div>
+    <div class="err" id="err">截止日期不能早于入职日期</div>
+  </div>
+
+  <div class="card big" id="result" style="display:none">
+    <div class="num" id="totalDays">0</div>
+    <div class="lbl">在司总天数（自然日，含入职当天与截止当天）</div>
+    <div class="tenure" id="tenure"></div>
+  </div>
+
+  <div class="card" id="statsCard" style="display:none">
+    <div class="grid">
+      <div class="stat"><div class="v hot" id="workDays">0</div><div class="k">工作日（剔除周末）</div></div>
+      <div class="stat"><div class="v" id="weekends">0</div><div class="k">其中周末</div></div>
+      <div class="stat"><div class="v" id="yearsCount">0</div><div class="k">整年数</div></div>
+      <div class="stat"><div class="v" id="annivDays">0</div><div class="k">距离下个周年（天）</div></div>
+    </div>
+  </div>
+
+  <div class="card" id="milestoneCard" style="display:none">
+    <table>
+      <thead><tr><th>里程碑</th><th>状态</th></tr></thead>
+      <tbody id="milestoneBody"></tbody>
+    </table>
+    <p class="note">口径说明：自然日 = 截止日期 − 入职日期 + 1（入职当天即第 1 天）；工作日剔除周六、周日，不剔除法定节假日。数据仅保存在本机浏览器，不会上传。</p>
+  </div>
+
+  <footer>司龄计算器 · 数据仅存本地 · 可添加到手机主屏幕使用</footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var DAY = 86400000;
+  var MILESTONES = [100, 365, 500, 1000, 1825, 3650, 5475, 7300, 9125, 10950, 18250];
+  var MONTHS_CN = ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"];
+
+  function $(id){ return document.getElementById(id); }
+
+  function parseDate(v){
+    if(!v) return null;
+    var parts = v.split("-");
+    if(parts.length !== 3) return null;
+    var d = new Date(parseInt(parts[0],10), parseInt(parts[1],10)-1, parseInt(parts[2],10));
+    return isNaN(d.getTime()) ? null : d;
+  }
+
+  function fmtDate(d){
+    return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
+  }
+
+  function todayStr(){
+    var t = new Date();
+    return fmtDate(t);
+  }
+
+  function daysInMonth(y, m){ // m: 0-11
+    return new Date(y, m+1, 0).getDate();
+  }
+
+  function calcTenure(start, end){
+    var y = end.getFullYear() - start.getFullYear();
+    var m = end.getMonth() - start.getMonth();
+    var d = end.getDate() - start.getDate();
+    if(d < 0){
+      m--;
+      var pm = end.getMonth() - 1;
+      var py = end.getFullYear();
+      if(pm < 0){ pm = 11; py--; }
+      d += daysInMonth(py, pm);
+    }
+    if(m < 0){ y--; m += 12; }
+    return {y:y, m:m, d:d};
+  }
+
+  function render(){
+    var start = parseDate($("start").value);
+    var end = parseDate($("end").value);
+    var err = $("err");
+    if(!start || !end){
+      err.style.display = "none";
+      return;
+    }
+    if(end < start){
+      err.style.display = "block";
+      return;
+    }
+    err.style.display = "none";
+
+    var total = Math.round((end - start) / DAY) + 1; // 含两端
+
+    // 工作日统计
+    var work = 0, weekends = 0;
+    var cur = new Date(start.getTime());
+    while(cur <= end){
+      var dow = cur.getDay();
+      if(dow === 0 || dow === 6){ weekends++; } else { work++; }
+      cur.setDate(cur.getDate() + 1);
+    }
+
+    var t = calcTenure(start, end);
+    var tenureText = t.y + " 年 " + t.m + " 个月 " + t.d + " 天";
+    var since = fmtDate(start) + " 入职至今";
+    $("totalDays").textContent = total.toLocaleString("zh-CN");
+    $("tenure").innerHTML = tenureText + "<small>" + since + "</small>";
+    $("workDays").textContent = work.toLocaleString("zh-CN");
+    $("weekends").textContent = weekends.toLocaleString("zh-CN");
+    $("yearsCount").textContent = t.y;
+
+    // 下个周年
+    var nextAnniv = new Date(end.getFullYear(), start.getMonth(), start.getDate());
+    if(nextAnniv <= end) nextAnniv.setFullYear(nextAnniv.getFullYear() + 1);
+    var annivDays = Math.round((nextAnniv - end) / DAY);
+    $("annivDays").textContent = annivDays + " 天";
+    if(nextAnniv.getFullYear() - start.getFullYear() > 0){
+      $("annivDays").textContent = annivDays + " 天（" + (nextAnniv.getFullYear() - start.getFullYear()) + " 周年）";
+    }
+
+    $("result").style.display = "block";
+    $("statsCard").style.display = "block";
+    $("milestoneCard").style.display = "block";
+
+    // 里程碑
+    var body = $("milestoneBody");
+    body.innerHTML = "";
+    MILESTONES.forEach(function(n){
+      var target = new Date(start.getTime() + (n-1) * DAY);
+      var tr = document.createElement("tr");
+      var name = document.createElement("td");
+      var st = document.createElement("td");
+      name.textContent = n >= 1000 ? (n/1000) + " 千天" : n + " 天";
+      if(target <= end){
+        st.className = "milestone past";
+        st.textContent = "已达成（" + fmtDate(target) + "）";
+      } else {
+        var left = Math.round((target - end) / DAY);
+        st.className = "milestone";
+        st.textContent = "还差 " + left.toLocaleString("zh-CN") + " 天（" + fmtDate(target) + "）";
+      }
+      tr.appendChild(name);
+      tr.appendChild(st);
+      body.appendChild(tr);
+    });
+  }
+
+  function save(){
+    try{
+      localStorage.setItem("sc_start", $("start").value);
+      localStorage.setItem("sc_end", $("end").value);
+    }catch(e){}
+  }
+
+  function init(){
+    var s = null, e = null;
+    try{
+      s = localStorage.getItem("sc_start");
+      e = localStorage.getItem("sc_end");
+    }catch(err){}
+    $("start").value = s || "";
+    $("end").value = e || todayStr();
+    $("start").addEventListener("change", function(){ save(); render(); });
+    $("end").addEventListener("change", function(){ save(); render(); });
+    render();
+  }
+
+  init();
+})();
+</script>
+</body>
+</html>
