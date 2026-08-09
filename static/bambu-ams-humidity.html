@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AMS 湿度科普动画：绝对湿度、相对湿度与烘干解惑</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --card: #161b22;
+    --card2: #1c2330;
+    --line: #2d333b;
+    --text: #e6edf3;
+    --sub: #9da7b3;
+    --blue: #4fc3f7;
+    --blue2: #29b6f6;
+    --yellow: #ffd54f;
+    --orange: #ffa726;
+    --green: #66bb6a;
+    --red: #ef5350;
+    --purple: #b388ff;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", "Helvetica Neue", sans-serif;
+    line-height: 1.75;
+    padding: 0 16px 80px;
+  }
+  .wrap { max-width: 820px; margin: 0 auto; }
+  header.hero {
+    text-align: center;
+    padding: 56px 0 36px;
+    background: radial-gradient(ellipse at 50% -20%, rgba(79,195,247,.15), transparent 60%);
+  }
+  header.hero .tag {
+    display: inline-block;
+    font-size: 13px;
+    color: var(--blue);
+    border: 1px solid rgba(79,195,247,.4);
+    border-radius: 999px;
+    padding: 3px 14px;
+    margin-bottom: 18px;
+    letter-spacing: 1px;
+  }
+  header.hero h1 { font-size: 30px; font-weight: 800; letter-spacing: .5px; }
+  header.hero p { color: var(--sub); margin-top: 14px; font-size: 15px; }
+  h2 {
+    font-size: 22px;
+    font-weight: 800;
+    margin: 56px 0 6px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  h2 .no {
+    background: linear-gradient(135deg, var(--blue2), var(--purple));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-size: 14px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 2px 9px;
+  }
+  .lead { color: var(--sub); font-size: 14.5px; margin-bottom: 18px; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 22px 24px;
+    margin: 16px 0;
+  }
+  .def-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 640px) { .def-grid { grid-template-columns: 1fr; } }
+  .def-card {
+    background: var(--card2);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 18px 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .def-card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+  .def-card.abs::before { background: linear-gradient(90deg, var(--blue2), var(--blue)); }
+  .def-card.rel::before { background: linear-gradient(90deg, var(--yellow), var(--orange)); }
+  .def-card h3 { font-size: 16.5px; margin-bottom: 6px; }
+  .def-card .formula {
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 13.5px;
+    color: var(--blue);
+    background: rgba(79,195,247,.08);
+    border-radius: 8px;
+    padding: 8px 12px;
+    margin: 10px 0;
+    display: inline-block;
+  }
+  .def-card.rel .formula { color: var(--yellow); background: rgba(255,213,79,.08); }
+  .def-card p { font-size: 14px; color: var(--sub); }
+  .def-card .eg { font-size: 13px; color: var(--text); background: rgba(255,255,255,.04); border-radius: 8px; padding: 8px 12px; margin-top: 10px; }
+  .anim-box { position: relative; }
+  canvas { width: 100%; height: auto; display: block; border-radius: 10px; background: var(--card2); border: 1px solid var(--line); }
+  .ctrl {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin: 12px 0 4px;
+  }
+  .ctrl label { font-size: 13.5px; color: var(--sub); white-space: nowrap; }
+  .ctrl input[type=range] {
+    flex: 1;
+    min-width: 140px;
+    accent-color: var(--blue2);
+    height: 6px;
+  }
+  .ctrl .val {
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 14px;
+    color: var(--yellow);
+    min-width: 70px;
+    text-align: right;
+  }
+  .btn {
+    background: var(--card2);
+    color: var(--text);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 6px 16px;
+    font-size: 13.5px;
+    cursor: pointer;
+    transition: all .15s;
+  }
+  .btn:hover { border-color: var(--blue2); color: var(--blue2); }
+  .btn.active { background: rgba(41,182,246,.15); border-color: var(--blue2); color: var(--blue2); }
+  .hint {
+    font-size: 13px;
+    color: var(--sub);
+    background: rgba(255,255,255,.03);
+    border-left: 3px solid var(--blue2);
+    border-radius: 0 8px 8px 0;
+    padding: 10px 14px;
+    margin: 10px 0;
+  }
+  .hint.warn { border-left-color: var(--orange); }
+  .hint.red { border-left-color: var(--red); }
+  .hint.green { border-left-color: var(--green); }
+  .checklist { list-style: none; }
+  .checklist li {
+    padding: 12px 14px 12px 42px;
+    position: relative;
+    background: var(--card2);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    margin: 10px 0;
+    font-size: 14.5px;
+  }
+  .checklist li .step {
+    position: absolute;
+    left: 12px; top: 50%;
+    transform: translateY(-50%);
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: rgba(41,182,246,.15);
+    color: var(--blue2);
+    font-size: 12px;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .checklist li b { color: var(--blue2); }
+  .checklist li .sub2 { color: var(--sub); font-size: 13px; display: block; margin-top: 2px; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 12px 0;
+  }
+  th, td { border: 1px solid var(--line); padding: 7px 10px; text-align: center; }
+  th { background: var(--card2); color: var(--blue); font-weight: 600; white-space: nowrap; }
+  td:first-child { text-align: left; white-space: nowrap; }
+  tr.hl td { background: rgba(41,182,246,.07); }
+  .scroll-x { overflow-x: auto; border-radius: 10px; border: 1px solid var(--line); }
+  .scroll-x table { margin: 0; min-width: 620px; }
+  .badge {
+    display: inline-block;
+    font-size: 12px;
+    border-radius: 6px;
+    padding: 2px 8px;
+    margin: 0 4px 4px 0;
+    font-weight: 600;
+  }
+  .badge.off { background: rgba(239,83,80,.12); color: var(--red); }
+  .badge.com { background: rgba(102,187,106,.12); color: var(--green); }
+  .badge.tip { background: rgba(255,167,38,.12); color: var(--orange); }
+  .tip-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 640px) { .tip-grid { grid-template-columns: 1fr; } }
+  .tip-card {
+    background: var(--card2);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 16px 18px;
+    font-size: 13.5px;
+  }
+  .tip-card .t { font-weight: 700; color: var(--yellow); margin-bottom: 6px; font-size: 14.5px; }
+  .tip-card p { color: var(--sub); }
+  .tip-card p b { color: var(--text); }
+  .faq-item { margin: 14px 0; }
+  .faq-item .q { font-weight: 700; color: var(--blue2); font-size: 15px; }
+  .faq-item .a { color: var(--sub); font-size: 14px; margin-top: 4px; }
+  .note {
+    font-size: 12.5px;
+    color: var(--sub);
+    border-top: 1px dashed var(--line);
+    margin-top: 40px;
+    padding-top: 14px;
+  }
+  .src-links { margin-top: 8px; }
+  .src-links a { color: var(--blue2); text-decoration: none; word-break: break-all; }
+  .src-links a:hover { text-decoration: underline; }
+  .arrow-flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    font-size: 13.5px;
+    color: var(--sub);
+    margin: 10px 0;
+  }
+  .arrow-flow .node {
+    background: var(--card2);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 6px 14px;
+    color: var(--text);
+  }
+  .arrow-flow .arr { color: var(--blue2); font-weight: 700; }
+  .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 640px) { .compare-grid { grid-template-columns: 1fr; } }
+  .compare {
+    background: var(--card2);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+  }
+  .compare .big { font-size: 26px; font-weight: 800; }
+  .compare .lvl-a { color: var(--green); }
+  .compare .lvl-b { color: var(--yellow); }
+  .compare .lvl-c { color: var(--orange); }
+  .compare .lvl-d { color: var(--red); }
+  .compare .lvl-e { color: var(--red); }
+  .compare p { font-size: 13px; color: var(--sub); margin-top: 4px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <span class="tag">🌡️ 3D 打印 · 耗材防潮科普</span>
+  <h1>一杯空气能装多少水？<br>相对湿度 & 绝对湿度 动画图解</h1>
+  <p>拓竹 AMS 湿度检测原理 + HT 湿度异常排查指南（官方口径 + 社区经验）</p>
+</header>
+
+<!-- ============ 概念 ============ -->
+<h2><span class="no">01</span>两个概念，一句话区别</h2>
+<p class="lead">官方定义有点绕，先记住这句：<b style="color:var(--blue2)">绝对湿度是"有多少水"</b>，<b style="color:var(--yellow)">相对湿度是"装得有多满"</b>。</p>
+
+<div class="def-grid">
+  <div class="def-card abs">
+    <h3>💧 绝对湿度 ρₐ — 实际含水量</h3>
+    <span class="formula">g/m³（每立方米空气里的水蒸气克数）</span>
+    <p>直接回答「空气里到底有多少克水」。它只由<span style="color:var(--blue2)">水蒸气压力和温度</span>决定，和"空气还能装多少"无关。</p>
+    <div class="eg">🎯 通俗版：<b>水杯里现在有多少水。</b></div>
+  </div>
+  <div class="def-card rel">
+    <h3>💦 相对湿度 RH — 饱和度百分比</h3>
+    <span class="formula">当前水汽 ÷ 同温度最大水汽 × 100%</span>
+    <p>回答「空气装得有多满」。RH=60% 意思是：这杯空气只装到了它当前温度下<span style="color:var(--yellow)">最大容量</span>的 60%。</p>
+    <div class="eg">🎯 通俗版：<b>水杯里的水占杯子的百分之几。</b></div>
+  </div>
+</div>
+
+<div class="hint green">🔥 关键差异：<b>温度变，绝对湿度不变，但相对湿度会变。</b>因为温度决定了"杯子"（空气容量）的大小 —— 温度越高，杯子越大。</div>
+
+<!-- ============ 动画一 ============ -->
+<h2><span class="no">02</span>动画一：同样的水，为什么冬天"更满"？</h2>
+<p class="lead">拖滑块或点按钮，看夏天 30°C 和冬天 5°C 的差别。蓝点是水蒸气分子，黄虚线是这杯空气的"最大容量线"。</p>
+
+<div class="anim-box">
+  <canvas id="cvCompare" width="720" height="400"></canvas>
+  <div class="ctrl">
+    <span class="btn" data-temp="30">☀️ 夏天 30°C</span>
+    <span class="btn" data-temp="5">❄️ 冬天 5°C</span>
+    <span class="btn" data-temp="auto">🎬 自动对比</span>
+  </div>
+  <div class="hint" id="compareHint"></div>
+</div>
+
+<!-- ============ 动画二 ============ -->
+<h2><span class="no">03</span>动画二：温度滑块 —— 水没变，为什么 RH 变了？</h2>
+<p class="lead">固定 <b>10 g/m³</b> 的水蒸气（分子数不变，绝对湿度不变），拖动温度：看"容量线"升降，看 RH% 数字怎么变。</p>
+
+<div class="anim-box">
+  <canvas id="cvSlider" width="720" height="400"></canvas>
+  <div class="ctrl">
+    <label>🌡️ 温度</label>
+    <input type="range" id="tempSlider" min="5" max="40" step="1" value="20">
+    <span class="val" id="tempVal">20°C</span>
+  </div>
+  <div class="ctrl">
+    <label>💧 绝对湿度（分子数固定）</label>
+    <span class="val" id="ahVal">10.0 g/m³</span>
+    <label>RH</label>
+    <span class="val" id="rhVal">58%</span>
+  </div>
+  <div class="hint" id="sliderHint"></div>
+</div>
+
+<!-- ============ 动画三 ============ -->
+<h2><span class="no">04</span>动画三：烘干后湿度为什么"反弹"？</h2>
+<p class="lead">这是最多人困惑的：明明烘干了，湿度反而涨了，是不是机器坏了？<b style="color:var(--blue2)">不是，看下面。</b></p>
+
+<div class="anim-box">
+  <canvas id="cvDry" width="720" height="420"></canvas>
+  <div class="ctrl">
+    <span class="btn active" id="btnPlay">⏯ 播放 / 暂停</span>
+    <span class="btn" id="btnReset">↺ 重播</span>
+    <span class="val" id="phaseLabel" style="color:var(--blue2)"></span>
+  </div>
+  <div class="hint" id="dryHint"></div>
+</div>
+
+<!-- ============ AMS 一代档位 ============ -->
+<h2><span class="no">05</span>AMS 一代为什么显示 A—E 档，而不是百分比？</h2>
+<p class="lead">一代 AMS 的温湿度传感器在<b>底部主板上</b>，受主板发热影响，读数不准。所以官方改用「含水量 + 温度 + 相对湿度」共同换算成 A—E 五档。</p>
+
+<div class="compare-grid">
+  <div class="compare">
+    <div class="big lvl-a">A 档</div>
+    <p>RH 30% · 20°C<br>含水量 ≈ 4.7 g/m³</p>
+  </div>
+  <div class="compare">
+    <div class="big lvl-b">B 档</div>
+    <p>RH 30% · 24°C<br>含水量 ≈ 5.9 g/m³</p>
+  </div>
+</div>
+<div class="hint">⚠️ 同样是 RH=30%，温度高了含水量高，档位就从 A 升到 B。<b>所以一代看档位，比看百分比更有参考意义。</b>显示 <b>C 档及以上</b>（橙红区）＝舱内偏潮湿，官方建议：检查密封、更换干燥剂。</div>
+
+<div class="anim-box" style="margin-top:14px">
+  <canvas id="cvLevel" width="720" height="230"></canvas>
+  <div class="ctrl">
+    <label>🌡️ 温度（RH 固定 30%）</label>
+    <input type="range" id="lvlSlider" min="18" max="30" step="0.5" value="20">
+    <span class="val" id="lvlVal">20°C</span>
+  </div>
+  <div class="hint" id="lvlHint"></div>
+</div>
+
+<!-- ============ HT 解决办法 ============ -->
+<h2><span class="no">06</span>AMS HT 湿度异常？按这个顺序排查</h2>
+<p class="lead">HT（高温版 AMS）直接显示百分比。看到湿度偏高/一直高，先别慌，一步步来。</p>
+
+<ul class="checklist">
+  <li><span class="step">1</span><b>看干燥剂状态（最最常见的原因）</b>
+    <span class="sub2">官方硅胶干燥剂是混合颗粒：<span style="color:var(--yellow)">橙色指示粒</span>吸水会变色。变墨绿色＝吸饱了，必须换；正常是黄色。干燥剂在后侧/底部的盒子里，翻盖就能看到。</span>
+    <span class="sub2">❌ 别用氯化钙（钙剂）干燥剂：吸水饱和后会<b style="color:var(--red)">反向析出水分</b>，可能损坏内部电路板 —— 官方明确警告。</span>
+  </li>
+  <li><span class="step">2</span><b>检查密封条与上盖</b>
+    <span class="sub2">下盖密封条有没有贴紧、有没有变形导致上盖盖不严。密封不好，干燥剂换再勤也没用。</span>
+  </li>
+  <li><span class="step">3</span><b>排除「温度波动」假警报</b>
+    <span class="sub2">刚烘干完、昼夜温差大的地区，RH 数字波动明显是<b style="color:var(--green)">正常物理现象</b>（见动画四），不代表耗材废了。</span>
+  </li>
+  <li><span class="step">4</span><b>湿度持续高 → 直接开烘干功能</b>
+    <span class="sub2">AMS HT 自带烘干：放入耗材 → 选耗材类型 → 启动烘干。注意 HT 必须用<b>标配电源线独立供电</b>，打印机无法给它供电。</span>
+  </li>
+  <li><span class="step">5</span><b>固件升级到最新</b>
+    <span class="sub2">2025 年 5 月 X/P 系列固件更新后，AMS 2 / HT 的烘干功能启用、湿度显示更精确。老固件显示不准也可能是原因。</span>
+  </li>
+  <li><span class="step">6</span><b>还是异常 → 记录数据找售后</b>
+    <span class="sub2">传感器故障（如一直 100%、数值完全不动）需要提交服务工单，附上打印机日志和照片。</span>
+  </li>
+</ul>
+
+<!-- ============ 烘干参数 ============ -->
+<h2><span class="no">07</span>AMS HT 烘干参数参考（官方表）</h2>
+<p class="lead">湿度数字本身<b style="color:var(--yellow)">不是</b>「低于多少就该烘干」的触发线（官方 FAQ 原话）。判断标准是<b>耗材类型</b>：PA / PAHT / PET-CF / TPU 打印前必须烘干；PLA / PETG 密封存放即可。</p>
+
+<div class="scroll-x">
+<table>
+  <tr><th>耗材</th><th>AMS 2 Pro</th><th>AMS HT</th><th>烘干要求</th></tr>
+  <tr><td>PLA Basic / Matte / Silk</td><td>45°C · 12h</td><td>45°C · 12h</td><td><span class="badge tip">推荐</span></td></tr>
+  <tr><td>PETG / PETG-CF</td><td>65°C · 12h</td><td>65°C · 12h</td><td><span class="badge tip">推荐</span></td></tr>
+  <tr><td>ABS / ASA</td><td><span class="badge off">不适配</span></td><td>80°C · 8h</td><td><span class="badge tip">推荐</span></td></tr>
+  <tr><td>TPU 85A / 90A / for AMS</td><td>65°C · 12h（有烘不干风险）</td><td>75°C · 18h</td><td><span class="badge com">必须</span></td></tr>
+  <tr class="hl"><td>PA6-CF / PAHT-CF 等</td><td><span class="badge off">不适配</span></td><td>85°C · 12h</td><td><span class="badge com">必须</span></td></tr>
+  <tr><td>PC</td><td><span class="badge off">不适配</span></td><td>80°C · 8h</td><td><span class="badge com">必须</span></td></tr>
+  <tr><td>PET-CF</td><td><span class="badge off">不适配</span></td><td>80°C · 12h</td><td><span class="badge com">必须</span></td></tr>
+  <tr><td>PVA / Support for PA</td><td><span class="badge off">不适配</span></td><td>85°C · 12–18h</td><td><span class="badge com">必须</span></td></tr>
+</table>
+</div>
+<div class="hint">💡 AMS 2 Pro 上限 65°C，烘不了 PA/PC/ABS 这类高温材料；<b style="color:var(--blue2)">AMS HT 能到 85°C</b>，这就是它名字里 "HT"（高温）的由来。</div>
+
+<!-- ============ 网友建议 ============ -->
+<h2><span class="no">08</span>社区老玩家的实战经验</h2>
+<p class="lead">收集自 B 站、什么值得买、抖音等平台 3D 打印玩家的真实反馈，按实用度排序：</p>
+
+<div class="tip-grid">
+  <div class="tip-card">
+    <div class="t">① 用温湿度计盯干燥剂「寿命」</div>
+    <p>很多玩家在干燥盒里塞一个<b>小米温湿度计</b>（蓝牙连手机），实时看 AMS 内部温湿度变化趋势。<b>湿度持续缓慢上升 = 干燥剂吸饱了</b>，该换了 —— 比肉眼盯指示粒变色更早发现问题。</p>
+  </div>
+  <div class="tip-card">
+    <div class="t">② 南方潮湿地区：勤换 + 备货</div>
+    <p>南方梅雨季湿度大，玩家反馈干燥剂<b>一个月甚至两周就饱和</b>。建议一次多囤几包官方硅胶干燥剂，定期轮换；换下来的可以放烘干箱/热床回魂再利用（橙色变回黄色）。</p>
+  </div>
+  <div class="tip-card">
+    <div class="t">③ 密封性是根本</div>
+    <p>「换了新干燥剂湿度还是高」的帖子，最后查出来大多是<b>密封条老化/上盖没盖严</b>。有人给 AMS 盖了亚克力防尘罩顺便加强密封，湿度能再降一截。</p>
+  </div>
+  <div class="tip-card">
+    <div class="t">④ AMS 一代也能「边烘边打」</div>
+    <p>一代 AMS 没有烘干功能，玩家用第三方 <b>AMS Heater（如三绿）</b> 替换顶盖，2 分钟装好，就能边烘干边打印，密封性评价不错。装完记得看湿度有没有降。</p>
+  </div>
+  <div class="tip-card">
+    <div class="t">⑤ 烘干完别急着判断「失败」</div>
+    <p>刚烘干完湿度数字回升（比如 15% → 40%）是正常现象，很多新手误以为机器坏了。老玩家经验：<b>看趋势不看单点</b> —— 冷却稳定 1–2 小时后读数才有效。</p>
+  </div>
+  <div class="tip-card">
+    <div class="t">⑥ 耗材本身也要「隔离」</div>
+    <p>不常用的耗材别裸放 AMS 里。玩家常用<b>密封袋 + 分子筛</b>或<b>密封饭盒 + 干燥剂 + 湿度计</b>的廉价方案（干燥剂几毛钱一包），湿度轻松压到 20% 以下。</p>
+  </div>
+</div>
+
+<div class="hint green">🎯 社区共识目标值：AMS 内部湿度尽量保持在 <b style="color:var(--green)">20% 以下</b>（官方支撑耗材指南同样建议配合干燥剂将环境湿度控制在 20% 左右）。PLA/PETG 短期 30–40% 问题不大，PA/TPU 这类必须严格。</div>
+
+<!-- ============ FAQ ============ -->
+<h2><span class="no">09</span>常见疑问速答</h2>
+<div class="card">
+  <div class="faq-item">
+    <div class="q">Q：湿度显示 100% 是不是传感器坏了？</div>
+    <div class="a">先查干燥剂是否饱和、密封是否失效（90% 的情况是这两者）；再排除刚烘干完/环境高湿。如果干燥剂全新、密封完好、放一晚还是纹丝不动的 100%，再考虑传感器故障找售后。</div>
+  </div>
+  <div class="faq-item">
+    <div class="q">Q：烘干后湿度回升，耗材是不是白烘了？</div>
+    <div class="a">没有白烘。回升的是「相对湿度」—— 温度降了，空气容量变小，同样的水分占比自然变大（动画四）。<b>耗材里的水分确实被烘出去了</b>，打印质量会证明一切。</div>
+  </div>
+  <div class="faq-item">
+    <div class="q">Q：湿度低于多少才需要烘干？</div>
+    <div class="a">官方明确：湿度读数<b>不是烘干触发阈值</b>。按耗材类型判断 —— PA、PAHT、PET-CF、TPU 打印前必须烘；PLA、PETG 密封存放即可。潮湿地区刚烘完湿度也会很快回升，正常。</div>
+  </div>
+  <div class="faq-item">
+    <div class="q">Q：氯化钙干燥剂为什么被官方点名警告？</div>
+    <div class="a">氯化钙吸饱水后会变成液体并<b>反向析出水分</b>，一旦漏液流到主板上会腐蚀电路。官方只推荐自家硅胶干燥剂（指示粒变色即换）。</div>
+  </div>
+</div>
+
+<div class="note">
+  📚 本文内容依据：拓竹官方 Wiki《AMS 湿度检测功能》《耗材烘干操作指南》（参数表）整理；社区经验综合自 B 站、什么值得买、抖音等平台玩家实测反馈，仅供参考，具体以官方文档与售后为准。<br>
+  🔗 官方原文：
+  <div class="src-links">
+    <a href="https://wiki.bambulab.com/zh/ams/manual/humidity-detection-function">wiki.bambulab.com/zh/ams/manual/humidity-detection-function</a><br>
+    <a href="https://wiki.bambulab.com/zh/filament-acc/filament/dry-filament">wiki.bambulab.com/zh/filament-acc/filament/dry-filament（耗材烘干操作指南）</a>
+  </div>
+</div>
+
+</div>
+
+<script>
+/* ================= 工具函数 ================= */
+function satAH(T) { // 饱和绝对湿度 g/m³（Magnus 公式近似）
+  const e = 6.1078 * Math.pow(10, 7.5 * T / (T + 237.3)); // hPa
+  return 216.7 * e / (T + 273.15);
+}
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+function setupCanvas(cv) {
+  const dpr = window.devicePixelRatio || 1;
+  const W = 720, H = parseInt(cv.getAttribute('height'), 10);
+  cv.width = W * dpr; cv.height = H * dpr;
+  const ctx = cv.getContext('2d');
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  return { ctx, W, H };
+}
+function drawMolecules(ctx, mols) {
+  ctx.fillStyle = 'rgba(79,195,247,.9)';
+  for (const m of mols) {
+    ctx.beginPath();
+    ctx.arc(m.x, m.y, m.r, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = 'rgba(255,255,255,.25)';
+    ctx.beginPath();
+    ctx.arc(m.x - m.r * 0.3, m.y - m.r * 0.3, m.r * 0.35, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = 'rgba(79,195,247,.9)';
+  }
+}
+function makeMols(n, x0, x1, yTop, yBot, seed) {
+  const mols = [];
+  for (let i = 0; i < n; i++) {
+    const t = (i + 0.5) / n;
+    mols.push({
+      x: x0 + (x1 - x0) * (0.15 + 0.7 * Math.random()),
+      y: yBot - (yBot - yTop) * t * (0.8 + 0.2 * Math.random()),
+      r: 3.5 + Math.random() * 1.5,
+      ph: seed + i * 1.7,
+      sp: 0.3 + Math.random() * 0.4
+    });
+  }
+  return mols;
+}
+function drawGlass(ctx, cx, top, bot, width, capY, color) {
+  ctx.strokeStyle = 'rgba(255,255,255,.35)';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(cx - width / 2, top);
+  ctx.lineTo(cx - width / 2, bot);
+  ctx.lineTo(cx + width / 2, bot);
+  ctx.lineTo(cx + width / 2, top);
+  ctx.stroke();
+  // 容量虚线
+  ctx.setLineDash([6, 5]);
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(cx - width / 2 - 4, capY);
+  ctx.lineTo(cx + width / 2 + 4, capY);
+  ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = 'rgba(255,255,255,.55)';
+  ctx.font = '11px "PingFang SC", sans-serif';
+  ctx.textAlign = 'right';
+  ctx.fillText('最大容量线', cx + width / 2 + 4, capY - 4);
+}
+function drawLabel(ctx, cx, top, title, sub, color) {
+  ctx.textAlign = 'center';
+  ctx.fillStyle = '#e6edf3';
+  ctx.font = 'bold 15px "PingFang SC", sans-serif';
+  ctx.fillText(title, cx, top - 26);
+  ctx.fillStyle = color;
+  ctx.font = '12px "PingFang SC", sans-serif';
+  ctx.fillText(sub, cx, top - 8);
+}
+
+/* ================= 动画一：两杯对比 ================= */
+const cv1 = document.getElementById('cvCompare');
+const s1 = setupCanvas(cv1);
+const { ctx: c1, W: W1, H: H1 } = s1;
+const SUMMER = { T: 30, mols: 15, label: '☀️ 夏天 30°C' };
+const WINTER = { T: 5, mols: 6, label: '❄️ 冬天 5°C' };
+let mode1 = 'auto'; // '30' | '5' | 'auto'
+let t1 = 0;
+let molsSummer = makeMols(SUMMER.mols, 0, 0, 0, 0, 1);
+let molsWinter = makeMols(WINTER.mols, 0, 0, 0, 0, 9);
+function layoutCompare() {
+  const glassTop = 78, glassBot = 330;
+  const capSummer = 250, capWinter = 135; // 容量线位置：30°C 杯子大
+  const cx1 = 200, cx2 = 520, gw = 150;
+  molsSummer = makeMols(SUMMER.mols, cx1 - gw / 2 + 14, cx1 + gw / 2 - 14, capSummer + 8, glassBot - 12, 1);
+  molsWinter = makeMols(WINTER.mols, cx2 - gw / 2 + 14, cx2 + gw / 2 - 14, capWinter + 8, glassBot - 12, 9);
+  return { glassTop, glassBot, capSummer, capWinter, cx1, cx2, gw };
+}
+function drawCompare() {
+  c1.clearRect(0, 0, W1, H1);
+  const L = layoutCompare();
+  const summerCap = satAH(30), winterCap = satAH(5);
+  const rhS = SUMMER.mols / summerCap * 100, rhW = WINTER.mols / winterCap * 100;
+  // 杯子
+  drawGlass(c1, L.cx1, L.glassTop, L.glassBot, L.gw, L.capSummer, '#ffd54f');
+  drawGlass(c1, L.cx2, L.glassTop, L.glassBot, L.gw, L.capWinter, '#ffd54f');
+  drawLabel(c1, L.cx1, L.glassTop, '夏天 · 30°C', `容量 ${summerCap.toFixed(1)} g/m³`, '#4fc3f7');
+  drawLabel(c1, L.cx2, L.glassTop, '冬天 · 5°C', `容量 ${winterCap.toFixed(1)} g/m³`, '#4fc3f7');
+  // 水分子
+  drawMolecules(c1, molsSummer);
+  drawMolecules(c1, molsWinter);
+  // 数据面板
+  c1.textAlign = 'center';
+  c1.font = 'bold 22px "PingFang SC", sans-serif';
+  c1.fillStyle = '#4fc3f7';
+  c1.fillText(`绝对湿度 ≈ ${SUMMER.mols} g/m³（水分子多）`, L.cx1, 372);
+  c1.fillStyle = '#4fc3f7';
+  c1.fillText(`绝对湿度 ≈ ${WINTER.mols} g/m³（水分子少）`, L.cx2, 372);
+  c1.font = 'bold 20px "PingFang SC", sans-serif';
+  c1.fillStyle = '#ffd54f';
+  c1.fillText(`RH ≈ ${rhS.toFixed(0)}%  「看着不满」`, L.cx1, 396);
+  c1.fillStyle = '#ffa726';
+  c1.fillText(`RH ≈ ${rhW.toFixed(0)}%  「快满了！」`, L.cx2, 396);
+  // 分子运动
+  for (const m of [...molsSummer, ...molsWinter]) {
+    m.ph += m.sp * 0.02;
+    m.y += Math.sin(m.ph) * 0.15;
+  }
+  const hint = document.getElementById('compareHint');
+  hint.innerHTML = mode1 === 'auto'
+    ? '🔄 自动演示：<b style="color:var(--blue2)">夏天 15 个水分子，杯子大，只装了 50%</b>；<b style="color:var(--orange)">冬天 6 个水分子，杯子小，却占了 90%</b>。所以「RH 90% 的冬天」其实比「RH 50% 的夏天」干得多 —— 官方原话：冬天 90% 相对湿度实际水蒸气更少。'
+    : (mode1 === '30'
+      ? '☀️ 夏天：水分子多（绝对湿度高），但 30°C 空气容量大，RH 只有 50%。感觉「不闷」，实际含的水很多。'
+      : '❄️ 冬天：水分子少（绝对湿度低），但 5°C 空气容量小，RH 高达 90%。感觉「很湿」，实际含的水很少。');
+}
+document.querySelectorAll('.btn[data-temp]').forEach(b => {
+  b.addEventListener('click', () => {
+    mode1 = b.dataset.temp;
+    document.querySelectorAll('.btn[data-temp]').forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    if (mode1 === 'auto') t1 = 0;
+  });
+});
+function loop1() {
+  drawCompare();
+  requestAnimationFrame(loop1);
+}
+loop1();
+
+/* ================= 动画二：温度滑块 ================= */
+const cv2 = document.getElementById('cvSlider');
+const s2 = setupCanvas(cv2);
+const { ctx: c2, W: W2, H: H2 } = s2;
+const FIXED_AH = 10;
+let temp2 = 20;
+let mols2 = makeMols(10, 0, 0, 0, 0, 3);
+function layoutSlider() {
+  const glassTop = 70, glassBot = 330, cx = 230, gw = 160;
+  return { glassTop, glassBot, cx, gw };
+}
+function drawSlider() {
+  c2.clearRect(0, 0, W2, H2);
+  const L = layoutSlider();
+  const cap = satAH(temp2);
+  const rh = FIXED_AH / cap * 100;
+  // 容量线高度：40°C 时 cap=51.1 → 接近杯顶；映射 0..1
+  const capRatio = clamp((cap - 4) / 48, 0.06, 1);
+  const capY = L.glassBot - (L.glassBot - L.glassTop) * capRatio;
+  drawGlass(c2, L.cx, L.glassTop, L.glassBot, L.gw, capY, '#ffd54f');
+  drawLabel(c2, L.cx, L.glassTop, `${temp2}°C`, `容量 ${cap.toFixed(1)} g/m³`, '#4fc3f7');
+  // 分子（绝对湿度不变，10 个）
+  if (mols2.length !== 10) mols2 = makeMols(10, L.cx - L.gw / 2 + 14, L.cx + L.gw / 2 - 14, capY + 8, L.glassBot - 12, 3);
+  else {
+    // 更新分子范围
+    for (const m of mols2) {
+      if (m.y > L.glassBot - 12) m.y = L.glassBot - 12;
+      if (m.y < capY + 8) m.y = capY + 8;
+      m.ph += m.sp * 0.02;
+      m.y += Math.sin(m.ph) * 0.15;
+    }
+  }
+  drawMolecules(c2, mols2);
+  // 右侧信息面板
+  c2.textAlign = 'left';
+  c2.font = 'bold 15px "PingFang SC", sans-serif';
+  c2.fillStyle = '#9da7b3';
+  c2.fillText('水分子数量（绝对湿度）', 470, 120);
+  c2.font = 'bold 26px "PingFang SC", sans-serif';
+  c2.fillStyle = '#4fc3f7';
+  c2.fillText(`${FIXED_AH.toFixed(1)} g/m³`, 470, 152);
+  c2.font = '13px "PingFang SC", sans-serif';
+  c2.fillStyle = '#9da7b3';
+  c2.fillText('↑ 一直不变', 470, 174);
+  c2.font = 'bold 15px "PingFang SC", sans-serif';
+  c2.fillStyle = '#9da7b3';
+  c2.fillText('相对湿度 RH', 470, 220);
+  c2.font = 'bold 30px "PingFang SC", sans-serif';
+  c2.fillStyle = rh > 100 ? '#ef5350' : '#ffd54f';
+  c2.fillText(`${rh > 100 ? '>100' : rh.toFixed(0)}%`, 470, 256);
+  // 结露提示
+  if (rh > 100) {
+    c2.font = 'bold 13px "PingFang SC", sans-serif';
+    c2.fillStyle = '#ef5350';
+    c2.fillText('⚠️ 超出容量 → 水汽凝结成露', 470, 288);
+    c2.fillText('（这就是露点/结露现象）', 470, 310);
+  } else {
+    c2.font = '13px "PingFang SC", sans-serif';
+    c2.fillStyle = '#9da7b3';
+    c2.fillText('水没变，是「杯子」变小了', 470, 288);
+    c2.fillText('所以占比（RH）变大', 470, 310);
+  }
+  // 提示
+  const hint = document.getElementById('sliderHint');
+  hint.innerHTML = rh > 100
+    ? `🌧️ <b style="color:var(--red)">${temp2}°C 时空气最多装 ${cap.toFixed(1)} g/m³，10 g/m³ 装不下了</b> —— 现实里就会结露（冷凝），这就是为什么冬天玻璃上会有水珠、烘干箱内壁会挂水。`
+    : `💡 温度从 20°C 升到 <b style="color:var(--blue2)">${temp2}°C</b>：空气容量从 17.3 涨到 ${cap.toFixed(1)} g/m³，同样 10 g/m³ 的水，RH 从 58% 降到 <b style="color:var(--yellow)">${rh.toFixed(0)}%</b>。水分子一个没少，只是杯子变大了。`;
+}
+const slider = document.getElementById('tempSlider');
+const tempVal = document.getElementById('tempVal');
+const rhVal = document.getElementById('rhVal');
+const ahVal = document.getElementById('ahVal');
+slider.addEventListener('input', () => {
+  temp2 = parseInt(slider.value, 10);
+  tempVal.textContent = temp2 + '°C';
+  const cap = satAH(temp2);
+  const rh = FIXED_AH / cap * 100;
+  rhVal.textContent = (rh > 100 ? '>100' : rh.toFixed(0)) + '%';
+  ahVal.textContent = FIXED_AH.toFixed(1) + ' g/m³';
+});
+slider.dispatchEvent(new Event('input'));
+function loop2() { drawSlider(); requestAnimationFrame(loop2); }
+loop2();
+
+/* ================= 动画三：烘干循环 ================= */
+const cv3 = document.getElementById('cvDry');
+const s3 = setupCanvas(cv3);
+const { ctx: c3, W: W3, H: H3 } = s3;
+let play3 = true;
+let t3 = 0;
+const DUR = 600; // 帧数
+function dryState(p) { // p: 0..1
+  let T, mols, phase;
+  if (p < 0.4) { // 加热
+    const k = p / 0.4;
+    T = 25 + 35 * k;
+    mols = 14 - 10 * k;
+    phase = '🔥 加热中';
+  } else if (p < 0.6) { // 保温
+    const k = (p - 0.4) / 0.2;
+    T = 60;
+    mols = 4;
+    phase = '♨️ 保温中';
+  } else { // 冷却
+    const k = (p - 0.6) / 0.4;
+    T = 60 - 35 * k;
+    mols = 4;
+    phase = '❄️ 停止加热 · 冷却';
+  }
+  const rh = mols / satAH(T) * 100;
+  return { T, mols, rh, phase };
+}
+let molsDry = [];
+function drawDry() {
+  c3.clearRect(0, 0, W3, H3);
+  const p = t3 / DUR;
+  const st = dryState(p);
+  const glassTop = 60, glassBot = 260, cx = 170, gw = 150;
+  const cap = satAH(st.T);
+  const capRatio = clamp((cap - 4) / 48, 0.06, 1);
+  const capY = glassBot - (glassBot - glassTop) * capRatio;
+  drawGlass(c3, cx, glassTop, glassBot, gw, capY, '#ffd54f');
+  drawLabel(c3, cx, glassTop, `舱内 ${st.T.toFixed(0)}°C`, `容量 ${cap.toFixed(1)} g/m³`, '#4fc3f7');
+  const n = Math.max(1, Math.round(st.mols));
+  if (molsDry.length !== n) {
+    molsDry = makeMols(n, cx - gw / 2 + 14, cx + gw / 2 - 14, capY + 8, glassBot - 12, 5);
+  } else {
+    for (const m of molsDry) {
+      m.ph += m.sp * 0.02;
+      m.y += Math.sin(m.ph) * 0.15;
+    }
+  }
+  drawMolecules(c3, molsDry);
+  // 温度计
+  const tx = 380, tTop = 70, tBot = 250;
+  c3.strokeStyle = 'rgba(255,255,255,.35)';
+  c3.lineWidth = 2;
+  c3.strokeRect(tx - 12, tTop, 24, tBot - tTop);
+  const tFill = (st.T - 20) / 45; // 20..65 映射
+  const fy = tBot - (tBot - tTop) * clamp(tFill, 0, 1);
+  c3.fillStyle = '#ef5350';
+  c3.fillRect(tx - 10, fy, 20, tBot - fy);
+  c3.beginPath(); c3.arc(tx, tBot + 14, 16, 0, Math.PI * 2); c3.fill();
+  c3.fillStyle = '#fff';
+  c3.font = 'bold 14px "PingFang SC", sans-serif';
+  c3.textAlign = 'center';
+  c3.fillText(`${st.T.toFixed(0)}°C`, tx, tBot + 22);
+  // 右侧数据
+  c3.textAlign = 'left';
+  c3.font = 'bold 15px "PingFang SC", sans-serif';
+  c3.fillStyle = '#9da7b3';
+  c3.fillText('舱内水分子', 460, 105);
+  c3.font = 'bold 24px "PingFang SC", sans-serif';
+  c3.fillStyle = '#4fc3f7';
+  c3.fillText(`${st.mols.toFixed(0)} g/m³`, 460, 135);
+  c3.font = '13px "PingFang SC", sans-serif';
+  c3.fillStyle = '#9da7b3';
+  c3.fillText('（绝对湿度，烘干时↓）', 460, 158);
+  c3.font = 'bold 15px "PingFang SC", sans-serif';
+  c3.fillStyle = '#9da7b3';
+  c3.fillText('相对湿度 RH', 460, 200);
+  c3.font = 'bold 30px "PingFang SC", sans-serif';
+  c3.fillStyle = '#ffd54f';
+  c3.fillText(`${st.rh.toFixed(0)}%`, 460, 236);
+  // 阶段与进度
+  document.getElementById('phaseLabel').textContent = st.phase;
+  c3.textAlign = 'center';
+  c3.fillStyle = '#9da7b3';
+  c3.font = '13px "PingFang SC", sans-serif';
+  // 进度条
+  c3.fillStyle = '#2d333b';
+  c3.fillRect(60, 330, 600, 8);
+  c3.fillStyle = '#29b6f6';
+  c3.fillRect(60, 330, 600 * p, 8);
+  // 底部曲线：RH over time
+  c3.strokeStyle = 'rgba(255,255,255,.15)';
+  c3.lineWidth = 1;
+  c3.beginPath();
+  c3.moveTo(60, 390); c3.lineTo(660, 390); c3.lineTo(660, 345);
+  c3.stroke();
+  c3.font = '12px "PingFang SC", sans-serif';
+  c3.fillStyle = '#9da7b3';
+  c3.textAlign = 'left';
+  c3.fillText('RH % 随时间变化（红线 = 当前）', 60, 415);
+  c3.strokeStyle = '#ffd54f';
+  c3.lineWidth = 2;
+  c3.beginPath();
+  for (let i = 0; i <= 100; i++) {
+    const q = i / 100;
+    const s = dryState(q);
+    const x = 60 + 600 * q;
+    const y = 390 - clamp(s.rh / 100, 0, 1) * 45;
+    if (i === 0) c3.moveTo(x, y); else c3.lineTo(x, y);
+  }
+  c3.stroke();
+  const cy = 390 - clamp(st.rh / 100, 0, 1) * 45;
+  c3.fillStyle = '#ef5350';
+  c3.beginPath();
+  c3.arc(60 + 600 * p, cy, 5, 0, Math.PI * 2);
+  c3.fill();
+  // 提示
+  const hint = document.getElementById('dryHint');
+  hint.innerHTML = p < 0.4
+    ? '🔥 <b>加热阶段：</b>温度上升，水分子被烘出（14 → 4 g/m³），同时空气容量变大，RH 一路暴跌。'
+    : p < 0.6
+    ? '♨️ <b>保温阶段：</b>高温维持，水分持续排出，RH 停在低位 —— 这是耗材真正变干的阶段。'
+    : '❄️ <b>冷却阶段：</b>水分子数没变（绝对湿度不变！），但温度下降 → 空气容量缩小 → <b style="color:var(--yellow)">RH 回升</b>。看右边曲线：不是烘干失败，是物理规律。';
+}
+function loop3() {
+  drawDry();
+  if (play3) {
+    t3 = (t3 + 1) % DUR;
+  }
+  requestAnimationFrame(loop3);
+}
+document.getElementById('btnPlay').addEventListener('click', () => { play3 = !play3; });
+document.getElementById('btnReset').addEventListener('click', () => { t3 = 0; play3 = true; });
+loop3();
+
+/* ================= AMS 一代档位 ================= */
+const cv4 = document.getElementById('cvLevel');
+const s4 = setupCanvas(cv4);
+const { ctx: c4, W: W4, H: H4 } = s4;
+let lvlT = 20;
+function lvlOf(ah) {
+  if (ah < 5.2) return { l: 'A', c: '#66bb6a' };
+  if (ah < 6.6) return { l: 'B', c: '#ffd54f' };
+  if (ah < 8.0) return { l: 'C', c: '#ffa726' };
+  if (ah < 9.5) return { l: 'D', c: '#ef5350' };
+  return { l: 'E', c: '#ef5350' };
+}
+function drawLevel() {
+  c4.clearRect(0, 0, W4, H4);
+  const ah = 4.7 + 0.3 * (lvlT - 20); // 官方：20°C→4.7, 24°C→5.9
+  const lv = lvlOf(ah);
+  // 五档条
+  const x0 = 60, x1 = 420, y = 100;
+  const segs = ['A', 'B', 'C', 'D', 'E'];
+  const cols = ['#66bb6a', '#ffd54f', '#ffa726', '#ef5350', '#ef5350'];
+  const w = (x1 - x0) / 5;
+  for (let i = 0; i < 5; i++) {
+    c4.fillStyle = cols[i];
+    if (segs[i] === lv.l) {
+      c4.globalAlpha = 1;
+      c4.fillRect(x0 + i * w + 3, y - 14, w - 6, 34);
+      c4.strokeStyle = '#fff';
+      c4.lineWidth = 2;
+      c4.strokeRect(x0 + i * w + 3, y - 14, w - 6, 34);
+    } else {
+      c4.globalAlpha = 0.25;
+      c4.fillRect(x0 + i * w + 3, y - 14, w - 6, 34);
+    }
+    c4.globalAlpha = 1;
+    c4.fillStyle = '#fff';
+    c4.font = 'bold 20px "PingFang SC", sans-serif';
+    c4.textAlign = 'center';
+    c4.fillText(segs[i], x0 + i * w + w / 2, y + 8);
+  }
+  c4.font = '13px "PingFang SC", sans-serif';
+  c4.fillStyle = '#9da7b3';
+  c4.fillText('低 ← 湿度等级 → 高（C 及以上＝潮湿，该换干燥剂）', 240, 150);
+  // 数据
+  c4.textAlign = 'left';
+  c4.font = 'bold 16px "PingFang SC", sans-serif';
+  c4.fillStyle = '#4fc3f7';
+  c4.fillText(`RH = 30% 固定`, 470, 70);
+  c4.fillStyle = '#e6edf3';
+  c4.font = '15px "PingFang SC", sans-serif';
+  c4.fillText(`温度 ${lvlT.toFixed(1)}°C`, 470, 100);
+  c4.fillText(`含水量 ≈ ${ah.toFixed(1)} g/m³`, 470, 126);
+  c4.font = 'bold 26px "PingFang SC", sans-serif';
+  c4.fillStyle = lv.c;
+  c4.fillText(`档位：${lv.l}`, 470, 162);
+  c4.font = '13px "PingFang SC", sans-serif';
+  c4.fillStyle = '#9da7b3';
+  c4.fillText('（档位为示意，实际以官方固件曲线为准）', 470, 196);
+  const hint = document.getElementById('lvlHint');
+  hint.innerHTML = `温度越高，同样 RH 下含水量越高，档位越高：<b style="color:var(--green)">20°C → A 档</b>（4.7 g/m³），<b style="color:var(--yellow)">24°C → B 档</b>（5.9 g/m³）—— 这就是官方举的两个例子。`;
+}
+const lvlSlider = document.getElementById('lvlSlider');
+const lvlVal = document.getElementById('lvlVal');
+lvlSlider.addEventListener('input', () => {
+  lvlT = parseFloat(lvlSlider.value);
+  lvlVal.textContent = lvlT.toFixed(1) + '°C';
+});
+lvlSlider.dispatchEvent(new Event('input'));
+function loop4() { drawLevel(); requestAnimationFrame(loop4); }
+loop4();
+</script>
+</body>
+</html>
