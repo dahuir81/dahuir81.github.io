@@ -337,30 +337,31 @@
   <div class="hint" id="dryHint"></div>
 </div>
 
-<!-- ============ AMS 一代档位 ============ -->
-<h2><span class="no">05</span>AMS 一代为什么显示 A—E 档，而不是百分比？</h2>
-<p class="lead">一代 AMS 的温湿度传感器在<b>底部主板上</b>，受主板发热影响，读数不准。所以官方改用「含水量 + 温度 + 相对湿度」共同换算成 A—E 五档。</p>
+<!-- ============ AMS HT 湿度持续上升 ============ -->
+<h2><span class="no">05</span>AMS HT 湿度持续上升？按这个顺序查</h2>
+<p class="lead">湿度不是「升高后稳定」，而是<b style="color:var(--red)">放着不动还在一直爬</b>——按下面顺序排查，90% 在前两步解决。</p>
 
-<div class="compare-grid">
-  <div class="compare">
-    <div class="big lvl-a">A 档</div>
-    <p>RH 30% · 20°C<br>含水量 ≈ 4.7 g/m³</p>
-  </div>
-  <div class="compare">
-    <div class="big lvl-b">B 档</div>
-    <p>RH 30% · 24°C<br>含水量 ≈ 5.9 g/m³</p>
-  </div>
-</div>
-<div class="hint">⚠️ 同样是 RH=30%，温度高了含水量高，档位就从 A 升到 B。<b>所以一代看档位，比看百分比更有参考意义。</b>显示 <b>C 档及以上</b>（橙红区）＝舱内偏潮湿，官方建议：检查密封、更换干燥剂。</div>
+<ul class="checklist">
+  <li><span class="step">1</span><b>先查 AMS 固件版本（HT 已知的坑）</b>
+    <span class="sub2">有用户实测案例：AMS 固件从 00.01.06.62 升到 01.00.06.83 后，湿度数据才恢复正常显示。<b style="color:var(--yellow)">旧固件的湿度显示本身有 bug</b>——先确认固件已是最新，再折腾别的。</span>
+  </li>
+  <li><span class="step">2</span><b>干燥剂饱和（持续上升最常见的原因）</b>
+    <span class="sub2">HT 用官方变色硅胶：<span style="color:var(--yellow)">干燥黄色 → 吸饱变墨绿/紫</span>。湿度「一直爬」基本就是干燥剂吸饱了不干活。换新干燥剂观察半天，湿度回落就是它的锅。</span>
+    <span class="sub2">❌ 别用氯化钙干燥剂：饱和后会<b style="color:var(--red)">反向析出水分</b>，可能损坏电路板（官方明确警告）。</span>
+  </li>
+  <li><span class="step">3</span><b>耗材在「放湿」</b>
+    <span class="sub2">刚放进舱内的受潮耗材（尤其 PA / TPU）会持续向舱内释放水分，湿度就会一直涨。不用慌——开烘干把耗材烘透，湿度自然降。</span>
+  </li>
+  <li><span class="step">4</span><b>密封 + 环境</b>
+    <span class="sub2">上盖密封条变形、或梅雨季环境湿度大，湿气持续渗入。放一个独立温湿度计对比舱内外读数，判断是渗漏还是干燥剂问题。</span>
+  </li>
+</ul>
 
-<div class="anim-box" style="margin-top:14px">
-  <canvas id="cvLevel" width="720" height="230"></canvas>
-  <div class="ctrl">
-    <label>🌡️ 温度（RH 固定 30%）</label>
-    <input type="range" id="lvlSlider" min="18" max="30" step="0.5" value="20">
-    <span class="val" id="lvlVal">20°C</span>
-  </div>
-  <div class="hint" id="lvlHint"></div>
+<div class="hint warn">⚠️ <b>HT 特性提醒：</b>HT 的湿度传感器在<b>烘干模块内部</b>，不是舱内居中位置——读数受烘干模块状态影响，烘干后/烘干中波动大是正常的。区分两种情况：<b style="color:var(--green)">烘干后降温回升</b>是正常物理现象（见动画三）；<b style="color:var(--red)">放着不动持续爬升</b>才需要按上面排查。</div>
+
+<!-- ============ 一代补充 ============ -->
+<div class="card" style="margin-top:10px">
+  <b>💡 补充（一代 AMS 用户）：</b>一代传感器在底部主板上、受主板发热影响，官方用 A—E 五档代替百分比。同 RH 30% 下，20°C→A 档（含水量 4.7 g/m³），24°C→B 档（5.9 g/m³）。显示 C 档及以上＝舱内潮湿，检查密封、更换干燥剂。2 代 / HT 用户无需关注此节。
 </div>
 
 <!-- ============ HT 解决办法 ============ -->
@@ -368,21 +369,21 @@
 <p class="lead">HT（高温版 AMS）直接显示百分比。看到湿度偏高/一直高，先别慌，一步步来。</p>
 
 <ul class="checklist">
-  <li><span class="step">1</span><b>看干燥剂状态（最最常见的原因）</b>
-    <span class="sub2">官方硅胶干燥剂是混合颗粒：<span style="color:var(--yellow)">橙色指示粒</span>吸水会变色。变墨绿色＝吸饱了，必须换；正常是黄色。干燥剂在后侧/底部的盒子里，翻盖就能看到。</span>
+  <li><span class="step">1</span><b>固件升级到最新（HT 已知坑）</b>
+    <span class="sub2">旧固件湿度显示有 bug：实测 00.01.06.62 → 01.00.06.83 后湿度才正常。2025 年 5 月 X/P 系列固件更新后，AMS 2 / HT 的烘干功能启用、湿度显示更精确。</span>
+  </li>
+  <li><span class="step">2</span><b>看干燥剂状态（最最常见的原因）</b>
+    <span class="sub2">官方硅胶干燥剂是混合颗粒：<span style="color:var(--yellow)">橙色指示粒</span>吸水会变色。变墨绿色＝吸饱了，必须换；正常是黄色。</span>
     <span class="sub2">❌ 别用氯化钙（钙剂）干燥剂：吸水饱和后会<b style="color:var(--red)">反向析出水分</b>，可能损坏内部电路板 —— 官方明确警告。</span>
   </li>
-  <li><span class="step">2</span><b>检查密封条与上盖</b>
+  <li><span class="step">3</span><b>检查密封条与上盖</b>
     <span class="sub2">下盖密封条有没有贴紧、有没有变形导致上盖盖不严。密封不好，干燥剂换再勤也没用。</span>
   </li>
-  <li><span class="step">3</span><b>排除「温度波动」假警报</b>
-    <span class="sub2">刚烘干完、昼夜温差大的地区，RH 数字波动明显是<b style="color:var(--green)">正常物理现象</b>（见动画四），不代表耗材废了。</span>
+  <li><span class="step">4</span><b>排除「温度波动」假警报</b>
+    <span class="sub2">刚烘干完、昼夜温差大的地区，RH 数字波动明显是<b style="color:var(--green)">正常物理现象</b>（见动画三），不代表耗材废了。注意 HT 传感器在<b>烘干模块内部</b>，烘干前后读数波动比想象中大。</span>
   </li>
-  <li><span class="step">4</span><b>湿度持续高 → 直接开烘干功能</b>
+  <li><span class="step">5</span><b>湿度持续高 → 直接开烘干功能</b>
     <span class="sub2">AMS HT 自带烘干：放入耗材 → 选耗材类型 → 启动烘干。注意 HT 必须用<b>标配电源线独立供电</b>，打印机无法给它供电。</span>
-  </li>
-  <li><span class="step">5</span><b>固件升级到最新</b>
-    <span class="sub2">2025 年 5 月 X/P 系列固件更新后，AMS 2 / HT 的烘干功能启用、湿度显示更精确。老固件显示不准也可能是原因。</span>
   </li>
   <li><span class="step">6</span><b>还是异常 → 记录数据找售后</b>
     <span class="sub2">传感器故障（如一直 100%、数值完全不动）需要提交服务工单，附上打印机日志和照片。</span>
@@ -836,75 +837,6 @@ document.getElementById('btnPlay').addEventListener('click', () => { play3 = !pl
 document.getElementById('btnReset').addEventListener('click', () => { t3 = 0; play3 = true; });
 loop3();
 
-/* ================= AMS 一代档位 ================= */
-const cv4 = document.getElementById('cvLevel');
-const s4 = setupCanvas(cv4);
-const { ctx: c4, W: W4, H: H4 } = s4;
-let lvlT = 20;
-function lvlOf(ah) {
-  if (ah < 5.2) return { l: 'A', c: '#66bb6a' };
-  if (ah < 6.6) return { l: 'B', c: '#ffd54f' };
-  if (ah < 8.0) return { l: 'C', c: '#ffa726' };
-  if (ah < 9.5) return { l: 'D', c: '#ef5350' };
-  return { l: 'E', c: '#ef5350' };
-}
-function drawLevel() {
-  c4.clearRect(0, 0, W4, H4);
-  const ah = 4.7 + 0.3 * (lvlT - 20); // 官方：20°C→4.7, 24°C→5.9
-  const lv = lvlOf(ah);
-  // 五档条
-  const x0 = 60, x1 = 420, y = 100;
-  const segs = ['A', 'B', 'C', 'D', 'E'];
-  const cols = ['#66bb6a', '#ffd54f', '#ffa726', '#ef5350', '#ef5350'];
-  const w = (x1 - x0) / 5;
-  for (let i = 0; i < 5; i++) {
-    c4.fillStyle = cols[i];
-    if (segs[i] === lv.l) {
-      c4.globalAlpha = 1;
-      c4.fillRect(x0 + i * w + 3, y - 14, w - 6, 34);
-      c4.strokeStyle = '#fff';
-      c4.lineWidth = 2;
-      c4.strokeRect(x0 + i * w + 3, y - 14, w - 6, 34);
-    } else {
-      c4.globalAlpha = 0.25;
-      c4.fillRect(x0 + i * w + 3, y - 14, w - 6, 34);
-    }
-    c4.globalAlpha = 1;
-    c4.fillStyle = '#fff';
-    c4.font = 'bold 20px "PingFang SC", sans-serif';
-    c4.textAlign = 'center';
-    c4.fillText(segs[i], x0 + i * w + w / 2, y + 8);
-  }
-  c4.font = '13px "PingFang SC", sans-serif';
-  c4.fillStyle = '#9da7b3';
-  c4.fillText('低 ← 湿度等级 → 高（C 及以上＝潮湿，该换干燥剂）', 240, 150);
-  // 数据
-  c4.textAlign = 'left';
-  c4.font = 'bold 16px "PingFang SC", sans-serif';
-  c4.fillStyle = '#4fc3f7';
-  c4.fillText(`RH = 30% 固定`, 470, 70);
-  c4.fillStyle = '#e6edf3';
-  c4.font = '15px "PingFang SC", sans-serif';
-  c4.fillText(`温度 ${lvlT.toFixed(1)}°C`, 470, 100);
-  c4.fillText(`含水量 ≈ ${ah.toFixed(1)} g/m³`, 470, 126);
-  c4.font = 'bold 26px "PingFang SC", sans-serif';
-  c4.fillStyle = lv.c;
-  c4.fillText(`档位：${lv.l}`, 470, 162);
-  c4.font = '13px "PingFang SC", sans-serif';
-  c4.fillStyle = '#9da7b3';
-  c4.fillText('（档位为示意，实际以官方固件曲线为准）', 470, 196);
-  const hint = document.getElementById('lvlHint');
-  hint.innerHTML = `温度越高，同样 RH 下含水量越高，档位越高：<b style="color:var(--green)">20°C → A 档</b>（4.7 g/m³），<b style="color:var(--yellow)">24°C → B 档</b>（5.9 g/m³）—— 这就是官方举的两个例子。`;
-}
-const lvlSlider = document.getElementById('lvlSlider');
-const lvlVal = document.getElementById('lvlVal');
-lvlSlider.addEventListener('input', () => {
-  lvlT = parseFloat(lvlSlider.value);
-  lvlVal.textContent = lvlT.toFixed(1) + '°C';
-});
-lvlSlider.dispatchEvent(new Event('input'));
-function loop4() { drawLevel(); requestAnimationFrame(loop4); }
-loop4();
 </script>
 </body>
 </html>
