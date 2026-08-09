@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>一部昇腾史、18层宝塔与全球芯片30年史诗 | 廖恒博士访谈笔记</title>
+    <style>
+        :root {
+            --primary-color: #0f4c81;
+            --secondary-color: #1e293b;
+            --accent-color: #3b82f6;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-color: #334155;
+            --heading-color: #0f172a;
+            --border-color: #e2e8f0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.7;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: linear-gradient(135deg, #0f4c81 0%, #1e3a8a 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+            line-height: 1.3;
+        }
+
+        .meta {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 25px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .card h2 {
+            color: var(--primary-color);
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .card h3 {
+            color: var(--heading-color);
+            margin: 15px 0 10px;
+            font-size: 1.15rem;
+        }
+
+        ul {
+            padding-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .highlight-box {
+            background-color: #eff6ff;
+            border-left: 4px solid var(--accent-color);
+            padding: 15px 20px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .book-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .book-table th, .book-table td {
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            text-align: left;
+        }
+
+        .book-table th {
+            background-color: #f1f5f9;
+            color: var(--heading-color);
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            header { padding: 25px; }
+            header h1 { font-size: 1.6rem; }
+            .card { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>一部昇腾史、18层宝塔与全球芯片恢弘30年史诗</h1>
+            <div class="meta">
+                <span>🎤 嘉宾：廖恒博士（华为半导体首席科学家）</span>
+                <span>👩‍💼 主持：张小珺</span>
+                <span>📌 深度学习笔记整理</span>
+            </div>
+        </header>
+
+        <div class="card">
+            <h2>01. 访谈缘起与硬件人才痛点</h2>
+            <h3>💡 接受访谈的三大初衷</h3>
+            <ul>
+                <li><b>工程史梳理：</b>回顾个人工程生涯，为行业及后来者留下启发。</li>
+                <li><b>缓解人才断档焦虑：</b>在清华授课后深感担忧，年青一代更倾向追逐AI算法等热点，而将底层处理器设计视为“鬼门关”。</li>
+                <li><b>展现产业全景：</b>帮助日常埋头苦干的工程师建立完整的产业视角与演进规律。</li>
+            </ul>
+            <div class="highlight-box">
+                <b>试错成本哲学：</b>软件代码10分钟即可编排运行一次，而芯片设计需要18-20个月才能 Tape out（按一次按钮），单次成本数亿元且绝不允许出现 Critical Bug，因此合格的架构师必须经历物理世界的严谨约束。
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>02. 全球半导体30年演进与“反直觉”规律</h2>
+            <h3>📈 发展主线与周期</h3>
+            <ul>
+                <li><b>CPU主线：</b>PC办公 &rarr; 企业IT服务器 &rarr; 数字基础设施 &rarr; AI算力浪潮。</li>
+                <li><b>通信主线：</b>有线宽带/光纤干线 &rarr; 移动互联网/智能手机 &rarr; 5G基础设施。</li>
+            </ul>
+            <h3>反直觉现象：垄断如何抑制创新？</h3>
+            <p>2005-2015年间，芯片曾被硅谷VC视为“夕阳产业”。上层互联网巨头形成压倒性垄断后拥有极高定价权与技术主导权，削弱了底层芯片供应链的创新动力。而当下的AI变革尚未成熟饱合，快速迭代打破了单一垄断，重新激活了半导体活力。</p>
+        </div>
+
+        <div class="card">
+            <h2>03. 核心认知模型：“18层宝塔”与协同设计（Co-Design）</h2>
+            <p>从18楼的上层应用（微信、支付宝、各类AI模型）到底层的物理、化学、材料与矿山（地下室），半导体贯穿全栈。</p>
+            <div class="highlight-box">
+                <b>DeepSeek 与昇腾的协同设计示例：</b><br>
+                Nvidia Blackwell 的 Tensor/Vector 算力比例约为 32:1，而华为昇腾 Cube 与 Vector 比例约为 8:1。<br>
+                DeepSeek 团队主动选择了极高复杂度的算法（激活1/32参数稀疏化、长序列压缩），用更多的 Vector 计算换取 32 倍算力与显存省减，在架构上完美匹配了昇腾 8:1 的算力特征。
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>04. 华为昇腾演进史：从 910 到 950 的生死蜕变</h2>
+            <ul>
+                <li><b>910 时代：</b>具备先进逻辑工艺，但对 AI 生态与商业化路径尚处于探索期。</li>
+                <li><b>断供危机：</b>抱定决战信念，将宏观死局拆解为上千个具体工程物理问题逐一击破，重构上万单板零配件。</li>
+                <li><b>950 时代：</b>根据推理（Decode）对内存带宽极其敏感的特点，打磨高带宽内存与细颗粒度（7KB）超节点紧耦合网络。</li>
+                <li><b>新同构与大算子融合：</b>同时支持 SIMD 与 SIMT 消除宗派争论，发力 PTO/Tland 等编译器技术，坚决“不抄作业”。</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>05. 摩尔定律困境与系统级突破</h2>
+            <ul>
+                <li><b>物理限制：</b>16nm/7nm 之后，单晶体管成本不再降低，性能提升微弱，仅剩能效收益。</li>
+                <li><b>空间换密度：</b>拒绝盲目堆叠极端单机柜密度（如1MW机柜导致的散热失衡），通过光互联让芯片宽松摆放，构建 10万卡/50万卡 超节点集群。</li>
+                <li><b>NPO（近封装光模块）：</b>采用 near package optics 方案，置于芯片旁 1-5cm 处，既缩短电缆又避免光器件过热失效。</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>06. 廖恒推荐工程师书单</h2>
+            <table class="book-table">
+                <thead>
+                    <tr>
+                        <th>书名</th>
+                        <th>核心洞察</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><b>《思想工厂》</b> (The Idea Factory)</td>
+                        <td>记录贝尔实验室历史，展示特定历史时空要素碰撞产生的深刻技术突破。</td>
+                    </tr>
+                    <tr>
+                        <td><b>《创新者的窘境》</b> (The Innovator's Dilemma)</td>
+                        <td>成熟组织面临自我革新时的困境与应对思考。</td>
+                    </tr>
+                    <tr>
+                        <td><b>《Rules of Work》</b></td>
+                        <td>指导年轻工程师理解工作环境与多团队协作共识。</td>
+                    </tr>
+                    <tr>
+                        <td><b>《Edison》传记</b></td>
+                        <td>工程者品质：不做花哨事，专注解决现实中有价值的问题。</td>
+                    </tr>
+                    <tr>
+                        <td><b>《新机器的灵魂》</b> (The Soul of a New Machine)</td>
+                        <td>记录工程师群体真实的开发日常与传承。</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <footer>
+            <p>基于《张小珺商业访谈 | 廖恒博士5小时对谈》内容整理生成</p>
+        </footer>
+    </div>
+</body>
+</html>
