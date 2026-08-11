@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3GW 算力集群核算：英伟达 vs 昇腾（完整推演）</title>
+<style>
+  :root{
+    --bg:#0d1117; --bg2:#161b22; --bg3:#1c2333; --line:#2d333b;
+    --txt:#e6edf3; --dim:#8b949e; --acc:#58a6ff; --grn:#3fb950; --org:#d29922; --red:#f85149; --pur:#bc8cff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei","Segoe UI",sans-serif;line-height:1.7;padding:24px 16px 80px}
+  .wrap{max-width:860px;margin:0 auto}
+  h1{font-size:1.7em;line-height:1.4;margin-bottom:6px}
+  .sub{color:var(--dim);font-size:.95em;margin-bottom:20px}
+  .kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin:18px 0 28px}
+  .kpi .box{background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:14px}
+  .kpi .v{font-size:1.35em;font-weight:700;color:var(--acc)}
+  .kpi .v.g{color:var(--grn)} .kpi .v.o{color:var(--org)} .kpi .v.r{color:var(--red)} .kpi .v.p{color:var(--pur)}
+  .kpi .l{font-size:.8em;color:var(--dim);margin-top:2px}
+  h2{font-size:1.25em;margin:34px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--line);color:var(--acc)}
+  h3{font-size:1.05em;margin:20px 0 8px;color:var(--txt)}
+  p{margin:8px 0;font-size:.95em}
+  table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.88em}
+  .tbl-wrap{overflow-x:auto;border-radius:8px}
+  th{background:var(--bg3);color:var(--acc);text-align:left;padding:8px 10px;border:1px solid var(--line);white-space:nowrap}
+  td{padding:8px 10px;border:1px solid var(--line);vertical-align:top}
+  tr:nth-child(even) td{background:rgba(255,255,255,.02)}
+  .hl{color:var(--grn);font-weight:600}
+  .hlr{color:var(--red);font-weight:600}
+  .hlo{color:var(--org);font-weight:600}
+  .note{background:var(--bg2);border-left:3px solid var(--org);padding:10px 14px;border-radius:0 8px 8px 0;font-size:.88em;color:var(--dim);margin:12px 0}
+  .warn{background:rgba(248,81,73,.08);border-left:3px solid var(--red);padding:10px 14px;border-radius:0 8px 8px 0;font-size:.9em;margin:12px 0}
+  .ok{background:rgba(63,185,80,.08);border-left:3px solid var(--grn);padding:10px 14px;border-radius:0 8px 8px 0;font-size:.9em;margin:12px 0}
+  .formula{background:var(--bg2);border:1px dashed var(--line);border-radius:8px;padding:12px 16px;margin:10px 0;font-family:"SF Mono",Menlo,Consolas,monospace;font-size:.85em;color:var(--grn);overflow-x:auto}
+  .formula .r{color:var(--org)} .formula .b{color:var(--acc)} .formula .d{color:var(--dim)}
+  .src{font-size:.75em;color:var(--dim);vertical-align:super}
+  .tabnav{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0}
+  .tabnav button{background:var(--bg2);border:1px solid var(--line);color:var(--dim);padding:8px 16px;border-radius:20px;cursor:pointer;font-size:.88em;transition:.15s}
+  .tabnav button.on{background:var(--acc);color:#0d1117;border-color:var(--acc);font-weight:600}
+  .panel{display:none}
+  .panel.on{display:block}
+  ul,ol{margin:8px 0 8px 22px;font-size:.93em}
+  li{margin:4px 0}
+  .foot{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--dim);font-size:.8em}
+  .tags{color:var(--dim);font-size:.85em;margin-bottom:14px}
+  .tags span{background:var(--bg2);border:1px solid var(--line);padding:2px 10px;border-radius:12px;margin-right:6px;font-size:.8em}
+  .bar-wrap{margin:8px 0}
+  .bar{height:16px;background:var(--bg2);border-radius:8px;overflow:hidden;display:flex}
+  .bar .seg{display:flex;align-items:center;justify-content:center;font-size:.7em;color:#fff;font-weight:600}
+  .cmp{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}
+  .cmp .col{background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:14px}
+  .cmp .col h4{font-size:.95em;margin-bottom:8px}
+  .cmp .col.nv h4{color:var(--grn)} .cmp .col.asc h4{color:var(--org)}
+  .small{font-size:.8em;color:var(--dim)}
+  @media(max-width:640px){ .cmp{grid-template-columns:1fr} table{font-size:.8em} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>3GW 算力集群核算：英伟达 vs 昇腾</h1>
+<div class="sub">完整推演 · 含理论值 / 机房 PUE / 实际可落地 / 双产品线差异 | 更新：2026-08-11</div>
+<div class="tags">
+  <span>#算力集群</span><span>#英伟达</span><span>#昇腾</span><span>#投资测算</span><span>#3GW</span>
+</div>
+
+<!-- ============ 结论 KPI ============ -->
+<div class="kpi">
+  <div class="box"><div class="v">2,500 MW</div><div class="l">IT 可用电力（3GW ÷ PUE 1.2）</div></div>
+  <div class="box"><div class="v g">~143 万张</div><div class="l">英伟达 GB200 方案 GPU 数（理论）</div></div>
+  <div class="box"><div class="v o">~284 万张</div><div class="l">昇腾 950 方案卡数（理论）</div></div>
+  <div class="box"><div class="v">990 亿$</div><div class="l">英伟达方案总投资（理论）</div></div>
+  <div class="box"><div class="v">708 亿$</div><div class="l">昇腾方案总投资（理论）</div></div>
+  <div class="box"><div class="v r">~2×</div><div class="l">英伟达等效算力 ≈ 昇腾的 2 倍</div></div>
+</div>
+
+<div class="warn"><b>一句话结论：</b>同样 3GW 电力下，英伟达 GB200 方案约 <b>143 万张卡、990 亿美元</b>（等效算力更高）；昇腾 Atlas 950 方案约 <b>284 万张卡、708 亿美元</b>（便宜约 30%，但等效算力只有英伟达的一半）。真正的瓶颈：英伟达被禁运，昇腾产能不足（年产能仅需求的 1/4-1/10）。</div>
+
+<!-- ============ 一、口径与方法论 ============ -->
+<h2>一、核算口径与方法论（先讲清楚怎么算）</h2>
+<p>本次核算遵循固定链路，每个环节单独列参数、列依据，避免"拍脑袋"：</p>
+<div class="formula">3GW 站点总电力 → <span class="b">PUE</span> 折算 → IT 可用电力 → <span class="b">负载率</span> 修正 → 机柜/集群数 → 卡数 → <span class="b">单价</span> → GPU 系统成本 + <span class="b">基建成本</span> → 总投资</div>
+<ol>
+  <li><b>口径定义</b>：3GW 指站点总供电容量（含 IT 负载 + 制冷 + 配电损耗 + 冗余），是行业立项口径。</li>
+  <li><b>理论值 vs 实际可落地</b>：理论 = IT 电力满载连续运行；实际 = 考虑负载率（85%）、N+1 冗余、峰值余量后的可持续负载。</li>
+  <li><b>算力口径</b>：英伟达官方规格为"稀疏（sparse）"值，稠密为稀疏一半；昇腾为稠密口径。对比时已做说明，避免数字打架。</li>
+  <li><b>价格口径</b>：GPU 系统 = 整柜/整集群采购价（含互联）；基建 = 土建+供配电+制冷+网络配套，按行业每 MW 造价。</li>
+  <li><b>等效算力锚点</b>：采用 DeepSeek 创始人梁文锋实测口径——"16000 张华为 950 ≈ 4000 张英伟达 B 系列"（4:1），这是目前最权威的第三方实测数据。<span class="src">[S7]</span></li>
+</ol>
+
+<!-- ============ 二、产品参数矩阵 ============ -->
+<h2>二、产品参数矩阵（核算的"原料"）</h2>
+
+<h3>2.1 英伟达产品线</h3>
+<div class="tbl-wrap"><table>
+  <tr><th>型号</th><th>单卡功耗</th><th>算力（稀疏）</th><th>显存/带宽</th><th>市场价</th><th>定位</th></tr>
+  <tr><td>H100 SXM</td><td>700W</td><td>FP8 ~1,979 TFLOPS<br>FP16 ~989 TFLOPS</td><td>80GB HBM3 / 3.35TB/s</td><td>2.5-3 万美元<span class="src">[S5]</span></td><td>Hopper 上一代旗舰</td></tr>
+  <tr><td>H200</td><td>700W</td><td>同 H100 算力</td><td>141GB HBM3e / 4.8TB/s</td><td>3-4 万美元<span class="src">[S5]</span></td><td>H100 显存增强版</td></tr>
+  <tr><td>B200</td><td>1,000W</td><td>FP4 20 PFLOPS<br>FP8 10 PFLOPS<span class="src">[S1]</span></td><td>192GB HBM3e / 8TB/s</td><td>3-4 万美元<span class="src">[S6]</span></td><td>Blackwell 单卡</td></tr>
+  <tr><td><b>GB200 NVL72</b></td><td>整柜 120-132kW<br>（72 GPU + 36 CPU）</td><td>FP4 1,440 PFLOPS<br>FP8 720 PFLOPS<span class="src">[S1]</span></td><td>13.4TB HBM3e / 576TB/s<br>NVLink 130TB/s</td><td>~300 万美元/柜<span class="src">[S4]</span></td><td><b>当前主流整柜方案</b></td></tr>
+  <tr><td>GB300 NVL72</td><td>整柜 135-140kW<span class="src">[S2]</span></td><td>FP4 ~2,160 PFLOPS<br>（较 GB200 提升 ~50%）</td><td>升级 HBM3e</td><td>350-400 万美元/柜（估）</td><td>2026H2 上市</td></tr>
+  <tr><td>H20（对华合规）</td><td>400W</td><td>FP16 150 TFLOPS<br>INT8 300 TOPS<span class="src">[S3]</span></td><td>96GB HBM3</td><td>1.2-1.5 万美元<br>（8.6-11 万 RMB）<span class="src">[S3]</span></td><td>受限版，算力阉割</td></tr>
+</table></div>
+
+<h3>2.2 昇腾产品线</h3>
+<div class="tbl-wrap"><table>
+  <tr><th>型号</th><th>单卡功耗</th><th>算力</th><th>显存</th><th>价格</th><th>定位</th></tr>
+  <tr><td>昇腾 910B</td><td>~400W</td><td>FP16 320 TFLOPS<span class="src">[S3]</span></td><td>80GB HBM<span class="src">[S8]</span></td><td>10-12 万 RMB</td><td>上一代（对标 A100 的 ~70%）</td></tr>
+  <tr><td>昇腾 910C</td><td>~700W</td><td>≈2×910B（双 die）</td><td>128GB HBM</td><td>15-20 万 RMB</td><td>910B 拼接版</td></tr>
+  <tr><td><b>昇腾 950PR</b></td><td><b>600W</b><span class="src">[S9]</span></td><td>FP4 ~2 PFLOPS<br>（1024 卡集群 2 EFLOPS）<span class="src">[S10]</span></td><td><b>128GB</b> HiBL1.0<span class="src">[S8]</span></td><td><b>7 万 RMB</b>（HBM）<br>5 万 RMB（DDR）<span class="src">[S11]</span></td><td>推理/推荐旗舰（2026 量产）</td></tr>
+  <tr><td>昇腾 950DT</td><td>~800-900W（估）</td><td>同 PR 更高算力</td><td>144GB HiZQ2.0<span class="src">[S8]</span></td><td>—</td><td>训练版（超节点主力）</td></tr>
+  <tr><td><b>Atlas 950 SuperPoD</b></td><td>集群 ~900kW<br>（1024 卡整系统）</td><td>1024 卡 FP4 2 EFLOPS<span class="src">[S10]</span><br>满配 8192 卡 FP4 16 EFLOPS<span class="src">[S12]</span></td><td>—</td><td>~1,500 万美元/集群<span class="src">[S13]</span></td><td><b>万卡级超节点</b>（灵衢 2.0 全光）</td></tr>
+</table></div>
+
+<div class="note">⚠️ 昇腾官方不公布单卡 TDP 与精确算力，表中 950DT 功耗为工程估算（基于 950PR 600W + 训练负载余量）；FP4 算力由"1024 卡 2 EFLOPS"反推（稠密口径）。英伟达 FP4 为稀疏口径。跨厂商对比以 DeepSeek 实测 4:1 为准。</div>
+
+<!-- ============ 三、英伟达方案 ============ -->
+<h2>三、英伟达方案核算（GB200 NVL72 为主方案）</h2>
+
+<h3>3.1 电力折算</h3>
+<div class="formula">IT 电力 = 站点总电力 ÷ PUE = 3,000MW ÷ <span class="r">1.2</span> = <span class="b">2,500MW</span></div>
+<p><b>PUE 取值依据</b>：现代液冷超大规模数据中心设计 PUE 1.15-1.25（GB200 全液冷是标配）；中国新建智算中心设计值普遍 ≤1.25。取 1.2 为中性值。敏感性见第六节。</p>
+
+<h3>3.2 卡数与算力（理论值 = 满载）</h3>
+<div class="formula">机柜数 = 2,500,000kW ÷ 125kW/柜 ≈ <span class="b">20,000 柜</span></div>
+<div class="formula">GPU 数 = 20,000 柜 × 72 卡 = <span class="b">144 万张 B200</span></div>
+<div class="formula">总算力 = 20,000 柜 × 1.44 EFLOPS(FP4) = <span class="b">28.8 EFLOPS FP4</span></div>
+<p class="small">整柜功耗取 120-132kW 区间中值 125kW <span class="src">[S2]</span>；单柜 FP4 1,440 PFLOPS 为 NVIDIA 官方规格（稀疏）<span class="src">[S1]</span>。</p>
+
+<h3>3.3 投资测算（理论）</h3>
+<div class="tbl-wrap"><table>
+  <tr><th>项目</th><th>计算</th><th>金额</th></tr>
+  <tr><td>GPU 系统（整柜）</td><td>20,000 柜 × 300 万美元</td><td>600 亿美元</td></tr>
+  <tr><td>外部网络/存储</td><td>GPU 系统 × 10%</td><td>60 亿美元</td></tr>
+  <tr><td>数据中心基建</td><td>3,000MW × 1,000-1,200 万美元/MW<span class="src">[S14]</span></td><td>300-360 亿美元</td></tr>
+  <tr><td><b>总投资</b></td><td></td><td class="hl"><b>≈ 960-1,020 亿美元</b>（取中 ~990 亿）</td></tr>
+</table></div>
+
+<h3>3.4 实际可落地（85% 负载率修正）</h3>
+<div class="note">数据中心无法 100% 满载运行：需预留峰值余量、N+1 冗余、分期上架。行业实际运行负载率 75-90%，取 <b>85%</b>（新建液冷集群乐观值）。</div>
+<div class="tbl-wrap"><table>
+  <tr><th>项目</th><th>理论</th><th>实际（85%）</th></tr>
+  <tr><td>IT 可用电力</td><td>2,500MW</td><td>2,125MW</td></tr>
+  <tr><td>机柜数</td><td>20,000</td><td>17,000</td></tr>
+  <tr><td>GPU 数</td><td>144 万张</td><td><b>122 万张</b></td></tr>
+  <tr><td>总算力（FP4）</td><td>28.8 EFLOPS</td><td>24.5 EFLOPS</td></tr>
+  <tr><td>GPU 系统投资</td><td>660 亿美元</td><td>561 亿美元</td></tr>
+  <tr><td>基建（不变）</td><td>300-360 亿美元</td><td>300-360 亿美元</td></tr>
+  <tr><td><b>总投资</b></td><td class="hl">~990 亿美元</td><td class="hlo"><b>~860-920 亿美元</b></td></tr>
+</table></div>
+
+<div class="ok"><b>英伟达方案结论</b>：3GW ≈ <b>122-144 万张 B200，总投资 860-1,020 亿美元</b>（约 6,100-7,200 亿人民币，按 7.1 汇率）。</div>
+
+<!-- ============ 四、昇腾方案 ============ -->
+<h2>四、昇腾方案核算（Atlas 950 SuperPoD 超节点）</h2>
+
+<h3>4.1 集群参数</h3>
+<div class="formula">单集群 = <span class="r">1,024 卡</span>（950PR/DT）| FP4 2 EFLOPS | 功耗 ≈ <span class="r">900kW</span>（整系统含卡+CPU+互联+液冷）| 价格 ≈ 1,500 万美元<span class="src">[S13]</span></div>
+<p class="small">集群功耗估算：950PR 600W × 1024 卡 = 614kW 纯卡，加鲲鹏 CPU、灵衢交换、电源与液冷损耗 ≈ 850-950kW，取 900kW。价格含机柜+灵衢互联+液冷（雪球拆解口径 1,500 万美元/1024 卡集群）。</p>
+
+<h3>4.2 卡数与算力（理论）</h3>
+<div class="formula">集群数 = 2,500,000kW ÷ 900kW ≈ <span class="b">2,778 集群</span></div>
+<div class="formula">卡数 = 2,778 × 1,024 = <span class="b">284 万张昇腾 950</span></div>
+<div class="formula">总算力 = 2,778 × 2 EFLOPS = <span class="b">5.6 EFLOPS FP4</span>（稠密口径）</div>
+
+<h3>4.3 投资测算（理论）</h3>
+<div class="tbl-wrap"><table>
+  <tr><th>项目</th><th>计算</th><th>金额</th></tr>
+  <tr><td>集群系统</td><td>2,778 × 1,500 万美元</td><td>417 亿美元</td></tr>
+  <tr><td>跨集群光互联</td><td>集群系统 × 5%</td><td>21 亿美元</td></tr>
+  <tr><td>数据中心基建</td><td>3,000MW × 800-1,000 万美元/MW<span class="src">[S15]</span></td><td>240-300 亿美元</td></tr>
+  <tr><td><b>总投资</b></td><td></td><td class="hlo"><b>≈ 678-738 亿美元</b>（取中 ~708 亿）</td></tr>
+</table></div>
+<p class="small">昇腾方案基建按中国建设成本 800-1,000 万美元/MW（低于美国 1,000-1,200 万，人工/土地成本差异）。</p>
+
+<h3>4.4 实际可落地（85% 负载）</h3>
+<div class="tbl-wrap"><table>
+  <tr><th>项目</th><th>理论</th><th>实际（85%）</th></tr>
+  <tr><td>集群数</td><td>2,778</td><td>2,361</td></tr>
+  <tr><td>卡数</td><td>284 万张</td><td><b>242 万张</b></td></tr>
+  <tr><td>总算力（FP4）</td><td>5.6 EFLOPS</td><td>4.7 EFLOPS</td></tr>
+  <tr><td>集群投资</td><td>438 亿美元</td><td>372 亿美元</td></tr>
+  <tr><td>基建（不变）</td><td>240-300 亿美元</td><td>240-300 亿美元</td></tr>
+  <tr><td><b>总投资</b></td><td class="hlo">~708 亿美元</td><td class="hlo"><b>~612-672 亿美元</b></td></tr>
+</table></div>
+
+<div class="ok"><b>昇腾方案结论</b>：3GW ≈ <b>242-284 万张昇腾 950，总投资 610-740 亿美元</b>（约 4,300-5,300 亿人民币）。</div>
+
+<!-- ============ 五、对比 ============ -->
+<h2>五、两方案对比：花钱 vs 买算力</h2>
+
+<h3>5.1 等效算力换算（关键）</h3>
+<div class="warn">英伟达 FP4 是"稀疏"口径、昇腾是"稠密"口径，直接比理论值会严重失真。因此引入 <b>DeepSeek 实测锚点（4:1）</b>——"16000 张华为 950 ≈ 4000 张英伟达 B 系列"（训练场景）<span class="src">[S7]</span>：</div>
+<div class="tbl-wrap"><table>
+  <tr><th>指标</th><th>英伟达 GB200</th><th>昇腾 Atlas 950</th><th>差距</th></tr>
+  <tr><td>物理卡数（理论）</td><td>144 万张</td><td>284 万张</td><td>昇腾多 97%</td></tr>
+  <tr><td><b>等效算力</b>（按 4:1 折算）</td><td class="hl">144 万张等效</td><td class="hlo">284 ÷ 4 = <b>71 万张等效</b></td><td class="hlr">英伟达多 ~2 倍</td></tr>
+  <tr><td>总投资（理论）</td><td>~990 亿美元</td><td>~708 亿美元</td><td>昇腾便宜 28%</td></tr>
+  <tr><td><b>单位等效算力成本</b></td><td class="hl">6.9 亿$/万卡等效</td><td class="hlo">10.0 亿$/万卡等效</td><td class="hlr">昇腾贵 ~45%</td></tr>
+</table></div>
+
+<h3>5.2 投资结构对比（理论口径）</h3>
+<div class="cmp">
+  <div class="col nv">
+    <h4>🟢 英伟达 GB200（~990 亿$）</h4>
+    <div class="bar-wrap"><div class="bar"><div class="seg" style="width:61%;background:#3fb950">GPU 660亿</div><div class="seg" style="width:33%;background:#58a6ff">基建 330亿</div></div></div>
+    <p class="small">GPU 系统占 61%，基建占 33%+</p>
+  </div>
+  <div class="col asc">
+    <h4>🟡 昇腾 Atlas 950（~708 亿$）</h4>
+    <div class="bar-wrap"><div class="bar"><div class="seg" style="width:62%;background:#d29922">集群 438亿</div><div class="seg" style="width:38%;background:#58a6ff">基建 270亿</div></div></div>
+    <p class="small">集群系统占 62%，基建占 38%</p>
+  </div>
+</div>
+
+<h3>5.3 全维度对比表</h3>
+<div class="tbl-wrap"><table>
+  <tr><th>维度</th><th>英伟达 GB200</th><th>昇腾 Atlas 950</th><th>点评</th></tr>
+  <tr><td>卡数（理论）</td><td>144 万张</td><td>284 万张</td><td>昇腾单卡功耗低（600W vs 1000W），同电力能装更多卡</td></tr>
+  <tr><td>等效算力</td><td class="hl">2×</td><td>1×</td><td>单卡算力差距（FP4 20 vs 2 PFLOPS）靠数量补不齐</td></tr>
+  <tr><td>总投资</td><td>~990 亿$</td><td class="hlo">~708 亿$（-28%）</td><td>昇腾卡单价低（7万 vs 21万 RMB）</td></tr>
+  <tr><td>单位等效算力成本</td><td class="hl">基准</td><td class="hlr">+45%</td><td>买同样算力，昇腾更贵</td></tr>
+  <tr><td>合规性</td><td class="hlr">❌ 禁运</td><td class="hl">✅ 自主可控</td><td>2026 年中国无法合规采购 GB200</td></tr>
+  <tr><td>产能</td><td>~360-500 万张/年（全球）</td><td class="hlr">20-75 万张/年<span class="src">[S11]</span></td><td>昇腾产能只够需求的 1/4-1/10</td></tr>
+  <tr><td>生态</td><td>CUDA 成熟</td><td>CANN/MindSpore 追赶中</td><td>DeepSeek V4 已实测可用<span class="src">[S16]</span></td></tr>
+  <tr><td>交付周期</td><td>禁运不可行</td><td>超节点 2026H2 批量上市<span class="src">[S17]</span></td><td>现实只有昇腾可选</td></tr>
+</table></div>
+
+<!-- ============ 六、敏感性分析 ============ -->
+<h2>六、敏感性分析（参数动了会怎样）</h2>
+
+<h3>6.1 PUE 敏感性（对卡数的影响）</h3>
+<div class="tbl-wrap"><table>
+  <tr><th>PUE</th><th>IT 电力</th><th>英伟达卡数</th><th>昇腾卡数</th></tr>
+  <tr><td>1.15（极致液冷）</td><td>2,609MW</td><td>150 万张</td><td>297 万张</td></tr>
+  <tr><td>1.20（基准）</td><td>2,500MW</td><td class="hl">144 万张</td><td class="hlo">284 万张</td></tr>
+  <tr><td>1.30（风冷混合）</td><td>2,308MW</td><td>133 万张</td><td>262 万张</td></tr>
+</table></div>
+
+<h3>6.2 价格敏感性</h3>
+<div class="tbl-wrap"><table>
+  <tr><th>变量</th><th>低</th><th>基准</th><th>高</th></tr>
+  <tr><td>GB200 整柜价</td><td>280 万$（920 亿$总）</td><td>300 万$（990 亿$）</td><td>350 万$（1,130 亿$）</td></tr>
+  <tr><td>昇腾 950PR 单价</td><td>5 万 RMB（598 亿$总）</td><td>7 万 RMB（708 亿$）</td><td>10 万 RMB（858 亿$）</td></tr>
+  <tr><td>基建单价</td><td>800 万$/MW</td><td>1,000-1,200 万$/MW</td><td>2,000 万$/MW（高密 AI）<span class="src">[S14]</span></td></tr>
+</table></div>
+
+<div class="note">基建是最不确定项：AI 高密度液冷园区造价可达 2,000 万美元/MW（含 500kV 变电站、储能、备电）<span class="src">[S14]</span>。若按此口径，3GW 基建 = 600 亿美元，两方案总投资分别升至 ~1,320 亿$ / ~1,060 亿$。</div>
+
+<!-- ============ 七、现实约束 ============ -->
+<h2>七、现实约束（为什么不能只看纸面）</h2>
+
+<h3>7.1 禁运：英伟达方案在中国不成立</h3>
+<ul>
+  <li>2023.10 起 B200/H100 对华禁售；2025.4 起 H20 也需出口许可。</li>
+  <li>合规可购的 H20：FP16 仅 150 TFLOPS（B200 的 ~1/130），400W/卡。3GW 若全用 H20 需 <b>~470 万张</b>、且等效算力仅 GB200 方案的 ~2%。<span class="src">[S3]</span></li>
+  <li>结论：<b>中国 3GW 集群实际只有昇腾（或存量英伟达）路线</b>。本文英伟达核算用于对照"花同样的电力/钱能买多少算力"。</li>
+</ul>
+
+<h3>7.2 产能：昇腾最大的硬约束</h3>
+<ul>
+  <li>梁文锋实测：华为给 DeepSeek 的产能 ~1.6 万张/年，互联网大厂十几万张/年。<span class="src">[S7]</span></li>
+  <li>路透社/新浪口径：昇腾 950PR 2026 年计划销售 ~75 万片。<span class="src">[S11]</span></li>
+  <li>3GW 需求 242-284 万张 → <b>按当前产能需排产 3-10 年</b>。这也是现实中没有"纯昇腾 3GW"立项的原因。</li>
+</ul>
+
+<h3>7.3 电力与占地（3GW 到底多大）</h3>
+<div class="tbl-wrap"><table>
+  <tr><th>项目</th><th>估算</th><th>依据</th></tr>
+  <tr><td>机柜数（英伟达）</td><td>~20,000 柜</td><td>2500MW ÷ 125kW</td></tr>
+  <tr><td>机房面积</td><td>~12-15 万 m²</td><td>单柜含通道约 6-8 m²</td></tr>
+  <tr><td>总占地</td><td>~500-900 亩</td><td>含变电站/制冷/配套（参考 100MW 园区 20-30 亩）</td></tr>
+  <tr><td>电力配套</td><td>500kV/220kV 变电站 1-2 座</td><td>3GW 需独立变电站或邻近电厂</td></tr>
+  <tr><td>年耗电</td><td>~26 亿 kWh</td><td>3GW × 24h × 365 × 利用系数 0.85 ÷ PUE</td></tr>
+</table></div>
+
+<h3>7.4 参考锚点：全球 3GW 级项目</h3>
+<ul>
+  <li>OpenAI Stargate：规划 5GW+、四年 5,000 亿美元 → 3GW 约 3,000 亿美元口径（含运营），与本测算同量级。<span class="src">[S18]</span></li>
+  <li>Meta/微软单园区：500MW-1GW，投资 50-150 亿美元 → 3GW ≈ 300-900 亿美元，与本文 610-1,020 亿$ 区间吻合。</li>
+</ul>
+
+<!-- ============ 八、混合方案 ============ -->
+<h2>八、现实路线：混合方案（国内头部厂商实际做法）</h2>
+<p>既然纯英伟达不可行、纯昇腾产能不足，现实立项通常是：</p>
+<div class="tbl-wrap"><table>
+  <tr><th>场景</th><th>推荐算力</th><th>理由</th></tr>
+  <tr><td>大模型训练（前沿）</td><td>英伟达存量卡 + 灰市补充</td><td>CUDA 生态 + 训练效率</td></tr>
+  <tr><td>训练（国产）</td><td>昇腾 950DT 超节点</td><td>万卡集群已跑通 DeepSeek V4</td></tr>
+  <tr><td>推理/推荐（规模化）</td><td>昇腾 950PR</td><td>128GB 显存、单卡 7 万 RMB 性价比</td></tr>
+  <tr><td>边缘/小模型</td><td>昇腾 910B/C</td><td>存量产能、成本低</td></tr>
+</table></div>
+<div class="note">务实口径：3GW 立项中 <b>30-40% 用昇腾（推理+国产训练）、60-70% 依赖存量英伟达/灰市或分期建设</b>，实际投资落在 700-900 亿美元区间，且需 3-5 年分期落地。</div>
+
+<!-- ============ 九、结论 ============ -->
+<h2>九、最终结论</h2>
+<div class="cmp">
+  <div class="col nv">
+    <h4>🟢 英伟达 GB200 方案</h4>
+    <p><b>122-144 万张 B200</b></p>
+    <p><b>860-1,020 亿美元</b></p>
+    <p>等效算力基准（2×昇腾）</p>
+    <p class="hlr">❌ 禁运，中国不可行</p>
+  </div>
+  <div class="col asc">
+    <h4>🟡 昇腾 Atlas 950 方案</h4>
+    <p><b>242-284 万张昇腾 950</b></p>
+    <p><b>610-740 亿美元</b></p>
+    <p>等效算力仅英伟达 ~50%</p>
+    <p class="hlo">⚠️ 产能需 3-10 年排产</p>
+  </div>
+</div>
+<ol>
+  <li><b>电力不是瓶颈，芯片才是</b>：3GW 电力配套（变电站/占地）约 240-360 亿美元可解决；卡才是卡点。</li>
+  <li><b>同电力下英伟达等效算力是昇腾的 2 倍</b>：昇腾靠"更省电的单卡 + 更低的单价"缩小差距，但单卡算力 10 倍差距无法完全弥补。</li>
+  <li><b>昇腾单位等效算力成本高 ~45%</b>：买同样算力昇腾更贵——这是禁运背景下的"自主可控溢价"。</li>
+  <li><b>3GW 昇腾集群现实不可一日建成</b>：年产能 75 万张 vs 需求 284 万张，实际是 3-5 年分期 + 混合架构。</li>
+  <li><b>投资量级</b>：无论哪条路线，3GW ≈ <b>600-1,000 亿美元（4,300-7,200 亿人民币）</b>，属国家级/超级云厂商体量。</li>
+</ol>
+
+<!-- ============ 来源 ============ -->
+<h2>数据来源</h2>
+<table class="small">
+  <tr><th>编号</th><th>数据</th><th>来源</th></tr>
+  <tr><td>S1</td><td>GB200 NVL72 官方规格（72 GPU/FP4 1440 PFLOPS/NVLink 130TB/s）</td><td>NVIDIA 官网 gb200-nvl72</td></tr>
+  <tr><td>S2</td><td>GB200 整柜 120-132kW；GB300 135-140kW</td><td>雪球（麦格米特分析 2026-02；GB300 散热拆解 2025-08）</td></tr>
+  <tr><td>S3</td><td>H20 400W / FP16 150 TFLOPS / 1.2-1.5 万美元</td><td>智东西 2024-02；网易科技 2024-05 实测对比</td></tr>
+  <tr><td>S4</td><td>GB200 NVL72 单价 ~300 万美元</td><td>腾讯新闻/鸿海量产版报道 2024-11；2025 出货 5-7 万柜</td></tr>
+  <tr><td>S5</td><td>H100 成本 3,320$、批发 2.5-3 万$、散货 4.5 万$</td><td>雪球（H100 渠道分析 2026-05）</td></tr>
+  <tr><td>S6</td><td>B200 售价 3-4 万美元</td><td>黄仁勋公开表态（东方财富 2026-01）</td></tr>
+  <tr><td>S7</td><td>DeepSeek 实测 4:1（16000 张 950 ≈ 4000 张 B 系）；华为产能 1.6 万张/年</td><td>DeepSeek 投资者交流会录音文字稿（梁文锋，2026-05）</td></tr>
+  <tr><td>S8</td><td>昇腾 950PR 128GB HiBL1.0；950DT 144GB HiZQ2.0；910B 80GB</td><td>科大讯飞确认（今日头条 2026-07）</td></tr>
+  <tr><td>S9</td><td>昇腾 950PR / Atlas 350 加速卡功耗 600W</td><td>雪球 2026-03</td></tr>
+  <tr><td>S10</td><td>昇腾 950 超节点 1024 卡 FP4 2 EFLOPS</td><td>今日头条（华为 950 超节点亮相）</td></tr>
+  <tr><td>S11</td><td>950PR 售价 7 万（HBM）/5 万（DDR）；2026 计划销售 75 万片</td><td>路透社/新浪科技 2026-07</td></tr>
+  <tr><td>S12</td><td>Atlas 950 SuperPoD 满配 8192 卡、FP4 16 EFLOPS、灵衢 2.0 全光</td><td>雪球（Atlas950 量产解读 2026-07）；CSDN 组网拆解</td></tr>
+  <tr><td>S13</td><td>Atlas 950 超节点 1024 卡 ~1,500 万美元</td><td>雪球 2026-07（单位算力成本对比）</td></tr>
+  <tr><td>S14</td><td>数据中心造价 1,000-1,200 万$/MW，AI 高密可达 2,000 万$</td><td>雪球（太空 vs 沙漠数据中心成本 2026-01）</td></tr>
+  <tr><td>S15</td><td>中国基建造价 800-1,000 万$/MW</td><td>行业综合估算（亚太成本低于美国，Cushman &amp; Wakefield 报告口径）</td></tr>
+  <tr><td>S16</td><td>DeepSeek V4 技术报告：英伟达 GPU + 华为昇腾 NPU</td><td>腾讯科技《华为AI芯片来时的路》2026-08-11（已入库）</td></tr>
+  <tr><td>S17</td><td>昇腾 950 超节点 2026H2 批量上市</td><td>同花顺 2026-04（DeepSeek Pro 定价说明）</td></tr>
+  <tr><td>S18</td><td>Stargate 5GW / 5,000 亿美元规划</td><td>公开报道（OpenAI/微软 2025-01）</td></tr>
+</table></div>
+
+<div class="foot">
+  <p>⚠️ 免责声明：本测算为工程口径估算，基于 2026-08 公开信息。昇腾单卡功耗/算力官方未公布，相关数值为推算；跨厂商等效算力采用 DeepSeek 实测 4:1 锚点。投资金额为量级参考，实际立项需结合具体选址（电价/气候/补贴）、分期方案与设备折扣。</p>
+  <p>数据交叉验证：DeepSeek 投资者交流会录音文字稿（4:1 实测、产能）、NVIDIA 官方规格页（GB200 NVL72）、路透社/新浪（950PR 售价与销量）、雪球多篇硬件拆解（功耗/价格）。</p>
+  <p style="margin-top:10px">Tars 出品 · 2026-08-11 · 散热正常 🧊</p>
+</div>
+
+</div>
+</body>
+</html>
