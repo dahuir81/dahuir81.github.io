@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0f2a43">
+<title>家庭支付宝三年支出分析 · 2024-2026</title>
+<style>
+:root{
+  --bg:#f4f6f9; --card:#ffffff; --ink:#1c2b3a; --dim:#5d6b7a;
+  --line:#e2e8f0; --accent:#0f2a43; --gold:#c9a227;
+  --c24:#7d8ea3; --c25:#e07b39; --c26:#16a085;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:-apple-system,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  background:var(--bg);color:var(--ink);line-height:1.6;
+  padding:32px 16px 72px;
+}
+.wrap{max-width:900px;margin:0 auto}
+header{text-align:center;margin-bottom:28px}
+h1{font-size:28px;letter-spacing:2px;color:var(--accent);font-weight:800}
+.sub{color:var(--dim);font-size:13px;margin-top:8px;letter-spacing:1px}
+.hero{
+  background:linear-gradient(135deg,#0f2a43,#1b4a6b);
+  color:#fff;border-radius:14px;padding:26px 28px;margin-bottom:22px;
+  box-shadow:0 10px 30px rgba(15,42,67,.25);
+}
+.hero .t{font-size:13px;opacity:.75;letter-spacing:2px}
+.hero .num{font-size:46px;font-weight:800;margin:6px 0 2px;font-variant-numeric:tabular-nums}
+.hero .num small{font-size:18px;font-weight:400;opacity:.8}
+.hero .d{font-size:13px;opacity:.85;max-width:620px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:22px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 16px}
+.kpi .k{font-size:12px;color:var(--dim);letter-spacing:1px}
+.kpi .v{font-size:24px;font-weight:700;margin-top:6px;color:var(--accent)}
+.kpi .s{font-size:12px;color:var(--dim);margin-top:4px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:22px 24px;margin-bottom:22px}
+.card h2{font-size:17px;color:var(--accent);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.card h2::before{content:"";width:4px;height:18px;background:var(--gold);border-radius:2px}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th,td{padding:9px 10px;text-align:right;border-bottom:1px solid var(--line)}
+th{color:var(--dim);font-weight:600;font-size:12px;background:#f8fafc}
+td:first-child,th:first-child{text-align:left}
+tr:last-child td{border-bottom:none}
+.money{font-variant-numeric:tabular-nums;font-weight:600}
+.tag{display:inline-block;font-size:11px;padding:1px 8px;border-radius:10px;margin-left:6px;vertical-align:1px}
+.tag.warn{background:#fef3c7;color:#92400e}
+.tag.biz{background:#fee2e2;color:#991b1b}
+.tag.ok{background:#d1fae5;color:#065f46}
+/* 柱状图 */
+.bars{display:flex;align-items:flex-end;gap:28px;height:230px;padding:10px 8px 0;border-bottom:2px solid var(--line)}
+.bgroup{flex:1;display:flex;flex-direction:column;align-items:center;height:100%;justify-content:flex-end}
+.bcol{display:flex;align-items:flex-end;gap:6px;height:100%;width:100%;justify-content:center}
+.col{width:34px;border-radius:6px 6px 0 0;position:relative;min-height:2px;transition:height .6s}
+.col span{position:absolute;top:-20px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--dim);white-space:nowrap}
+.bname{font-size:12px;color:var(--dim);margin-top:8px}
+.bnote{font-size:11px;color:var(--dim)}
+/* 横向条形图 */
+.hbars{margin-top:6px}
+.hrow{display:grid;grid-template-columns:130px 1fr 76px;align-items:center;gap:10px;margin-bottom:9px}
+.hlbl{font-size:12.5px;color:var(--ink);text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.htrack{background:#eef1f5;border-radius:4px;height:16px;overflow:hidden}
+.hfill{height:100%;border-radius:4px;background:linear-gradient(90deg,#16a085,#0d8f74);min-width:2px}
+.hval{font-size:12px;color:var(--dim);font-variant-numeric:tabular-nums}
+.legend{display:flex;gap:18px;flex-wrap:wrap;margin-bottom:14px;font-size:12px;color:var(--dim)}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.insights{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.ins{background:#f8fafc;border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.ins .t{font-size:12px;color:var(--accent);font-weight:700;margin-bottom:4px}
+.ins .d{font-size:12.5px;color:var(--dim)}
+.foot{font-size:11.5px;color:var(--dim);margin-top:8px;line-height:1.8}
+.note{background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:12px 16px;font-size:12.5px;color:#78350f;margin-bottom:22px}
+@media(max-width:560px){
+  .bars{gap:12px;height:190px}
+  .hrow{grid-template-columns:96px 1fr 64px}
+  h1{font-size:22px}
+  .hero .num{font-size:36px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>家庭支付宝三年支出分析</h1>
+  <div class="sub">2024 – 2026 · 数据来源：支付宝年度账单 · 2026 为 1-8 月数据（年化折算）</div>
+</header>
+
+<div class="hero">
+  <div class="t">全家正常年度总开销（剔除借款与因公支出后）</div>
+  <div class="num">约 37<small> 万元 / 年</small></div>
+  <div class="d">三年口径：2024 约 34.2 万 · 2025 约 40.1 万 · 2026 年化约 38.6 万，波动 ±15%，水位稳定</div>
+</div>
+
+<div class="kpis">
+  <div class="kpi"><div class="k">纯日常基础开销</div><div class="v">10-15万</div><div class="s">吃 + 日用 + 交通 + 水电 + 家居</div></div>
+  <div class="kpi"><div class="k">弹性项（最大）</div><div class="v">7-10万</div><div class="s">旅游 3-5万 + 运动户外 3.3-5.3万</div></div>
+  <div class="kpi"><div class="k">刚性项</div><div class="v">5-6万</div><div class="s">医疗 ~1.8万 + 保险 ~1万 + 教育 1-3万</div></div>
+  <div class="kpi"><div class="k">稳定项</div><div class="v">~1.2万</div><div class="s">水电燃气 + 手机充值</div></div>
+</div>
+
+<div class="note">⚠️ 口径说明：2024 年含一笔 ¥333,258 借款转账（"鲜虾红包"），已剔除；2025 年数码电器 ¥176,410 主要为因公支出，已剔除。支付宝是主要消费通道（微信偶发、现金几乎无），实际开销略高于此。</div>
+
+<div class="card">
+  <h2>三年总览</h2>
+  <div class="bars">
+    <div class="bgroup">
+      <div class="bcol">
+        <div class="col" style="height:61%;background:var(--c24)"><span>67.6万</span></div>
+        <div class="col" style="height:41%;background:var(--c24);opacity:.55"><span>34.2万</span></div>
+      </div>
+      <div class="bname">2024</div>
+      <div class="bnote">含33.3万借款</div>
+    </div>
+    <div class="bgroup">
+      <div class="bcol">
+        <div class="col" style="height:52%;background:var(--c25)"><span>57.8万</span></div>
+        <div class="col" style="height:48%;background:var(--c25);opacity:.55"><span>40.1万</span></div>
+      </div>
+      <div class="bname">2025</div>
+      <div class="bnote">含17.6万因公数码</div>
+    </div>
+    <div class="bgroup">
+      <div class="bcol">
+        <div class="col" style="height:23%;background:var(--c26)"><span>25.7万</span></div>
+        <div class="col" style="height:35%;background:var(--c26);opacity:.55"><span>38.6万*</span></div>
+      </div>
+      <div class="bname">2026</div>
+      <div class="bnote">1-8月 · *年化</div>
+    </div>
+  </div>
+  <div class="legend" style="margin-top:34px">
+    <span><i style="background:var(--c24)"></i>实际总支出</span>
+    <span><i style="background:var(--c24);opacity:.55"></i>剔除后正常口径</span>
+  </div>
+  <table style="margin-top:10px">
+    <tr><th>年份</th><th>总支出</th><th>笔数</th><th>剔除异常后</th><th>说明</th></tr>
+    <tr><td>2024</td><td class="money">¥675,660.57</td><td>1,914</td><td class="money">¥342,402.57</td><td>剔 33.3万 借款转账</td></tr>
+    <tr><td>2025</td><td class="money">¥577,677.32</td><td>2,042</td><td class="money">¥401,267.78</td><td>剔 17.6万 因公数码</td></tr>
+    <tr><td>2026（1-8月）</td><td class="money">¥257,376.84</td><td>1,404</td><td class="money">≈¥386,000（年化）</td><td>全年预估</td></tr>
+  </table>
+</div>
+
+<div class="card">
+  <h2>2026 分类支出全景（前8月 · 按年化排序）</h2>
+  <div class="legend">
+    <span><i style="background:var(--c26)"></i>2026 年化金额</span>
+  </div>
+  <div class="hbars">
+    <div class="hrow"><div class="hlbl">酒店旅游</div><div class="htrack"><div class="hfill" style="width:100%"></div></div><div class="hval">¥50,759</div></div>
+    <div class="hrow"><div class="hlbl">运动户外</div><div class="htrack"><div class="hfill" style="width:97%"></div></div><div class="hval">¥49,304</div></div>
+    <div class="hrow"><div class="hlbl">餐饮美食</div><div class="htrack"><div class="hfill" style="width:94%"></div></div><div class="hval">¥47,643</div></div>
+    <div class="hrow"><div class="hlbl">日用百货</div><div class="htrack"><div class="hfill" style="width:86%"></div></div><div class="hval">¥43,572</div></div>
+    <div class="hrow"><div class="hlbl">数码电器</div><div class="htrack"><div class="hfill" style="width:76%"></div></div><div class="hval">¥38,789</div></div>
+    <div class="hrow"><div class="hlbl">交通出行</div><div class="htrack"><div class="hfill" style="width:57%"></div></div><div class="hval">¥29,141</div></div>
+    <div class="hrow"><div class="hlbl">商业服务</div><div class="htrack"><div class="hfill" style="width:43%"></div></div><div class="hval">¥21,761</div></div>
+    <div class="hrow"><div class="hlbl">医疗健康</div><div class="htrack"><div class="hfill" style="width:36%"></div></div><div class="hval">¥18,486</div></div>
+    <div class="hrow"><div class="hlbl">保险</div><div class="htrack"><div class="hfill" style="width:30%"></div></div><div class="hval">¥15,414</div></div>
+    <div class="hrow"><div class="hlbl">教育培训</div><div class="htrack"><div class="hfill" style="width:28%"></div></div><div class="hval">¥14,321</div></div>
+    <div class="hrow"><div class="hlbl">充值缴费</div><div class="htrack"><div class="hfill" style="width:25%"></div></div><div class="hval">¥12,473</div></div>
+    <div class="hrow"><div class="hlbl">家居家装</div><div class="htrack"><div class="hfill" style="width:22%"></div></div><div class="hval">¥10,965</div></div>
+    <div class="hrow"><div class="hlbl">文化休闲</div><div class="htrack"><div class="hfill" style="width:15%"></div></div><div class="hval">¥7,703</div></div>
+    <div class="hrow"><div class="hlbl">母婴亲子</div><div class="htrack"><div class="hfill" style="width:11%"></div></div><div class="hval">¥5,565</div></div>
+    <div class="hrow"><div class="hlbl">美容美发</div><div class="htrack"><div class="hfill" style="width:5%"></div></div><div class="hval">¥2,543</div></div>
+    <div class="hrow"><div class="hlbl">健身养生</div><div class="htrack"><div class="hfill" style="width:5%"></div></div><div class="hval">¥2,334</div></div>
+  </div>
+</div>
+
+<div class="card">
+  <h2>分类三年对比明细</h2>
+  <table>
+    <tr><th>分类</th><th>2024</th><th>2025</th><th>2026前8月</th><th>2026年化</th><th>备注</th></tr>
+    <tr><td>餐饮美食</td><td class="money">50,673</td><td class="money">~68,743*</td><td class="money">31,762</td><td class="money">47,643</td><td>正餐为主，结构健康</td></tr>
+    <tr><td>日用百货</td><td class="money">12,288</td><td class="money">35,003</td><td class="money">29,048</td><td class="money">43,572</td><td>近两年明显上升</td></tr>
+    <tr><td>交通出行</td><td class="money">9,283</td><td class="money">32,421</td><td class="money">19,427</td><td class="money">29,141</td><td>打车 + 城际为主</td></tr>
+    <tr><td>酒店旅游</td><td class="money">32,144</td><td class="money">47,995</td><td class="money">33,839</td><td class="money">50,759</td><td>每年 3-5 万</td></tr>
+    <tr><td>运动户外</td><td class="money">52,588</td><td class="money">49,306</td><td class="money">32,869</td><td class="money">49,304</td><td>单笔大额 <span class="tag warn">弹性最大</span></td></tr>
+    <tr><td>数码电器</td><td class="money">77,295</td><td class="money">176,410*</td><td class="money">25,859</td><td class="money">38,789</td><td>2025 大头因公 <span class="tag biz">因公</span></td></tr>
+    <tr><td>医疗健康</td><td class="money">29,743</td><td class="money">17,696</td><td class="money">12,324</td><td class="money">18,486</td><td>2024 偏高，近年回落</td></tr>
+    <tr><td>保险</td><td class="money">11,410</td><td class="money">10,504</td><td class="money">10,276</td><td class="money">15,414</td><td>稳定 ~1万/年</td></tr>
+    <tr><td>教育培训</td><td class="money">12,288</td><td class="money">30,228</td><td class="money">9,547</td><td class="money">14,321</td><td>2025 冲高（18笔）</td></tr>
+    <tr><td>充值缴费</td><td class="money">~8,000</td><td class="money">~8,843</td><td class="money">8,315</td><td class="money">12,473</td><td>电费 + 手机为主</td></tr>
+    <tr><td>家居家装</td><td class="money">1,501</td><td class="money">5,105</td><td class="money">7,310</td><td class="money">10,965</td><td>逐年上升</td></tr>
+    <tr><td>商业服务</td><td class="money">2,552</td><td class="money">5,019</td><td class="money">14,507</td><td class="money">21,761</td><td>2026 显著上升 <span class="tag ok">关注</span></td></tr>
+    <tr><td>美容美发</td><td class="money">2,476</td><td class="money">66,988*</td><td class="money">1,695</td><td class="money">2,543</td><td>2025 数据存疑*</td></tr>
+    <tr><td>母婴亲子</td><td class="money">7,764</td><td class="money">—</td><td class="money">3,710</td><td class="money">5,565</td><td></td></tr>
+    <tr><td>文化休闲</td><td class="money">6,040</td><td class="money">—</td><td class="money">5,135</td><td class="money">7,703</td><td></td></tr>
+    <tr><td>服饰装扮</td><td class="money">3,851</td><td class="money">3,851</td><td class="money">—</td><td class="money">—</td><td></td></tr>
+  </table>
+  <div class="foot">* 2025 餐饮为占比推算（11.9%）；2025 美容美发 66,988 与餐饮金额相同，疑为账单显示异常，建议在支付宝核实。单位：元。</div>
+</div>
+
+<div class="card">
+  <h2>关键洞察</h2>
+  <div class="insights">
+    <div class="ins"><div class="t">🍚 消费结构健康</div><div class="d">餐饮以正餐为主，咖啡奶茶全年仅数百元，基本在家做饭</div></div>
+    <div class="ins"><div class="t">⛰️ 运动户外最"猛"</div><div class="d">三年 3.3-5.3 万，2026 前8月仅 15 笔就花 3.3 万，装备/课程/办卡大额集中</div></div>
+    <div class="ins"><div class="t">🛡️ 刚性支出稳定</div><div class="d">保险 ~1万/年，医疗回落到 ~1.8万/年，教育 2025 冲高到 3 万后回落</div></div>
+    <div class="ins"><div class="t">📈 2026 商业服务上升</div><div class="d">前8月已 1.45 万（年化 2.2 万），为三年最高，建议关注构成</div></div>
+    <div class="ins"><div class="t">🏠 家居家装逐年涨</div><div class="d">1,501 → 5,105 → 7,310（前8月），生活改善性支出在增加</div></div>
+    <div class="ins"><div class="t">💳 口径提示</div><div class="d">支付宝为主要通道，微信偶发、现金几乎无；实际家庭总开销应略高于本表</div></div>
+  </div>
+</div>
+
+<div class="foot">
+  数据来源：支付宝年度账单 2024 / 2025 / 2026（1-8月）· 2026 年化为前8月 × 1.5 折算 · 本页面由 Tars 生成，自包含无外部依赖
+</div>
+
+</div>
+</body>
+</html>
