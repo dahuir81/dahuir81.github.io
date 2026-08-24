@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tars 知识库 · HTML 作品面板</title>
+<meta name="description" content="Tars 发布的全部独立 HTML 页面索引，按主题分类，支持搜索。">
+<style>
+:root{--bg:#0b0e14;--panel:#141824;--card:#1a2030;--line:#2a3040;--txt:#e6eaf2;--sub:#9aa4b5;--ac1:#4f7cff;--ac2:#7c5cff;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;line-height:1.6;padding:0 16px 80px}
+.wrap{max-width:1060px;margin:0 auto}
+.hero{text-align:center;padding:56px 0 30px}
+.hero h1{font-size:32px;font-weight:800;background:linear-gradient(90deg,var(--ac1),var(--ac2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{color:var(--sub);margin-top:8px}
+.hero .stat{display:inline-flex;gap:18px;margin-top:18px;padding:8px 20px;background:var(--panel);border:1px solid var(--line);border-radius:20px;color:var(--sub);font-size:13px}
+.hero .stat b{color:var(--txt);font-size:16px}
+.search-box{max-width:600px;margin:20px auto 0;position:relative}
+.search-box input{width:100%;padding:14px 18px 14px 44px;background:var(--panel);border:1px solid var(--line);border-radius:14px;color:var(--txt);font-size:15px;outline:none}
+.search-box input:focus{border-color:var(--ac1)}
+.search-box .ico{position:absolute;left:15px;top:50%;transform:translateY(-50%);color:var(--sub)}
+.nav{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:26px 0 8px}
+.chip{padding:8px 16px;background:var(--panel);border:1px solid var(--line);border-radius:20px;color:var(--sub);font-size:13px;cursor:pointer;transition:.15s}
+.chip b{color:var(--ac1);margin-left:4px}
+.chip:hover,.chip.on{border-color:var(--ac2);color:var(--txt)}
+.sec{margin-top:40px}
+.sec-title{font-size:18px;margin-bottom:18px;padding-left:12px;border-left:4px solid var(--ac2);color:var(--txt)}
+.sec-title .cnt{color:var(--sub);font-size:13px;font-weight:400;margin-left:8px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:8px;transition:.18s}
+.card:hover{transform:translateY(-3px);border-color:var(--ac1);box-shadow:0 6px 24px rgba(79,124,255,.12)}
+.card-head{display:flex;justify-content:space-between;align-items:center}
+.cat{font-size:11px;color:var(--sub);background:rgba(124,92,255,.12);padding:3px 9px;border-radius:10px}
+.card-title{color:var(--txt);text-decoration:none;font-size:14px;font-weight:600;line-height:1.5}
+.card-title:hover{color:var(--ac1)}
+.card-slug{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;color:var(--sub)}
+.card-links{display:flex;gap:8px;margin-top:auto}
+.btn{flex:1;text-align:center;padding:7px 0;border-radius:9px;color:#fff;font-size:12px;text-decoration:none}
+.btn.gh{background:rgba(79,124,255,.85)}
+.btn.cn{background:rgba(55,214,122,.75)}
+.hidden{display:none!important}
+.empty{text-align:center;color:var(--sub);padding:50px 0;display:none}
+@media(max-width:560px){.hero h1{font-size:24px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hero">
+    <h1>Tars 知识库 · HTML 作品面板</h1>
+    <p>把那些一次写过的分析、调研、工具页面，统一收纳成一个随时可翻的门面。</p>
+    <div class="stat"><span>共 <b>66</b> 篇</span><span>·</span><span><b>8</b> 个主题</span></div>
+    <div class="search-box"><span class="ico">🔍</span><input id="q" type="text" placeholder="搜索标题 / 关键词…"></div>
+  </div>
+  <div class="nav" id="nav"><button class="chip" data-cat="AI · 大模型与智能体">AI · 大模型与智能体 <b>10</b></button><button class="chip" data-cat="阿里 · 云与 Token 经济">阿里 · 云与 Token 经济 <b>13</b></button><button class="chip" data-cat="芯片 · 算力与半导体">芯片 · 算力与半导体 <b>16</b></button><button class="chip" data-cat="华为 · 产业合作">华为 · 产业合作 <b>2</b></button><button class="chip" data-cat="行业 · 财报与投资">行业 · 财报与投资 <b>4</b></button><button class="chip" data-cat="人物 · 巨擘访谈">人物 · 巨擘访谈 <b>3</b></button><button class="chip" data-cat="实用工具 · 生活助手">实用工具 · 生活助手 <b>7</b></button><button class="chip" data-cat="其他 · 分析报告">其他 · 分析报告 <b>11</b></button></div>
+  <div id="body"><section class="sec" data-cat="AI · 大模型与智能体">
+  <h2 class="sec-title">AI · 大模型与智能体 <span class="cnt">10</span></h2>
+  <div class="grid"><div class="card" data-title="AI Agent 趋势研判 2026：当蚂蚁说&quot;6个月爆发&quot;，美团说&quot;热闹但无效&quot;" data-slug="agent-trends-2026" data-cat="AI · 大模型与智能体">
+  <div class="card-head"><span class="cat">AI · 大模型与智能体</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/agent-trends-2026.html" target="_blank" rel="noopener">AI Agent 趋势研判 2026：当蚂蚁说&quot;6个月爆发&quot;，美团说&quot;热闹但无效&quot;</a>
+  <div class="card-slug">agent-trends-2026.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/agent-trends-2026.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/agent-trends-2026.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div><div class="card" data-title="Claude Code 实战技巧手册 · Tars KnowledgeBase" data-slug="claude-code-tips" data-cat="AI · 大模型与智能体">
+  <div class="card-head"><span class="cat">AI · 大模型与智能体</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/claude-code-tips.html" target="_blank" rel="noopener">Claude Code 实战技巧手册 · Tars KnowledgeBase</a>
+  <div class="card-slug">claude-code-tips.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/claude-code-tips.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/claude-code-tips.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div><div class="card" data-title="分岔路：中国大模型的两条技术路线之争" data-slug="cn-llm-routes" data-cat="AI · 大模型与智能体">
+  <div class="card-head"><span class="cat">AI · 大模型与智能体</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/cn-llm-routes.html" target="_blank" rel="noopener">分岔路：中国大模型的两条技术路线之争</a>
+  <div class="card-slug">cn-llm-routes.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/cn-llm-routes.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/cn-llm-routes.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div><div class="card" data-title="中国开源大模型三连发：Kimi K3 × DeepSeek V4 Flash × Qwen 3.8 海外评价全景" data-slug="cn-llm-trio-overseas-reviews-2026" data-cat="AI · 大模型与智能体">
+  <div class="card-head"><span class="cat">AI · 大模型与智能体</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/cn-llm-trio-overseas-reviews-2026.html" target="_blank" rel="noopener">中国开源大模型三连发：Kimi K3 × DeepSeek V4 Flash × Qwen 3.8 海外评价全景</a>
+  <div class="card-slug">cn-llm-trio-overseas-reviews-2026.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/cn-llm-trio-overseas-reviews-2026.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/cn-llm-trio-overseas-reviews-2026.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div><div class="card" data-title="DeepSeek V4 43天推理性能进化深度分析 — SemiAnalysis 精读" data-slug="deepseek-v4-43days-analysis" data-cat="AI · 大模型与智能体">
+  <div class="card-head"><span class="cat">AI · 大模型与智能体</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/deepseek-v4-43days-analysis.html" target="_blank" rel="noopener">DeepSeek V4 43天推理性能进化深度分析 — SemiAnalysis 精读</a>
+  <div class="card-slug">deepseek-v4-43days-analysis.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/deepseek-v4-43days-analysis.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/deepseek-v4-43days-analysis.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div><div class="card" data-title="DeepSeek V4 深度分析报告" data-slug="deepseek-v4-deep-dive" data-cat="AI · 大模型与智能体">
+  <div class="card-head"><span class="cat">AI · 大模型与智能体</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/deepseek-v4-deep-dive.html" target="_blank" rel="noopener">DeepSeek V4 深度分析报告</a>
+  <div class="card-slug">deepseek-v4-deep-dive.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/deepseek-v4-deep-dive.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/deepseek-v4-deep-dive.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div><div class="card" data-title="豆包、千问同日下线智能体：一场监管倒逼下的行业资源再配置" data-slug="doubao-qwen-agent-offline-analysis" data-cat="AI · 大模型与智能体">
+  <div class="card-head"><span class="cat">AI · 大模型与智能体</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/doubao-qwen-agent-offline-analysis.html" target="_blank" rel="noopener">豆包、千问同日下线智能体：一场监管倒逼下的行业资源再配置</a>
+  <div class="card-slug">doubao-qwen-agent-offline-analysis.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/doubao-qwen-agent-offline-analysis.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/doubao-qwen-agent-offline-analysis.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div><div class="card" data-title="Karpathy AI Ascent 2026：Vibe Coding → Agentic Engineering" data-slug="karpathy-vibe-coding-agentic-engineering" data-cat="AI · 大模型与智能体">
+  <div class="card-head"><span class="cat">AI · 大模型与智能体</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/karpathy-vibe-coding-agentic-engineering.html" target="_blank" rel="noopener">Karpathy AI Ascent 2026：Vibe Coding → Agentic Engineering</a>
+  <div class="card-slug">karpathy-vibe-coding-agentic-engineering.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/karpathy-vibe-coding-agentic-engineering.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/karpathy-vibe-coding-agentic-engineering.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div><div class="card" data-title="Kimi K3 海外真实评价：HN 与 X 上的声音" data-slug="kimi-k3-overseas-reviews" data-cat="AI · 大模型与智能体">
+  <div class="card-head"><span class="cat">AI · 大模型与智能体</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/kimi-k3-overseas-reviews.html" target="_blank" rel="noopener">Kimi K3 海外真实评价：HN 与 X 上的声音</a>
+  <div class="card-slug">kimi-k3-overseas-reviews.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/kimi-k3-overseas-reviews.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/kimi-k3-overseas-reviews.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div><div class="card" data-title="Scaling Laws, Honestly — 精读笔记" data-slug="scaling-laws-honestly" data-cat="AI · 大模型与智能体">
+  <div class="card-head"><span class="cat">AI · 大模型与智能体</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/scaling-laws-honestly.html" target="_blank" rel="noopener">Scaling Laws, Honestly — 精读笔记</a>
+  <div class="card-slug">scaling-laws-honestly.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/scaling-laws-honestly.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/scaling-laws-honestly.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div></div>
+</section><section class="sec" data-cat="阿里 · 云与 Token 经济">
+  <h2 class="sec-title">阿里 · 云与 Token 经济 <span class="cnt">13</span></h2>
+  <div class="grid"><div class="card" data-title="Anthropic蒸馏诉讼与阿里股价：深度分析 2026-06-25" data-slug="ali-anthropic-ali-stock-analysis-2026-06-25" data-cat="阿里 · 云与 Token 经济">
+  <div class="card-head"><span class="cat">阿里 · 云与 Token 经济</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/ali-anthropic-ali-stock-analysis-2026-06-25.html" target="_blank" rel="noopener">Anthropic蒸馏诉讼与阿里股价：深度分析 2026-06-25</a>
+  <div class="card-slug">ali-anthropic-ali-stock-analysis-2026-06-25.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/ali-anthropic-ali-stock-analysis-2026-06-25.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/ali-anthropic-ali-stock-analysis-2026-06-25.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div><div class="card" data-title="阿里网络架构与华为合作机会 · 内部简报" data-slug="ali-network-huawei-opportunity" data-cat="阿里 · 云与 Token 经济">
+  <div class="card-head"><span class="cat">阿里 · 云与 Token 经济</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/ali-network-huawei-opportunity.html" target="_blank" rel="noopener">阿里网络架构与华为合作机会 · 内部简报</a>
+  <div class="card-slug">ali-network-huawei-opportunity.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/ali-network-huawei-opportunity.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/ali-network-huawei-opportunity.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div><div class="card" data-title="阿里 vs 字节：组织病与战略赌性的对撞" data-slug="ali-vs-bytedance" data-cat="阿里 · 云与 Token 经济">
+  <div class="card-head"><span class="cat">阿里 · 云与 Token 经济</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/ali-vs-bytedance.html" target="_blank" rel="noopener">阿里 vs 字节：组织病与战略赌性的对撞</a>
+  <div class="card-slug">ali-vs-bytedance.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/ali-vs-bytedance.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/ali-vs-bytedance.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div><div class="card" data-title="阿里巴巴与蚂蚁集团客户地图｜华为销售视角" data-slug="alibaba-ant-huawei-account-map" data-cat="阿里 · 云与 Token 经济">
+  <div class="card-head"><span class="cat">阿里 · 云与 Token 经济</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/alibaba-ant-huawei-account-map.html" target="_blank" rel="noopener">阿里巴巴与蚂蚁集团客户地图｜华为销售视角</a>
+  <div class="card-slug">alibaba-ant-huawei-account-map.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/alibaba-ant-huawei-account-map.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/alibaba-ant-huawei-account-map.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div><div class="card" data-title="阿里巴巴 2026 财年年报解读：营收破万亿，AI 狂奔，利润流血" data-slug="alibaba-fy2026-earnings" data-cat="阿里 · 云与 Token 经济">
+  <div class="card-head"><span class="cat">阿里 · 云与 Token 经济</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/alibaba-fy2026-earnings.html" target="_blank" rel="noopener">阿里巴巴 2026 财年年报解读：营收破万亿，AI 狂奔，利润流血</a>
+  <div class="card-slug">alibaba-fy2026-earnings.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/alibaba-fy2026-earnings.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/alibaba-fy2026-earnings.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div><div class="card" data-title="阿里 Q1 财报全解读：云增速 45% 创 22 季度新高，AI 云成第二增长曲线" data-slug="alibaba-q1-earnings-2026" data-cat="阿里 · 云与 Token 经济">
+  <div class="card-head"><span class="cat">阿里 · 云与 Token 经济</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/alibaba-q1-earnings-2026.html" target="_blank" rel="noopener">阿里 Q1 财报全解读：云增速 45% 创 22 季度新高，AI 云成第二增长曲线</a>
+  <div class="card-slug">alibaba-q1-earnings-2026.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/alibaba-q1-earnings-2026.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/alibaba-q1-earnings-2026.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div><div class="card" data-title="阿里巴巴集团股权架构深度解析 | 双重上市·前十大股东·下层控股全图谱" data-slug="alibaba-shareholding-analysis" data-cat="阿里 · 云与 Token 经济">
+  <div class="card-head"><span class="cat">阿里 · 云与 Token 经济</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/alibaba-shareholding-analysis.html" target="_blank" rel="noopener">阿里巴巴集团股权架构深度解析 | 双重上市·前十大股东·下层控股全图谱</a>
+  <div class="card-slug">alibaba-shareholding-analysis.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/alibaba-shareholding-analysis.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/alibaba-shareholding-analysis.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div><div class="card" data-title="阿里云 Token 汇报音频" data-slug="aliyun-token-audio" data-cat="阿里 · 云与 Token 经济">
+  <div class="card-head"><span class="cat">阿里 · 云与 Token 经济</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/aliyun-token-audio.html" target="_blank" rel="noopener">阿里云 Token 汇报音频</a>
+  <div class="card-slug">aliyun-token-audio.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/aliyun-token-audio.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/aliyun-token-audio.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div><div class="card" data-title="阿里云 Token 变现逻辑研究" data-slug="aliyun-token-business-loop-2026" data-cat="阿里 · 云与 Token 经济">
+  <div class="card-head"><span class="cat">阿里 · 云与 Token 经济</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/aliyun-token-business-loop-2026.html" target="_blank" rel="noopener">阿里云 Token 变现逻辑研究</a>
+  <div class="card-slug">aliyun-token-business-loop-2026.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/aliyun-token-business-loop-2026.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/aliyun-token-business-loop-2026.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div><div class="card" data-title="阿里云 Token 变现逻辑研究 — 内部讨论报告" data-slug="aliyun-token-monetization-report-audio-2026" data-cat="阿里 · 云与 Token 经济">
+  <div class="card-head"><span class="cat">阿里 · 云与 Token 经济</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/aliyun-token-monetization-report-audio-2026.html" target="_blank" rel="noopener">阿里云 Token 变现逻辑研究 — 内部讨论报告</a>
+  <div class="card-slug">aliyun-token-monetization-report-audio-2026.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/aliyun-token-monetization-report-audio-2026.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/aliyun-token-monetization-report-audio-2026.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div><div class="card" data-title="蔡崇信VivaTech 2026发言深度分析：阿里全面投入AI，50万亿市场蓝图" data-slug="caichongxin-vivatech-2026-ali-ai" data-cat="阿里 · 云与 Token 经济">
+  <div class="card-head"><span class="cat">阿里 · 云与 Token 经济</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/caichongxin-vivatech-2026-ali-ai.html" target="_blank" rel="noopener">蔡崇信VivaTech 2026发言深度分析：阿里全面投入AI，50万亿市场蓝图</a>
+  <div class="card-slug">caichongxin-vivatech-2026-ali-ai.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/caichongxin-vivatech-2026-ali-ai.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/caichongxin-vivatech-2026-ali-ai.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div><div class="card" data-title="阿里 vs 亚马逊 vs Google：五维深度对比" data-slug="cloud-giants-2025" data-cat="阿里 · 云与 Token 经济">
+  <div class="card-head"><span class="cat">阿里 · 云与 Token 经济</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/cloud-giants-2025.html" target="_blank" rel="noopener">阿里 vs 亚马逊 vs Google：五维深度对比</a>
+  <div class="card-slug">cloud-giants-2025.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/cloud-giants-2025.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/cloud-giants-2025.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div><div class="card" data-title="Token经济学 | 2026算力市场全景透视 — 运营商VS云厂商VS中转站，谁在定价AI时代的石油" data-slug="token-economics-2026" data-cat="阿里 · 云与 Token 经济">
+  <div class="card-head"><span class="cat">阿里 · 云与 Token 经济</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/token-economics-2026.html" target="_blank" rel="noopener">Token经济学 | 2026算力市场全景透视 — 运营商VS云厂商VS中转站，谁在定价AI时代的石油</a>
+  <div class="card-slug">token-economics-2026.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/token-economics-2026.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/token-economics-2026.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div></div>
+</section><section class="sec" data-cat="芯片 · 算力与半导体">
+  <h2 class="sec-title">芯片 · 算力与半导体 <span class="cnt">16</span></h2>
+  <div class="grid"><div class="card" data-title="3GW 算力集群核算：英伟达 vs 昇腾（完整推演）" data-slug="3gw-ai-cluster" data-cat="芯片 · 算力与半导体">
+  <div class="card-head"><span class="cat">芯片 · 算力与半导体</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/3gw-ai-cluster.html" target="_blank" rel="noopener">3GW 算力集群核算：英伟达 vs 昇腾（完整推演）</a>
+  <div class="card-slug">3gw-ai-cluster.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/3gw-ai-cluster.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/3gw-ai-cluster.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div><div class="card" data-title="BlueField-3 vs ConnectX-6/7：NVIDIA 网卡与 DPU 的区别" data-slug="bf3-vs-cx6-cx7" data-cat="芯片 · 算力与半导体">
+  <div class="card-head"><span class="cat">芯片 · 算力与半导体</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/bf3-vs-cx6-cx7.html" target="_blank" rel="noopener">BlueField-3 vs ConnectX-6/7：NVIDIA 网卡与 DPU 的区别</a>
+  <div class="card-slug">bf3-vs-cx6-cx7.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/bf3-vs-cx6-cx7.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/bf3-vs-cx6-cx7.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div><div class="card" data-title="BIS 2026新指引：美国堵死中国AI芯片境外子公司采购漏洞" data-slug="bis-chip-loophole-2026" data-cat="芯片 · 算力与半导体">
+  <div class="card-head"><span class="cat">芯片 · 算力与半导体</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/bis-chip-loophole-2026.html" target="_blank" rel="noopener">BIS 2026新指引：美国堵死中国AI芯片境外子公司采购漏洞</a>
+  <div class="card-slug">bis-chip-loophole-2026.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/bis-chip-loophole-2026.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/bis-chip-loophole-2026.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div><div class="card" data-title="具身智能与空间智能：算力需求与芯片竞争格局" data-slug="embodied-spatial-intelligence-chip-landscape" data-cat="芯片 · 算力与半导体">
+  <div class="card-head"><span class="cat">芯片 · 算力与半导体</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/embodied-spatial-intelligence-chip-landscape.html" target="_blank" rel="noopener">具身智能与空间智能：算力需求与芯片竞争格局</a>
+  <div class="card-slug">embodied-spatial-intelligence-chip-landscape.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/embodied-spatial-intelligence-chip-landscape.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/embodied-spatial-intelligence-chip-landscape.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div><div class="card" data-title="NVIDIA GTC Taipei 2026 — 完整发布全览" data-slug="gtc-taipei-2026" data-cat="芯片 · 算力与半导体">
+  <div class="card-head"><span class="cat">芯片 · 算力与半导体</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/gtc-taipei-2026.html" target="_blank" rel="noopener">NVIDIA GTC Taipei 2026 — 完整发布全览</a>
+  <div class="card-slug">gtc-taipei-2026.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/gtc-taipei-2026.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/gtc-taipei-2026.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div><div class="card" data-title="韬（τ）定律 V2：华为半导体时间缩微理论完整版解读" data-slug="huawei-tau-law-v2-update" data-cat="芯片 · 算力与半导体">
+  <div class="card-head"><span class="cat">芯片 · 算力与半导体</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/huawei-tau-law-v2-update.html" target="_blank" rel="noopener">韬（τ）定律 V2：华为半导体时间缩微理论完整版解读</a>
+  <div class="card-slug">huawei-tau-law-v2-update.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/huawei-tau-law-v2-update.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/huawei-tau-law-v2-update.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div><div class="card" data-title="华为&quot;韬（τ）定律&quot;：海外媒体与两投行解读综合" data-slug="huawei-tau-overseas-reactions-2026-05-25" data-cat="芯片 · 算力与半导体">
+  <div class="card-head"><span class="cat">芯片 · 算力与半导体</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/huawei-tau-overseas-reactions-2026-05-25.html" target="_blank" rel="noopener">华为&quot;韬（τ）定律&quot;：海外媒体与两投行解读综合</a>
+  <div class="card-slug">huawei-tau-overseas-reactions-2026-05-25.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/huawei-tau-overseas-reactions-2026-05-25.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/huawei-tau-overseas-reactions-2026-05-25.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div><div class="card" data-title="华为韬定律（τ-Scaling）两投行对照解析与产业链推演" data-slug="hw-tau-law-analysis" data-cat="芯片 · 算力与半导体">
+  <div class="card-head"><span class="cat">芯片 · 算力与半导体</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/hw-tau-law-analysis.html" target="_blank" rel="noopener">华为韬定律（τ-Scaling）两投行对照解析与产业链推演</a>
+  <div class="card-slug">hw-tau-law-analysis.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/hw-tau-law-analysis.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/hw-tau-law-analysis.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div><div class="card" data-title="一部昇腾史、18层宝塔与全球芯片30年史诗 | 廖恒博士访谈笔记" data-slug="liaoheng-18-tower" data-cat="芯片 · 算力与半导体">
+  <div class="card-head"><span class="cat">芯片 · 算力与半导体</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/liaoheng-18-tower.html" target="_blank" rel="noopener">一部昇腾史、18层宝塔与全球芯片30年史诗 | 廖恒博士访谈笔记</a>
+  <div class="card-slug">liaoheng-18-tower.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/liaoheng-18-tower.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/liaoheng-18-tower.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div><div class="card" data-title="LPO / NPO / CPO 区别：AI 数据中心光互连的三种路线" data-slug="lpo-npo-cpo" data-cat="芯片 · 算力与半导体">
+  <div class="card-head"><span class="cat">芯片 · 算力与半导体</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/lpo-npo-cpo.html" target="_blank" rel="noopener">LPO / NPO / CPO 区别：AI 数据中心光互连的三种路线</a>
+  <div class="card-slug">lpo-npo-cpo.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/lpo-npo-cpo.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/lpo-npo-cpo.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div><div class="card" data-title="平头哥半导体全景梳理｜从玄铁到真武 阿里造芯的底层逻辑" data-slug="pingtouge-chip" data-cat="芯片 · 算力与半导体">
+  <div class="card-head"><span class="cat">芯片 · 算力与半导体</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/pingtouge-chip.html" target="_blank" rel="noopener">平头哥半导体全景梳理｜从玄铁到真武 阿里造芯的底层逻辑</a>
+  <div class="card-slug">pingtouge-chip.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/pingtouge-chip.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/pingtouge-chip.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div><div class="card" data-title="平头哥 vs 英伟达 vs 华为 — AI芯片参数深度对比 (2026-05)" data-slug="pingtouge-nvidia-huawei-comparison-2026" data-cat="芯片 · 算力与半导体">
+  <div class="card-head"><span class="cat">芯片 · 算力与半导体</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/pingtouge-nvidia-huawei-comparison-2026.html" target="_blank" rel="noopener">平头哥 vs 英伟达 vs 华为 — AI芯片参数深度对比 (2026-05)</a>
+  <div class="card-slug">pingtouge-nvidia-huawei-comparison-2026.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/pingtouge-nvidia-huawei-comparison-2026.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/pingtouge-nvidia-huawei-comparison-2026.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div><div class="card" data-title="半导体备忘录：供应链传承 — Citrini Research 深度解析" data-slug="semis-supply-chain-inheritance" data-cat="芯片 · 算力与半导体">
+  <div class="card-head"><span class="cat">芯片 · 算力与半导体</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/semis-supply-chain-inheritance.html" target="_blank" rel="noopener">半导体备忘录：供应链传承 — Citrini Research 深度解析</a>
+  <div class="card-slug">semis-supply-chain-inheritance.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/semis-supply-chain-inheritance.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/semis-supply-chain-inheritance.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div><div class="card" data-title="华为韬（τ）定律论文精读｜时间缩放理论" data-slug="tao-paper-digest" data-cat="芯片 · 算力与半导体">
+  <div class="card-head"><span class="cat">芯片 · 算力与半导体</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/tao-paper-digest.html" target="_blank" rel="noopener">华为韬（τ）定律论文精读｜时间缩放理论</a>
+  <div class="card-slug">tao-paper-digest.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/tao-paper-digest.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/tao-paper-digest.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div><div class="card" data-title="三强争霸：Trainium vs TPU vs NVIDIA — AI芯片全代际对比（2026版）" data-slug="trainium-vs-tpu" data-cat="芯片 · 算力与半导体">
+  <div class="card-head"><span class="cat">芯片 · 算力与半导体</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/trainium-vs-tpu.html" target="_blank" rel="noopener">三强争霸：Trainium vs TPU vs NVIDIA — AI芯片全代际对比（2026版）</a>
+  <div class="card-slug">trainium-vs-tpu.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/trainium-vs-tpu.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/trainium-vs-tpu.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div><div class="card" data-title="从电力 GW 到算力 Token：AI 工厂的能量-智商转换链" data-slug="watt-to-token-briefing" data-cat="芯片 · 算力与半导体">
+  <div class="card-head"><span class="cat">芯片 · 算力与半导体</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/watt-to-token-briefing.html" target="_blank" rel="noopener">从电力 GW 到算力 Token：AI 工厂的能量-智商转换链</a>
+  <div class="card-slug">watt-to-token-briefing.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/watt-to-token-briefing.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/watt-to-token-briefing.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div></div>
+</section><section class="sec" data-cat="华为 · 产业合作">
+  <h2 class="sec-title">华为 · 产业合作 <span class="cnt">2</span></h2>
+  <div class="grid"><div class="card" data-title="菜鸟物流 × 华为数字能源：重卡新能源补能合作机会分析" data-slug="cainiao-huawei-heavy-truck-charging" data-cat="华为 · 产业合作">
+  <div class="card-head"><span class="cat">华为 · 产业合作</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/cainiao-huawei-heavy-truck-charging.html" target="_blank" rel="noopener">菜鸟物流 × 华为数字能源：重卡新能源补能合作机会分析</a>
+  <div class="card-slug">cainiao-huawei-heavy-truck-charging.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/cainiao-huawei-heavy-truck-charging.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/cainiao-huawei-heavy-truck-charging.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div><div class="card" data-title="华为对接阿里巴巴矩阵式作战组织设计" data-slug="huawei-alibaba-matrix-org-design" data-cat="华为 · 产业合作">
+  <div class="card-head"><span class="cat">华为 · 产业合作</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/huawei-alibaba-matrix-org-design.html" target="_blank" rel="noopener">华为对接阿里巴巴矩阵式作战组织设计</a>
+  <div class="card-slug">huawei-alibaba-matrix-org-design.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/huawei-alibaba-matrix-org-design.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/huawei-alibaba-matrix-org-design.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div></div>
+</section><section class="sec" data-cat="行业 · 财报与投资">
+  <h2 class="sec-title">行业 · 财报与投资 <span class="cnt">4</span></h2>
+  <div class="grid"><div class="card" data-title="Anthropic「2028 报告」解读：一份写给白宫的 AI 作战计划" data-slug="anthropic-report" data-cat="行业 · 财报与投资">
+  <div class="card-head"><span class="cat">行业 · 财报与投资</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/anthropic-report.html" target="_blank" rel="noopener">Anthropic「2028 报告」解读：一份写给白宫的 AI 作战计划</a>
+  <div class="card-slug">anthropic-report.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/anthropic-report.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/anthropic-report.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div><div class="card" data-title="AI时代的组织重塑：2026年中国互联网大厂集体治理反思" data-slug="tech-giant-org-restructuring-2026" data-cat="行业 · 财报与投资">
+  <div class="card-head"><span class="cat">行业 · 财报与投资</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/tech-giant-org-restructuring-2026.html" target="_blank" rel="noopener">AI时代的组织重塑：2026年中国互联网大厂集体治理反思</a>
+  <div class="card-slug">tech-giant-org-restructuring-2026.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/tech-giant-org-restructuring-2026.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/tech-giant-org-restructuring-2026.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div><div class="card" data-title="浙江互联网行业深度分析报告 - 2026" data-slug="zhejiang-internet-report-2026" data-cat="行业 · 财报与投资">
+  <div class="card-head"><span class="cat">行业 · 财报与投资</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/zhejiang-internet-report-2026.html" target="_blank" rel="noopener">浙江互联网行业深度分析报告 - 2026</a>
+  <div class="card-slug">zhejiang-internet-report-2026.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/zhejiang-internet-report-2026.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/zhejiang-internet-report-2026.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div><div class="card" data-title="浙江互联网行业未来 2-3 年趋势研究｜分享版含男声口播宣讲" data-slug="zhejiang-internet-trend-oral-speech-2026" data-cat="行业 · 财报与投资">
+  <div class="card-head"><span class="cat">行业 · 财报与投资</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/zhejiang-internet-trend-oral-speech-2026.html" target="_blank" rel="noopener">浙江互联网行业未来 2-3 年趋势研究｜分享版含男声口播宣讲</a>
+  <div class="card-slug">zhejiang-internet-trend-oral-speech-2026.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/zhejiang-internet-trend-oral-speech-2026.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/zhejiang-internet-trend-oral-speech-2026.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div></div>
+</section><section class="sec" data-cat="人物 · 巨擘访谈">
+  <h2 class="sec-title">人物 · 巨擘访谈 <span class="cnt">3</span></h2>
+  <div class="grid"><div class="card" data-title="Bloomberg专访Anthropic Dario Amodei：年度最硬核访谈深度解析" data-slug="dario-amodei-bloomberg-interview" data-cat="人物 · 巨擘访谈">
+  <div class="card-head"><span class="cat">人物 · 巨擘访谈</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/dario-amodei-bloomberg-interview.html" target="_blank" rel="noopener">Bloomberg专访Anthropic Dario Amodei：年度最硬核访谈深度解析</a>
+  <div class="card-slug">dario-amodei-bloomberg-interview.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/dario-amodei-bloomberg-interview.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/dario-amodei-bloomberg-interview.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div><div class="card" data-title="黄仁勋 CMU 2026 毕业演讲深度分析 — 别慌，AI 把所有人拉回同一起跑线" data-slug="jensen-cmu-speech" data-cat="人物 · 巨擘访谈">
+  <div class="card-head"><span class="cat">人物 · 巨擘访谈</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/jensen-cmu-speech.html" target="_blank" rel="noopener">黄仁勋 CMU 2026 毕业演讲深度分析 — 别慌，AI 把所有人拉回同一起跑线</a>
+  <div class="card-slug">jensen-cmu-speech.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/jensen-cmu-speech.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/jensen-cmu-speech.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div><div class="card" data-title="马斯克的太空 × AI 帝国：从零到全面认知" data-slug="musk-space-ai-exploration" data-cat="人物 · 巨擘访谈">
+  <div class="card-head"><span class="cat">人物 · 巨擘访谈</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/musk-space-ai-exploration.html" target="_blank" rel="noopener">马斯克的太空 × AI 帝国：从零到全面认知</a>
+  <div class="card-slug">musk-space-ai-exploration.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/musk-space-ai-exploration.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/musk-space-ai-exploration.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div></div>
+</section><section class="sec" data-cat="实用工具 · 生活助手">
+  <h2 class="sec-title">实用工具 · 生活助手 <span class="cnt">7</span></h2>
+  <div class="grid"><div class="card" data-title="AMS 湿度科普动画：绝对湿度、相对湿度与烘干解惑" data-slug="bambu-ams-humidity" data-cat="实用工具 · 生活助手">
+  <div class="card-head"><span class="cat">实用工具 · 生活助手</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/bambu-ams-humidity.html" target="_blank" rel="noopener">AMS 湿度科普动画：绝对湿度、相对湿度与烘干解惑</a>
+  <div class="card-slug">bambu-ams-humidity.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/bambu-ams-humidity.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/bambu-ams-humidity.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div><div class="card" data-title="巴塞尔问题：为什么 1/1² + 1/2² + 1/3² + … = π²/6？" data-slug="basel-problem" data-cat="实用工具 · 生活助手">
+  <div class="card-head"><span class="cat">实用工具 · 生活助手</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/basel-problem.html" target="_blank" rel="noopener">巴塞尔问题：为什么 1/1² + 1/2² + 1/3² + … = π²/6？</a>
+  <div class="card-slug">basel-problem.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/basel-problem.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/basel-problem.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div><div class="card" data-title="家庭支付宝三年支出分析 · 2024-2026" data-slug="family-alipay-2024-2026" data-cat="实用工具 · 生活助手">
+  <div class="card-head"><span class="cat">实用工具 · 生活助手</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/family-alipay-2024-2026.html" target="_blank" rel="noopener">家庭支付宝三年支出分析 · 2024-2026</a>
+  <div class="card-slug">family-alipay-2024-2026.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/family-alipay-2024-2026.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/family-alipay-2024-2026.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div><div class="card" data-title="2026杭州民办摇号全景 · 小学初中冰火两重天" data-slug="hangzhou-edu-lottery-2026" data-cat="实用工具 · 生活助手">
+  <div class="card-head"><span class="cat">实用工具 · 生活助手</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/hangzhou-edu-lottery-2026.html" target="_blank" rel="noopener">2026杭州民办摇号全景 · 小学初中冰火两重天</a>
+  <div class="card-slug">hangzhou-edu-lottery-2026.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/hangzhou-edu-lottery-2026.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/hangzhou-edu-lottery-2026.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div><div class="card" data-title="般若波罗蜜多心经" data-slug="heart-sutra" data-cat="实用工具 · 生活助手">
+  <div class="card-head"><span class="cat">实用工具 · 生活助手</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/heart-sutra.html" target="_blank" rel="noopener">般若波罗蜜多心经</a>
+  <div class="card-slug">heart-sutra.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/heart-sutra.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/heart-sutra.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div><div class="card" data-title="司龄计算器 · 岁月为证" data-slug="seniority-calculator" data-cat="实用工具 · 生活助手">
+  <div class="card-head"><span class="cat">实用工具 · 生活助手</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/seniority-calculator.html" target="_blank" rel="noopener">司龄计算器 · 岁月为证</a>
+  <div class="card-slug">seniority-calculator.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/seniority-calculator.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/seniority-calculator.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div><div class="card" data-title="☀️ Noah暑期日历管理 - 2026年7-8月" data-slug="summer-calendar" data-cat="实用工具 · 生活助手">
+  <div class="card-head"><span class="cat">实用工具 · 生活助手</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/summer-calendar.html" target="_blank" rel="noopener">☀️ Noah暑期日历管理 - 2026年7-8月</a>
+  <div class="card-slug">summer-calendar.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/summer-calendar.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/summer-calendar.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div></div>
+</section><section class="sec" data-cat="其他 · 分析报告">
+  <h2 class="sec-title">其他 · 分析报告 <span class="cnt">11</span></h2>
+  <div class="grid"><div class="card" data-title="AWS要卖AI服务器了 · Tars KnowledgeBase" data-slug="2026-05-10-aws-sell-ai-servers" data-cat="其他 · 分析报告">
+  <div class="card-head"><span class="cat">其他 · 分析报告</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/2026-05-10-aws-sell-ai-servers.html" target="_blank" rel="noopener">AWS要卖AI服务器了 · Tars KnowledgeBase</a>
+  <div class="card-slug">2026-05-10-aws-sell-ai-servers.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/2026-05-10-aws-sell-ai-servers.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/2026-05-10-aws-sell-ai-servers.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div><div class="card" data-title="Claude Code 实战技巧手册 · Tars KnowledgeBase" data-slug="2026-05-10-claude-code-tips" data-cat="其他 · 分析报告">
+  <div class="card-head"><span class="cat">其他 · 分析报告</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/2026-05-10-claude-code-tips.html" target="_blank" rel="noopener">Claude Code 实战技巧手册 · Tars KnowledgeBase</a>
+  <div class="card-slug">2026-05-10-claude-code-tips.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/2026-05-10-claude-code-tips.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/2026-05-10-claude-code-tips.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div><div class="card" data-title="阿里巴巴 2026 财年 Q4 业绩全景" data-slug="2026-05-13-alibaba-q4-earnings" data-cat="其他 · 分析报告">
+  <div class="card-head"><span class="cat">其他 · 分析报告</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/2026-05-13-alibaba-q4-earnings.html" target="_blank" rel="noopener">阿里巴巴 2026 财年 Q4 业绩全景</a>
+  <div class="card-slug">2026-05-13-alibaba-q4-earnings.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/2026-05-13-alibaba-q4-earnings.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/2026-05-13-alibaba-q4-earnings.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div><div class="card" data-title="AI 3D模型生成工具横向对比 2026" data-slug="ai3d-tools-comparison" data-cat="其他 · 分析报告">
+  <div class="card-head"><span class="cat">其他 · 分析报告</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/ai3d-tools-comparison.html" target="_blank" rel="noopener">AI 3D模型生成工具横向对比 2026</a>
+  <div class="card-slug">ai3d-tools-comparison.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/ai3d-tools-comparison.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/ai3d-tools-comparison.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div><div class="card" data-title="AI 3D手办创作工具对比 2026" data-slug="ai3d-tools-comparison-v2" data-cat="其他 · 分析报告">
+  <div class="card-head"><span class="cat">其他 · 分析报告</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/ai3d-tools-comparison-v2.html" target="_blank" rel="noopener">AI 3D手办创作工具对比 2026</a>
+  <div class="card-slug">ai3d-tools-comparison-v2.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/ai3d-tools-comparison-v2.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/ai3d-tools-comparison-v2.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div><div class="card" data-title="AWS要卖AI服务器了 · Tars KnowledgeBase" data-slug="aws-sell-ai-servers" data-cat="其他 · 分析报告">
+  <div class="card-head"><span class="cat">其他 · 分析报告</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/aws-sell-ai-servers.html" target="_blank" rel="noopener">AWS要卖AI服务器了 · Tars KnowledgeBase</a>
+  <div class="card-slug">aws-sell-ai-servers.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/aws-sell-ai-servers.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/aws-sell-ai-servers.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div><div class="card" data-title="演唱会场外摆摊经济深度调研 — 人群画像 · 杭州奥体情报 · 3D打印切入点" data-slug="concert-stall-economy" data-cat="其他 · 分析报告">
+  <div class="card-head"><span class="cat">其他 · 分析报告</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/concert-stall-economy.html" target="_blank" rel="noopener">演唱会场外摆摊经济深度调研 — 人群画像 · 杭州奥体情报 · 3D打印切入点</a>
+  <div class="card-slug">concert-stall-economy.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/concert-stall-economy.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/concert-stall-economy.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div><div class="card" data-title="HTML发布工作流设计 · Tars" data-slug="html-publish-workflow" data-cat="其他 · 分析报告">
+  <div class="card-head"><span class="cat">其他 · 分析报告</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/html-publish-workflow.html" target="_blank" rel="noopener">HTML发布工作流设计 · Tars</a>
+  <div class="card-slug">html-publish-workflow.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/html-publish-workflow.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/html-publish-workflow.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div><div class="card" data-title="阿里云 Token 变现逻辑研究 — 内部讨论报告" data-slug="report-audio" data-cat="其他 · 分析报告">
+  <div class="card-head"><span class="cat">其他 · 分析报告</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/report-audio.html" target="_blank" rel="noopener">阿里云 Token 变现逻辑研究 — 内部讨论报告</a>
+  <div class="card-slug">report-audio.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/report-audio.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/report-audio.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div><div class="card" data-title="战略规划访谈简报 · 2025" data-slug="strategy-briefing-2025" data-cat="其他 · 分析报告">
+  <div class="card-head"><span class="cat">其他 · 分析报告</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/strategy-briefing-2025.html" target="_blank" rel="noopener">战略规划访谈简报 · 2025</a>
+  <div class="card-slug">strategy-briefing-2025.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/strategy-briefing-2025.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/strategy-briefing-2025.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div><div class="card" data-title="字节为什么缺席？2026 WAIC 深度观察" data-slug="waic-2026-bytedance" data-cat="其他 · 分析报告">
+  <div class="card-head"><span class="cat">其他 · 分析报告</span></div>
+  <a class="card-title" href="https://dahuir81.github.io/waic-2026-bytedance.html" target="_blank" rel="noopener">字节为什么缺席？2026 WAIC 深度观察</a>
+  <div class="card-slug">waic-2026-bytedance.html</div>
+  <div class="card-links">
+    <a class="btn gh" href="https://dahuir81.github.io/waic-2026-bytedance.html" target="_blank" rel="noopener">🌐 GitHub</a>
+    <a class="btn cn" href="https://openclawmy.work/waic-2026-bytedance.html" target="_blank" rel="noopener">⚡ 国内</a>
+  </div>
+</div></div>
+</section></div>
+  <div class="empty" id="empty">没有匹配的页面 🥲</div>
+  <footer style="text-align:center;color:var(--sub);font-size:12px;margin-top:60px">Tars · 自动整理 · 66 篇 HTML</footer>
+</div>
+<script>
+var chips=document.querySelectorAll('.chip'),secs=document.querySelectorAll('.sec');
+chips.forEach(function(c){c.addEventListener('click',function(){
+  chips.forEach(function(x){x.classList.remove('on');});c.classList.add('on');
+  var cat=c.dataset.cat;
+  secs.forEach(function(s){ if(s.dataset.cat===cat){s.classList.remove('hidden');} else {s.classList.add('hidden');} });
+  checkEmpty();
+});});
+var q=document.getElementById('q');
+q.addEventListener('input',function(){
+  chips.forEach(function(x){x.classList.remove('on');});
+  var v=q.value.trim().toLowerCase(),any=false;
+  secs.forEach(function(s){
+    s.classList.remove('hidden');var vis=0;
+    s.querySelectorAll('.card').forEach(function(cc){
+      var txt=(cc.dataset.title+' '+cc.dataset.slug).toLowerCase();
+      if(!v||txt.indexOf(v)>-1){vis++;cc.classList.remove('hidden');} else {cc.classList.add('hidden');}
+    });
+    if(vis===0){s.classList.add('hidden');} else {any=true;}
+  });
+  checkEmpty(any);
+});
+function checkEmpty(a){
+  var e=document.getElementById('empty');
+  var has=(a!==undefined)?a:Array.prototype.slice.call(document.querySelectorAll('.sec')).some(function(s){return !s.classList.contains('hidden');});
+  e.style.display=has?'none':'block';
+}
+</script>
+</body>
+</html>
