@@ -5,8 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tars 知识库 · HTML 作品面板</title>
 <meta name="description" content="Tars 发布的全部独立 HTML 页面索引，按主题分类，支持搜索。">
-<style>
-:root{--bg:#0b0e14;--panel:#141824;--card:#1a2030;--line:#2a3040;--txt:#e6eaf2;--sub:#9aa4b5;--ac1:#4f7cff;--ac2:#7c5cff;}
+<style>:root{--bg:#0b0e14;--panel:#141824;--card:#1a2030;--line:#2a3040;--txt:#e6eaf2;--sub:#9aa4b5;--ac1:#4f7cff;--ac2:#7c5cff;}
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;line-height:1.6;padding:0 16px 80px}
 .wrap{max-width:1060px;margin:0 auto}
@@ -40,8 +39,7 @@ body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSys
 .btn.cn{background:rgba(55,214,122,.75)}
 .hidden{display:none!important}
 .empty{text-align:center;color:var(--sub);padding:50px 0;display:none}
-@media(max-width:560px){.hero h1{font-size:24px}}
-</style>
+@media(max-width:560px){.hero h1{font-size:24px}}</style>
 </head>
 <body>
 <div class="wrap">
@@ -608,33 +606,10 @@ body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSys
   <div class="empty" id="empty">没有匹配的页面 🥲</div>
   <footer style="text-align:center;color:var(--sub);font-size:12px;margin-top:60px">Tars · 自动整理 · 66 篇 HTML</footer>
 </div>
-<script>
-var chips=document.querySelectorAll('.chip'),secs=document.querySelectorAll('.sec');
-chips.forEach(function(c){c.addEventListener('click',function(){
-  chips.forEach(function(x){x.classList.remove('on');});c.classList.add('on');
-  var cat=c.dataset.cat;
-  secs.forEach(function(s){ if(s.dataset.cat===cat){s.classList.remove('hidden');} else {s.classList.add('hidden');} });
-  checkEmpty();
-});});
+<script>var chips=document.querySelectorAll('.chip'),secs=document.querySelectorAll('.sec');
+chips.forEach(function(c){c.addEventListener('click',function(){chips.forEach(function(x){x.classList.remove('on');});c.classList.add('on');var cat=c.dataset.cat;secs.forEach(function(s){if(s.dataset.cat===cat){s.classList.remove('hidden');}else{s.classList.add('hidden');}});checkEmpty();});});
 var q=document.getElementById('q');
-q.addEventListener('input',function(){
-  chips.forEach(function(x){x.classList.remove('on');});
-  var v=q.value.trim().toLowerCase(),any=false;
-  secs.forEach(function(s){
-    s.classList.remove('hidden');var vis=0;
-    s.querySelectorAll('.card').forEach(function(cc){
-      var txt=(cc.dataset.title+' '+cc.dataset.slug).toLowerCase();
-      if(!v||txt.indexOf(v)>-1){vis++;cc.classList.remove('hidden');} else {cc.classList.add('hidden');}
-    });
-    if(vis===0){s.classList.add('hidden');} else {any=true;}
-  });
-  checkEmpty(any);
-});
-function checkEmpty(a){
-  var e=document.getElementById('empty');
-  var has=(a!==undefined)?a:Array.prototype.slice.call(document.querySelectorAll('.sec')).some(function(s){return !s.classList.contains('hidden');});
-  e.style.display=has?'none':'block';
-}
-</script>
+q.addEventListener('input',function(){chips.forEach(function(x){x.classList.remove('on');});var v=q.value.trim().toLowerCase(),any=false;secs.forEach(function(s){s.classList.remove('hidden');var vis=0;s.querySelectorAll('.card').forEach(function(cc){var txt=(cc.dataset.title+' '+cc.dataset.slug).toLowerCase();if(!v||txt.indexOf(v)>-1){vis++;cc.classList.remove('hidden');}else{cc.classList.add('hidden');}});if(vis===0){s.classList.add('hidden');}else{any=true;}});checkEmpty(any);});
+function checkEmpty(a){var e=document.getElementById('empty');var has=(a!==undefined)?a:Array.prototype.slice.call(document.querySelectorAll('.sec')).some(function(s){return !s.classList.contains('hidden');});e.style.display=has?'none':'block';}</script>
 </body>
 </html>
