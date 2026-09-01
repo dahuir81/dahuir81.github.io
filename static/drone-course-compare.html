@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>无人机三门课对比卡 · 杭州奥体实验小学</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: #0d1117;
+    color: #e6edf3;
+    line-height: 1.6;
+    padding: 32px 16px 60px;
+  }
+  .wrap { max-width: 860px; margin: 0 auto; }
+  .hero {
+    text-align: center;
+    padding: 32px 20px 24px;
+    border-bottom: 1px solid #21262d;
+    margin-bottom: 28px;
+  }
+  .hero h1 { font-size: 30px; font-weight: 800; letter-spacing: 1px; }
+  .hero .sub { color: #8b949e; font-size: 14px; margin-top: 8px; }
+  .hero .tagline { color: #58a6ff; font-size: 15px; margin-top: 14px; font-weight: 600; }
+
+  .section-title {
+    font-size: 18px; font-weight: 700; margin: 28px 0 16px;
+    display: flex; align-items: center; gap: 8px; color: #f0f6fc;
+  }
+  .section-title::before { content:""; width: 4px; height: 20px; background:#58a6ff; border-radius: 2px; }
+
+  /* 核心一句话卡 */
+  .oneline {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 8px;
+  }
+  .oneline .card {
+    background: #161b22; border: 1px solid #262c36; border-radius: 12px;
+    padding: 16px; text-align: center;
+  }
+  .oneline .card .emoji { font-size: 34px; }
+  .oneline .card .name { font-weight: 700; margin-top: 8px; font-size: 15px; }
+  .oneline .card .who { color: #58a6ff; font-size: 13px; margin-top: 6px; font-weight: 600; }
+  .oneline .card .desc { color: #c9d1d9; font-size: 13px; margin-top: 6px; }
+
+  /* 主对比表格 */
+  .table { width: 100%; border-collapse: collapse; background: #161b22; border-radius: 12px; overflow: hidden; border: 1px solid #262c36; }
+  .table th, .table td { padding: 13px 14px; text-align: center; border-bottom: 1px solid #21262d; font-size: 14px; }
+  .table th { background: #1b2129; color: #f0f6fc; font-weight: 700; font-size: 14px; }
+  .table td:first-child, .table th:first-child {
+    text-align: left; color: #8b949e; font-weight: 600; white-space: nowrap; width: 108px;
+  }
+  .table tr:last-child td { border-bottom: none; }
+  .course-hd { display: flex; align-items: center; justify-content: center; gap: 6px; }
+  .course-hd .dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+  .fpv .dot { background:#f47067; } .fpv .lbl { color:#f47067; }
+  .prog .dot { background:#3fb950; } .prog .lbl { color:#3fb950; }
+  .ctrl .dot { background:#58a6ff; } .ctrl .lbl { color:#58a6ff; }
+  .lbl { font-weight: 700; }
+  .warn { color: #d29922; font-size: 13px; }
+  .pending { color:#6e7681; font-style: italic; }
+
+  /* 适合人群 */
+  .fit { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
+  .fit .card { background:#161b22; border:1px solid #262c36; border-radius:12px; padding:16px; }
+  .fit .card h3 { font-size:15px; margin-bottom:8px; }
+  .fit .card.fpv h3 { color:#f47067; }
+  .fit .card.prog h3 { color:#3fb950; }
+  .fit .card.ctrl h3 { color:#58a6ff; }
+  .fit ul { padding-left:18px; color:#c9d1d9; font-size:13px; }
+  .fit li { margin-bottom:6px; }
+
+  .note { margin-top: 28px; background:#1c2128; border-left: 4px solid #d29922; border-radius: 8px; padding: 14px 16px; font-size: 14px; color:#e6edf3; }
+  .note strong { color:#d29922; }
+  .footer { margin-top: 40px; text-align:center; color:#6e7681; font-size: 12px; }
+  .badge { display:inline-block; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight:700; margin-left:6px; }
+  .badge.vital { background:#d29922; color:#0d1117; }
+  .badge.info { background:#21262d; color:#c9d1d9; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <h1>🛸 无人机三门课 · 对比卡</h1>
+    <div class="sub">杭州市奥体实验小学 · 无人机校队</div>
+    <div class="tagline">同一种玩具 · 三种玩法：核心区别是 —— 谁来"掌舵"</div>
+  </div>
+
+  <div class="section-title">一句话看懂</div>
+  <div class="oneline">
+    <div class="card">
+      <div class="emoji">🥽</div>
+      <div class="name fpv lbl">第一视角 FPV</div>
+      <div class="who">你坐进飞机里</div>
+      <div class="desc">戴眼镜/看屏幕，人机合一，手控实战</div>
+    </div>
+    <div class="card">
+      <div class="emoji">💻</div>
+      <div class="name prog lbl">无人机编程</div>
+      <div class="who">程序让飞机自己飞</div>
+      <div class="desc">写代码 → 飞机按程序自主飞行</div>
+    </div>
+    <div class="card">
+      <div class="emoji">🎮</div>
+      <div class="name ctrl lbl">操控竞技（第三视角）</div>
+      <div class="who">你站场边遥控</div>
+      <div class="desc">看着飞机飞，用遥控器操控它</div>
+    </div>
+  </div>
+
+  <div class="section-title">六大维度详细对比</div>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>维度</th>
+        <th><span class="course-hd"><span class="dot"></span><span class="lbl fpv">第一视角 FPV</span></span></th>
+        <th><span class="course-hd"><span class="dot"></span><span class="lbl prog">无人机编程</span></span></th>
+        <th><span class="course-hd"><span class="dot"></span><span class="lbl ctrl">操控竞技</span></span></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>谁在控制</td>
+        <td>你实时手控<br>人机合一</td>
+        <td>程序控制<br>飞机自主</td>
+        <td>你实时遥控<br>人机分离</td>
+      </tr>
+      <tr>
+        <td>视角</td>
+        <td>第一视角<br>（机载镜头）</td>
+        <td>不涉及视角<br>（代码驱动）</td>
+        <td>第三视角<br>（站场边看）</td>
+      </tr>
+      <tr>
+        <td>核心能力</td>
+        <td>手眼协调·反应·空间感</td>
+        <td>编程逻辑·算法·自动化</td>
+        <td>操控手感·判断·精准度</td>
+      </tr>
+      <tr>
+        <td>上手难度</td>
+        <td><span class="warn">最难</span>（模拟器练多，易摔机）</td>
+        <td>中（需编程逻辑）</td>
+        <td>相对直观，上手较快</td>
+      </tr>
+      <tr>
+        <td>上课时间</td>
+        <td><span class="pending">需面试</span>·9/3 中午12:30</td>
+        <td><strong>周一</strong></td>
+        <td><strong>周二</strong></td>
+      </tr>
+      <tr>
+        <td>报名方式</td>
+        <td>模拟器飞行测试（面试）</td>
+        <td>扫码报名</td>
+        <td>扫码报名</td>
+      </tr>
+      <tr>
+        <td>对应赛事</td>
+        <td>模拟器测试入门</td>
+        <td>全国青少年无人机<b>编程类</b>赛事（白名单）</td>
+        <td>全国青少年无人机大赛<b>个人飞行</b>赛项（白名单）</td>
+      </tr>
+      <tr>
+        <td>装备/费用</td>
+        <td colspan="2" class="pending">套装约 1600 元（含飞机/遥控器/电池/充电器/桨叶）<span class="badge info">待确认</span></td>
+        <td class="pending">联系老师确认<span class="badge info">待确认</span></td>
+      </tr>
+      <tr>
+        <td>师资</td>
+        <td colspan="3">同一教练团队：世界机器人大会无人机赛项冠军 · 全国青少年无人机大赛一等奖 · 全国信息素养一等奖 · 杭州市科技节无人机编程一等奖</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="section-title">适合怎样的孩子</div>
+  <div class="fit">
+    <div class="card fpv">
+      <h3>🥽 第一视角 FPV</h3>
+      <ul>
+        <li>手脚协调、反应快</li>
+        <li>爱冒险、享受"飞驰"感</li>
+        <li>能接受前期摔机/练习成本</li>
+      </ul>
+    </div>
+    <div class="card prog">
+      <h3>💻 无人机编程</h3>
+      <ul>
+        <li>逻辑好、坐得住、爱钻研</li>
+        <li>数学/编程启蒙有优势</li>
+        <li>想走科技特长升学路线</li>
+      </ul>
+    </div>
+    <div class="card ctrl">
+      <h3>🎮 操控竞技（第三视角）</h3>
+      <ul>
+        <li>空间感好、喜欢操控类</li>
+        <li>想最快看到成就感</li>
+        <li>适合零基础入门</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="note">
+    <strong>⚠️ 给家长的建议</strong>：零基础孩子想快速建立信心 → 先报 <strong>操控竞技（第三视角，周二）</strong>；逻辑强、奔着升学科技特长 → 优先 <strong>无人机编程（周一）</strong>；真的很迷、想玩"最爽"的 → <strong>第一视角 FPV（9/3 中午 12:30 要面试）</strong>。FPV 是最硬核也最烧装备的一门，三门的<em>课时费 & 报名费 & 是否分年级</em>建议报名时直接向老师核实（费用处已标"待确认"）。
+  </div>
+
+  <div class="footer">杭州奥体实验小学 · 无人机校队 2026 招新 · 内容整理自校方海报 &amp; 老师介绍</div>
+</div>
+</body>
+</html>
