@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>华为韬定律（τ-Scaling）两投行对照解析与产业链推演</title>
+<title>华为韬定律（τ-Scaling）深度解析：从理论到 V3 实测</title>
 <style>
 :root {
   --bg: #0f1117;
@@ -27,7 +27,7 @@ body {
   line-height: 1.7;
   padding: 0;
 }
-.container { max-width: 820px; margin: 0 auto; padding: 40px 24px 80px; }
+.container { max-width: 860px; margin: 0 auto; padding: 40px 24px 80px; }
 
 /* Header */
 .hero {
@@ -48,7 +48,7 @@ body {
 .hero .subtitle {
   color: var(--text-dim);
   font-size: 0.95em;
-  max-width: 600px;
+  max-width: 640px;
   margin: 0 auto;
 }
 .hero .meta {
@@ -158,6 +158,25 @@ tr:hover td { background: rgba(108,140,255,0.03); }
 }
 .data-block h4 { color: var(--accent); margin-bottom: 8px; font-size: 0.95em; }
 
+/* Metrics grid */
+.metric-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+  margin: 16px 0;
+}
+.metric {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px;
+  text-align: center;
+}
+.metric .num { font-size: 1.6em; font-weight: 700; color: var(--accent); }
+.metric .num.green { color: var(--green); }
+.metric .num.red { color: var(--red); }
+.metric .lbl { font-size: 0.76em; color: var(--text-dim); margin-top: 4px; }
+
 /* Quote */
 blockquote {
   border-left: 3px solid var(--accent2);
@@ -180,6 +199,16 @@ blockquote strong { color: var(--text); }
 }
 .risk-item h5 { color: var(--red); margin-bottom: 4px; font-size: 0.9em; }
 
+/* Highlight callout */
+.highlight {
+  background: rgba(78,205,196,0.06);
+  border: 1px solid rgba(78,205,196,0.2);
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin: 16px 0;
+}
+.highlight h4 { color: var(--accent3); margin-bottom: 8px; }
+
 /* Separator */
 hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
 
@@ -199,14 +228,15 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
 <body>
 
 <div class="hero">
-  <h1>华为韬定律（τ-Scaling）</h1>
-  <div class="subtitle">BOCI × CITI 两投行对照解析 &amp; 产业链推演</div>
-  <div class="meta">综合整理 · 2026-05-28 | 覆盖：华为原论文 · BOCI · CITI</div>
+  <h1>华为韬定律（τ-Scaling）深度解析</h1>
+  <div class="subtitle">从理论宣言到 V3 实测：一场"芯片本该熔化"的证伪</div>
+  <div class="meta">综合更新 · 2026-09-05 | 覆盖：华为 V1/V2/V3 论文 · 麒麟2026 实测 · BOCI · CITI</div>
   <div style="margin-top:12px">
     <span class="tag tag-blue">#韬定律</span>
     <span class="tag tag-green">#LogicFolding</span>
-    <span class="tag tag-orange">#先进封装</span>
-    <span class="tag tag-red">#半导体</span>
+    <span class="tag tag-orange">#麒麟2026</span>
+    <span class="tag tag-red">#3D堆叠</span>
+    <span class="tag tag-blue">#半导体</span>
   </div>
 </div>
 
@@ -214,60 +244,122 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
 
 <!-- ===== 1. BACKGROUND ===== -->
 <section>
-<h2>一、事件背景</h2>
-<p>2026年5月25日，华为何庭波在上海IEEE ISCAS 2026上正式提出<strong>韬定律（τ-Scaling Law）</strong>——以"时间缩微"替代"几何缩微"的新范式，系统性降低时间常数τ，通过<strong>LogicFolding（逻辑折叠）</strong>实现芯片性能代际跨越。</p>
+<h2>一、事件脉络：百日三级跳</h2>
+<p>2026年5月25日，华为半导体业务部总裁何庭波在 IEEE ISCAS 2026 上正式提出<strong>韬定律（τ-Scaling Law）</strong>——以"时间缩微"替代"几何缩微"的新范式，系统性降低时间常数τ，通过<strong>LogicFolding（逻辑折叠）</strong>实现芯片性能代际跨越。</p>
 
-<p>不足24小时内，BOCI和CITI同时发布解读研报。以下综合两篇投行研报 + 华为原论文，从<strong>技术逻辑、投行视角差异、产业链影响、风险边界</strong>四维度展开。</p>
+<p>此后不到四个月，何庭波连发两篇论文，把韬定律从理论宣言一步步推向工程实证：</p>
+
+<div class="card">
+<table>
+  <tr><th>版本</th><th>时间</th><th>核心</th></tr>
+  <tr><td><strong>V1</strong></td><td>5/25 ISCAS</td><td>提出τ定律：以"时间缩微"替代"几何缩微"，中国企业首次在全球半导体领域提出引领性产业原则</td></tr>
+  <tr><td><strong>V2</strong></td><td>7/3</td><td>《面向多层级电子系统的时间缩微理论》，补齐工程细节与实测量化（移动SoC密度+55%、能效+41%）</td></tr>
+  <tr><td><strong>V3</strong></td><td>9/4</td><td>《Huawei's τ Chip Was Supposed to Melt?》，聚焦功耗与发热，首次公开麒麟2026独家实测</td></tr>
+</table>
+</div>
+
+<p>关于 V3 论文，何庭波在论文结尾借用西西弗斯的神话：每一轮芯片迭代都应留下"计算更多、耗能更少"的成果。V3 的锋芒直指一个被半导体行业奉为常识的判断——<strong>3D 堆叠必然高热</strong>。</p>
 </section>
 
 <!-- ===== 2. TECHNICAL CORE ===== -->
 <section>
-<h2>二、技术核心</h2>
+<h2>二、技术核心：功耗大头在"数据搬运"</h2>
 
-<h3>LogicFolding 的核心逻辑</h3>
-<p>传统芯片在2D平面上铺晶体管；LogicFolding 将数字、模拟、存储电路通过<strong>超精细混合键合（1.5μ间距）</strong>垂直堆叠为有源层，构成单一连续计算结构。本质是用第三维交换延迟——堆叠越深，信号路径越短，时钟越高。</p>
+<h3>拆掉"堆叠必热"的技术迷信</h3>
+<p>行业长期认为：把更多晶体管压进同一面积，单位面积功率密度必然飙升，热量无路可逃——3D 堆叠等于给自己架一口锅。何庭波用一句生活化比喻捅破这层窗户纸：</p>
+<blockquote>一个人工作日消耗的能量，主要不是坐在办公桌前那几个小时，通勤同样要吃掉大量卡路里。芯片同理——在典型手机负载下，<strong>动态功耗能占到总功耗约九成</strong>，而动态功耗除了晶体管开关，更大头是信号在金属连线上奔波传输所耗的"互连电容"。</blockquote>
 
+<p>这意味着，传统把"发热"全算在晶体管头上是找错了账本。一旦意识到功耗大头在<strong>数据搬运</strong>而非<strong>数据计算</strong>，解题方向就彻底翻转：与其死磕更小的晶体管，不如缩短数据走线的距离。这正是 LogicFolding 的命门。</p>
+
+<div class="highlight">
+<h4>🔑 核心机制</h4>
+<p><strong>LogicFolding（逻辑折叠）</strong>：把原本铺得很开的逻辑层沿垂直方向折叠，将长距离"横向通勤"变成短距离"垂直换乘"，以 3D 混合键合工艺建立微米级垂直互连。走线缩短 → 互连电容下降 → 动态功耗（与电压平方成正比）大幅缩减。</p>
+<p>V3 论文披露，麒麟2026 上典型核心连线缩短约 <strong>20%</strong>，关键路径部分最多缩短 <strong>70%</strong>；时钟布线缩短 <strong>28%</strong>，时钟缓冲器数量从约 4.36 万降至 <strong>1.9 万</strong>。</p>
+</div>
+
+<h3>反直觉结论</h3>
 <div class="data-block">
-<h4>📊 关键指标（跨来源交叉验证）</h4>
+<p style="font-size:1.05em; font-weight:600; color:var(--text);">3D 堆叠未必更热，关键在于你怎么堆叠。</p>
+<p style="font-size:0.9em;">功率密度不是堆叠技术的宿命，而是可以通过设计调控的结果。</p>
+</div>
+</section>
+
+<!-- ===== 3. V3 REAL-WORLD DATA ===== -->
+<section>
+<h2>三、麒麟2026 独家实测：&nbsp;密度 +55%，功耗最高砍 66%</h2>
+
+<p>V3 首次公开了首款完整"τ芯片"——<strong>麒麟2026</strong> 的详细实测数据。这是理论能否服众的硬证据。</p>
+
+<div class="metric-grid">
+  <div class="metric">
+    <div class="num green">+55%</div>
+    <div class="lbl">晶体管密度跃升<br>(1.55亿→2.38亿/mm²)</div>
+  </div>
+  <div class="metric">
+    <div class="num green">-66%</div>
+    <div class="lbl">NPU 功耗下降<br>(同性能 vs 9030 Pro)</div>
+  </div>
+  <div class="metric">
+    <div class="num green">-58%</div>
+    <div class="lbl">GPU 功耗下降</div>
+  </div>
+  <div class="metric">
+    <div class="num green">-41%</div>
+    <div class="lbl">CPU 大核功耗下降</div>
+  </div>
+</div>
+
+<h3>三大核心模块实测对比（麒麟2026 vs 麒麟9030 Pro，同性能）</h3>
 <table>
-  <tr><th>指标</th><th>数值</th><th>说明</th></tr>
-  <tr><td>晶体管密度</td><td>155→238 MTr/mm²</td><td>BOCI: +53.5% / CITI: +55%</td></tr>
-  <tr><td>能效提升</td><td><strong>41%</strong></td><td>同器件节点，纯系统级优化</td></tr>
-  <tr><td>频率提升</td><td><strong>~13%</strong></td><td>2.75GHz→3.1GHz（Kirin 2026首代）</td></tr>
-  <tr><td>混合键合间距</td><td><strong>1.5μ</strong></td><td>Intel/TSMC也在同一区间</td></tr>
-  <tr><td>布线路由压缩</td><td>30%</td><td>BOCI独家数据</td></tr>
-  <tr><td>时钟缓冲器消除</td><td>50%</td><td>BOCI独家数据</td></tr>
-  <tr><td>2031密度目标</td><td>等效1.3-1.4nm</td><td>BOCI: 1.3nm / CITI: 1.4nm</td></tr>
+  <tr><th>模块</th><th>实现方式</th><th>功耗收益</th><th>关键变化</th></tr>
+  <tr><td><strong>NPU</strong></td><td>保持 29 TOPS 算力</td><td style="color:var(--green)"><strong>-66%</strong></td><td>时钟频率 -63%，电压 0.85V→0.55V，功耗密度 -73%</td></tr>
+  <tr><td><strong>GPU</strong></td><td>保持 61 FPS</td><td style="color:var(--green)"><strong>-58%</strong></td><td>电压降低约 200mV</td></tr>
+  <tr><td><strong>CPU 大核</strong></td><td>HNX 测试同性能</td><td style="color:var(--green)"><strong>-41%</strong></td><td>低 9% 频率 + 低 200mV 电压</td></tr>
+</table>
+
+<div class="card">
+<h4 style="color:var(--accent);">📊 核心指标一览</h4>
+<table>
+  <tr><th>指标</th><th>麒麟2026</th><th>说明</th></tr>
+  <tr><td>晶体管密度</td><td><strong>1.55亿→2.38亿/mm²</strong></td><td>+55%，相当于过去三年传统工艺微缩的全部成果一次兑现</td></tr>
+  <tr><td>混合键合节距</td><td><strong>1.5μm</strong></td><td>拥有约 5000 万根垂直互连（10-15% 用于信号传输）</td></tr>
+  <tr><td>CPU 大核频率</td><td><strong>3.1GHz</strong></td><td>未来 3-5 年目标推向 5GHz+</td></tr>
+  <tr><td>Turbo 模式 NPU</td><td><strong>70 TOPS</strong></td><td>较前代提升 141%（GPU 帧率 +42%）</td></tr>
 </table>
 </div>
 
-<h3>Kirin LogicFolding 路线图</h3>
-<table>
-  <tr><th>年份</th><th>SoC</th><th>架构</th><th>频率(GHz)</th><th>状态</th></tr>
-  <tr><td>2023</td><td>Kirin 9000s</td><td>Planar</td><td>2.6</td><td class="tag tag-green">量产</td></tr>
-  <tr><td>2024</td><td>Kirin 9020</td><td>Planar</td><td>2.65</td><td class="tag tag-green">量产</td></tr>
-  <tr><td>2025</td><td>Kirin 9030 Pro</td><td>Planar</td><td>2.75</td><td class="tag tag-green">量产</td></tr>
-  <tr><td><strong>2026</strong></td><td><strong>Kirin 2026</strong></td><td><strong>LogicFolding</strong></td><td><strong>3.1</strong></td><td class="tag tag-blue">流片</td></tr>
-  <tr><td>2027</td><td>Kirin 2027</td><td>LogicFolding</td><td>3.39</td><td class="tag tag-blue">流片</td></tr>
-  <tr><td>2028</td><td>Kirin 2028</td><td>LogicFolding</td><td>3.71</td><td class="tag tag-orange">预流片</td></tr>
-  <tr><td>2029</td><td>Kirin 2029</td><td>LogicFolding</td><td>4.0</td><td class="tag tag-orange">预流片</td></tr>
-</table>
-<div style="font-size:0.8em; color:var(--text-dim); margin-top:-8px;">来源: CITI Tau Scaling研报, p.2</div>
+<h3>DSP 反例：收益并不均匀</h3>
+<p>LogicFolding 并非处处完美，收益分布有明显物理界限。麒麟2026 的 DSP 完成相同工作时功耗下降 <strong>25%</strong>，但由于芯片面积同步缩小 <strong>40%</strong>，单位面积功率密度反而上升 <strong>24%</strong>。到麒麟2027，该问题已改善——DSP 功耗下降 <strong>47%</strong>，功耗密度也低于平面设计基准。</p>
+<p>这印证了何庭波的限定：<strong>τ 是时间缩放定律，而不是能量缩放定律</strong>。芯片跑得更快，并不必然更省电——如果设计师把缩短信号路径获得的时间余量全部用来提高频率和性能，芯片完全可能消耗更多功率。</p>
+
+<div class="data-block">
+<h4>⚠️ 涡轮增压模式（Trade-off 提醒）</h4>
+<p>达成"等性能下省电低温"的同时，LogicFolding 也提供双模式：开启 <strong>Turbo 模式</strong>时，麒麟2026 NPU 可达 <strong>70 TOPS</strong>（+141%），GPU 帧率 +42%。此时功率密度会随之升高，系统可根据场景在"极致省电"与"极限性能"之间灵活切换。</p>
+</div>
 </section>
 
-<!-- ===== 3. BANK COMPARISON ===== -->
+<!-- ===== 4. NEXT GEN ===== -->
 <section>
-<h2>三、两投行视角对照</h2>
+<h2>四、下一代路线：麒麟2027</h2>
+<table>
+  <tr><th>指标</th><th>麒麟2026</th><th>麒麟2027</th><th>三年内目标</th></tr>
+  <tr><td>混合键合节距</td><td>1.5μm</td><td><strong>1μm</strong></td><td><strong>720nm</strong></td></tr>
+  <tr><td>垂直互连</td><td>约 5000 万根</td><td><strong>突破 1 亿根</strong></td><td><strong>2 亿根以上</strong></td></tr>
+</table>
+</section>
+
+<!-- ===== 5. BANK COMPARISON ===== -->
+<section>
+<h2>五、早期投行视角（V1 背景）</h2>
+<p>V1 发布当天，BOCI 和 CITI 同时发布解读研报。以下保留其分析框架作为早期市场认知的参照：</p>
 
 <div class="comp-grid">
 <div class="comp-card left">
   <h4>🏦 BOCI（中银国际）</h4>
   <ul>
-    <li><strong>基调</strong>: 最直接——"地缘政治与光刻约束下的工程补偿"</li>
+    <li><strong>基调</strong>: "地缘政治与光刻约束下的工程补偿"</li>
     <li><strong>定性</strong>: 不是新物理，是系统工程的概念统一</li>
     <li><strong>风险分析</strong>: 三层面全覆盖（散热/EDA/晶体管）</li>
-    <li><strong>路线图</strong>: 含Atlas系统级数据（950→960→NEXT）</li>
-    <li><strong>个股推荐</strong>: 无（News Alert性质）</li>
     <li><strong>金句</strong>: "华为被迫把先进封装这条腿推到绝对极限"</li>
   </ul>
 </div>
@@ -275,91 +367,27 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
   <h4>🏦 CITI（花旗）</h4>
   <ul>
     <li><strong>基调</strong>: 中性——"可信的设计响应"</li>
-    <li><strong>定性</strong>: 新设计理念，四个层级创新推动</li>
-    <li><strong>风险分析</strong>: 简要提及（散热/EDA）</li>
-    <li><strong>路线图</strong>: Kirin频率路线图含具体数据</li>
-    <li><strong>个股推荐</strong>: ASMPT(0522.HK, Buy, TP HK$180)</li>
+    <li><strong>定性</strong>: 新设计理念，四层级创新推动</li>
     <li><strong>金句</strong>: "238 MTr/mm²是3D密度，不等同于平面"</li>
+    <li><strong>个股推荐</strong>: ASMPT(0522.HK, Buy, TP HK$180)</li>
   </ul>
 </div>
 </div>
 
-<h3>BOCI的独特增量</h3>
-<div class="comp-grid" style="grid-template-columns: 1fr;">
-<div class="comp-card left">
-<p><strong>"非对称迫选"框架</strong>——这是最具穿透力的定性。<br>
-BOCI指出：全球巨头（TSMC/Intel）在<strong>More-than-Moore</strong>路线图中早已规划了3D堆叠和后端优化。华为并非做前人没做的事，而是在FEOL（前道）被锁的情况下，把所有工程资源集中押在先进封装这一条路上。</p>
-<blockquote>"这是一个必要之下的系统级补偿路径，而非里程碑式的科学突破。" — BOCI, p.2</blockquote>
-</div>
-</div>
-
-<h3>CITI的独特增量</h3>
-<div class="comp-grid" style="grid-template-columns: 1fr;">
-<div class="comp-card right">
-<p><strong>产业链受益排序</strong>——最务实贡献。</p>
-<ol style="color: var(--text-dim); padding-left: 18px; font-size: 0.9em;">
-  <li>🥇 先进封装设备（混合键合机供应商）</li>
-  <li>🥈 OSAT（封装复杂度上升）</li>
-  <li>🥉 晶圆代工（芯片复杂度上升）</li>
-  <li>④ EDA（3D设计支持工具链重构）</li>
-</ol>
-<p style="margin-top:12px">CITI重点推荐：<strong>ASMPT(0522.HK)</strong>，目标价HK$180，基于37x 2027E PE。核心驱动：AI驱动的TCB订单（HBM &amp; CoW）+ SMT业务剥离触发估值重估。</p>
-</div>
-</div>
+<blockquote><strong>CITI 补充提醒</strong>：238 MTr/mm² 是<strong>3D 密度</strong>，不等同于平面设计密度。消费者不能直接拿这个数字跟 TSMC 3nm 的 ~300 MTr/mm² 平面密度对标。</blockquote>
 </section>
 
-<!-- ===== 4. MARKET DATA ===== -->
-<section>
-<h2>四、板块定价情况</h2>
-
-<p>CITI收录了截至5月26日的板块股价数据。各环节对韬定律的反应差别显著：</p>
-
-<div class="data-block">
-<h4>📈 1日涨跌幅</h4>
-<table>
-  <tr><th>板块</th><th>1日</th><th>1周</th><th>12月</th></tr>
-  <tr><td>OSAT</td><td style="color:var(--green)"><strong>+7.3%</strong></td><td style="color:var(--green)"><strong>+28.2%</strong></td><td style="color:var(--green)">+132.9%</td></tr>
-  <tr><td>Foundry</td><td style="color:var(--green)">+2.2%</td><td style="color:var(--green)">+21.4%</td><td style="color:var(--green)">+178.4%</td></tr>
-  <tr><td>后道设备</td><td style="color:var(--red)">-1.0%</td><td style="color:var(--green)">+10.1%</td><td style="color:var(--green)"><strong>+355.0%</strong></td></tr>
-  <tr><td>EDA/设计</td><td style="color:var(--red)">-2.4%</td><td style="color:var(--green)">+11.6%</td><td style="color:var(--green)">+115.4%</td></tr>
-  <tr><td>SiPh/CPO</td><td style="color:var(--red)">-2.1%</td><td style="color:var(--green)">+5.2%</td><td style="color:var(--green)"><strong>+722.3%</strong></td></tr>
-  <tr><td>Memory</td><td style="color:var(--red)">-3.1%</td><td style="color:var(--green)">+4.2%</td><td style="color:var(--green)">+297.4%</td></tr>
-  <tr><td>前道设备</td><td style="color:var(--red)">-3.0%</td><td style="color:var(--green)">+5.8%</td><td style="color:var(--green)">+149.8%</td></tr>
-  <tr><td>Wafer</td><td style="color:var(--red)"><strong>-4.8%</strong></td><td style="color:var(--red)">-7.7%</td><td style="color:var(--green)">+48.3%</td></tr>
-</table>
-<div style="font-size:0.8em; color:var(--text-dim);">来源: dataCentral, CITI Research, 2026-05-26</div>
-</div>
-
-<blockquote><strong>关键信号</strong>：<br>OSAT 1日+7.3%、后道设备12月+355%，市场已经提前定价了先进封装这条主线。相对的，Wafer和前道设备表现疲弱——资金正在从"前端制程"切换到"后端系统集成"逻辑。</blockquote>
-</section>
-
-<!-- ===== 5. RISKS ===== -->
-<section>
-<h2>五、风险边界</h2>
-
-<p>BOCI提供了三篇资料中最详尽的风险分析：</p>
-
-<div class="risk-item">
-<h5>🔥 散热：空前的机械挑战</h5>
-<p>高功耗逻辑电路垂直堆叠在极其有限的（无风扇）手机机箱内。这不是渐进式改进，而是本质性的热力学约束——3D堆叠的功耗密度是指数级上升的。</p>
-</div>
-
-<div class="risk-item">
-<h5>🔧 EDA &amp; 良率：自缚手脚</h5>
-<p>主流EDA工具链面向2D设计，华为必须完全依赖<strong>自家未经验证的跨层协同优化EDA工具</strong>。上下逻辑单元1:1垂直对齐需要极端叠加精度，国内代工厂良率曲线陡峭。</p>
-</div>
-
-<div class="risk-item">
-<h5>⛓️ 晶体管限制因子</h5>
-<p>总系统延迟受器件+电路+芯片+系统四层约束。LogicFolding大幅降低互联和系统级延迟，但<strong>无法改变晶体管本身的物理属性</strong>。如果FEOL工艺的栅电容/接触电阻/驱动电流滞后，最终性能天花板低于不受此限制的对手。</p>
-</div>
-
-<blockquote><strong>CITI的补充提醒</strong>：238 MTr/mm²是<strong>3D密度</strong>，不等同于平面设计密度。消费者不能直接拿这个数字跟TSMC 3nm的~300 MTr/mm²平面密度对标。</blockquote>
-</section>
-
-<!-- ===== 6. STRATEGIC IMPLICATIONS ===== -->
+<!-- ===== 6. STRATEGIC ===== -->
 <section>
 <h2>六、战略推演</h2>
+
+<h3>两种哲学对撞</h3>
+<p>全球 3D 集成赛道正在同步升温，但内核分叉：台积电（SoIC/3DFabric）、英特尔（Foveros/EMIB/XBM）、三星（CUBE/zHBM）的 3D 堆叠仍主要依托<strong>先进制程工艺</strong>向前推；华为的 τ 定律则试图在<strong>减少对 EUV 依赖</strong>的前提下，靠架构层的逻辑折叠撕开性能空间。</p>
+<blockquote>一种相信"把单个晶体管做到极致"，另一种相信"把晶体管的组织方式做到极致"。<br>前者是物理极限的冲刺，后者是系统智慧的迂回。</blockquote>
+
+<h3>产业链重构前夜</h3>
+<p>券商分析普遍认为，τ定律路径下受影响最大的三个环节依次是：<strong>EDA → 晶圆代工 → 制造设备</strong>。当芯片设计从 2D 全面转向 3D，EDA 工具链将被迫重构，平面布线、时序分析范式推倒重来；代工与设备环节为混合键合、垂直互连重新定义能力与标准。</p>
+<p>价值重心正从<strong>"制程节点"</strong>挪到<strong>"系统架构"</strong>——传统巨头用制程构筑的护城河，出现一道可供追赶者侧身而入的缝隙。</p>
 
 <h3>从"摩尔 vs 韬"看产业链重构</h3>
 <table>
@@ -370,75 +398,97 @@ BOCI指出：全球巨头（TSMC/Intel）在<strong>More-than-Moore</strong>路�
   <tr><td>投资焦点</td><td>ASML、应用材料</td><td>ASMPT、OSAT、SiPh、混合键合设备</td></tr>
   <tr><td>技术护城河</td><td>制程节点领先</td><td>全栈系统协同优化</td></tr>
 </table>
-
-<h3>Atlas系统路线图（BOCI独家）</h3>
-<table>
-  <tr><th>产品</th><th>年份</th><th>性能</th><th>提升倍数</th></tr>
-  <tr><td>Atlas 950</td><td>2026</td><td>8 EFLOPS</td><td>—</td></tr>
-  <tr><td>Atlas 960</td><td>2027</td><td>60 EFLOPS</td><td>7.5×</td></tr>
-  <tr><td>Atlas:NEXT</td><td>2030</td><td>Z FLOPS</td><td>125×</td></tr>
-</table>
-<div style="font-size:0.8em; color:var(--text-dim);">来源: BOCI路演d图，含华为τ-Scaling路线图</div>
-
-<blockquote><strong>核心观察</strong>：从8 EFLOPS到Z FLOPS（125倍提升）意味着华为算力基础设施的指数级推进。如果韬定律在Kirin上验证成功，Atlas系列的迭代速度可能比对标TSMC路线的竞品更快——因为迭代环节更少（封装为主，非光刻）。</blockquote>
 </section>
 
-<!-- ===== 7. TIMELINE ===== -->
+<!-- ===== 7. RISKS ===== -->
 <section>
-<h2>七、关键验证节点</h2>
+<h2>七、风险边界</h2>
+
+<p>V3 用麒麟2026 实测部分回应了早年投行担心的散热问题，但风险并未消失，只是换了形态：</p>
+
+<div class="risk-item">
+<h5>🔥 散热：从"总发热"转向"热分布"</h5>
+<p>3D 结构的散热问题并未因 LogicFolding 消失——下层硅产生的热量依然需要通过上层结构向外传导。何庭波的回应是：不能只看总发热量，要看热量集中在哪、晶体管结温多高。通过<strong>热感知布局</strong>交错排布高低温模块、避开热点垂直叠加，把结温控制在安全区间。但这是设计取舍，不是物理豁免。</p>
+</div>
+
+<div class="risk-item">
+<h5>🔧 EDA &amp; 良率：系统性工程</h5>
+<p>主流 EDA 工具链面向 2D 设计。低并行度 CPU 核心实现完整逻辑折叠，需要 EDA 工具迭代、漫长验证，属于系统性工程。国内代工良率曲线仍是关键变量。</p>
+</div>
+
+<div class="risk-item">
+<h5>⛓️ 收益不均衡：CPU &amp; DSP 的短板</h5>
+<p>CPU 大核因大量不可并行的串行任务，功耗收益相对有限（仅 41%）；DSP 在麒麟2026 出现过功率密度上升（+24%）。τ 不是万能钥匙，它给的是重新分配性能/面积/功耗的空间，而非无条件省电。</p>
+</div>
+
+<div class="risk-item">
+<h5>💰 τ≠能量定律：性能诱惑</h5>
+<p>如果设计师把时间余量全部用于拉高频率换性能，芯片完全可能更费电。这是 τ 定律从"论文省电"到"量产省电"之间最大的执行风险。</p>
+</div>
+</section>
+
+<!-- ===== 8. TIMELINE ===== -->
+<section>
+<h2>八、关键验证节点</h2>
 
 <div class="card">
 <div style="display:flex; align-items:baseline; gap:12px; margin-bottom:12px; flex-wrap:wrap;">
-  <span style="font-size:1.1em; font-weight:600;">📅 2026年Q3</span>
+  <span style="font-size:1.1em; font-weight:600;">📅 2026 秋季</span>
   <span class="tag tag-blue">核心验证窗口</span>
 </div>
-<p style="font-size:0.92em;">首款大规模量产完全部署LogicFolding的Kirin旗舰芯片发布。<strong>这是验证韬定律从"PPT"到"量产"的关键节点</strong>。</p>
+<p style="font-size:0.92em;">搭载麒麟2026 的终端正式面世（首款完整 LogicFolding 移动 SoC）。<strong>这是 τ 定律从"论文"到"量产"的关键成人礼</strong>。</p>
 <ul style="color:var(--text-dim); font-size:0.88em; padding-left:18px; margin-top:8px;">
-  <li>实际功耗/发热 vs 官方数据</li>
-  <li>良率 vs 台积电N3类比基准</li>
+  <li>实际功耗/发热 vs 官方数据（NPU -66%、GPU -58%、CPU -41%）</li>
+  <li>良率 vs 台积电 N3 类比基准</li>
   <li>第三方测评：频率/能效/散热的一致性</li>
-  <li>国内代工厂实际交付能力验证</li>
+  <li>Turbo 模式下功耗密度的真实表现</li>
 </ul>
 </div>
 
 <div class="card">
 <div style="display:flex; align-items:baseline; gap:12px; margin-bottom:12px; flex-wrap:wrap;">
-  <span style="font-size:1.1em; font-weight:600;">📅 2027年</span>
+  <span style="font-size:1.1em; font-weight:600;">📅 2027</span>
   <span class="tag tag-orange">迭代验证</span>
 </div>
-<p style="font-size:0.92em;">Kirin 2027流片（3.39GHz），Atlas 960 (60 EFLOPS) 发布。这将证明LogicFolding路线是否具有<strong>可持续迭代性</strong>。</p>
+<p style="font-size:0.92em;">麒麟2027（1μm 键合节距、1 亿+ 垂直互连）流片，DSP 功耗密度问题改善。这将证明 LogicFolding 是否具有<strong>可持续迭代性</strong>。</p>
 </div>
 
 <div class="card">
 <div style="display:flex; align-items:baseline; gap:12px; margin-bottom:12px; flex-wrap:wrap;">
-  <span style="font-size:1.1em; font-weight:600;">📅 2031年</span>
+  <span style="font-size:1.1em; font-weight:600;">📅 3-5 年 / 2031</span>
   <span class="tag tag-red">终极验证</span>
 </div>
-<p style="font-size:0.92em;">华为承诺达到等效1.3-1.4nm逻辑密度。如果实现，<strong>将首次验证"非制程路径可达到与先进制程相当的芯片性能"</strong>。</p>
+<p style="font-size:0.92em;">三年内达成 720nm 顶层金属节距；CPU 核心频率目标 5GHz+；远期挑战"非制程路径达到等效先进制程性能"。若实现，将首次验证"换道可对标"。</p>
 </div>
 </section>
 
-<!-- ===== 8. SUMMARY ===== -->
+<!-- ===== 9. SUMMARY ===== -->
 <section>
-<h2>八、综合判断</h2>
+<h2>九、综合判断</h2>
 
 <div class="comp-grid" style="grid-template-columns: 1fr;">
 <div class="comp-card left">
 <p style="font-size:0.95em; line-height:1.8;">
-<strong>技术层面</strong>：韬定律不是"摩尔替代品"，它是摩尔定律在光刻受限条件下的<strong>系统性补偿路径</strong>。BOCI和CITI在这点上一致——华为不是发现了新物理，而是把所有工程资源集中到先进封装一条路上。<br><br>
-<strong>投资层面</strong>：CITI给出了清晰的产业链受益排序，BOCI提供了最详尽的风险分析。两篇拼在一起，韬定律的全貌基本清晰。<br><br>
-<strong>最大不确定性</strong>：散热管理 + 自家EDA工具验证 + 国内代工厂良率 = 三座大山。2026Q3的Kirin芯片将是第一次真正的压力测试。
+<strong>技术层面</strong>：V3 让 τ 定律从理论宣言走到了硬数据。它证明的不是"3D 堆叠不发热"，而是"发热大头在数据搬运、可被设计调控"。动态功耗约九成来自互连电容 + LogicFolding 缩短走线，是这轮实测反直觉的核心逻辑。<br><br>
+<strong>商业层面</strong>：价值重心从"制程节点"挪到"系统架构"。这意味着一批靠先进制程构筑护城河的巨头，可能面对一道侧身而入的缝隙；同时先进封装/EDA/混合键合设备成为战略焦点。<br><br>
+<strong>最大不确定性</strong>：τ 是时间缩放而非能量缩放，量产真机能否兑现功耗承诺仍待检验；CPU/DSP 并行度短板、EDA 工具链完备度、国内代工良率，三者依然是决定路线能走多远的关键。
 </p>
 </div>
 </div>
+
+<blockquote style="border-color:var(--accent3); background:rgba(78,205,196,0.05);">
+<strong>"时间余量是手段，能量才是锦标。<br>τ 的每一个未来，都成于功耗、亦败于功耗。"</strong><br>
+—— 何庭波（V3 论文）
+</blockquote>
+</section>
 
 </div>
 
 <div class="disclaimer">
   <strong>免责声明</strong><br>
-  本文综合整理自华为原论文(ChinaXiv:202605.00224v1)、BOCI Research News Alert (2026-05-26) 及 CITI Research 研报 (2026-05-26)。<br>
+  本文综合整理自华为何庭波 V1/V2/V3 论文（ChinaXiv）、麒麟2026 实测公开数据，以及 BOCI、CITI 早期解读研报。<br>
   内容仅供参考，不构成投资建议。所有数据以原始出处为准。<br>
-  整理日期: 2026-05-28
+  整理日期: 2026-09-05
 </div>
 
 </body>
