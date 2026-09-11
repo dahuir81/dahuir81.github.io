@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mac 升级决策：MacBook Pro vs Mac Studio vs Mac mini（2026 本地大模型视角）</title>
+<style>
+:root{
+  --bg:#0f1117; --card:#1a1d28; --card2:#20242f; --border:#2a2d3a;
+  --text:#e4e6ef; --text-dim:#8b8fa3;
+  --accent:#6c8cff; --accent2:#ff6b6b; --accent3:#4ecdc4; --accent4:#ffd93d;
+  --green:#4caf7d; --orange:#ff9f43; --red:#ee5a24;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro SC","PingFang SC","Noto Sans SC",sans-serif;
+  background:var(--bg);color:var(--text);line-height:1.75}
+.container{max-width:900px;margin:0 auto;padding:40px 24px 80px}
+.hero{padding:64px 24px 44px;text-align:center;
+  background:linear-gradient(135deg,#1a1d28 0%,#1d1f2e 50%,#1a1d28 100%);border-bottom:1px solid var(--border)}
+.hero h1{font-size:1.9em;font-weight:700;margin-bottom:14px;line-height:1.35;
+  background:linear-gradient(135deg,var(--accent),var(--accent3));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero .subtitle{color:var(--text-dim);font-size:.97em;max-width:680px;margin:0 auto}
+.hero .meta{color:var(--text-dim);font-size:.8em;margin-top:18px;opacity:.7}
+section{margin:44px 0}
+h2{font-size:1.4em;font-weight:600;margin-bottom:18px;padding-bottom:10px;
+  border-bottom:1px solid var(--border);color:var(--accent)}
+h3{font-size:1.08em;font-weight:600;margin:26px 0 12px;color:var(--text)}
+h4{font-size:.97em;font-weight:600;margin:18px 0 8px;color:var(--accent3)}
+p{margin:12px 0;color:var(--text-dim)}
+p strong,li strong,td strong{color:var(--text)}
+ul,ol{margin:12px 0 12px 22px;color:var(--text-dim)}
+li{margin:7px 0}
+.verdict{background:linear-gradient(135deg,rgba(108,140,255,.14),rgba(78,205,196,.10));
+  border:1px solid rgba(108,140,255,.35);border-radius:14px;padding:26px 26px 22px;margin:26px 0}
+.verdict .tag{display:inline-block;font-size:.72em;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--accent3);border:1px solid rgba(78,205,196,.4);border-radius:999px;padding:2px 12px;margin-bottom:12px}
+.verdict h3{margin-top:0;font-size:1.22em;color:var(--text)}
+.verdict p{color:var(--text);opacity:.88}
+.callout{border-radius:10px;padding:16px 18px;margin:18px 0;font-size:.94em;border-left:3px solid}
+.callout p{margin:6px 0}
+.callout.info{background:rgba(108,140,255,.08);border-color:var(--accent)}
+.callout.warn{background:rgba(255,159,67,.08);border-color:var(--orange)}
+.callout.bad{background:rgba(238,90,36,.08);border-color:var(--red)}
+.callout.good{background:rgba(76,175,125,.08);border-color:var(--green)}
+.callout .ct{font-weight:600;color:var(--text);display:block;margin-bottom:4px}
+.table-wrap{overflow-x:auto;margin:18px 0;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;font-size:.86em;min-width:600px}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--border);vertical-align:top}
+th{color:var(--accent3);font-weight:600;background:rgba(255,255,255,.02);white-space:nowrap}
+td{color:var(--text-dim)}
+tr:hover td{background:rgba(255,255,255,.015)}
+.yes{color:var(--green);font-weight:600}
+.no{color:var(--red);font-weight:600}
+.mid{color:var(--orange);font-weight:600}
+.num{font-variant-numeric:tabular-nums;color:var(--accent4);white-space:nowrap}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin:18px 0}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px}
+.card .ct{font-weight:600;color:var(--text);margin-bottom:6px;font-size:.96em}
+.card p{font-size:.86em;margin:6px 0}
+.card .big{font-size:1.5em;font-weight:700;color:var(--accent);font-variant-numeric:tabular-nums}
+.card .lbl{font-size:.78em;color:var(--text-dim)}
+.bars{margin:20px 0}
+.barrow{display:grid;grid-template-columns:150px 1fr 90px;gap:10px;align-items:center;margin:9px 0;font-size:.85em}
+.barrow .lbl{color:var(--text-dim);text-align:right}
+.bartrack{background:var(--card2);border:1px solid var(--border);border-radius:6px;height:20px;overflow:hidden}
+.barfill{height:100%;border-radius:5px}
+.barrow .val{color:var(--accent4);font-variant-numeric:tabular-nums;font-size:.92em}
+.timeline{position:relative;margin:24px 0;padding-left:30px}
+.timeline::before{content:'';position:absolute;left:9px;top:8px;bottom:8px;width:2px;
+  background:linear-gradient(180deg,var(--accent),var(--accent3),transparent)}
+.tl-item{position:relative;margin-bottom:24px}
+.tl-item::before{content:'';position:absolute;left:-25px;top:7px;width:12px;height:12px;border-radius:50%;
+  background:var(--bg);border:2px solid var(--accent)}
+.tl-item .stage{font-weight:700;color:var(--text);font-size:1.02em}
+.tl-item p{margin:6px 0;font-size:.92em}
+code{background:var(--card2);border:1px solid var(--border);border-radius:4px;padding:1px 6px;
+  font-size:.88em;color:var(--accent3)}
+footer{margin-top:56px;padding-top:24px;border-top:1px solid var(--border);
+  color:var(--text-dim);font-size:.8em;text-align:center}
+@media(max-width:640px){
+  .hero h1{font-size:1.4em}
+  .container{padding:24px 16px 60px}
+  h2{font-size:1.2em}
+  .barrow{grid-template-columns:96px 1fr 72px;font-size:.78em}
+}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>Mac 升级决策：MacBook Pro 能不能替代 Mac Studio？</h1>
+  <div class="subtitle">从「OpenClaw 常开网关 + 本地大模型」两个真实用途出发，把 MacBook Pro / Mac Studio / Mac mini 三条路算清楚</div>
+  <div class="meta">2026-09-11 · 基于 M5 世代实机参数与实测推理数据 · 附决策树与预算表</div>
+</div>
+
+<div class="container">
+
+<section>
+  <div class="verdict">
+    <span class="tag">结论</span>
+    <h3>你的判断对了一半，但结论反了</h3>
+    <p><strong>对的一半：</strong>Mac Studio 对「7×24 常开网关」这个角色确实没必要 —— 但接替它的应该是 <strong>Mac mini</strong>，不是 MacBook Pro。</p>
+    <p><strong>反的一半：</strong>「M5 Max 性能超过 M3 Ultra」是事实，但那比的是<strong>上一代</strong> Ultra。同代对位，M5 Ultra 的内存带宽是 M5 Max 的 <strong>2 倍</strong>、内存上限是 <strong>4 倍</strong>。跑分超过 ≠ 模型能力超过。</p>
+    <p style="margin-top:14px"><strong>我的推荐：不要换，加一台。</strong>现有 Mac mini M4 继续当 7×24 网关（它本来就是标准答案），新增一台 <strong>MacBook Pro M5 Max 128GB</strong> 当移动工作站 + 按需本地大模型。<strong>两台分工，比一台顶配干两件事更划算、更稳。</strong></p>
+  </div>
+</section>
+
+<section>
+  <h2>一、先纠正一个关键误判</h2>
+
+  <p>你现在这台 Mac mini（M4 / 16GB / 120GB·s⁻¹ 带宽）为什么跑不了本地大模型，不是 CPU 慢，是<strong>带宽墙</strong>。这个物理规律决定了后面所有结论，所以先讲清楚。</p>
+
+  <div class="callout info">
+    <span class="ct">大模型推理的硬约束</span>
+    <p>生成每个 token，GPU 都要把<strong>整个模型的权重从内存里完整读一遍</strong>。所以解码速度的理论上限就是一个除法：</p>
+    <p style="text-align:center;font-size:1.05em;color:var(--accent4);margin:10px 0"><strong>tok/s 上限 ≈ 内存带宽 ÷ 模型权重大小</strong></p>
+    <p>算力（GPU 核心数）在这里几乎不起作用 —— 这是内存带宽游戏，不是 GPU 游戏。</p>
+  </div>
+
+  <h3>当场算一遍</h3>
+  <p>70B 模型 4-bit 量化后权重约 42GB。代入公式：</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>芯片</th><th>内存带宽</th><th>70B Q4 理论上限</th><th>实测参考</th><th>可用性</th></tr></thead>
+      <tbody>
+        <tr><td><strong>M4</strong>（你现在的 mini）</td><td class="num">120 GB/s</td><td class="num">≈ 2.9 tok/s</td><td>内存只有 32GB，直接装不下</td><td class="no">不可用</td></tr>
+        <tr><td><strong>M5 Pro</strong></td><td class="num">307 GB/s</td><td class="num">≈ 7.3 tok/s</td><td>64GB 上限，勉强</td><td class="mid">不推荐</td></tr>
+        <tr><td><strong>M5 Max</strong></td><td class="num">614 GB/s</td><td class="num">≈ 14.6 tok/s</td><td>实测 12–18 tok/s</td><td class="yes">可用</td></tr>
+        <tr><td><strong>M5 Ultra</strong></td><td class="num">1,200 GB/s</td><td class="num">≈ 28.6 tok/s</td><td>—</td><td class="yes">舒适</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout warn">
+    <span class="ct">「M5 Max 超过 M3 Ultra」这句话要拆开看</span>
+    <p>Geekbench Metal 跑分：M5 Max <strong>30,000+</strong> vs M3 Ultra <strong>27,691</strong> —— 确实超了，但这说明的是<strong>单代架构进步很大</strong>，不代表 M5 Max 强过同代的 M5 Ultra。</p>
+    <p>看带宽：M5 Max <strong>614 GB/s</strong>，M5 Ultra <strong>1,200 GB/s</strong>。看内存：M5 Max 上限 <strong>128GB</strong>，M5 Ultra 上限 <strong>512GB</strong>。</p>
+    <p><strong>跑分是峰值算力，模型能力看的是带宽 × 容量。</strong>这两件事在 Mac 上恰好是分开的。</p>
+  </div>
+</section>
+
+<section>
+  <h2>二、五台机器横向对比</h2>
+
+  <p>把 2026 年（8 月 25 日更新后）苹果产品线里跟你有关系的五档拎出来：</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>机型</th><th>芯片</th><th>带宽</th><th>内存上限</th><th>起价(US)</th><th>本地模型定位</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Mac mini 2026</strong><br><small>M6 版</small></td>
+          <td>M6</td><td class="num">~153 GB/s</td><td>32GB</td><td class="num">$899</td>
+          <td>网关升级款，跑不了大模型</td>
+        </tr>
+        <tr>
+          <td><strong>Mac mini 2026</strong><br><small>M5 Pro 版</small></td>
+          <td>M5 Pro</td><td class="num">307 GB/s</td><td>64GB</td><td class="num">$1,699</td>
+          <td>34B 舒适区，70B 勉强</td>
+        </tr>
+        <tr>
+          <td><strong>Mac Studio 2026</strong><br><small>M5 Max</small></td>
+          <td>M5 Max</td><td class="num">614 GB/s</td><td>128GB</td><td class="num">$2,499</td>
+          <td class="yes">70B 可用，性价比拐点</td>
+        </tr>
+        <tr>
+          <td><strong>MacBook Pro</strong><br><small>M5 Max 14/16"</small></td>
+          <td>M5 Max</td><td class="num">614 GB/s</td><td>128GB</td><td class="num">高于 Studio 一档</td>
+          <td class="yes">同上，但可带走</td>
+        </tr>
+        <tr>
+          <td><strong>Mac Studio 2026</strong><br><small>M5 Ultra</small></td>
+          <td>M5 Ultra</td><td class="num">1,200 GB/s</td><td>512GB</td><td class="num">$5,499</td>
+          <td class="yes">120B+ SOTA，另一个量级</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>内存带宽直观对比</h3>
+  <div class="bars">
+    <div class="barrow"><span class="lbl">M4（现役 mini）</span><div class="bartrack"><div class="barfill" style="width:10%;background:linear-gradient(90deg,#555,#777)"></div></div><span class="val">120</span></div>
+    <div class="barrow"><span class="lbl">M5 Pro</span><div class="bartrack"><div class="barfill" style="width:26%;background:linear-gradient(90deg,#6c8cff,#8ba3ff)"></div></div><span class="val">307</span></div>
+    <div class="barrow"><span class="lbl">M5 Max</span><div class="bartrack"><div class="barfill" style="width:51%;background:linear-gradient(90deg,#4ecdc4,#7ee0d9)"></div></div><span class="val">614</span></div>
+    <div class="barrow"><span class="lbl">M5 Ultra</span><div class="bartrack"><div class="barfill" style="width:100%;background:linear-gradient(90deg,#ffd93d,#ff9f43)"></div></div><span class="val">1,200</span></div>
+  </div>
+  <p style="font-size:.82em;color:var(--text-dim)">单位 GB/s。你现在的 M4 在跑大模型这件事上，只有 M5 Ultra 的十分之一。</p>
+
+  <h3>实测推理速度（第三方汇总，4-bit 量化）</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>机型</th><th>8B</th><th>14B</th><th>32–34B</th><th>70B</th></tr></thead>
+      <tbody>
+        <tr><td>M4 Pro mini 48GB</td><td class="num">42</td><td class="num">24</td><td class="num">11</td><td class="no">装不下</td></tr>
+        <tr><td>M3 Max 笔记本 64GB</td><td class="num">58</td><td class="num">33</td><td class="num">15</td><td class="num">7.5</td></tr>
+        <tr><td>M3 Max Studio 128GB</td><td class="num">72</td><td class="num">41</td><td class="num">19</td><td class="num">9.8</td></tr>
+        <tr><td>M5 Pro 64GB</td><td class="num">45–55</td><td class="num">—</td><td class="num">15–20</td><td class="no">紧张</td></tr>
+        <tr><td><strong>M5 Max 128GB</strong></td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">12–18</td></tr>
+        <tr><td>M3 Ultra 512GB</td><td class="num">135</td><td class="num">—</td><td class="num">37</td><td class="num">~12</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="font-size:.82em;color:var(--text-dim)">单位 tok/s。注意 M3 Ultra 在 8B 小模型上甚至更快（135 vs M5 Max 未测），但 70B 档位两者接近 —— 说明<strong>模型越大，带宽差距越不明显，容量差距越致命</strong>。</p>
+</section>
+
+<section>
+  <h2>三、MacBook Pro 当常开服务器：四个硬伤</h2>
+
+  <p>关键事实：<strong>MacBook Pro M5 Max 和 Mac Studio M5 Max 是同芯、同带宽、同内存上限。</strong>差别不在算力，在形态。而形态恰恰决定了它适不适合「7×24 挂在墙上跑 OpenClaw」。</p>
+
+  <div class="grid">
+    <div class="card">
+      <div class="ct">① 电池是纯负债</div>
+      <p>长期插电保持 100% 是锂电池最差工况。macOS 有优化充电，但电池仍是损耗件。</p>
+      <p style="color:var(--text-dim)">Studio / mini 根本没这个部件，也就不存在这个问题。</p>
+    </div>
+    <div class="card">
+      <div class="ct">② 散热余量小 → 必降频</div>
+      <p>本地大模型推理是典型的持续满载负载。笔记本散热余量远小于 Studio 的大体积风道。</p>
+      <p style="color:var(--text-dim)">合盖（clamshell）运行散热更差。</p>
+    </div>
+    <div class="card">
+      <div class="ct">③ 你为闲置功能付了钱</div>
+      <p>7×24 常开的机器不需要屏幕、键盘、触控板、电池 —— 这些占笔记本成本的很大一块。</p>
+      <p style="color:var(--text-dim)">历史参照：M4 Max 世代，Studio 起价 $1,999，同芯 MacBook Pro 14" 起价 $3,199。</p>
+    </div>
+    <div class="card">
+      <div class="ct">④ 可移动 = 不可靠</div>
+      <p>网关被搬去客厅、被合盖、忘了插电 —— 你的定时任务、消息通道、博客自动发布就断了。</p>
+      <p style="color:var(--text-dim)">服务器角色的第一要求是「一直在那儿」。</p>
+    </div>
+  </div>
+
+  <div class="callout bad">
+    <span class="ct">但反过来说，MacBook Pro 也有它不可替代的地方</span>
+    <p>一台机器两份用途（移动办公 + 本地模型）、性能和同价 Studio 不差、出差也能跑。<strong>要判断的不是「笔记本好不好」，而是「你要的是不是一台能搬走的机器」。</strong></p>
+  </div>
+</section>
+
+<section>
+  <h2>四、三条路，怎么选</h2>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>你的真实场景</th><th>该买</th><th>理由</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>机器<strong>固定放家里</strong>，主要跑网关 + 按需跑模型</td>
+          <td class="yes">Mac Studio M5 Max 128GB<br>或 Mac mini M5 Pro 64GB</td>
+          <td>同芯片下最便宜、无电池、散热最好、天生为常开设计</td>
+        </tr>
+        <tr>
+          <td><strong>经常带出门</strong>，同时想要本地模型能力</td>
+          <td class="yes">MacBook Pro M5 Max 128GB</td>
+          <td>唯一能同时满足移动 + 70B 级推理的形态</td>
+        </tr>
+        <tr>
+          <td>要跑 <strong>120B 以上</strong>的 SOTA 模型</td>
+          <td class="mid">Mac Studio M5 Ultra</td>
+          <td>512GB / 1.2TB·s⁻¹ 是另一个量级，但价格翻倍还多</td>
+        </tr>
+        <tr>
+          <td>只想让<strong>网关更稳更快</strong>，本地模型不是刚需</td>
+          <td class="yes">Mac mini M6 或保持现状</td>
+          <td>网关负载很轻，16GB 的 M4 其实还够用</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <h2>五、我的推荐：不要换，加一台</h2>
+
+  <div class="verdict">
+    <h3>组合方案：现有 Mac mini 留守 + 新增 MacBook Pro M5 Max</h3>
+    <p><strong>Mac mini M4（16GB）</strong> —— 继续当 7×24 网关。它的负载是消息路由、定时任务、记忆检索，功耗低、静音、已经在稳定运行。这是它的最优角色。</p>
+    <p style="margin-top:10px"><strong>MacBook Pro M5 Max 128GB</strong> —— 你的主力工作机 + 按需本地大模型。需要跑 70B 的时候开机接上局域网，跑完合盖睡眠；日常写东西、做分析、带出门都用它。</p>
+    <p style="margin-top:10px"><strong>为什么这样分：</strong>两者的故障域完全隔离。笔记本睡眠不影响定时任务；网关被搬走不影响你干活。而且你不需要为一个「偶尔才跑一次」的大模型能力，买一台 24 小时通电的贵机器。</p>
+  </div>
+
+  <h3>为什么不推荐「一台 MacBook Pro 全包」</h3>
+  <ul>
+    <li>你会失去 7×24 的稳定性 —— 笔记本合盖、休眠、带出门，网关就断</li>
+    <li>你会为一个大部分时间闲置的功能，付电池 + 屏幕 + 键盘的钱</li>
+    <li>你会让一块电池长期处于最差工况</li>
+    <li>而保留 mini 做网关，成本几乎为零 —— 它已经在那儿了</li>
+  </ul>
+
+  <h3>为什么不现在冲 M5 Ultra</h3>
+  <ul>
+    <li>$5,499 起（国行约 ¥40,999 量级），是 M5 Max 的两倍多</li>
+    <li>512GB 顶配要等到 2026 年 10 月下旬才发货</li>
+    <li>128GB 跑 70B Q4 完全够用，这个档位的模型两年内仍是主力</li>
+    <li><strong>除非你有明确的「跑 120B+ 本地模型」需求，否则先别上。</strong></li>
+  </ul>
+</section>
+
+<section>
+  <h2>六、如果决定动手，分三步走</h2>
+
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="stage">第 1 步 · 先证明你确实需要（0 元）</div>
+      <p>在现有 Mac mini 上装 Ollama 或 LM Studio，跑一个 7B–8B 的量化模型（约 5GB，16GB 内存放得下）。实测它在你这台机器上的真实速度和可用性。</p>
+      <p><strong>出口标准：</strong>你能说清楚「本地模型要拿来干什么、多久用一次、能不能接受那个速度」。说不清楚，就先别买 —— 云端 API 现在又便宜又快。</p>
+    </div>
+
+    <div class="tl-item">
+      <div class="stage">第 2 步 · 明确用途再定配置</div>
+      <p>如果验证下来是「偶尔用、要移动」→ MacBook Pro M5 Max 128GB。</p>
+      <p>如果是「常驻、跑后台任务」→ Mac Studio M5 Max 128GB，网关继续留在 mini 上。</p>
+      <p>如果只是「偶尔试玩」→ 什么都不用买，继续用云端 API。</p>
+    </div>
+
+    <div class="tl-item">
+      <div class="stage">第 3 步 · 买之前确认三个数</div>
+      <p>① 内存<strong>必须一步到位</strong>（焊死的，买了不能升）；② 确认是 <strong>M5 Max</strong> 而不是 M5 Pro（差一倍带宽）；③ 国行价格和发货时间以 apple.com.cn 为准，别按美元换算。</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>七、一页纸总结</h2>
+  <div class="verdict">
+    <h3>一句话</h3>
+    <p><strong>MacBook Pro 不是 Mac Studio 的替代品，它是另一个用途的工具。</strong>你要判断的不是「哪个更强」，而是「你要不要一台能搬走的机器」。</p>
+    <h3 style="margin-top:16px">三个数字记住就够</h3>
+    <p>带宽：M5 Max <strong>614 GB/s</strong>，M5 Ultra <strong>1,200 GB/s</strong>（2 倍）</p>
+    <p>内存上限：M5 Max <strong>128GB</strong>，M5 Ultra <strong>512GB</strong>（4 倍）</p>
+    <p>解码公式：<strong>tok/s ≈ 带宽 ÷ 模型大小</strong>，70B Q4 ≈ 42GB</p>
+    <h3 style="margin-top:16px">最优解</h3>
+    <p>别换机器，加一台。<strong>mini 留守当网关，MacBook Pro M5 Max 128GB 当移动主力 + 按需跑模型。</strong>两台分工，预算花在刀刃上，稳定性还更好。</p>
+  </div>
+</section>
+
+<footer>
+  <p>参数与价格来自 Apple 官方新闻稿及第三方实测汇总（截至 2026-09-11）。美元价为官方起价，国行价格请以 apple.com.cn 为准。</p>
+  <p>推理速度为第三方社区实测数据汇总，受量化方式、上下文长度、框架版本影响，仅作量级参考。</p>
+</footer>
+
+</div>
+</body>
+</html>
