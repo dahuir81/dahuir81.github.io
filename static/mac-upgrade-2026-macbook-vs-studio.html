@@ -90,8 +90,8 @@ footer{margin-top:56px;padding-top:24px;border-top:1px solid var(--border);
 
 <div class="hero">
   <h1>Mac 升级决策：MacBook Pro 能不能替代 Mac Studio？</h1>
-  <div class="subtitle">从「OpenClaw 常开网关 + 本地大模型」两个真实用途出发，把 MacBook Pro / Mac Studio / Mac mini 三条路算清楚</div>
-  <div class="meta">2026-09-11 · 基于 M5 世代实机参数与实测推理数据 · 附决策树与预算表</div>
+  <div class="subtitle">从「OpenClaw 常开网关 + 本地大模型」两个真实用途出发，把 MacBook Pro / Mac Studio / Mac mini 三条路算清楚，再补上第四条：懒猫 AI 算力舱（英伟达 CUDA 阵营）</div>
+  <div class="meta">2026-09-11 · 基于 M5 世代实机参数与实测推理数据 · 附四条路线对比表与「适合买 / 不适合买」清单</div>
 </div>
 
 <div class="container">
@@ -326,22 +326,178 @@ footer{margin-top:56px;padding-top:24px;border-top:1px solid var(--border);
 </section>
 
 <section>
-  <h2>七、一页纸总结</h2>
+  <h2>七、第四条路线：懒猫 AI 算力舱（英伟达 CUDA 阵营）</h2>
+
+  <p>前面三条路都是苹果。现在补第四条 —— 它不是 Mac 的竞品，而是<strong>另一套物理规律</strong>：用英伟达芯片 + 本地软件栈，把「私有 AI 服务器」做成一台可以买回家的家电。</p>
+
+  <p>先清一个常被搞混的事实：<strong>它既不是 x86，也不是显卡台式机。</strong>新款算力舱是 <strong>Arm 架构 CPU（Neoverse-V3AE）+ 英伟达 Jetson 平台</strong>，预装 Ubuntu；上一代用的是英伟达 Orin 平台。宣传里的「275T / 2070T」是 <strong>INT8 稀疏口径</strong>的 AI 算力，不能拿去跟台式机的 FP16 数字直接比。</p>
+
+  <div class="verdict">
+    <span class="tag">结论</span>
+    <h3>现在不值得买，但值得盯住</h3>
+    <p><strong>一句话：</strong>懒猫算力舱不是 Mac 升级的替代方案，它补的是「Mac 做不到的那一块」。你现在的需求不在那块拼图里 —— 所以现在不买；但一旦用法变成「团队共享 + 大批量多模态处理 + 数据绝对不能出门」，它是目前最锋利的一台机器。</p>
+    <p style="margin-top:10px"><strong>算账最狠的一句：</strong>128GB 顶配 + 微服套装约 <strong>¥3.5 万</strong>。这笔钱按每月 200 元的云端 API 用量，够付 <strong>14 年</strong>。硬件只在「量足够大」和「隐私是硬需求」两个条件同时成立时才划算。</p>
+  </div>
+
+  <h3>1. 它是什么，卖多少钱</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>产品</th><th>芯片 / 标称算力</th><th>显存·内存</th><th>价格</th><th>功耗</th></tr></thead>
+      <tbody>
+        <tr><td><strong>懒猫 AI 算力舱</strong><br><small>上一代（公众号文章那台）</small></td><td>英伟达 Orin，275T</td><td class="num">64GB</td><td class="num">¥16,599</td><td class="num">60W</td></tr>
+        <tr><td><strong>X5-T4000</strong><br><small>现售</small></td><td>Jetson T4000（Blackwell），1200T</td><td class="num">64GB LPDDR5X</td><td class="mid">官网未单列</td><td class="num">40–70W</td></tr>
+        <tr><td><strong>X5-T5000</strong><br><small>现售顶配</small></td><td>Jetson T5000（Blackwell），2070T</td><td class="num">128GB LPDDR5X</td><td class="num">¥29,899 起</td><td class="num">40–130W</td></tr>
+        <tr><td><strong>懒猫微服</strong><br><small>配套主机（全固态 7 盘位）</small></td><td>标压处理器，最高 96TB 存储</td><td>存储为主</td><td class="num">¥4,999 起</td><td class="mid">常开</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="font-size:.82em;color:var(--text-dim)">记住一个数字：两个型号的内存都是 <strong>256 位 LPDDR5X，带宽 273 GB/s</strong>。后面全靠它算账。</p>
+
+  <h3>2. 它卖的不只是硬件，是「无限 Tokens + 22 个开箱应用」</h3>
+  <div class="grid">
+    <div class="card"><div class="ct">沉浸式翻译</div><p>自研翻译模型延迟 <strong>5ms</strong>，无会员费、无 Tokens 限制</p></div>
+    <div class="card"><div class="ct">写代码</div><p>Qwen3-Coder:30B，<strong>31.84 tok/s</strong>，1024K 上下文，显存占用 35GB</p></div>
+    <div class="card"><div class="ct">ComfyUI 文生图 / 文生视频</div><p><strong>4 秒一张图</strong>，一天可生 2 万张，官方称电费 0.3 元/天</p></div>
+    <div class="card"><div class="ct">个人知识库 / 搜索微服</div><p>70 万文件全盘语义搜索 <strong>0.3–0.5 秒</strong>；视频可按画面、字幕、音频检索</p></div>
+    <div class="card"><div class="ct">音视频转文字</div><p><strong>5 分钟音频 7 秒</strong>转完；2 小时录音约 3 分钟出稿</p></div>
+    <div class="card"><div class="ct">PDF 翻译 / DeepSeek-OCR</div><p>8 页 PDF <strong>不到 10 秒</strong>；OCR 识别率 >99%，歪拍、书页卷曲都能认</p></div>
+  </div>
+  <div class="callout info">
+    <span class="ct">它的真正卖点：Tokens 不要钱</span>
+    <p>硬件是自己的 → 翻译、转写、生图、OCR 全部不限量。公有云会员即使付了费也有额度上限，这是算力舱唯一无法被云端 API 复制的东西。</p>
+  </div>
+
+  <div class="callout warn">
+    <span class="ct">三个要打折扣的宣传口径</span>
+    <p><strong>① 「一天 0.3 元电费」偏乐观。</strong>按模组 40–130W 反推：0.3 元/天 ≈ 约定 21W 常态功耗。实测空载 40W 约 0.6 元/天，满载 130W 约 <strong>1.9 元/天</strong>。方向对（仍是同级 GPU 台式机的 1/3–1/5），数字别当真。</p>
+    <p><strong>② 「31.84 tok/s」不是 70B 的成绩。</strong>Qwen3-Coder:30B 是 MoE 模型，每次只激活一小部分参数，所以快 —— 这是 MoE 的功劳，不是带宽的功劳。别拿它推断 70B 稠密模型的速度。</p>
+    <p><strong>③ 「275T / 2070T 不虚标」说的是口径，不是性能。</strong>那是 INT8 稀疏算力，稠密 FP16 要打大折扣。真正决定大模型手感的是带宽：<strong>273 GB/s</strong>。</p>
+  </div>
+
+  <h3>3. 路线之争：苹果卖带宽，懒猫卖容量</h3>
+  <p>两条路其实都是「统一内存」（CPU 和 GPU 共享同一块内存），物理思路一样，差别在<strong>把钱压在带宽上还是容量上</strong>。代入前面那条公式 <code>tok/s ≈ 带宽 ÷ 模型大小</code>：</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>维度</th><th>苹果路线<br><small>M5 Max / M5 Ultra</small></th><th>懒猫路线<br><small>Jetson T4000 / T5000</small></th></tr></thead>
+      <tbody>
+        <tr><td><strong>内存架构</strong></td><td>统一内存，CPU / GPU 共享</td><td>统一内存（LPDDR5X），CPU / GPU 共享</td></tr>
+        <tr><td><strong>带宽</strong></td><td class="yes">614 / 1,200 GB/s</td><td class="mid">273 GB/s</td></tr>
+        <tr><td><strong>容量与单价</strong></td><td>128GB / 512GB，加内存非常贵</td><td class="yes">64GB / 128GB，加容量相对便宜</td></tr>
+        <tr><td><strong>70B Q4 手感</strong></td><td>约 12–18 tok/s（M5 Max）</td><td>约 6.5 tok/s 上限（273 ÷ 42）</td></tr>
+        <tr><td><strong>最大可装载</strong></td><td>128GB 档跑 70B 舒适</td><td class="yes">128GB 档可塞 284B 量化模型（慢，但装得下）</td></tr>
+        <tr><td><strong>软件生态</strong></td><td>MLX / Metal / llama.cpp；<span class="no">CUDA 跑不了</span></td><td class="yes">CUDA 原生：PyTorch / vLLM / ComfyUI / TensorRT 直接跑</td></tr>
+        <tr><td><strong>功耗</strong></td><td>整机数十～200W</td><td class="yes">模组 40–130W</td></tr>
+        <tr><td><strong>扩展性</strong></td><td>单机到顶，无横向方案</td><td class="yes">局域网叠加，QSFP28 光口最高 100Gbps</td></tr>
+        <tr><td><strong>形态</strong></td><td>桌面 / 笔记本，macOS 一体体验</td><td>2.3kg 方盒，插电 + 显示器就是一台独立 Ubuntu 机</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout good">
+    <span class="ct">看出来了：这不是「谁更强」，是「你为哪种资源付钱」</span>
+    <p>苹果把内存做成高带宽精品：单价贵、上限极高、跑得最快。懒猫把内存做成大容量白菜：单价便宜、带宽只有苹果的一半（对比 M5 Max）甚至四分之一（对比 M5 Ultra）。</p>
+    <p>所以路线选择很清楚：<strong>要跑得快 → 苹果；要装得下、要 CUDA、要一台机器服务全家人 → 懒猫。</strong>在 70B 档位上两者都只是「能读文档」的速度（懒猫约 6.5、M5 Max 12–18 tok/s），真正的分水岭不是速度，是<strong>生态和形态</strong>。</p>
+  </div>
+
+  <h3>4. 值不值得买：两个清单</h3>
+  <div class="grid">
+    <div class="card" style="border-color:rgba(76,175,125,.35)">
+      <div class="ct" style="color:var(--green)">✅ 适合买</div>
+      <ul style="margin-left:18px">
+        <li><strong>团队 / 工作室共享：</strong>一台机器全家设备（电脑、平板、手机）共用一套算力，人越多越省</li>
+        <li><strong>多模态批量流水线：</strong>一天几百上千张图、成批视频转写、整柜 PDF 翻译 —— 这些任务按云端用量计费会非常贵</li>
+        <li><strong>数据绝对不能出门：</strong>合同、投研底稿、行业资料、会议录音，本地算完不联网</li>
+        <li><strong>需要 CUDA 生态的开发 / 研究者：</strong>HuggingFace 下模型直接跑，Jupyter 一键装，不做移植适配</li>
+        <li><strong>想把 AI 当家里水电用的人：</strong>不看 token 计数，用量越大越划算</li>
+      </ul>
+    </div>
+    <div class="card" style="border-color:rgba(238,90,36,.35)">
+      <div class="ct" style="color:var(--red)">❌ 不适合买</div>
+      <ul style="margin-left:18px">
+        <li><strong>只有翻译 / 摘要 / 问答这类轻需求：</strong>云端 API 每月几十到两百元，¥3.5 万硬件要十几年才回本</li>
+        <li><strong>需要移动办公的人：</strong>2.3kg 方盒 + 必须插电，物理上带不出去</li>
+        <li><strong>把 macOS 生态当命的人：</strong>它是 Ubuntu，AirDrop、Time Machine、Final Cut 那套生态一律没有</li>
+        <li><strong>在意二手残值的人：</strong>小众硬件无成熟二手市场，Jetson 平台一换代价值就跳水</li>
+        <li><strong>想「一台顶所有」的人：</strong>单买算力舱只是台 Ubuntu 电脑，全套 AI 应用要再买微服配套</li>
+        <li><strong>把它当 Mac 替代方案的人：</strong>它替代不了 Mac，它只补 Mac 缺的那一块</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>5. 不升级，现有 Mac 还能撑多久</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>用途</th><th>现有 Mac mini M4 / 16GB</th><th>还能撑多久</th></tr></thead>
+      <tbody>
+        <tr><td><strong>OpenClaw 常开网关</strong></td><td>消息路由 + 定时任务 + 记忆检索，负载极轻</td><td class="yes">3–5 年无压力</td></tr>
+        <tr><td><strong>8B 级本地模型</strong></td><td>量化后约 5GB，装得下，速度够读文档</td><td class="mid">能跑，但属于「尝鲜级」</td></tr>
+        <tr><td><strong>70B 级本地模型</strong></td><td>权重约 42GB，<strong>16GB 内存物理装不下</strong></td><td class="no">永远不行，与 CPU 快慢无关</td></tr>
+        <tr><td><strong>知识库 / 翻译 / 摘要</strong></td><td>交给云端 API，每月几十～两百元</td><td class="yes">随时可用，成本可控</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout info">
+    <span class="ct">所以「不升级」的真实代价很小</span>
+    <p>你唯一损失的能力是<strong>「本地跑大模型」</strong>，而这项能力今天可以按月租 —— 每月 200 元买到的云端模型，智力水平还高于任何能塞进 128GB 的本地模型。<strong>硬件的一次性投入，只在「用量摊平」或「隐私不可妥协」时才成立。</strong></p>
+  </div>
+
+  <h3>6. 四条路线，一张表拍板</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>路线</th><th>一次性投入</th><th>持有成本</th><th>你拿到什么</th><th>判断</th></tr></thead>
+      <tbody>
+        <tr><td><strong>保持现状</strong><br><small>Mac mini M4 当网关</small></td><td class="num">¥0</td><td class="num">约 30 元/年电费</td><td>7×24 稳定网关 + 云端 API 全部能力</td><td class="yes">当下最优</td></tr>
+        <tr><td><strong>加 MacBook Pro M5 Max 128GB</strong></td><td class="num">约 ¥3 万量级</td><td>电费可忽略</td><td>移动主力 + 70B 级本地模型（12–18 tok/s）</td><td class="yes">个人主力机</td></tr>
+        <tr><td><strong>Mac Studio M5 Max / Ultra</strong></td><td class="num">$2,499 / $5,499 起</td><td>电费可忽略</td><td>固定常开的桌面推理机，Ultra 可上 120B+</td><td class="mid">固定场景</td></tr>
+        <tr><td><strong>懒猫算力舱 128GB + 微服</strong></td><td class="num">约 ¥3.5 万</td><td class="num">200–700 元/年电费</td><td>无限 Tokens + 22 个开箱应用 + CUDA + 全家共享</td><td class="mid">有批量 / 隐私刚需才划算</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>7. 风险对照：两条路的坑不一样</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>风险</th><th>苹果路线</th><th>懒猫路线</th></tr></thead>
+      <tbody>
+        <tr><td><strong>生态锁定</strong></td><td class="mid">macOS + MLX；但你本来就住在这里，边际锁定成本低</td><td class="no">单买 = 裸 Ubuntu；全套 AI 应用能力绑定「微服」，缺了微服价值腰斩</td></tr>
+        <tr><td><strong>二手残值</strong></td><td class="yes">高，Mac 是硬通货，两三年后仍能回收大半</td><td class="no">低，小众硬件无成熟二手市场，平台换代跳水</td></tr>
+        <tr><td><strong>售后</strong></td><td class="yes">Apple Store 全球联保，可到店</td><td class="mid">小厂直营（微信小程序 / Shopify 独立站，官方称利润薄不走京东），服务依赖单一团队</td></tr>
+        <tr><td><strong>模型迭代</strong></td><td class="yes">通用硬件，llama.cpp / MLX 社区跟进极快</td><td class="mid">绑定 JetPack / 固件版本，新模型支持常滞后于 x86 CUDA</td></tr>
+        <tr><td><strong>性能口径</strong></td><td class="mid">宣传相对保守，跑分与体感基本一致</td><td class="no">「275T / 2070T」是 INT8 稀疏口径，别拿去比 FP16；273 GB/s 带宽才是真实上限</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="verdict">
+    <h3>这一节的结论</h3>
+    <p><strong>先走上一条路：加一台 MacBook Pro M5 Max 128GB，网关留在现有 mini 上。</strong>懒猫算力舱记在心里，等下面任一条件出现再回来买：</p>
+    <p style="margin-top:10px">① 你的 AI 用量从「个人偶尔」变成「每天成批」—— 生图、转写、翻译、检索全面跑起来；<br>
+    ② 你有数据不能出门的硬约束（客户资料、投研底稿、会议录音）；<br>
+    ③ 要让家里 / 团队多台设备共享同一套算力；<br>
+    ④ 你要跑某个只有 CUDA 才有的模型或工具链。</p>
+    <p style="margin-top:10px"><strong>四条都不成立，这 ¥3.5 万就先别花。</strong></p>
+  </div>
+</section>
+
+<section>
+  <h2>八、一页纸总结</h2>
   <div class="verdict">
     <h3>一句话</h3>
     <p><strong>MacBook Pro 不是 Mac Studio 的替代品，它是另一个用途的工具。</strong>你要判断的不是「哪个更强」，而是「你要不要一台能搬走的机器」。</p>
-    <h3 style="margin-top:16px">三个数字记住就够</h3>
+    <h3 style="margin-top:16px">四个数字记住就够</h3>
     <p>带宽：M5 Max <strong>614 GB/s</strong>，M5 Ultra <strong>1,200 GB/s</strong>（2 倍）</p>
     <p>内存上限：M5 Max <strong>128GB</strong>，M5 Ultra <strong>512GB</strong>（4 倍）</p>
     <p>解码公式：<strong>tok/s ≈ 带宽 ÷ 模型大小</strong>，70B Q4 ≈ 42GB</p>
+    <p>懒猫算力舱：<strong>273 GB/s</strong>、128GB 顶配 <strong>¥29,899 起</strong>、微服 <strong>¥4,999 起</strong> —— 卖容量不卖带宽</p>
     <h3 style="margin-top:16px">最优解</h3>
     <p>别换机器，加一台。<strong>mini 留守当网关，MacBook Pro M5 Max 128GB 当移动主力 + 按需跑模型。</strong>两台分工，预算花在刀刃上，稳定性还更好。</p>
+    <p style="margin-top:10px"><strong>懒猫算力舱先不买。</strong>它不是 Mac 的替代品，是 Mac 做不到那部分的补丁；等「批量多模态处理」或「数据不能出门」变成常态，再花那 ¥3.5 万。</p>
   </div>
 </section>
 
 <footer>
-  <p>参数与价格来自 Apple 官方新闻稿及第三方实测汇总（截至 2026-09-11）。美元价为官方起价，国行价格请以 apple.com.cn 为准。</p>
+  <p>Mac 参数与价格来自 Apple 官方新闻稿及第三方实测汇总（截至 2026-09-11）。美元价为官方起价，国行价格请以 apple.com.cn 为准。</p>
   <p>推理速度为第三方社区实测数据汇总，受量化方式、上下文长度、框架版本影响，仅作量级参考。</p>
+  <p>懒猫算力舱资料与自述数据来自：① 公众号《懒猫 AI 算力舱有啥用？》（mp.weixin.qq.com/s/l4cuLv-HbqicGwLGdlChcw）；② 公众号《懒猫 AI 算力舱 22 个应用场景》（mp.weixin.qq.com/s/6wLC17339Y9BT-XJPbWsfQ）；③ 懒猫官网产品页（lazycat.cloud/lcmd、lazycat.cloud/ai-pod）。价格为官方公开标价，宣传口径的折扣已在正文标注。</p>
 </footer>
 
 </div>
