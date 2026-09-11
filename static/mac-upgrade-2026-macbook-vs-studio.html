@@ -479,7 +479,86 @@ footer{margin-top:56px;padding-top:24px;border-top:1px solid var(--border);
 </section>
 
 <section>
-  <h2>八、一页纸总结</h2>
+  <h2>八、第五条路线：NVIDIA DGX Spark（$4,699 的桌面超算）</h2>
+
+  <p>第七章的懒猫算力舱之后，再补第五条路 —— <strong>英伟达亲自下场做的那台</strong>。它不是 Mac，也不是「厂商基于 Jetson 攒的盒子」，而是英伟达自己出的<strong>个人 AI 超算</strong>，前身是 2025 年 CES 上公布的 Project DIGITS。</p>
+
+  <div class="callout warn">
+    <strong>先隔离一个最容易搞混的点：</strong>DGX Spark 和懒猫 AI 算力舱是<strong>两家公司的两台不同机器</strong>。它们唯一重合的数字是内存带宽 —— 都写着 <strong>273 GB/s</strong>。这不是巧合，是同一代 256 位 LPDDR5X 内存总线的物理上限；但芯片、软件栈、定位、价格全都不同，不能当成一台机器来比。
+  </div>
+
+  <div class="verdict">
+    <span class="tag">结论</span>
+    <h3>现在不值得买：它是开发者的原型沙盒，不是生产推理服务器</h3>
+    <p><strong>一句话：</strong>DGX Spark 卖的是「CUDA 官方栈 + 128GB 统一内存 + 200G 组网」这三件套，强项在<strong>微调和原型开发</strong>，不在单机推理速度。它的推理速度被 273 GB/s 锁住，和懒猫算力舱是同一档。</p>
+    <p style="margin-top:10px"><strong>算账：</strong>2026 年 2 月涨价后 <strong>$4,699</strong>（约 ¥3.4 万），与懒猫 128GB 顶配 + 微服套装（约 ¥3.5 万）几乎同价。这笔钱按每月 200 元云端 API 用量，同样够付十几年。</p>
+  </div>
+
+  <h3>1. 它是什么，卖多少钱</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>项目</th><th>规格</th><th>备注</th></tr></thead>
+      <tbody>
+        <tr><td>芯片</td><td>GB10 Grace Blackwell Superchip</td><td>CPU 与 GPU 经 NVLink-C2C 直连</td></tr>
+        <tr><td>CPU</td><td>20 核 Arm（10× Cortex-X925 @4GHz + 10× Cortex-A725 @2.8GHz）</td><td>联发科代工，单线程约 M4 级</td></tr>
+        <tr><td>GPU</td><td>Blackwell：6,144 CUDA 核心 / 192 个第五代 Tensor Core / 48 个第四代 RT Core</td><td>原生支持 NVFP4</td></tr>
+        <tr><td><strong>内存</strong></td><td class="num"><strong>128GB LPDDR5X 统一内存</strong></td><td class="num">256 位</td></tr>
+        <tr><td><strong>带宽</strong></td><td class="num"><strong>273 GB/s</strong></td><td class="no">全机最关键的限制</td></tr>
+        <tr><td>算力</td><td class="num">1 PFLOP FP4（稀疏）</td><td>稠密 FP4 约 500 TFLOPS；标称 1000 AI TOPS</td></tr>
+        <tr><td>网络</td><td>ConnectX-7：2×200G QSFP + 1×10GbE</td><td>可双机互联、可接 NVMe-oF 外部存储</td></tr>
+        <tr><td>存储 / 无线</td><td>1TB 或 4TB NVMe M.2（自加密）</td><td>Wi-Fi 7、蓝牙 5.3</td></tr>
+        <tr><td>形态 / 功耗</td><td>150×150×50.5 mm，1.13 升，约 1.2kg</td><td>240W 适配器（部分资料标 TDP 140W）</td></tr>
+        <tr><td>系统</td><td>DGX OS（Ubuntu 基础）+ 预装 CUDA / AI 软件栈</td><td>PyTorch、TensorRT-LLM、vLLM、ComfyUI 可直接跑</td></tr>
+        <tr><td><strong>价格</strong></td><td class="num"><strong>$3,999 → $4,699</strong></td><td>2025-10 开售；2026-02 因内存供应紧张涨价 18%</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="font-size:.82em;color:var(--text-dim)">OEM 版本（ASUS Ascent GX10、HP Z2 Mini G1a 等）用同一颗 GB10，价格更低但 SSD 更小 —— 只想要「CUDA + 128GB」而不在乎品牌，可以往这条线找。</p>
+  <p style="font-size:.82em;color:var(--text-dim)">官方口径：本地可跑最高 <strong>2000 亿参数</strong>模型，做完原型可无缝迁到云端或数据中心。</p>
+
+  <h3>2. 实测性能：快在哪里，慢在哪里</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>场景</th><th>实测</th><th>来源</th></tr></thead>
+      <tbody>
+        <tr><td>Llama 3.1 8B FP4</td><td class="num">约 924 tok/s @ 128 并发</td><td>StorageReview</td></tr>
+        <tr><td>Qwen3 Coder 30B-A3B FP8</td><td class="num">约 483 tok/s @ batch 64</td><td>StorageReview</td></tr>
+        <tr><td>120B 级模型单流</td><td class="num">约 14.48 tok/s</td><td>Level1Techs 实测</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p><strong>读法：</strong>高并发批处理的数字很好看（这是 Blackwell Tensor Core 的功劳），但<strong>单流大模型推理被 273 GB/s 卡住</strong>。代入前面的公式 <strong>tok/s ≈ 带宽 ÷ 模型大小</strong>：70B Q4（约 42GB）算下来上限就是 <strong>6.5 tok/s 左右</strong>，与懒猫算力舱同档 —— 都属于「能读文档，但当不了主力」的速度。</p>
+
+  <h3>3. 评测界怎么说</h3>
+  <div class="callout good">
+    <strong>正面：</strong>StorageReview 认为它把数据中心级能力压进了 1.13 升、240W 的盒子 —— 本地全参数微调 8B 模型、跑 200B 级推理都成立，ConnectX-7 还能组集群或挂 NVMe-oF 存储。对需要 CUDA 生态的开发者和研究者，「128GB 显存 + CUDA」在这个价位上没有等价替代品。
+  </div>
+  <div class="callout bad">
+    <strong>负面：</strong>有评测直接给判词 ——「<strong>over-promised、over-priced，但对特定任务又不可或缺</strong>」。核心批评三条：① 273 GB/s 是并发推理的硬瓶颈；② 生产级推理服务场景下 RTX PRO 6000 快 6–7 倍；③ 按吞吐/美元算，多用户服务不划算。此外它不做游戏、不做图形创作。
+  </div>
+  <p><strong>评测口径一句话：</strong>买它是为了「CUDA 原生 + 128GB 的背包沙盒」，不是为了当推理服务器。</p>
+
+  <h3>4. 三方横向对比（关键表）</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>维度</th><th>NVIDIA DGX Spark</th><th>懒猫算力舱 X5-T5000</th><th>MacBook Pro M5 Max</th></tr></thead>
+      <tbody>
+        <tr><td>芯片</td><td>GB10 Grace Blackwell</td><td>Jetson T5000（Blackwell）</td><td>Apple M5 Max</td></tr>
+        <tr><td>内存</td><td class="num">128GB LPDDR5X</td><td class="num">128GB LPDDR5X</td><td class="num">最高 128GB 统一内存</td></tr>
+        <tr><td><strong>带宽</strong></td><td class="num mid"><strong>273 GB/s</strong></td><td class="num mid"><strong>273 GB/s</strong></td><td class="num yes"><strong>614 GB/s</strong></td></tr>
+        <tr><td>算力口径</td><td>1 PFLOP FP4（稀疏）</td><td>2070T INT8（稀疏）</td><td>不以 TOPS 标称，GPU 比 M4 约快 20%</td></tr>
+        <tr><td>70B Q4 推理手感</td><td class="num mid">约 6.5 tok/s 上限</td><td class="num mid">约 6.5 tok/s 上限</td><td class="num yes">约 12–18 tok/s</td></tr>
+        <tr><td>CUDA 生态</td><td class="yes">原生</td><td class="yes">原生</td><td class="no">不支持（MLX / Metal）</td></tr>
+        <tr><td>价格</td><td class="num">$4,699</td><td class="num">¥29,899 起（+微服 ¥4,999）</td><td class="num">$2,999–$4,999</td></tr>
+        <tr><td>功耗</td><td class="num">240W 适配器</td><td class="num">模组 40–130W</td><td class="num">整机数十–200W</td></tr>
+        <tr><td>形态</td><td>1.13 升方盒，约 1.2kg</td><td>2.3kg 方盒，必须插电</td><td class="yes">笔记本，可移动</td></tr>
+        <tr><td>最强场景</td><td>CUDA 开发 / 微调 / 200B 原型</td><td>团队共享 + 批量多模态 + 数据不出门</td><td>移动主力 + 按需跑模型</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p><strong>这张表的结论：</strong>Spark 与懒猫算力舱的<strong>推理速度是同一档</strong>（273 GB/s 决定的），价格也接近；Spark 真正多出来的是 <strong>CUDA 官方栈、NVFP4 原生、200G 组网、1 PFLOP FP4 算力</strong> —— 这些优势体现在<strong>微调和原型</strong>上，不体现在「问一句话等多久」上。而苹果那台赢在带宽，输在生态和形态。</p>
+
+  <h2>九、一页纸总结</h2>
   <div class="verdict">
     <h3>一句话</h3>
     <p><strong>MacBook Pro 不是 Mac Studio 的替代品，它是另一个用途的工具。</strong>你要判断的不是「哪个更强」，而是「你要不要一台能搬走的机器」。</p>
@@ -491,12 +570,22 @@ footer{margin-top:56px;padding-top:24px;border-top:1px solid var(--border);
     <h3 style="margin-top:16px">最优解</h3>
     <p>别换机器，加一台。<strong>mini 留守当网关，MacBook Pro M5 Max 128GB 当移动主力 + 按需跑模型。</strong>两台分工，预算花在刀刃上，稳定性还更好。</p>
     <p style="margin-top:10px"><strong>懒猫算力舱先不买。</strong>它不是 Mac 的替代品，是 Mac 做不到那部分的补丁；等「批量多模态处理」或「数据不能出门」变成常态，再花那 ¥3.5 万。</p>
+
+    <p style="margin-top:10px"><strong>DGX Spark 同样先不买。</strong>$4,699（约 ¥3.4 万）买来的是「CUDA 官方栈 + 128GB + 1 PFLOP FP4」，但单机推理速度与懒猫算力舱同档（273 GB/s 下 70B Q4 约 6.5 tok/s）。除非你开始<strong>做需要 CUDA 的开发和微调</strong>，它没有买点。</p>
+
+    <h3 style="margin-top:16px">最终购买建议：三条路各自的触发条件</h3>
+    <p><strong>要快 → 苹果。</strong>带宽 614 GB/s（M5 Max）到 1,200 GB/s（M5 Ultra），70B Q4 能跑 12–18 tok/s，是唯一「跑得动又跑得快」的路线。</p>
+    <p><strong>要装得下、要 CUDA → DGX Spark 或懒猫算力舱。</strong>两者带宽同为 273 GB/s、价格同档（约 ¥3.4–3.5 万）。做开发 / 微调 / 200B 原型选 Spark；做团队共享 + 批量多模态 + 数据不出门选懒猫。</p>
+    <p><strong>要省钱 → 云端 API。</strong>每月 200 元就能把现有两台机器用下去；上面任何一台硬件的钱，都够付十年以上。</p>
+    <p style="margin-top:10px"><strong>回到你的真实处境：</strong>Mac mini M4 16GB 当网关负载极轻，再战 3–5 年没问题；MacBook Air M1 16GB 无风扇，本来就不适合长期推理。两台都是 16GB 硬顶 —— <strong>真正的短板是内存，不是芯片</strong>。</p>
+    <p style="margin-top:10px"><strong>所以「现在该不该为本地大模型花钱」的答案是：不该。</strong>唯一值得掏钱的前提，是哪天真出现「数据绝对不能出门」或「每天几百上千次批量多模态处理」这类硬需求；到那时一次性上 128GB 档的机器。在那之前，本地模型是尝鲜，云端模型才是生产力。</p>
   </div>
 </section>
 
 <footer>
   <p>Mac 参数与价格来自 Apple 官方新闻稿及第三方实测汇总（截至 2026-09-11）。美元价为官方起价，国行价格请以 apple.com.cn 为准。</p>
   <p>推理速度为第三方社区实测数据汇总，受量化方式、上下文长度、框架版本影响，仅作量级参考。</p>
+  <p>NVIDIA DGX Spark 规格与价格来自 NVIDIA 官方规格页及 StorageReview、IntuitionLabs、Level1Techs 第三方评测（截至 2026-09-11）；2026 年 2 月官方 MSRP 由 $3,999 上调至 $4,699，OEM 版本定价独立。</p>
   <p>懒猫算力舱资料与自述数据来自：① 公众号《懒猫 AI 算力舱有啥用？》（mp.weixin.qq.com/s/l4cuLv-HbqicGwLGdlChcw）；② 公众号《懒猫 AI 算力舱 22 个应用场景》（mp.weixin.qq.com/s/6wLC17339Y9BT-XJPbWsfQ）；③ 懒猫官网产品页（lazycat.cloud/lcmd、lazycat.cloud/ai-pod）。价格为官方公开标价，宣传口径的折扣已在正文标注。</p>
 </footer>
 
