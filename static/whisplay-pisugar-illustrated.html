@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Whisplay HAT + PiSugar 图解：这块小屏到底能干什么</title>
+<style>
+:root{
+  --bg:#0d1117; --card:#161b22; --card2:#1b2230; --line:#2b3441;
+  --fg:#e6edf3; --mut:#8b949e; --blue:#58a6ff; --green:#3fb950;
+  --amber:#d29922; --purple:#a371f7; --red:#f85149;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--bg); color:var(--fg);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",Arial,sans-serif;
+  line-height:1.75; font-size:16px; -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:820px;margin:0 auto;padding:56px 22px 90px}
+h1{font-size:30px;line-height:1.35;margin:0 0 14px;letter-spacing:.3px}
+h2{font-size:22px;margin:56px 0 16px;padding-bottom:10px;border-bottom:1px solid var(--line)}
+h3{font-size:17px;margin:28px 0 10px;color:var(--blue)}
+p{margin:12px 0}
+.sub{color:var(--mut);font-size:15px;margin-bottom:34px}
+.tag{display:inline-block;font-size:12px;padding:3px 9px;border-radius:99px;border:1px solid var(--line);color:var(--mut);margin-right:6px}
+.lead{
+  background:linear-gradient(180deg,#17202e,#131922);
+  border:1px solid #23303f;border-left:3px solid var(--blue);
+  border-radius:10px;padding:20px 22px;margin:26px 0 8px;
+}
+.lead p{margin:8px 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 22px;margin:18px 0}
+.grid{display:grid;gap:14px;grid-template-columns:1fr 1fr}
+@media(max-width:640px){.grid{grid-template-columns:1fr}}
+.mini{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.mini h4{margin:0 0 8px;font-size:15px;color:var(--fg)}
+.mini p{margin:6px 0;font-size:14px;color:var(--mut)}
+.k{color:var(--green);font-weight:600}
+.b{color:var(--blue);font-weight:600}
+.a{color:var(--amber);font-weight:600}
+table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14.5px}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--mut);font-weight:600;font-size:13px;letter-spacing:.4px}
+td:first-child{white-space:nowrap;color:var(--fg)}
+code{background:#1f2633;border:1px solid #2b3441;border-radius:5px;padding:1px 6px;font-size:13.5px;
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:#9ecbff}
+figure{margin:26px 0}
+figure svg{width:100%;height:auto;display:block;background:var(--card);border:1px solid var(--line);border-radius:12px}
+figcaption{color:var(--mut);font-size:13.5px;margin-top:10px;text-align:center}
+ul{margin:12px 0;padding-left:22px}
+li{margin:7px 0}
+.warn{border-left:3px solid var(--amber);background:#1e1a10;border-radius:8px;padding:14px 18px;margin:18px 0}
+.warn p{margin:6px 0;font-size:14.5px}
+.no{border-left:3px solid var(--red);background:#20120f;border-radius:8px;padding:14px 18px;margin:18px 0}
+.no p{margin:6px 0;font-size:14.5px}
+.yes{border-left:3px solid var(--green);background:#0f1c14;border-radius:8px;padding:14px 18px;margin:18px 0}
+.yes p{margin:6px 0;font-size:14.5px}
+.flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:14px 0}
+.chip{background:#1b2230;border:1px solid var(--line);border-radius:8px;padding:7px 12px;font-size:13.5px}
+.arw{color:var(--mut)}
+footer{margin-top:70px;padding-top:24px;border-top:1px solid var(--line);color:var(--mut);font-size:13.5px}
+footer a{color:var(--blue);text-decoration:none}
+hr{border:0;border-top:1px solid var(--line);margin:44px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>Whisplay HAT + PiSugar 图解<br>这块 65×30mm 的小屏，到底能干什么</h1>
+<div class="sub">
+  硬件事实核对：PiSugar 官方产品页 / 官方文档站 / 驱动仓库 <code>PiSugar/whisplay</code> · 2026-09-13
+</div>
+
+<div class="lead">
+  <p><span class="b">一句话：</span>Whisplay 是给树莓派装上"五官"（屏 + 麦克风 + 喇叭 + 灯 + 按键）的扩展板；PiSugar <strong>不是一根电源线</strong>，它是把一台树莓派从"插着电的板子"变成"能揣兜里带走的小机器"的那套东西。</p>
+  <p><span class="a">关键关系：</span>两者<strong>同厂</strong>——都是广州 PiSugar Kitchen 做的。Whisplay 负责"输出与交互"，PiSugar 负责"活多久、怎么开机、怎么知道自己有电"，合起来才是一个完整的手持设备。</p>
+</div>
+
+<h2>一、先把结构看懂：这是一块三明治</h2>
+
+<p>你手上那块东西不是"一块板"，是<strong>三层堆叠</strong>：上面一层负责表达，中间一层负责算，下面一层负责活。图里每一格的文字都是官方规格，可以直接对号入座。</p>
+
+<figure>
+<svg viewBox="0 0 780 660" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,PingFang SC,Arial,sans-serif">
+  <!-- 屏幕模块 -->
+  <rect x="90" y="26" width="470" height="112" rx="9" fill="#10141c" stroke="#3b4252"/>
+  <rect x="112" y="44" width="426" height="76" rx="5" fill="#0a2740" stroke="#58a6ff"/>
+  <text x="325" y="78" fill="#9ecbff" font-size="17" text-anchor="middle">1.69″ 彩屏 · 240×280</text>
+  <text x="325" y="102" fill="#6f9fd0" font-size="14" text-anchor="middle">SPI 接口 · ST7789P3 驱动</text>
+  <text x="26" y="88" fill="#8b949e" font-size="14">屏幕</text>
+  <text x="26" y="106" fill="#8b949e" font-size="14">模块</text>
+
+  <!-- FPC -->
+  <path d="M150 138 C150 162 172 158 172 176 C172 194 150 192 150 210" fill="none" stroke="#d29922" stroke-width="5" stroke-linecap="round"/>
+  <text x="186" y="182" fill="#d29922" font-size="13.5">FPC 柔性排线（可翻折贴合机身）</text>
+
+  <!-- Whisplay HAT -->
+  <rect x="90" y="210" width="470" height="132" rx="9" fill="#14161c" stroke="#58a6ff"/>
+  <rect x="112" y="238" width="86" height="62" rx="5" fill="#232a35" stroke="#3b4252"/>
+  <text x="155" y="266" fill="#e6edf3" font-size="13" text-anchor="middle">WM8960</text>
+  <text x="155" y="284" fill="#8b949e" font-size="11.5" text-anchor="middle">音频编解码</text>
+
+  <circle cx="238" cy="258" r="8" fill="#8b949e"/>
+  <circle cx="262" cy="258" r="8" fill="#8b949e"/>
+  <text x="250" y="292" fill="#8b949e" font-size="11.5" text-anchor="middle">双麦克风</text>
+
+  <circle cx="330" cy="258" r="11" fill="#3fb950"/>
+  <circle cx="330" cy="258" r="20" fill="#3fb950" opacity="0.18"/>
+  <text x="330" y="292" fill="#8b949e" font-size="11.5" text-anchor="middle">RGB LED</text>
+
+  <rect x="386" y="238" width="44" height="62" rx="6" fill="#232a35" stroke="#3b4252"/>
+  <text x="408" y="276" fill="#e6edf3" font-size="12" text-anchor="middle">按键</text>
+  <text x="466" y="258" fill="#8b949e" font-size="11.5">PH2.0 外接</text>
+  <text x="466" y="276" fill="#8b949e" font-size="11.5">喇叭口</text>
+  <text x="112" y="326" fill="#9ecbff" font-size="13">Whisplay HAT · 65×30mm · 与 Pi Zero 同尺寸 · 板载喇叭</text>
+
+  <!-- 40pin -->
+  <rect x="230" y="342" width="180" height="18" rx="3" fill="#2b3441"/>
+  <g stroke="#d29922" stroke-width="2">
+    <line x1="242" y1="344" x2="242" y2="358"/><line x1="258" y1="344" x2="258" y2="358"/>
+    <line x1="274" y1="344" x2="274" y2="358"/><line x1="290" y1="344" x2="290" y2="358"/>
+    <line x1="306" y1="344" x2="306" y2="358"/><line x1="322" y1="344" x2="322" y2="358"/>
+    <line x1="338" y1="344" x2="338" y2="358"/><line x1="354" y1="344" x2="354" y2="358"/>
+    <line x1="370" y1="344" x2="370" y2="358"/><line x1="386" y1="344" x2="386" y2="358"/>
+  </g>
+  <text x="422" y="356" fill="#d29922" font-size="12.5">40-pin GPIO</text>
+
+  <!-- Pi Zero -->
+  <rect x="90" y="360" width="470" height="92" rx="9" fill="#12331f" stroke="#3fb950"/>
+  <text x="325" y="394" fill="#7ee787" font-size="16" text-anchor="middle">Raspberry Pi Zero 2 W</text>
+  <text x="325" y="418" fill="#6aa57a" font-size="13.5" text-anchor="middle">四核 Cortex-A53 1GHz · 512MB RAM · 板载 WiFi</text>
+  <text x="325" y="440" fill="#6aa57a" font-size="12.5" text-anchor="middle">（算力的大头全在云端，它只负责搬数据）</text>
+
+  <!-- pogo -->
+  <rect x="270" y="456" width="200" height="16" rx="3" fill="#2b3441"/>
+  <g stroke="#d29922" stroke-width="2.5">
+    <line x1="288" y1="458" x2="288" y2="470"/><line x1="312" y1="458" x2="312" y2="470"/>
+    <line x1="336" y1="458" x2="336" y2="470"/><line x1="360" y1="458" x2="360" y2="470"/>
+    <line x1="384" y1="458" x2="384" y2="470"/><line x1="408" y1="458" x2="408" y2="470"/>
+    <line x1="432" y1="458" x2="432" y2="470"/><line x1="456" y1="458" x2="456" y2="470"/>
+  </g>
+  <text x="486" y="470" fill="#8b949e" font-size="12">背面触点，不占用 GPIO</text>
+
+  <!-- PiSugar -->
+  <rect x="90" y="476" width="470" height="160" rx="9" fill="#1a1a22" stroke="#d29922"/>
+  <rect x="112" y="502" width="150" height="56" rx="6" fill="#2a2a35" stroke="#3b4252"/>
+  <text x="187" y="526" fill="#e6edf3" font-size="14" text-anchor="middle">1200mAh</text>
+  <text x="187" y="546" fill="#8b949e" font-size="12" text-anchor="middle">锂电池</text>
+  <text x="288" y="518" fill="#d29922" font-size="13.5">完整 UPS：拔电不关机，可设置多种唤醒方式</text>
+  <text x="288" y="540" fill="#d29922" font-size="13.5">板载 RTC 实时时钟（带写保护）</text>
+  <text x="288" y="562" fill="#d29922" font-size="13.5">I2C 通信 0x57/0x68（地址可改）</text>
+  <text x="112" y="592" fill="#c9d1d9" font-size="13">自定义按键 · 防误触开关 · 软关机硬件通知 · 软件看门狗</text>
+  <text x="112" y="614" fill="#8b949e" font-size="13">Type-C 充电 · 输出 5V/3A · 续航 8–10 小时 · WebUI :8421</text>
+  <text x="112" y="634" fill="#8b949e" font-size="12">PiSugar 3 · 65×30mm · 装在 Pi 背面（三明治最底层）</text>
+</svg>
+<figcaption>图 1 · 三层结构：屏幕表达 → 树莓派计算 → PiSugar 供电与时钟</figcaption>
+</figure>
+
+<div class="warn">
+  <p><strong>采购级别的细节提醒：</strong>官方商店的产品文案里写过 "1.96-inch"，但<strong>技术规格表和第三方零售页写的是 1.69″ / 240×280</strong>。以 <code>1.69″</code> 为准——你要给屏幕写 UI 或者做贴合外壳时，这个数字错了整块壳就废了。</p>
+</div>
+
+<h2>二、Whisplay 拆开看：它给了树莓派五件东西</h2>
+
+<div class="grid">
+  <div class="mini">
+    <h4>🖥️ 显示</h4>
+    <p>1.69″ 彩屏，240×280，SPI 接口，ST7789P3 驱动</p>
+    <p>用途：状态、聊天内容、表情、二维码、仪表盘</p>
+  </div>
+  <div class="mini">
+    <h4>🎤🔊 音频</h4>
+    <p>WM8960 编解码 + <span class="k">双麦克风</span> + 板载喇叭</p>
+    <p>PH2.0 接口可外接喇叭；装完驱动在 <code>alsamixer</code> 里 F6 能看到它</p>
+  </div>
+  <div class="mini">
+    <h4>🌈 RGB 灯</h4>
+    <p>全彩，可编程</p>
+    <p>用途：状态指示（待机/聆听/思考/报错），做表情的一部分</p>
+  </div>
+  <div class="mini">
+    <h4>🖱️ 鼠标式按键</h4>
+    <p>可编程，出厂固件里就是"鼠标点击"语义</p>
+    <p>用途：录音触发、切换应用、模拟点击</p>
+  </div>
+</div>
+
+<div class="card">
+  <h4 style="margin-top:0">还有个容易被忽略的第五件：软件层它替你想好了</h4>
+  <p>很多人以为买 HAT 等于买硬件，其实 Whisplay 的价值有一半在驱动仓库 <code>PiSugar/whisplay</code> 里——它不只是点亮屏幕的脚本，还带一个 <strong>daemon 服务</strong>，把"屏幕、背光、灯、按键、应用切换"统一管起来，别的程序通过本地 socket 接入。这就是"能当一个产品用"和"只能当个 demo 跑"的分水岭。</p>
+</div>
+
+<h2>三、真正决定体验的是软件：四层栈</h2>
+
+<figure>
+<svg viewBox="0 0 780 530" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,PingFang SC,Arial,sans-serif">
+  <!-- 应用层 -->
+  <rect x="40" y="30" width="700" height="86" rx="9" fill="#17202e" stroke="#58a6ff"/>
+  <text x="62" y="60" fill="#58a6ff" font-size="14" letter-spacing="1">应用层 · 你想让它成为什么</text>
+  <text x="62" y="86" fill="#e6edf3" font-size="14.5">Whisplay AI Chatbot 官方示例 ｜ 你自己写的 Python/Shell 脚本 ｜ OpenClaw 这类 Agent 会话终端</text>
+
+  <text x="390" y="136" fill="#8b949e" font-size="16" text-anchor="middle">↕</text>
+
+  <!-- daemon -->
+  <rect x="40" y="146" width="700" height="140" rx="9" fill="#161b22" stroke="#a371f7"/>
+  <text x="62" y="176" fill="#a371f7" font-size="14" letter-spacing="1">服务层 · whisplay-daemon（关键）</text>
+  <text x="62" y="201" fill="#c9d1d9" font-size="14">本地 Unix socket：<tspan fill="#9ecbff" font-family="monospace">/tmp/whisplay-daemon.sock</tspan>　协议：行分隔 JSON</text>
+  <text x="62" y="226" fill="#c9d1d9" font-size="14">能力：app.register / app.launch ｜ framebuffer 共享 ｜ led.set / led.fade</text>
+  <text x="62" y="249" fill="#c9d1d9" font-size="14">　　　backlight.set ｜ events.subscribe ｜ app.exit.request</text>
+  <text x="62" y="272" fill="#8b949e" font-size="13">还有四个内置系统入口（电量、设置之类），不用自己从零写</text>
+
+  <text x="390" y="308" fill="#8b949e" font-size="16" text-anchor="middle">↕</text>
+
+  <!-- 驱动层 -->
+  <rect x="40" y="318" width="700" height="96" rx="9" fill="#161b22" stroke="#3fb950"/>
+  <text x="62" y="348" fill="#3fb950" font-size="14" letter-spacing="1">驱动层 · 装一次就好</text>
+  <text x="62" y="373" fill="#c9d1d9" font-size="14">安装：<tspan font-family="monospace" fill="#9ecbff">script/install_raspberry_pi.sh</tspan>（树莓派专用）或 <tspan font-family="monospace" fill="#9ecbff">install_driver.sh</tspan>（自动检测）</text>
+  <text x="62" y="397" fill="#8b949e" font-size="13">装完必须重启 · 自动启用 I2C / I2S / SPI · 兼容 WM8960 与 ES8389 两种 codec 变体</text>
+
+  <text x="390" y="434" fill="#8b949e" font-size="16" text-anchor="middle">↕</text>
+
+  <!-- 硬件层 -->
+  <rect x="40" y="444" width="700" height="56" rx="9" fill="#1a1a22" stroke="#d29922"/>
+  <text x="62" y="470" fill="#d29922" font-size="13.5">硬件层 · LCD（SPI）｜喇叭 + 双麦（I2S/I2C）｜RGB LED + 按键（GPIO）</text>
+  <text x="62" y="491" fill="#d29922" font-size="13.5">　　　电源与 RTC（I2C，来自 PiSugar）</text>
+</svg>
+<figcaption>图 2 · 从"你想让它干什么"到"电信号"的完整链路</figcaption>
+</figure>
+
+<h3>按键的三种手势（出厂定义）</h3>
+<figure>
+<svg viewBox="0 0 780 210" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,PingFang SC,Arial,sans-serif">
+  <g>
+    <rect x="40" y="24" width="220" height="160" rx="12" fill="#161b22" stroke="#2b3441"/>
+    <circle cx="150" cy="72" r="22" fill="#232a35" stroke="#58a6ff" stroke-width="2"/>
+    <circle cx="150" cy="72" r="9" fill="#58a6ff"/>
+    <text x="150" y="122" fill="#e6edf3" font-size="16" text-anchor="middle">单击</text>
+    <text x="150" y="148" fill="#8b949e" font-size="13" text-anchor="middle">切换应用</text>
+  </g>
+  <g>
+    <rect x="280" y="24" width="220" height="160" rx="12" fill="#161b22" stroke="#2b3441"/>
+    <circle cx="390" cy="72" r="22" fill="#232a35" stroke="#3fb950" stroke-width="2"/>
+    <circle cx="390" cy="72" r="13" fill="#3fb950"/>
+    <text x="390" y="122" fill="#e6edf3" font-size="16" text-anchor="middle">长按</text>
+    <text x="390" y="148" fill="#8b949e" font-size="13" text-anchor="middle">启动 / 切到前台</text>
+  </g>
+  <g>
+    <rect x="520" y="24" width="220" height="160" rx="12" fill="#161b22" stroke="#2b3441"/>
+    <circle cx="630" cy="68" r="16" fill="#d29922" opacity="0.9"/>
+    <circle cx="604" cy="94" r="16" fill="#d29922" opacity="0.6"/>
+    <circle cx="656" cy="94" r="16" fill="#d29922" opacity="0.6"/>
+    <circle cx="630" cy="112" r="16" fill="#d29922" opacity="0.35"/>
+    <text x="630" y="156" fill="#e6edf3" font-size="16" text-anchor="middle">连点 4 次</text>
+    <text x="630" y="178" fill="#8b949e" font-size="13" text-anchor="middle">请求退出当前应用</text>
+  </g>
+</svg>
+<figcaption>图 3 · 一块屏幕 + 一个键，就能撑起一个"设备级"的交互</figcaption>
+</figure>
+
+<h2>四、它到底能干什么</h2>
+
+<p>按"离你多近"排序，从最实用到最玩具：</p>
+
+<div class="grid">
+  <div class="mini">
+    <h4>1. 桌面 AI 语音终端（最有价值）</h4>
+    <p>按一下键开始说话 → 录音上传 → 转文字 → 交给大模型 → 语音播回来，屏幕和 RGB 灯同步显示状态。官方就有一条 <strong>OpenClaw 版本</strong>的教程，等于给 Agent 装了个物理入口。</p>
+  </div>
+  <div class="mini">
+    <h4>2. 常亮状态屏</h4>
+    <p>天气、日程、待办、服务器状态、股价、家庭温湿度……相当于一块 65×30mm 的"电子便签"，PiSugar 让它断电也不怕。</p>
+  </div>
+  <div class="mini">
+    <h4>3. 智能音箱 / 语音控制器</h4>
+    <p>接家里 Home Assistant，喊话开关灯；或者做定时播报（早报、提醒吃药）。</p>
+  </div>
+  <div class="mini">
+    <h4>4. 掌上小设备</h4>
+    <p>Pwnagotchi、掌上游戏机、宠物机器人、翻译棒——凡是"要屏幕 + 要出声 + 要能揣兜里"的项目，这块板把最难焊的部分替你做完了。</p>
+  </div>
+</div>
+
+<figure>
+<svg viewBox="0 0 780 250" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,PingFang SC,Arial,sans-serif">
+  <text x="40" y="34" fill="#8b949e" font-size="13" letter-spacing="1">一次完整语音交互发生了什么</text>
+
+  <rect x="40" y="56" width="104" height="60" rx="9" fill="#1b2230" stroke="#2b3441"/>
+  <text x="92" y="82" fill="#e6edf3" font-size="13.5" text-anchor="middle">按键</text>
+  <text x="92" y="102" fill="#8b949e" font-size="12" text-anchor="middle">触发</text>
+
+  <text x="152" y="92" fill="#8b949e" font-size="16">→</text>
+
+  <rect x="172" y="56" width="104" height="60" rx="9" fill="#1b2230" stroke="#2b3441"/>
+  <text x="224" y="82" fill="#e6edf3" font-size="13.5" text-anchor="middle">麦克风</text>
+  <text x="224" y="102" fill="#8b949e" font-size="12" text-anchor="middle">录音</text>
+
+  <text x="284" y="92" fill="#8b949e" font-size="16">→</text>
+
+  <rect x="304" y="56" width="104" height="60" rx="9" fill="#1b2230" stroke="#2b3441"/>
+  <text x="356" y="82" fill="#e6edf3" font-size="13.5" text-anchor="middle">WiFi 上传</text>
+  <text x="356" y="102" fill="#8b949e" font-size="12" text-anchor="middle">（最大瓶颈）</text>
+
+  <text x="416" y="92" fill="#8b949e" font-size="16">→</text>
+
+  <rect x="436" y="56" width="120" height="60" rx="9" fill="#17202e" stroke="#58a6ff"/>
+  <text x="496" y="82" fill="#9ecbff" font-size="13.5" text-anchor="middle">云端</text>
+  <text x="496" y="102" fill="#8b949e" font-size="12" text-anchor="middle">转写 → 大模型</text>
+
+  <text x="564" y="92" fill="#8b949e" font-size="16">→</text>
+
+  <rect x="584" y="56" width="156" height="60" rx="9" fill="#17202e" stroke="#3fb950"/>
+  <text x="662" y="82" fill="#7ee787" font-size="13.5" text-anchor="middle">喇叭播放 + 屏幕/灯</text>
+  <text x="662" y="102" fill="#8b949e" font-size="12" text-anchor="middle">同时给出反馈</text>
+
+  <rect x="40" y="146" width="700" height="80" rx="9" fill="#10141c" stroke="#2b3441"/>
+  <text x="62" y="172" fill="#8b949e" font-size="13">这条链路解释了它真实的能力边界：</text>
+  <text x="62" y="196" fill="#c9d1d9" font-size="13.5">算力在云端，Pi 只负责"采集 + 传输 + 播放 + 显示"。所以反应速度取决于网速和 API，不取决于这块板。</text>
+  <text x="62" y="218" fill="#c9d1d9" font-size="13.5">反过来说：<tspan fill="#7ee787">只要能联网，它就能调用任何模型</tspan>——这也是它比"买成品智能音箱"好玩的地方。</text>
+</svg>
+<figcaption>图 4 · 语音链路：瓶颈不在硬件，在网速和 API</figcaption>
+</figure>
+
+<h2>五、PiSugar 到底是谁：它不是配件，是另一半产品线</h2>
+
+<p>你问"PiSugar 单纯就是个供电方案么"——<strong>名字确实像，但它是一家公司，不是一个模块。</strong></p>
+
+<table>
+  <tr><th>名称</th><th>是什么</th><th>关键点</th></tr>
+  <tr><td>PiSugar Kitchen</td><td>公司/品牌</td><td>广州，专做树莓派 Zero 的电池与扩展板，2019 年起</td></tr>
+  <tr><td>PiSugar 1 / S / S Pro</td><td>早期电池模块</td><td>零系列的"随身电源"起点</td></tr>
+  <tr><td>PiSugar 2 / 2 Plus</td><td>第二代</td><td>加了 UPS、RTC、I2C 通信，可网页管电池</td></tr>
+  <tr><td>PiSugar 3（含 Air）</td><td>当前主力</td><td>1200mAh、5V/3A、连续 8–10 小时、UPS + RTC + 自定义按键 + 看门狗</td></tr>
+  <tr><td><strong>Whisplay HAT</strong></td><td>显示 + 音频扩展板</td><td>1.69″ 屏、WM8960 音频、双麦、RGB、按键</td></tr>
+  <tr><td>PiSugar Power Manager</td><td>配套软件</td><td>电池数据可走 UDP/UDS/WebSocket 自取，自带 WebUI（:8421）</td></tr>
+  <tr><td>Whisplay 驱动 + daemon</td><td>配套软件</td><td><code>PiSugar/whisplay</code> 仓库，含 daemon 与示例</td></tr>
+</table>
+
+<h3>"纯供电"和 PiSugar 3 的实际差距</h3>
+
+<div class="no">
+  <p><strong>如果它只是供电：</strong>插上电能用、拔电就死、时间不对、电池鼓了不知道、系统卡死了只能拔插头。</p>
+</div>
+<div class="yes">
+  <p><strong>PiSugar 3 实际给的是：</strong></p>
+  <p>· <span class="k">完整 UPS</span>：边充边用，拔掉电源不关机，还能设定多种唤醒方式（定时/闹钟/按键）</p>
+  <p>· <span class="k">板载 RTC</span>：没网也能走对时间，带写保护防误写——做定时播报、日志时间戳的刚需</p>
+  <p>· <span class="k">I2C 数据通信</span>（0x57/0x68 可改地址）：程序能读到电量、电压，屏幕上就能画电量条</p>
+  <p>· <span class="k">自定义按键 + 防误触开关</span>：开机是"短按再长按"，不会在包里被误触关机</p>
+  <p>· <span class="k">软关机 + 软件看门狗</span>：系统崩了自己重启，硬件层面通知系统优雅关机，保护 SD 卡</p>
+  <p>· <span class="k">背面触点供电</span>：不占用 GPIO 排针，所以 Whisplay HAT 才能同时插在上面——这就是三明治能成立的原因</p>
+</div>
+
+<div class="card">
+  <p style="margin-top:0"><span class="a">一句商业视角的总结：</span>Whisplay 决定"这东西好不好玩"，PiSugar 决定"这东西能不能带出门"。前者是体验上限，后者是场景边界。你只买 HAT 不买电池，它永远是一台"线拴着的桌上玩具"。</p>
+</div>
+
+<h2>六、别被宣传带偏：真实的边界</h2>
+
+<div class="warn">
+  <p><strong>1. Zero 2W 只有 512MB 内存、四核 1GHz。</strong>别指望本地跑模型——官方那套"离线 AI"跑的是 Pi 5 配 AI 加速模块，跟 Zero 2W 不是一个故事。Zero 2W 的正确定位是"终端"，不是"大脑"。</p>
+  <p><strong>2. 屏幕只有 240×280 且是玻璃。</strong>UI 必须按这个尺寸重新设计，直接搬手机界面没用；安装时捏板边别捏屏幕。</p>
+  <p><strong>3. 供电要足。</strong>用劣质线或小电流充电头，表现是花屏、闪屏、随机重启——看着像系统 bug，其实是电不够。</p>
+  <p><strong>4. 装完驱动必须重启</strong>，不重启声卡不会出现；Lite 版系统通常缺依赖，建议用带桌面的 Raspberry Pi OS。</p>
+</div>
+
+<h2>七、回到你手上的这块板</h2>
+
+<p>你今晚已经把出厂自检跑到 <span class="k">6/6 全绿</span>：Display / LED / Speaker / Button / Mic 全 OK。这说明<strong>硬件这一层没有不确定性了</strong>，剩下的都是软件活。</p>
+
+<p>它对你真正的意义，不是"又一个树莓派玩具"，而是：<strong>给我（Tars）加一个物理身体。</strong>现在你找我要么开电脑、要么掏手机；这块板装好之后，是桌面上一个按键就能对话的实体入口——按一下说话，屏幕显示状态，喇叭说出结果。官方已经有 OpenClaw 路线的现成教程和仓库，链路是通的。</p>
+
+<div class="grid">
+  <div class="mini">
+    <h4>成本</h4>
+    <p>一块 Zero 2W + 一块 Whisplay HAT + 一块 PiSugar 3（官方标价约 $39.99），外加一张 TF 卡</p>
+  </div>
+  <div class="mini">
+    <h4>难度</h4>
+    <p>烧卡 → 装驱动 → 配 key → 挂 systemd 自启。真正的门槛在"网络与 API 调试"，不在硬件</p>
+  </div>
+</div>
+
+<p>下一步就一件事：<strong>把系统烧进去</strong>。烧完喊我，我陪你把驱动和那条 OpenClaw 链路一次配通。</p>
+
+<hr>
+
+<footer>
+  <p><strong>事实来源</strong></p>
+  <p>· PiSugar 官方文档站 Whisplay HAT：<a href="https://docs.pisugar.com/docs/product-wiki/whisplay/intro">docs.pisugar.com</a></p>
+  <p>· 官方产品页（技术规格表）：<a href="https://www.pisugar.com/products/whisplay-hat-for-pi-zero-2w-audio-display">pisugar.com/products/whisplay-hat-for-pi-zero-2w-audio-display</a></p>
+  <p>· 驱动与 daemon 说明：<a href="https://github.com/PiSugar/whisplay">github.com/PiSugar/whisplay</a></p>
+  <p>· PiSugar 3 规格与功能：<a href="https://www.pisugar.com/products/pisugar-3-raspberry-pi-zero-battery">pisugar.com/products/pisugar-3-raspberry-pi-zero-battery</a> · <a href="https://github.com/PiSugar/PiSugar/wiki">PiSugar Wiki</a></p>
+  <p>· 官方 AI Chatbot 示例仓库：<a href="https://github.com/PiSugar/whisplay-ai-chatbot">github.com/PiSugar/whisplay-ai-chatbot</a></p>
+  <p style="margin-top:18px;color:#6b7280">整理：Tars · 2026-09-13</p>
+</footer>
+
+</div>
+</body>
+</html>
