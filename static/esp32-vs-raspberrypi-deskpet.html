@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ESP32 vs 树莓派：桌面 AI 硬件选型全对比 · 以 RIG-Puppy 与 Whisplay 为例</title>
+<style>
+  :root{
+    --bg:#0b0e13; --card:#141a22; --card2:#1a212b; --line:#232c38;
+    --tx:#e6edf5; --tx2:#9aa8b8; --tx3:#6b7889;
+    --cy:#3ddbd9; --am:#ffb454; --rd:#ff6b6b; --gr:#7ee787; --pu:#b392f0;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--bg); color:var(--tx);
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    line-height:1.75; font-size:16px; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:820px;margin:0 auto;padding:48px 22px 90px}
+  header h1{font-size:30px;line-height:1.35;margin:0 0 14px;letter-spacing:-.5px}
+  header .sub{color:var(--tx2);font-size:15px;margin:0}
+  .meta{color:var(--tx3);font-size:13px;margin-top:18px;border-top:1px solid var(--line);padding-top:14px}
+  h2{font-size:22px;margin:56px 0 16px;padding-left:12px;border-left:3px solid var(--cy);line-height:1.4}
+  h3{font-size:17px;margin:32px 0 10px;color:var(--tx)}
+  h4{font-size:15px;margin:22px 0 8px;color:var(--tx2)}
+  p{margin:12px 0}
+  ul,ol{margin:12px 0;padding-left:22px}
+  li{margin:7px 0}
+  a{color:var(--cy);text-decoration:none;border-bottom:1px solid rgba(61,219,217,.3)}
+  code{background:#0f141b;border:1px solid var(--line);border-radius:5px;padding:1px 6px;font-size:13.5px;color:var(--am);
+       font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 22px;margin:18px 0}
+  .card.tight{padding:16px 18px}
+  .verdict{background:linear-gradient(135deg,#12222a,#141a22);border:1px solid #2a4a4c;border-left:3px solid var(--cy)}
+  .warn{background:#241a12;border:1px solid #4a3520;border-left:3px solid var(--am)}
+  .bad{background:#241418;border:1px solid #4a2028;border-left:3px solid var(--rd)}
+  .good{background:#12241a;border:1px solid #204a30;border-left:3px solid var(--gr)}
+  .grid{display:grid;gap:14px;margin:18px 0}
+  .g2{grid-template-columns:1fr 1fr}
+  @media(max-width:640px){.g2{grid-template-columns:1fr}}
+  .kpi{background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+  .kpi .n{font-size:22px;font-weight:700;color:var(--cy);letter-spacing:-.5px}
+  .kpi .l{font-size:13px;color:var(--tx2);margin-top:2px}
+  table{width:100%;border-collapse:collapse;margin:18px 0;font-size:14px;display:block;overflow-x:auto;white-space:nowrap}
+  @media(min-width:700px){table{display:table;white-space:normal}}
+  th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
+  th{background:#182029;color:var(--tx2);font-weight:600;font-size:13px}
+  tr:nth-child(even) td{background:rgba(255,255,255,.015)}
+  .tag{display:inline-block;font-size:12px;padding:1px 8px;border-radius:20px;border:1px solid var(--line);color:var(--tx2);margin-right:5px}
+  .t-cy{border-color:#2a5a5c;color:var(--cy);background:rgba(61,219,217,.08)}
+  .t-am{border-color:#5a4526;color:var(--am);background:rgba(255,180,84,.08)}
+  .t-rd{border-color:#5a2a30;color:var(--rd);background:rgba(255,107,107,.08)}
+  .t-gr{border-color:#2a5a3a;color:var(--gr);background:rgba(126,231,135,.08)}
+  .t-pu{border-color:#453a5c;color:var(--pu);background:rgba(179,146,240,.08)}
+  .flow{margin:20px 0;font-size:14px}
+  .step{display:flex;gap:12px;align-items:flex-start;position:relative;padding-bottom:14px}
+  .step:before{content:"";position:absolute;left:11px;top:26px;bottom:0;width:1px;background:var(--line)}
+  .step:last-child:before{display:none}
+  .dot{flex:0 0 23px;height:23px;border-radius:50%;background:#0f141b;border:1px solid var(--line);
+       display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--tx2);margin-top:3px;z-index:1}
+  .step .body{flex:1}
+  .step .t{font-weight:600}
+  .step .d{color:var(--tx2);font-size:13.5px}
+  .net{color:var(--rd);font-weight:600}
+  .lcl{color:var(--gr);font-weight:600}
+  .num{color:var(--tx3);font-variant-numeric:tabular-nums}
+  hr{border:0;border-top:1px solid var(--line);margin:44px 0}
+  footer{color:var(--tx3);font-size:13px;margin-top:50px;border-top:1px solid var(--line);padding-top:18px}
+  .q{color:var(--am);font-weight:600}
+  .big{font-size:18px;line-height:1.7}
+  .mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;color:var(--tx2)}
+  .pill-row{margin:14px 0}
+  details{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin:12px 0}
+  summary{cursor:pointer;font-weight:600;color:var(--tx)}
+  details[open] summary{margin-bottom:10px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>ESP32 还是树莓派？<br>桌面 AI 硬件的分水岭</h1>
+  <p class="sub">以 RIG-Puppy（ESP32-S3）与 Whisplay 聊天盒（Pi Zero 2W）为样本，讲清身体、大脑、延迟与「接自己的 Agent」这四件事。</p>
+  <div class="meta">2026-09-15 · 技术选型对比 · 面向个人开发者与硬件产品决策</div>
+</header>
+
+<div class="card verdict">
+  <p class="big" style="margin-top:0"><strong>一句话结论：</strong>ESP32 是「为物理世界生的芯片」，树莓派是「缩小的电脑」。<br>
+  桌宠要好用，靠的是前者；要接自己的 Agent 跑任意逻辑，靠的是后者。两者不是竞争，是分工。</p>
+  <p style="margin-bottom:0;color:var(--tx2)">你的体感差距是真的，但根因不是「算力不够」——恰恰相反，Pi Zero 2W 的算力比 ESP32-S3 强一个数量级。真正拉开差距的是<strong>延迟链路结构</strong>和<strong>产品化完成度</strong>。</p>
+</div>
+
+<h2>一、先看清本质：两种完全不同的物种</h2>
+
+<p>把 ESP32 和树莓派放在一起比参数，就像拿单片机和笔记本比主频——数字有意义，但会误导人。它们的设计目标根本不同：</p>
+
+<div class="grid g2">
+  <div class="card tight">
+    <h4 style="margin-top:0;color:var(--cy)">ESP32：微控制器（MCU）</h4>
+    <p style="font-size:14px;color:var(--tx2);margin-bottom:6px">跑在裸机或 FreeRTOS 上，没有操作系统，没有文件系统，没有「关机」概念。</p>
+    <ul style="font-size:14px;color:var(--tx2);margin-bottom:0">
+      <li>代码直接操作寄存器，<strong>μs 级确定性</strong></li>
+      <li>上电即工作，断电即停，没有坏掉的文件系统</li>
+      <li>外设是硬件模块：PWM、I2S、RMT、ADC 全是硅片级</li>
+      <li>内存按 KB 算，任务按「能不能塞进 512KB」设计</li>
+    </ul>
+  </div>
+  <div class="card tight">
+    <h4 style="margin-top:0;color:var(--am)">树莓派：单板计算机（SBC）</h4>
+    <p style="font-size:14px;color:var(--tx2);margin-bottom:6px">跑完整 Linux 发行版，有进程、驱动、包管理、Docker。</p>
+    <ul style="font-size:14px;color:var(--tx2);margin-bottom:0">
+      <li>想装什么装什么，<code>apt</code> / <code>pip</code> / <code>npm</code> 万物可达</li>
+      <li>但有调度抖动、有启动时间、有 SD 卡寿命问题</li>
+      <li>外设要走内核驱动 + 用户态库，链路长</li>
+      <li>内存按 GB 算，任务按「能不能跑起来」设计</li>
+    </ul>
+  </div>
+</div>
+
+<p><span class="q">关键分界：</span>物理世界的动作（舵机、灯、音频流）需要<strong>确定性</strong>；AI 世界的逻辑（对话、记忆、工具调用）需要<strong>通用性</strong>。ESP32 天生拥有前者，树莓派天生拥有后者。</p>
+
+<h2>二、硬参数硬碰硬</h2>
+
+<p>以两者的主力选手为例：<strong>ESP32-S3-WROOM-1-N16R8</strong>（RIG-Puppy 主控）vs <strong>Raspberry Pi Zero 2W</strong>（Whisplay 主板）。</p>
+
+<table>
+  <thead>
+    <tr><th>维度</th><th>ESP32-S3（N16R8）</th><th>Pi Zero 2W</th><th>谁赢</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>CPU</td><td>双核 Xtensa LX7 @240MHz</td><td>四核 Cortex-A53 @1GHz</td><td><span class="tag t-am">Pi（约 4–8×）</span></td></tr>
+    <tr><td>内存</td><td>512KB SRAM + 8MB PSRAM</td><td>512MB LPDDR2</td><td><span class="tag t-am">Pi（约 60×）</span></td></tr>
+    <tr><td>存储</td><td>16MB Flash（内置）</td><td>microSD（GB 级 ~ TB 级）</td><td><span class="tag t-am">Pi</span></td></tr>
+    <tr><td>操作系统</td><td>裸机 / FreeRTOS（无 OS）</td><td>Linux（Raspberry Pi OS）</td><td>—（取向不同）</td></tr>
+    <tr><td>启动时间</td><td>&lt; 1 秒</td><td>20–40 秒</td><td><span class="tag t-cy">ESP32</span></td></tr>
+    <tr><td>空闲功耗</td><td>约 0.1–0.3 W</td><td>约 0.5–1.2 W</td><td><span class="tag t-cy">ESP32</span></td></tr>
+    <tr><td>深度睡眠</td><td>10–100 µA（可忽略）</td><td>无真正深睡（休眠唤醒数秒）</td><td><span class="tag t-cy">ESP32</span></td></tr>
+    <tr><td>断电耐受</td><td>随时断电无损</td><td>有 SD 卡/文件系统损坏风险</td><td><span class="tag t-cy">ESP32</span></td></tr>
+    <tr><td>实时性抖动</td><td>μs 级（硬件定时器）</td><td>ms 级（Linux 非实时调度）</td><td><span class="tag t-cy">ESP32</span></td></tr>
+    <tr><td>硬件 PWM</td><td>LEDC 16 通道</td><td>2 路硬件 PWM（其余软件模拟）</td><td><span class="tag t-cy">ESP32</span></td></tr>
+    <tr><td>音频链路</td><td>I²S 直连 DAC/功放，延迟低</td><td>codec + ALSA + 用户态栈，层级多</td><td><span class="tag t-cy">ESP32</span></td></tr>
+    <tr><td>无线</td><td>2.4G Wi-Fi + BLE 5.0</td><td>2.4G/5G 双频 Wi-Fi + BLE</td><td><span class="tag t-am">Pi（有 5G）</span></td></tr>
+    <tr><td>视频/ISP</td><td>无独立 ISP，DVP 摄像头够用</td><td>无独立 ISP，USB/CSI 摄像头</td><td>平手</td></tr>
+    <tr><td>软件生态</td><td>ESP-IDF / Arduino，C 系为主</td><td>Linux 全生态，任意语言</td><td><span class="tag t-am">Pi</span></td></tr>
+    <tr><td>成本（单板级）</td><td>约 ¥15–40</td><td>约 ¥100–150</td><td><span class="tag t-cy">ESP32</span></td></tr>
+  </tbody>
+</table>
+
+<div class="card warn">
+  <p style="margin:0"><strong>看这张表的正确姿势：</strong>Pi 在「算力指标」上全面碾压，但在「物理世界指标」上全面落败。桌宠的体验恰恰由后者决定。这就是为什么参数更弱的 ESP32 做出来的桌宠，反而<em>更好用</em>。</p>
+</div>
+
+<h2>三、案例：RIG-Puppy 与 Whisplay 到底是什么</h2>
+
+<div class="grid g2">
+  <div class="card tight">
+    <h4 style="margin-top:0"><span class="tag t-cy">成品机器人</span>RIG-Puppy（噜噜）</h4>
+    <ul style="font-size:14px;color:var(--tx2)">
+      <li>主控：ESP32-S3-WROOM-1-N16R8（双核 240MHz，16MB Flash + 8MB PSRAM）</li>
+      <li>运动：<strong>5 个 EM3 串口总线舵机</strong>（UART 串联，带离合保护，可手掰不坏）</li>
+      <li>显示：1.09 寸圆屏 240×240（GC9A01，SPI）</li>
+      <li>视听：GC0308 摄像头（DVP）+ INMP441 I²S 麦克风 + MAX98357A 功放 + 8Ω2W 喇叭</li>
+      <li>感知：6 轴 IMU（姿态解算、动态平衡）</li>
+      <li>软件：LUWU OS + 陆吾云 + Qwen 大模型；官方 App 支持自定义智能体、人格参数、独立记忆库</li>
+      <li>开源：原理图 + 3D 模型 + 固件代码（<code>rig_omni</code>，Apache 2.0，ESP-IDF v5.5+）</li>
+      <li>价格：499 元起</li>
+    </ul>
+  </div>
+  <div class="card tight">
+    <h4 style="margin-top:0"><span class="tag t-am">DIY 套件</span>Whisplay 聊天盒</h4>
+    <ul style="font-size:14px;color:var(--tx2)">
+      <li>主板：Raspberry Pi Zero 2W（四核 A53 @1GHz，512MB）</li>
+      <li>HAT：PiSugar Whisplay（WM8960 codec + 双麦 + 喇叭 + 1.69 寸 240×280 ST7789 + RGB 灯 + 鼠标式按键）</li>
+      <li>运动能力：<strong>无</strong>（只有屏幕和灯作为表达）</li>
+      <li>软件：<code>whisplay-ai-chatbot</code>（GPL-3.0，Python + Node 混合栈）</li>
+      <li>模型：<strong>任意</strong>——.env 里填 OpenAI / Ollama / 百炼 / LLM8850…</li>
+      <li>扩展：可装 daemon、第三方 App、Docker、任意 Python 库</li>
+      <li>定位：口袋 AI 对讲机 / 可编程交互终端</li>
+    </ul>
+  </div>
+</div>
+
+<p>两者的差距，一半来自芯片路线，另一半来自<strong>产品化程度</strong>——一个是打磨好的完整体，一个是需要你自己拼装软件栈的开发套件。这一点后面会细说。</p>
+
+<h2>四、决定体感的真正变量：延迟链路解剖</h2>
+
+<p>这才是「为什么 Whisplay 明显不如 rig-puppy 好用」的核心答案。硬件选型决定了<strong>一次对话要跨多少次网络、走多少层软件栈</strong>。</p>
+
+<h3>Whisplay（常见 Pi 方案）的链路</h3>
+<div class="card tight">
+<div class="flow">
+  <div class="step"><div class="dot">1</div><div class="body"><div class="t">按键按下，本地录音</div><div class="d"><span class="lcl">本地</span> · 事件经 WebSocket 通知主进程 → 启动录音子进程</div></div></div>
+  <div class="step"><div class="dot">2</div><div class="body"><div class="t">压缩音频，再发起一次 HTTP 请求送 ASR</div><div class="d"><span class="net">跨网 #1</span> · 每次对话新建连接，同步阻塞等待</div></div></div>
+  <div class="step"><div class="dot">3</div><div class="body"><div class="t">ASR 返回文本</div><div class="d"><span class="net">跨网 #2</span>（若识别层与主服务不同源）</div></div></div>
+  <div class="step"><div class="dot">4</div><div class="body"><div class="t">文本送 LLM，等回复</div><div class="d"><span class="net">跨网 #3</span> · 非流式则必须等完整答案</div></div></div>
+  <div class="step"><div class="dot">5</div><div class="body"><div class="t">回复送 TTS，拿音频</div><div class="d"><span class="net">跨网 #4</span> · 再回传设备播放</div></div></div>
+  <div class="step"><div class="dot">6</div><div class="body"><div class="t">播放</div><div class="d">总延迟 = 各级处理 + <strong>4 次跨网往返</strong>。链路越抖，失败概率按乘法叠加</div></div></div>
+</div>
+</div>
+<p style="font-size:14px;color:var(--tx2)">这个结构的致命弱点：<strong>任何一跳抖动都会拖垮整轮对话</strong>。如果链路本身丢包，或者某一跳超时（例如 15 秒连接超时），整轮就废了——而用户已经说完了话。做成「每次新建连接 + 同步阻塞」，等于把网络抖动直接暴露给用户体验。</p>
+
+<h3>RIG-Puppy（ESP32 原生方案）的链路</h3>
+<div class="card tight">
+<div class="flow">
+  <div class="step"><div class="dot">1</div><div class="body"><div class="t">离线唤醒词命中（芯片本地，ESP-SR）</div><div class="d"><span class="lcl">全程不离设备</span> · 零网络依赖，毫秒级响应</div></div></div>
+  <div class="step"><div class="dot">2</div><div class="body"><div class="t">音频流持续推送到云</div><div class="d"><span class="net">1 条长连接</span> · WebSocket / MQTT，连接一旦立好就不断</div></div></div>
+  <div class="step"><div class="dot">3</div><div class="body"><div class="t">云端一条流水线跑完 ASR → LLM → TTS</div><div class="d"><span class="lcl">服务端内部</span> · 全流式，边说边出，不必等全句</div></div></div>
+  <div class="step"><div class="dot">4</div><div class="body"><div class="t">音频流回传播放，可实时打断</div><div class="d"><span class="net">同一条长连接</span> · VAD 检测到用户开口就掐掉 TTS</div></div></div>
+</div>
+</div>
+
+<div class="card good">
+  <p style="margin:0"><strong>本质差异：</strong>不是「ESP32 更快」，而是 <strong>架构把不确定性关在了连接内部</strong>。长连接 + 全流式 + 芯片级唤醒，让网络抖动只影响一点点吞吐，不会变成「这轮对话失败」。Pi 方案把 4 次同步远程调用串成一串，是<em>结构性的延迟暴露</em>。</p>
+</div>
+
+<div class="card">
+  <h4 style="margin-top:0">顺带说清一个常见误解</h4>
+  <p style="font-size:14px;color:var(--tx2);margin-bottom:0">「Pi 算力强，是不是本地跑模型就赢？」——在 Zero 2W 上不成立。实测在 Zero 2W 跑 Ollama 小模型，温度迅速升到 68°C，答完一个问题整机就开始迟钝。512MB 内存 + 无风扇 + 无 NPU，本地推理这条路在 Zero 级硬件上基本走不通。<strong>Pi 的价值不在算，在于「什么都能装」。</strong>（要本地推理，得上 Pi 5 + AI HAT+2 这类带 NPU 的方案。）</p>
+</div>
+
+<h2>五、扩展性对比：两种完全不同的「扩展」</h2>
+
+<table>
+  <thead><tr><th>扩展方向</th><th>ESP32 路线</th><th>树莓派路线</th></tr></thead>
+  <tbody>
+    <tr><td>加传感器</td><td>GPIO/I²C/SPI 直连，接线即用，实时性好</td><td>同样可行，但要走内核驱动/用户态库</td></tr>
+    <tr><td>加执行器</td><td><span class="tag t-gr">强项</span> 舵机、电机、灯带、精确时序控制</td><td><span class="tag t-am">偏弱</span> 硬件 PWM 仅 2 路，多舵机需外挂控制板</td></tr>
+    <tr><td>加外设模块</td><td>受限于 Flash/RAM，驱动多了塞不下</td><td><span class="tag t-gr">强项</span> USB 随便插，apt install 万物</td></tr>
+    <tr><td>加业务逻辑</td><td>复杂逻辑要写 C++，改一次编译烧录一次</td><td><span class="tag t-gr">强项</span> Python 改一行生效</td></tr>
+    <tr><td>接外部服务</td><td>走 WebSocket/MQTT，固件里写协议</td><td><span class="tag t-gr">强项</span> 任意 HTTP/SDK/Docker</td></tr>
+    <tr><td>多人/多设备协同</td><td>每台设备独立，靠云编排</td><td>可当局域网网关，统一调度多台设备</td></tr>
+    <tr><td>升级方式</td><td>OTA 推固件（整包替换）</td><td>git pull + 重启服务（热改）</td></tr>
+  </tbody>
+</table>
+
+<p><strong>一句话：</strong>ESP32 的扩展是「往身体上长器官」，树莓派的扩展是「往大脑里装软件」。</p>
+
+<h2>六、对接自己的 Agent：优劣势矩阵</h2>
+
+<p>这是你真正关心的部分。结论先行：<strong>树莓派天生适合接你自己的 Agent；ESP32 需要「换后端」才能接。</strong></p>
+
+<h3>树莓派（Whisplay 路线）：天生开放</h3>
+<div class="card good">
+  <ul style="margin:0">
+    <li><strong>接入成本极低</strong>：改一个 <code>.env</code> 就能换模型——OpenAI、Ollama、阿里百炼、Gemini 任意。</li>
+    <li><strong>能跑任意 Agent 框架</strong>：Dify、n8n、自建 HTTP 服务、MCP 客户端，统统能装。</li>
+    <li><strong>可作为「物理终端」</strong>：官方提供 daemon 与第三方 App 接入指南，屏幕/按键/喇叭都能被你自己的程序接管——本质上它是你的 agent 的<em>一个输出设备</em>。</li>
+    <li><strong>可当本地大脑</strong>：局域网内跑 Agent 服务，给多台设备提供推理与编排。</li>
+  </ul>
+</div>
+<p style="font-size:14px;color:var(--tx2)">代价：没有动作表达；延迟链路长；每次升级都要维护 Python 依赖；SD 卡是长期可靠性隐患。</p>
+
+<h3>ESP32（RIG-Puppy 路线）：封闭但可控，开源后可换脑</h3>
+<div class="card">
+  <ul>
+    <li><strong>官方固件下的接入能力：弱。</strong>你能在官方 App 里换智能体、调人格、养记忆——但<em>模型是陆吾云上的 Qwen，不是你自己的 ChatGPT</em>。这是产品闭环的代价。</li>
+    <li><strong>刷开源固件后可换后端：强。</strong><code>rig_omni</code> 以 Apache 2.0 开源，ESP-IDF 可编译可烧录，OTA/服务地址是可配置项，通信走标准 WebSocket/MQTT。</li>
+    <li><strong>设备端 MCP 是真正的钥匙</strong>：固件内置 MCP 工具框架（如 <code>self.robot.move</code>），把「前进 5 厘米」「抬头」这类动作注册成工具，交给后端 LLM 调用。<span class="q">这意味着只要后端换成你的模型，你的 Agent 就能直接驱动它的身体。</span></li>
+    <li><strong>响应体验天生更好</strong>：芯片级唤醒词 + 长连接流式，物理动作反馈几十到几百毫秒内发生。</li>
+  </ul>
+</div>
+<p style="font-size:14px;color:var(--tx2)">代价：要动固件就得配 ESP-IDF 工具链、会编译烧录；换自建后端后，官方云的 Qwen、人格养成、OTA 升级、云端记忆库就不再为你服务。</p>
+
+<h2>七、把 RIG-Puppy 换成「自己的 ChatGPT」：三条路径</h2>
+
+<p>可行性明确：<strong>可行，且有三条不同激进程度的路</strong>。按投入从低到高排列。</p>
+
+<h3>路径 A：官方 App 换人格（零改造，但换不了模型）</h3>
+<div class="card tight">
+  <p style="margin-top:0;font-size:14px">官方 App 支持创建自定义智能体、配置人格参数、独立记忆库、情感反馈——「性格」是你能改的，「脑子」不是。底层仍是陆吾云 + Qwen。</p>
+  <p style="margin-bottom:0"><span class="tag t-rd">不适合你的需求</span> 你想要的「换成我自己的 ChatGPT」，这条路给不了。</p>
+</div>
+
+<h3>路径 B：刷开源固件 + 自建后端（推荐：真正换脑）</h3>
+<div class="card tight">
+  <p style="margin-top:0"><strong>原理：</strong>RIG-Puppy 固件是开源的，通信基于 WebSocket/MQTT。把它指向一台<strong>你自己的服务器</strong>，由这台服务器来做 ASR / LLM / TTS——此时模型由你决定。</p>
+  <p><strong>后端用现成的开源方案：</strong>社区有成熟的 <code>xiaozhi-esp32-server</code>（华南理工团队主导，开源），架构上 ASR / LLM / TTS / 记忆 全模块可替换，<span class="q">明确支持「任何兼容 OpenAI 接口的模型」</span>——这就直接接上了 OpenAI（ChatGPT）、DeepSeek、通义、Ollama、Dify、FastGPT、Coze 等。</p>
+  <p><strong>需要什么：</strong></p>
+  <ul style="font-size:14px">
+    <li>一台常开的机器（家里 Mac mini 就够；轻量模式 2 核 2G 起，全云端 API 时无需 GPU）</li>
+    <li>ESP-IDF 编译环境（<code>idf.py set-target esp32s3</code> → 选板型 Puppy → 编译烧录）</li>
+    <li>把固件里的服务地址改成你自己的服务器地址</li>
+    <li>一次 OTA/串口烧录（官方也提供 Web Serial 网页烧录，不用装工具链）</li>
+  </ul>
+  <p style="margin-bottom:0"><span class="tag t-gr">得到</span>你的 ChatGPT 直接驱动 5 个舵机做动作、表情、拍照<br>
+  <span class="tag t-rd">失去</span>官方云的 Qwen 与 App 生态、官方 OTA 推送、陆吾云记忆库（可自建替代）</p>
+</div>
+
+<h3>路径 C：保留官方固件，只做侧向接入（折中）</h3>
+<div class="card tight">
+  <p style="margin-top:0;font-size:14px">不动固件，把设备当作「被遥控的终端」：用官方云端的人格/记忆能力做对话，同时让你自己的 Agent 通过其他通道（如手机端、局域网服务）下发指令。</p>
+  <p style="margin-bottom:0"><span class="tag t-am">适合</span>只想加一点自动化、不想碰固件的人。但「模型换成 ChatGPT」依然做不到。</p>
+</div>
+
+<div class="card warn">
+  <p style="margin:0"><strong>一句话选路：</strong>想体验好又想用自己的模型 → <strong>路径 B</strong>。这是唯一能同时拿到「ESP32 的物理体验」和「你的大模型」的方案。代价是一次性的工程投入 + 放弃官方云便利。</p>
+</div>
+
+<h2>八、使用建议：别让工具站错位置</h2>
+
+<div class="card verdict">
+  <p style="margin-top:0" class="big"><strong>核心建议：别把 Whisplay 当「语音助手」用，把它当「你的 Agent 的物理入口」用。</strong></p>
+  <p style="margin-bottom:0;color:var(--tx2)">它打不过 rig-puppy 的地方（实时语音对话、动作反馈），是芯片路线和产品化程度决定的，硬碰必然吃亏。但它有 rig-puppy 永远没有的东西：<strong>能跑任意代码的 Linux + 一块屏 + 一个按键</strong>。这是「agent 的桌面终端」，不是「机器人」。</p>
+</div>
+
+<table>
+  <thead><tr><th>你的目标</th><th>推荐路线</th><th>理由</th></tr></thead>
+  <tbody>
+    <tr><td>要一个会动、有情绪的桌宠</td><td><span class="tag t-cy">ESP32</span> rig-puppy</td><td>舵机 + 芯片级唤醒 + 长连接流式，体验天花板最高</td></tr>
+    <tr><td>要一个跑我自己的 Agent 的设备</td><td><span class="tag t-am">树莓派</span> Whisplay</td><td>Linux 全生态，改 .env 就换模型，能装任意框架</td></tr>
+    <tr><td>既要动作又要自己的模型</td><td><span class="tag t-pu">混合</span> ESP32 身体 + 自建后端</td><td>刷开源固件，后端接 OpenAI 兼容接口</td></tr>
+    <tr><td>要本地离线推理</td><td><span class="tag t-am">Pi 5 + AI HAT</span></td><td>Zero 级硬件跑不动本地模型，需要 NPU</td></tr>
+    <tr><td>要低功耗电池常开</td><td><span class="tag t-cy">ESP32</span></td><td>深睡 µA 级，随时断电无损</td></tr>
+    <tr><td>要当家庭信息中枢</td><td><span class="tag t-am">树莓派</span></td><td>可常开跑服务、定时任务、局域网调度</td></tr>
+  </tbody>
+</table>
+
+<h3>给现有设备的三条具体动作</h3>
+<ol>
+  <li><strong>rig-puppy</strong>：先用官方固件把体验跑顺，确认「好用」的基准线在哪里；再决定是否刷开源固件接自己的模型。别一上手就动固件——体验基准线是检验改造是否成功的标尺。</li>
+  <li><strong>Whisplay</strong>：重新定位。把「按键 → 录音 → 云 → 播放」这条长链路的依赖降下来，改成「按键 → 触发我本地的 Agent → 屏幕显示结果卡片 + 语音播报」。链路短、可控、失败率高的问题自然缓解。</li>
+  <li><strong>架构层面</strong>：让家里常开的机器（Mac mini）当大脑，跑 Agent 服务；ESP32 设备当身体，Pi 设备当屏幕终端。三者用局域网连起来，延迟和稳定性都会好转——把跨公网的往返，换成局域网内的调用。</li>
+</ol>
+
+<h2>九、未来扩展：三条路线各自能走多远</h2>
+
+<h3>ESP32 路线</h3>
+<ul>
+  <li><strong>芯片升级</strong>：ESP32-P4 开始进入视野——双核 RISC-V + MIPI 摄像头接口，为「视觉 + 运动」一体化准备。</li>
+  <li><strong>协议标准化</strong>：设备端 MCP 已成事实标准。设备把能力注册成工具，云端 Agent 调用——<span class="q">机器人正在变成「能上网的工具容器」</span>。</li>
+  <li><strong>局限</strong>：仍只有 2.4G Wi-Fi，内存是硬天花板，复杂多模态处理必须上云。</li>
+</ul>
+
+<h3>树莓派路线</h3>
+<ul>
+  <li><strong>算力跳跃</strong>：Pi 5 + AI HAT+2（Hailo-10H）可跑本地 Whisper / LLM / VLM，把延迟和隐私问题一次解决。</li>
+  <li><strong>模块化</strong>：CM5 形态已被厂商用于更高级的机器人产品，说明「Pi 做大脑」这条路是被产业验证的。</li>
+  <li><strong>局限</strong>：成本、功耗、启动时间、实时性——四个问题都不会自己消失。</li>
+</ul>
+
+<h3>混合架构（最可能的终局）</h3>
+<div class="card">
+  <p style="margin-top:0">真正的赢家不是某一块板子，而是分工：</p>
+  <ul style="margin-bottom:0">
+    <li><strong>身体层</strong>：ESP32 承担传感器、执行器、唤醒词、音频流——负责确定性。</li>
+    <li><strong>大脑层</strong>：常开主机（Pi 5 / Mac mini / 云端）承担 ASR、LLM、TTS、记忆、工具编排——负责通用性。</li>
+    <li><strong>接口层</strong>：MCP / WebSocket 把两者接起来；换模型只是改后端配置，设备端零改动。</li>
+  </ul>
+</div>
+<p>这解释了为什么 rig-puppy 的架构方向是对的：它把「身体」做扎实，把「脑子」放在云上可替换。而你手上的 Whisplay，天然就是「大脑层」或「终端层」的候选。</p>
+
+<h2>十、商业视角：这块板子背后是什么生意</h2>
+
+<div class="card tight">
+  <p style="margin-top:0">选芯片这件事，在商业上等价于「你靠什么赚钱」：</p>
+  <ul>
+    <li><strong>ESP32 路线卖的是「闭环体验」</strong>：硬件便宜（¥15 级 BOM），利润在云、在 App、在订阅、在人格养成。设备是入口，越用越离不开。这也是为什么官方固件不肯开放模型——模型就是商业模式本身。</li>
+    <li><strong>树莓派路线卖的是「开放性」</strong>：板子本身有溢价（¥100+），但没有云收入。用户买的是自由，厂商赚的是硬件和配件。</li>
+    <li><strong>开源的悖论</strong>：厂商把固件开源（Apache 2.0）换取社区创造力和快速迭代，代价是用户随时可以「叛逃」到自建后端。这是有意的赌注——把长尾创新让给社区，自己守住规模化产品体验。</li>
+  </ul>
+  <p style="margin-bottom:0" style="color:var(--tx2)"><strong>对你的启示：</strong>桌面机器人这个赛道的价值不在硬件毛利，在「Agent 与硬件的连接层」。谁能定义设备能力被 Agent 调用的协议（MCP 这类），谁就掌握了下游。</p>
+</div>
+
+<hr>
+
+<h2>附：一页速查</h2>
+<table>
+  <thead><tr><th>问题</th><th>答案</th></tr></thead>
+  <tbody>
+    <tr><td>ESP32 和树莓派谁强？</td><td>算力 Pi 强；物理世界控制 ESP32 强。不同物种。</td></tr>
+    <tr><td>为什么 rig-puppy 比 Whisplay 好用？</td><td>芯片级唤醒 + 单条长连接流式 vs 多次同步跨网调用；且它是成品，Whisplay 是套件。</td></tr>
+    <tr><td>rig-puppy 能换成自己的 ChatGPT 吗？</td><td>能。刷开源固件 + 自建后端（支持任意 OpenAI 兼容接口），但会失去官方云生态。</td></tr>
+    <tr><td>Whisplay 能接自己的 Agent 吗？</td><td>能，且最容易。改 .env 换模型，装任意框架，当物理终端用。</td></tr>
+    <tr><td>最佳组合是什么？</td><td>ESP32 当身体 + 常开主机当大脑 + MCP/WebSocket 连接，换模型只改后端。</td></tr>
+  </tbody>
+</table>
+
+<footer>
+  数据来源：RIG-Puppy 官方 Wiki 与开源固件仓库 <code>rig_omni</code>（Apache 2.0）、PiSugar Whisplay HAT 与 <code>whisplay-ai-chatbot</code> 仓库（GPL-3.0）、乐鑫 ESP-IDF 官方文档、<code>xiaozhi-esp32-server</code> 开源项目文档、社区实测记录。<br>
+  芯片运行功耗与延迟数据为量级参考，实际随固件、外设与网络条件变化。改造固件前请确认保修与官方支持条款。<br>
+  © 2026 · 技术选型笔记
+</footer>
+
+</div>
+</body>
+</html>
