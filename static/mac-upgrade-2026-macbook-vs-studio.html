@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mac 升级决策：MacBook Pro vs Mac Studio vs Mac mini（2026 本地大模型视角）</title>
+  <title>本地 AI 硬件决策 2026：Mac / DGX Spark / 算力舱，以及能跑什么模型</title>
 <style>
 :root{
   --bg:#0f1117; --card:#1a1d28; --card2:#20242f; --border:#2a2d3a;
@@ -90,8 +90,8 @@ footer{margin-top:56px;padding-top:24px;border-top:1px solid var(--border);
 
 <div class="hero">
   <h1>Mac 升级决策：MacBook Pro 能不能替代 Mac Studio？</h1>
-  <div class="subtitle">从「OpenClaw 常开网关 + 本地大模型」两个真实用途出发，把 MacBook Pro / Mac Studio / Mac mini 三条路算清楚，再补上第四条：懒猫 AI 算力舱（英伟达 CUDA 阵营）</div>
-  <div class="meta">2026-09-11 · 基于 M5 世代实机参数与实测推理数据 · 附四条路线对比表与「适合买 / 不适合买」清单</div>
+  <div class="subtitle">从「OpenClaw 常开网关 + 本地大模型」两个真实用途出发，把五条路线算清楚：Mac 三档、懒猫 AI 算力舱、NVIDIA DGX Spark。并附一台 Spark 的完整模型能力清单——它能跑什么、跑多快、哪些是营销口径</div>
+  <div class="meta">2026-09-15 更新 · 新增第九、十章（Spark 模型能力清单 / Qwen3.8-27B 与 DeepSeek V4 门槛）· 基于实测推理数据与官方 benchmark 交叉核对</div>
 </div>
 
 <div class="container">
@@ -558,15 +558,270 @@ footer{margin-top:56px;padding-top:24px;border-top:1px solid var(--border);
   </div>
   <p><strong>这张表的结论：</strong>Spark 与懒猫算力舱的<strong>推理速度是同一档</strong>（273 GB/s 决定的），价格也接近；Spark 真正多出来的是 <strong>CUDA 官方栈、NVFP4 原生、200G 组网、1 PFLOP FP4 算力</strong> —— 这些优势体现在<strong>微调和原型</strong>上，不体现在「问一句话等多久」上。而苹果那台赢在带宽，输在生态和形态。</p>
 
-  <h2>九、一页纸总结</h2>
+  <h2>九、一台 DGX Spark 到底能跑什么模型</h2>
+
+  <p>第八章讲了 Spark 值不值得买。这一章回答更具体的问题：<strong>买回来，它能跑什么？</strong>全部答案由两条算式推出，先记住它们。</p>
+
+  <div class="callout info">
+    <span class="ct">① 容量账 —— 决定「装不装得下」</span>
+    <p style="text-align:center;font-size:1.05em;color:var(--accent4);margin:10px 0"><strong>权重占用 = 总参数量 × 量化字节数</strong></p>
+    <p>可用预算 ≈ 128GB − KV Cache − 激活/缓冲 − 系统开销 ≈ <strong>100–115GB</strong>（实用上限）</p>
+    <p style="margin-top:10px"><strong>⚠️ MoE 模型必须按「总参数」算容量，不是激活参数。</strong>这是最常见的误判：一个 235B-A22B 的模型，仍要占 235B 的容量，220 亿激活只决定算得快不快，不决定占多大。</p>
+  </div>
+
+  <div class="callout info">
+    <span class="ct">② 速度账 —— 决定「跑得多快」</span>
+    <p style="text-align:center;font-size:1.05em;color:var(--accent4);margin:10px 0"><strong>decode 上限 ≈ 273 GB/s ÷ 权重占用(GB)</strong></p>
+    <p>实际速度 ≈ 上限 × 40–70%（kernel 效率）</p>
+  </div>
+
+  <h3>1. 硬边界（官方口径）</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>项目</th><th>数值</th></tr></thead>
+      <tbody>
+        <tr><td>内存</td><td>128GB LPDDR5X，<strong>273 GB/s</strong>，无升级路径</td></tr>
+        <tr><td>官方模型支持</td><td><strong>最高 200B 参数</strong>（单机）</td></tr>
+        <tr><td>双机（ConnectX-7）</td><td>405B</td></tr>
+        <tr><td>单机微调</td><td>70B（QLoRA）</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p><strong>这张表里最重要的一行是「273 GB/s」。</strong>它不到 RTX 5090（约 1,792）的 1/6，不到 M3 Ultra（819）的 1/3。Spark 的全部优缺点都从这一行长出来。</p>
+
+  <h3>2. 按公式推演的理论天花板</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>模型</th><th>量化</th><th>权重</th><th>理论上限</th><th>实测区间</th></tr></thead>
+      <tbody>
+        <tr><td>8B</td><td>Q4</td><td class="num">5 GB</td><td class="num">55 tok/s</td><td class="num">35–45</td></tr>
+        <tr><td>27B dense</td><td>Q4</td><td class="num">17 GB</td><td class="num">16 tok/s</td><td class="num">8–14</td></tr>
+        <tr><td>35B MoE (A3B)</td><td>FP8</td><td class="num">~35 GB</td><td class="num">7.8</td><td class="num yes">35–102</td></tr>
+        <tr><td>70B dense</td><td>FP8</td><td class="num">70 GB</td><td class="num">3.9</td><td class="num no">2.7–5</td></tr>
+        <tr><td>120B MoE</td><td>NVFP4</td><td class="num">~60 GB</td><td class="num">4.6</td><td class="num mid">18–45</td></tr>
+        <tr><td>200B MoE</td><td>NVFP4</td><td class="num">~100 GB</td><td class="num">2.7</td><td class="num mid">3–8</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="font-size:.82em;color:var(--text-dim)">注意 35B MoE 与 120B MoE 两行的<strong>实测远高于理论上限</strong> —— 理论公式按「每 token 读取全部权重」估算，MoE 只读激活部分，所以实际快得多。这正是下面第 5 节要讲的核心。</p>
+
+  <h3>3. 分四档的模型清单（带实测数据）</h3>
+
+  <h4>🟢 第一档：流畅交互（&gt;40 tok/s）</h4>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>模型</th><th>配置</th><th>实测</th></tr></thead>
+      <tbody>
+        <tr><td><strong>GPT-OSS-20B</strong></td><td>MXFP4 / llama.cpp</td><td class="num yes">282 tok/s（官方口径）</td></tr>
+        <tr><td><strong>Qwen3.5 35B-A3B</strong></td><td>FP8 / vLLM</td><td class="num yes">35.75–102 tok/s</td></tr>
+        <tr><td>DeepSeek-R1 14B</td><td>Q4</td><td class="num yes">80+ tok/s</td></tr>
+        <tr><td>Qwen3 14B</td><td>NVFP4 / TRT-LLM</td><td class="num">prefill 5,929</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>社区在单台 GB10 上把 Qwen3.5-35B-A3B 推到 <strong>102 稳定 tok/s</strong>。这是 Spark 真正的甜点区。</p>
+
+  <h4>🟡 第二档：可用（15–40 tok/s）</h4>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>模型</th><th>配置</th><th>实测</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Qwen3.8-27B</strong></td><td>NVFP4 + DSpark 投机解码</td><td class="num">Math 42–47 / Code 22–41 / 散文 12–18</td></tr>
+        <tr><td><strong>Qwen3 Coder Next 80B</strong></td><td>FP8 / vLLM</td><td class="num">28.95 tok/s（prefill 2,390）</td></tr>
+        <tr><td>Qwen3-80B / Llama 3.3 70B</td><td>跑完整 RAG 栈</td><td class="num">~45 tok/s</td></tr>
+        <tr><td><strong>Nemotron 3 Super 120B</strong></td><td>NVFP4 / TRT-LLM，权重约 60GB</td><td class="num">18 tok/s（prefill 2,855）</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>🟠 第三档：原型级（5–15 tok/s，别用于交互）</h4>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>模型</th><th>配置</th><th>实测</th></tr></thead>
+      <tbody>
+        <tr><td>Llama 3.1 70B</td><td><strong>FP8</strong></td><td class="num no">2.7 tok/s（prefill 803）· LMSYS 权威测试</td></tr>
+        <tr><td>Qwen3 235B</td><td>需<strong>双机</strong>，显存占用 &gt;120GB</td><td class="num mid">双机 11.73 tok/s</td></tr>
+        <tr><td>120B+ 各类</td><td>—</td><td>官方建议：<strong>用于原型，不是生产</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>🔴 第四档：装不下 / 别想</h4>
+  <ul>
+    <li><strong>Llama 3.3 70B Q4_K_M</strong>：需 48.8GB，官方标注 <strong>「Tight fit」</strong>（Q8_0 反而可行，因架构差异）</li>
+    <li><strong>Qwen3.5 397B-A17B</strong>：单机不够，需 4 台（512GB）</li>
+    <li><strong>Kimi K2（600GB）</strong>：需 <strong>8 台</strong> Spark（1TB）</li>
+    <li><strong>DeepSeek V4-Pro（1.0–1.4TB）</strong>：8×B200，与 Spark 无关</li>
+  </ul>
+
+  <h3>4. ⚠️ 官方基准表里的一个坑</h3>
+  <p>把 NVIDIA 官方技术博客表 4 拉出来交叉核对时，发现<strong>内部数据自相矛盾</strong>：</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>模型</th><th>精度</th><th>官方标称 decode</th></tr></thead>
+      <tbody>
+        <tr><td>Llama 3.1 <strong>8B</strong></td><td>NVFP4</td><td class="num no">38.65 tok/s</td></tr>
+        <tr><td>GPT-OSS-<strong>20B</strong></td><td>MXFP4</td><td class="num">282.74 tok/s</td></tr>
+        <tr><td>GPT-OSS-<strong>120B</strong></td><td>MXFP4</td><td class="num no">755.37 tok/s ← 比 20B 还快 2.7 倍？</td></tr>
+        <tr><td>Qwen3 <strong>235B</strong>（双机）</td><td>NVFP4</td><td class="num no">表格 311.73 / 正文 11.73 ← 差 26 倍</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout bad">
+    <span class="ct">8B 不应该比 20B 慢 7 倍</span>
+    <p>唯一合理解释是：这张表的「token 生成吞吐量」<strong>混用了单流（BS=1）和聚合吞吐两种口径</strong>，且未统一标注。</p>
+    <p><strong>结论：NVIDIA 官方基准表不能直接横向比。</strong>采购决策必须落到<strong>具体模型 + 具体框架 + 具体量化 + 具体 batch</strong>上自己测。这也解释了为什么社区数据差异能到 10 倍以上 —— 测法不同，结论就不同。</p>
+  </div>
+
+  <h3>5. 最反直觉的一点：MoE 逆袭</h3>
+  <p>这是全章最重要的发现：</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th></th><th>Llama 3.1 70B（dense, FP8）</th><th>GPT-OSS 120B（MoE, MXFP4）</th></tr></thead>
+      <tbody>
+        <tr><td>总参数</td><td class="num">70B</td><td class="num">120B</td></tr>
+        <tr><td>权重占用</td><td class="num">~70GB</td><td class="num">~60GB</td></tr>
+        <tr><td><strong>实测 decode</strong></td><td class="num no"><strong>2.7 tok/s</strong></td><td class="num yes"><strong>~18–45 tok/s</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout good">
+    <span class="ct">参数多 71% 的模型，跑得快 7–16 倍</span>
+    <p>原因：MoE 每个 token 只激活部分专家，<strong>实际读取的权重少得多</strong>；而 dense 模型每个 token 都要把全部权重读一遍。</p>
+    <p><strong>所以在 Spark 上选模型的正确姿势是：优先 MoE，避开大 dense。</strong>这跟「买显存卡」的直觉完全相反。</p>
+  </div>
+
+  <h3>6. 微调与图像生成（Spark 的另一半价值）</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>任务</th><th>模型</th><th>实测</th></tr></thead>
+      <tbody>
+        <tr><td>全量微调</td><td>Llama 3.2 3B</td><td class="num">82,739 tok/s</td></tr>
+        <tr><td>LoRA</td><td>Llama 3.1 8B</td><td class="num">53,657 tok/s</td></tr>
+        <tr><td>QLoRA</td><td>Llama 3.3 70B</td><td class="num">5,079 tok/s</td></tr>
+        <tr><td>文生图</td><td>Flux.1 12B（FP4）</td><td class="num">2.6 秒 / 张 1K</td></tr>
+        <tr><td>文生图</td><td>SDXL 1.0（BF16）</td><td class="num">7 张/分钟 1K</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>官方原话：这些微调负载<strong>均无法在 32GB 消费级 GPU 上运行</strong>。这才是 Spark 相对消费卡的真实差异。</p>
+
+  <h3>7. 一句话判断</h3>
+  <div class="verdict">
+    <h3>Spark 卖的不是速度，是「单机能装下」</h3>
+    <p><strong>该买：</strong>要跑 70B–200B 模型且不想上云、不想组多卡；跑 MoE 大模型（GPT-OSS-120B、Qwen3.5-122B、Nemotron 120B）——这里它无可替代；要 CUDA 做微调；长上下文 Agent（prefill 极快，吃长 prompt 很爽）。</p>
+    <p style="margin-top:10px"><strong>不该买：</strong>主力模型在 8B–30B → RTX 5090 快 4 倍还便宜；想要 token 生成快 → Mac Studio 带宽 3 倍；想做训练 → 这不是训练机器；想跑 DeepSeek V4-Pro / Kimi K2 → 要 8 台起步，不如买 API。</p>
+  </div>
+</section>
+
+<section>
+  <h2>十、2026 年真正改变选型的变量：小模型逆袭</h2>
+
+  <p>如果只看第八章的结论，你会以为「本地跑大模型 = 必须买 128GB 以上的贵机器」。<strong>但 2026 年 8–9 月发生的事，把这个前提推翻了。</strong></p>
+
+  <h3>1. Qwen3.8-27B：16GB 显存，逼近 284B MoE 的能力</h3>
+  <p>2026 年 8 月 14 日阿里开源，27B <strong>稠密</strong>多模态模型，Apache 2.0。原生支持图像与视频，原生上下文 262,144 tokens（YaRN 可外推约 1M）。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>基准</th><th>Qwen3.8-27B</th><th>DeepSeek V4-Flash 0731（284B MoE）</th></tr></thead>
+      <tbody>
+        <tr><td>参数</td><td class="num">27B dense</td><td class="num">284B（13B 激活）</td></tr>
+        <tr><td>Terminal Bench 2.1</td><td class="num">73.0</td><td class="num">82.7</td></tr>
+        <tr><td>SWE-bench Pro</td><td class="num">61.7</td><td class="num">—</td></tr>
+        <tr><td>OSWorld</td><td class="num">84.3</td><td class="num">—</td></tr>
+        <tr><td>LiveCodeBench v6</td><td class="num">90.3</td><td class="num">—</td></tr>
+        <tr><td><strong>跑起来需要</strong></td><td class="num yes"><strong>16–18GB</strong></td><td class="num no"><strong>103–162GB</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>海外社区的评价是「这是开源 AI 的 DeepSeek 时刻」。<strong>27B 打 284B，只差 10 分，而硬件门槛差了约 8 倍。</strong></p>
+
+  <h4>它到底需要什么硬件</h4>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>精度</th><th>文件大小</th><th>实际需要</th><th>建议硬件</th></tr></thead>
+      <tbody>
+        <tr><td>BF16 原生</td><td class="num">54.7 GB</td><td>64GB 以下别硬上</td><td>—</td></tr>
+        <tr><td>官方 FP8</td><td class="num">30.9 GB</td><td>≥48GB NVIDIA 显存</td><td>RTX 6000 / A100</td></tr>
+        <tr><td><strong>4-bit GGUF（推荐）</strong></td><td class="num">16.1–17.9 GB</td><td class="num yes">24GB 显存 或 32GB 统一内存</td><td>RTX 3090/4090</td></tr>
+        <tr><td>3-bit GGUF</td><td class="num">11.9–13.8 GB</td><td>16GB 显存能试</td><td>质量损失明显</td></tr>
+        <tr><td>社区压缩版</td><td class="num">~9.8 GB</td><td>12GB 卡（3060）</td><td>短题表现接近大版本</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout warn">
+    <span class="ct">⚠️ 文件大小 ≠ 整机需求（真实实测，RTX PRO 4500 32GB）</span>
+    <p>Q4 档权重 <strong>17.92GB</strong> + 视觉投影 mmproj <strong>0.93GB</strong> + 200K 上下文 4bit KV 缓冲 <strong>6.1GB</strong> = <strong>总计约 24.9GB / 32GB</strong>。</p>
+    <p>速度：MTP 投机解码下短负载 <strong>67–68 tok/s</strong>；100K 预填 + 5800 token 长生成 246 秒零崩溃。</p>
+    <p><strong>200K 上下文三板斧：</strong>KV cache 全 4bit（<code>--cache-type-k/v q4_0</code>）+ 全量 offload（<code>-ngl 99</code>）+ <code>--no-mmap</code>。换 fp8/fp16 直接放不下。</p>
+  </div>
+
+  <h4>五个反直觉的坑</h4>
+  <ul>
+    <li><strong>vLLM 跑这个 dense 27B 只有约 20 tok/s，llama.cpp 才是正解</strong> —— 跟 MoE 模型的经验完全相反。</li>
+    <li><strong>Q5 档 + MTP 在 Blackwell sm_120 上必崩</strong>（decode kernel 超驱动看门狗）。Q5 无 MTP 仅 24.5 tok/s —— 所以 <strong>Q4 + MTP 反而比 Q5 更快更好</strong>。</li>
+    <li><strong>上下文别一上来开满 262K。</strong>先 8K/16K/32K 跑稳再加。</li>
+    <li><strong>8GB 显存能跑但没意义</strong>：RTX 2070 上 IQ4_XS 跑复杂 Agent 只有 <strong>1 tok/s</strong>；16GB 以上才流畅。</li>
+    <li><strong>别用 FP8</strong> —— 社区实测 FP8 激活反而损害精度，不如 Q4。</li>
+  </ul>
+
+  <h3>2. DeepSeek 这一侧：V4.1 本地基本无望</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>模型</th><th>规模</th><th>量化后权重</th><th>本地可行性</th></tr></thead>
+      <tbody>
+        <tr><td>DeepSeek <strong>V4.1 Flash</strong></td><td>552B MoE（新 Causal-Encoder-Decoder，输入激活 8B / 输出 16B）</td><td class="num">—</td><td class="no">官方口径需 <strong>2k 卡 GPU</strong>，个人无望</td></tr>
+        <tr><td>DeepSeek <strong>V4-Flash</strong></td><td>284B / 13B 激活</td><td class="num">103–162 GB（IQ3 → Q8）</td><td class="mid">多台 Spark 或 512GB Mac 才够</td></tr>
+        <tr><td>DeepSeek <strong>V4-Pro</strong></td><td>1.6T / 49B 激活</td><td class="num">1.0–1.4 TB</td><td class="no">8×B200 或 16×H200 起步</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout bad">
+    <span class="ct">DeepSeek 官方发布会文档原话</span>
+    <p>「如果您有<strong>大规模部署</strong>的需求且具备相应的资源（<strong>2k 卡 GPU、有存储集群</strong>），欢迎与我们联系。」</p>
+    <p>连英伟达自己都不敢说这模型能塞进 3 台 Spark。<strong>官方划的线是 2000 张卡。</strong>此外 V4.1 Pro 至今未上线，2026 年 9 月 14 日起 V4 Pro 请求已全部路由至 V4.1 Flash。</p>
+  </div>
+
+  <h3>3. 这一章改变了什么结论</h3>
+  <div class="verdict">
+    <span class="tag">修正</span>
+    <h3>「要跑本地大模型就必须上万元级机器」是错的</h3>
+    <p>修正后的门槛表 —— 先定目标模型，再倒推内存：</p>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>你的目标</th><th>最低硬件</th><th>预算量级</th></tr></thead>
+      <tbody>
+        <tr><td>7–8B 尝鲜</td><td>现有 Mac / 任何 8GB 显卡</td><td class="num">¥0</td></tr>
+        <tr><td><strong>27B 级（Qwen3.8-27B Q4）</strong></td><td><strong>24GB 显卡 或 32GB 统一内存</strong></td><td class="num yes">¥1.5–2 万</td></tr>
+        <tr><td>27B + 200K 长上下文 + MTP</td><td>32GB 显存（RTX 5090 / PRO 4500）</td><td class="num">¥3–4 万</td></tr>
+        <tr><td>70B 级</td><td>128GB 档（Mac Studio / Spark）</td><td class="num">¥3.4–5 万</td></tr>
+        <tr><td>120B–200B MoE</td><td>DGX Spark 一台</td><td class="num">$4,699</td></tr>
+        <tr><td>284B+ / DeepSeek V4</td><td>多机集群或直接买 API</td><td class="num no">¥10 万起 / 不划算</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout good">
+    <span class="ct">这才是 2026 年最有意思的地方</span>
+    <p><strong>智能在往小模型跑，不是往大模型跑。</strong>阿里用 27B dense 逼近 284B MoE，说明<strong>架构效率的收益已经超过参数堆叠</strong> —— 官方把 Qwen3.8-27B 适配到了高端手机甚至 64 核 RISC-V 芯片上（玄铁 C950 跑出 30+ tok/s、TTFT 1.9 秒）。</p>
+    <p style="margin-top:10px">对采购决策的含义：<strong>别再按「越大越好」配硬件。</strong>先确定目标模型，再倒推内存，最后才看芯片。</p>
+  </div>
+</section>
+
+<section>
+  <h2>十一、一页纸总结</h2>
   <div class="verdict">
     <h3>一句话</h3>
     <p><strong>MacBook Pro 不是 Mac Studio 的替代品，它是另一个用途的工具。</strong>你要判断的不是「哪个更强」，而是「你要不要一台能搬走的机器」。</p>
-    <h3 style="margin-top:16px">四个数字记住就够</h3>
-    <p>带宽：M5 Max <strong>614 GB/s</strong>，M5 Ultra <strong>1,200 GB/s</strong>（2 倍）</p>
+    <h3 style="margin-top:16px">六个数字记住就够</h3>
+    <p>带宽：M5 Max <strong>614 GB/s</strong>，M5 Ultra <strong>1,200 GB/s</strong>（2 倍）；DGX Spark 与懒猫算力舱同为 <strong>273 GB/s</strong></p>
     <p>内存上限：M5 Max <strong>128GB</strong>，M5 Ultra <strong>512GB</strong>（4 倍）</p>
     <p>解码公式：<strong>tok/s ≈ 带宽 ÷ 模型大小</strong>，70B Q4 ≈ 42GB</p>
-    <p>懒猫算力舱：<strong>273 GB/s</strong>、128GB 顶配 <strong>¥29,899 起</strong>、微服 <strong>¥4,999 起</strong> —— 卖容量不卖带宽</p>
+    <p>懒猫算力舱：128GB 顶配 <strong>¥29,899 起</strong>、微服 <strong>¥4,999 起</strong> —— 卖容量不卖带宽</p>
+    <p><strong>Qwen3.8-27B</strong>：仅需 <strong>16–18GB</strong>，却能逼近 284B 的 DeepSeek V4-Flash —— 这是今年门槛下降最快的一条线</p>
+    <p><strong>DeepSeek V4.1 Flash</strong>：552B，官方口径需 <strong>2k 卡</strong> —— 个人本地路线到此为止</p>
     <h3 style="margin-top:16px">最优解</h3>
     <p>别换机器，加一台。<strong>mini 留守当网关，MacBook Pro M5 Max 128GB 当移动主力 + 按需跑模型。</strong>两台分工，预算花在刀刃上，稳定性还更好。</p>
     <p style="margin-top:10px"><strong>懒猫算力舱先不买。</strong>它不是 Mac 的替代品，是 Mac 做不到那部分的补丁；等「批量多模态处理」或「数据不能出门」变成常态，再花那 ¥3.5 万。</p>
@@ -578,14 +833,22 @@ footer{margin-top:56px;padding-top:24px;border-top:1px solid var(--border);
     <p><strong>要装得下、要 CUDA → DGX Spark 或懒猫算力舱。</strong>两者带宽同为 273 GB/s、价格同档（约 ¥3.4–3.5 万）。做开发 / 微调 / 200B 原型选 Spark；做团队共享 + 批量多模态 + 数据不出门选懒猫。</p>
     <p><strong>要省钱 → 云端 API。</strong>每月 200 元就能把现有两台机器用下去；上面任何一台硬件的钱，都够付十年以上。</p>
     <p style="margin-top:10px"><strong>回到你的真实处境：</strong>Mac mini M4 16GB 当网关负载极轻，再战 3–5 年没问题；MacBook Air M1 16GB 无风扇，本来就不适合长期推理。两台都是 16GB 硬顶 —— <strong>真正的短板是内存，不是芯片</strong>。</p>
-    <p style="margin-top:10px"><strong>所以「现在该不该为本地大模型花钱」的答案是：不该。</strong>唯一值得掏钱的前提，是哪天真出现「数据绝对不能出门」或「每天几百上千次批量多模态处理」这类硬需求；到那时一次性上 128GB 档的机器。在那之前，本地模型是尝鲜，云端模型才是生产力。</p>
+    <h3 style="margin-top:16px">修正后的最终结论（2026-09-15）</h3>
+    <p><strong>先问自己一个问题：你到底要跑哪个模型？</strong>第八章之前的结论是「不该为本地大模型花钱」——那个结论建立在「要跑就得买 128GB 贵机器」这个错误前提上。<strong>第十章已经把它推翻了。</strong></p>
+    <p style="margin-top:10px"><strong>修正一：门槛比想象中低得多。</strong>想做本地 Agent / 代码助手，<strong>Qwen3.8-27B 只要 16–18GB</strong>，一台 <strong>¥1.5–2 万</strong>的 24GB 显卡机或 32GB 统一内存机器就够了，不用碰 ¥3.5 万以上的设备。能力对标的是 284B 的 DeepSeek V4-Flash（Terminal Bench 73.0 vs 82.7）。</p>
+    <p style="margin-top:10px"><strong>修正二：真要上 128GB，触发条件仍然只有三条。</strong>① 目标模型是 <strong>70B dense 或 120B+ MoE</strong>；② 数据绝对不能出门（合规 / 客户资料 / 投研底稿）；③ 每天成批的多模态处理（生图、转写、翻译、检索）。<strong>三条都不成立，那 ¥3.5 万就先别花。</strong></p>
+    <p style="margin-top:10px"><strong>修正三：DeepSeek V4.1 这条线本地直接放弃。</strong>官方白纸黑字写着大规模部署需要「2k 卡 GPU」，V4-Pro 要 1.0–1.4TB 权重。这不是钱的问题，是物理问题。<strong>这类模型的正确定位是买 API，不是自建。</strong></p>
+    <p style="margin-top:10px"><strong>回到你的真实处境：</strong>Mac mini M4 16GB 当网关负载极轻，再战 3–5 年没问题；MacBook Air M1 16GB 无风扇，本来就不适合长期推理。两台都是 16GB 硬顶 —— <strong>真正的短板是内存，不是芯片</strong>。而按照新的门槛表，你缺的那块能力和它需要的钱，都比三个月前的判断低了一个档。</p>
   </div>
 </section>
 
 <footer>
-  <p>Mac 参数与价格来自 Apple 官方新闻稿及第三方实测汇总（截至 2026-09-11）。美元价为官方起价，国行价格请以 apple.com.cn 为准。</p>
+  <p>Mac 参数与价格来自 Apple 官方新闻稿及第三方实测汇总（截至 2026-09-15）。美元价为官方起价，国行价格请以 apple.com.cn 为准。</p>
   <p>推理速度为第三方社区实测数据汇总，受量化方式、上下文长度、框架版本影响，仅作量级参考。</p>
-  <p>NVIDIA DGX Spark 规格与价格来自 NVIDIA 官方规格页及 StorageReview、IntuitionLabs、Level1Techs 第三方评测（截至 2026-09-11）；2026 年 2 月官方 MSRP 由 $3,999 上调至 $4,699，OEM 版本定价独立。</p>
+  <p>NVIDIA DGX Spark 规格与价格来自 NVIDIA 官方规格页及 StorageReview、IntuitionLabs、Level1Techs 第三方评测（截至 2026-09-15）；2026 年 2 月官方 MSRP 由 $3,999 上调至 $4,699，OEM 版本定价独立。</p>
+  <p>第九章模型能力数据来自：NVIDIA 官方技术博客表 4 与 DGX Spark 硬件规格页（developer.nvidia.cn / docs.nvidia.com）、LMSYS 深度评测（lmsys.org, 2025-10-13）、NVIDIA 开发者论坛 GB10 板块社区实测、Reddit r/LocalLLaMA、MAQ 引用的 NVIDIA 官方测试口径（128K 输入 / 1K 输出 / BS=1）。<strong>官方基准表存在单流与聚合口径混用问题，正文第 4 节已标出，请勿直接横向引用。</strong></p>
+  <p>第十章数据来自：阿里云 Qwen 官方发布（2026-08-14 Qwen3.8-27B 开源）、QwenLM/Qwen3.8 GitHub、DataLearnerAI 量化选型指南、Unsloth 官方量化文档、抡锤者（lcz.me）双服务实测（2026-08-20）、DeepSeek 官方 API 文档（2026-09-10 V4.1 Flash 发布公告）、百度百科 DeepSeek-V4.1 词条、腾讯云开发者社区《DeepSeek V4 满血版一体机》配置测算、SGLang 官方部署推荐配置。</p>
+  <p>本章所有速度数据受量化方式、上下文长度、推理框架版本、batch size 影响可达数倍差异，仅作量级参考，采购前请按自己的目标模型自行实测。</p>
   <p>懒猫算力舱资料与自述数据来自：① 公众号《懒猫 AI 算力舱有啥用？》（mp.weixin.qq.com/s/l4cuLv-HbqicGwLGdlChcw）；② 公众号《懒猫 AI 算力舱 22 个应用场景》（mp.weixin.qq.com/s/6wLC17339Y9BT-XJPbWsfQ）；③ 懒猫官网产品页（lazycat.cloud/lcmd、lazycat.cloud/ai-pod）。价格为官方公开标价，宣传口径的折扣已在正文标注。</p>
 </footer>
 
