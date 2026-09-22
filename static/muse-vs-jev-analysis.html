@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>一周两个爆款：Muse 卖分发，Jev 卖每美元智能</title>
+<style>
+  :root{
+    --bg:#0a0c10; --card:#12151c; --line:#242a36;
+    --tx:#e6eaf2; --tx2:#9aa5b8; --tx3:#697487;
+    --blue:#4ea1ff; --green:#35d07f; --amber:#ffb340; --red:#ff5f6d; --purple:#a071ff;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--tx);
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    line-height:1.75;font-size:16px;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:820px;margin:0 auto;padding:56px 22px 80px}
+  .kicker{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--blue);font-weight:600;margin-bottom:14px}
+  h1{font-size:33px;line-height:1.3;margin:0 0 14px;letter-spacing:-.02em}
+  .sub{color:var(--tx2);font-size:16px;margin:0 0 28px}
+  .meta{color:var(--tx3);font-size:13px;border-top:1px solid var(--line);padding-top:14px;margin-bottom:40px}
+  h2{font-size:22px;margin:52px 0 16px;letter-spacing:-.01em}
+  h2 .num{color:var(--blue);font-variant-numeric:tabular-nums;margin-right:10px;font-weight:700}
+  h3{font-size:16.5px;margin:26px 0 8px}
+  p{margin:0 0 16px;color:#d3dae6}
+  .tldr{background:linear-gradient(180deg,#141a26,#11141b);border:1px solid var(--line);border-left:3px solid var(--blue);
+    border-radius:12px;padding:22px 24px;margin:0 0 8px}
+  .tldr ol{margin:0;padding-left:20px}
+  .tldr li{margin-bottom:12px;color:#dbe3ef}
+  .tldr li:last-child{margin-bottom:0}
+  .tldr b{color:#fff}
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:30px 0 8px}
+  .kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 14px}
+  .kpi .v{font-size:22px;font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+  .kpi .l{font-size:11.5px;color:var(--tx3);margin-top:4px;line-height:1.5}
+  .kpi.b .v{color:var(--blue)} .kpi.g .v{color:var(--green)} .kpi.a .v{color:var(--amber)} .kpi.p .v{color:var(--purple)}
+  table{width:100%;border-collapse:collapse;margin:20px 0;font-size:14px}
+  th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--tx3);font-weight:600;font-size:12px;letter-spacing:.04em;background:#0f1219}
+  .num-cell{font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+  .vs{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:22px 0}
+  .vsc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+  .vsc h4{margin:0 0 4px;font-size:17px}
+  .vsc .t{font-size:12px;color:var(--tx3);margin-bottom:12px}
+  .vsc ul{margin:0;padding-left:18px;font-size:13.8px;color:#c6d1e0}
+  .vsc li{margin-bottom:7px}
+  .vsc.a{border-top:3px solid var(--blue)} .vsc.b{border-top:3px solid var(--purple)}
+  .chart{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:22px;margin:22px 0}
+  .chart .ct{font-size:13px;color:var(--tx2);margin-bottom:18px}
+  .row{display:grid;grid-template-columns:126px 1fr;gap:12px;align-items:center;margin-bottom:9px;font-size:12.5px}
+  .row .name{color:var(--tx2);text-align:right}
+  .bars{display:flex;flex-direction:column;gap:3px}
+  .bar{height:14px;border-radius:3px;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;
+    font-size:10.5px;color:#0a0c10;font-weight:700;min-width:34px}
+  .bar.p{background:linear-gradient(90deg,#6f45c9,#a071ff)}
+  .bar.b{background:linear-gradient(90deg,#2f7fd6,#4ea1ff)}
+  .bar.g{background:linear-gradient(90deg,#1e9c63,#35d07f)}
+  .bar.x{background:#333c4c;color:#c8d2e2}
+  .legend{display:flex;gap:18px;font-size:12px;color:var(--tx3);margin-top:16px;padding-top:14px;border-top:1px solid var(--line);flex-wrap:wrap}
+  .dot{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:6px;vertical-align:middle}
+  .dcard{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:14px 0}
+  .dcard .h{font-weight:700;margin-bottom:6px;color:#fff;font-size:15px}
+  .dcard p{margin:0;font-size:14px;color:#becad9}
+  .tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:20px;margin-left:8px;vertical-align:1px;font-weight:600}
+  .tag.win{background:rgba(53,208,127,.14);color:var(--green);border:1px solid rgba(53,208,127,.3)}
+  .tag.lose{background:rgba(255,95,109,.14);color:var(--red);border:1px solid rgba(255,95,109,.3)}
+  .tag.mid{background:rgba(255,179,64,.14);color:var(--amber);border:1px solid rgba(255,179,64,.3)}
+  .tag.info{background:rgba(78,161,255,.14);color:var(--blue);border:1px solid rgba(78,161,255,.3)}
+  .warn{background:rgba(255,95,109,.06);border:1px solid rgba(255,95,109,.28);border-radius:12px;padding:18px 22px;margin:20px 0}
+  .warn .h{color:var(--red);font-weight:700;margin-bottom:10px;font-size:15px}
+  .warn ul{margin:0;padding-left:20px;font-size:14px;color:#d8dfea}
+  .warn li{margin-bottom:8px}
+  .good{background:rgba(53,208,127,.05);border:1px solid rgba(53,208,127,.25);border-radius:12px;padding:18px 22px;margin:20px 0}
+  .good .h{color:var(--green);font-weight:700;margin-bottom:10px;font-size:15px}
+  .good ul{margin:0;padding-left:20px;font-size:14px;color:#d8dfea}
+  .good li{margin-bottom:8px}
+  .final{background:linear-gradient(180deg,#16202e,#11141b);border:1px solid #2a3446;border-radius:12px;padding:24px;margin:24px 0}
+  .final p{color:#dde6f2}
+  .watch{list-style:none;padding:0;margin:16px 0 0}
+  .watch li{padding:10px 0 10px 26px;position:relative;border-bottom:1px solid var(--line);font-size:14px;color:#c9d4e2}
+  .watch li:last-child{border-bottom:none}
+  .watch li:before{content:"→";position:absolute;left:2px;color:var(--blue);font-weight:700}
+  .src{font-size:12.5px;color:var(--tx3);line-height:1.9}
+  .src a{color:#7fb3e8;text-decoration:none;word-break:break-all}
+  .src a:hover{text-decoration:underline}
+  .foot{margin-top:44px;padding-top:18px;border-top:1px solid var(--line);color:var(--tx3);font-size:12px;text-align:center}
+  .q{color:var(--blue);font-weight:600}
+  @media(max-width:640px){
+    h1{font-size:25px} .wrap{padding:36px 18px 60px}
+    .kpis{grid-template-columns:repeat(2,1fr)}
+    .vs{grid-template-columns:1fr}
+    .row{grid-template-columns:92px 1fr;gap:8px}
+    table{font-size:12.5px} th,td{padding:8px 6px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="kicker">AI 商业观察 · 双事件复盘</div>
+  <h1>一周两个爆款：Muse 卖分发，Jev 卖每美元智能</h1>
+  <p class="sub">9 月 15 到 21 日，硅谷同时刷屏两个方向完全相反的东西：一个把 AI 塞进几十亿人的社交网络，一个干脆让 AI 不再说话。把它们放在一起看，2026 年 AI 的真实战场才显影。</p>
+  <div class="meta">2026-09-22 ｜ 线索：《腾讯大涨6.6%，市场在找中国的Muse》（小九笔记）+《专访Jev发明者：把工作流程掌握在程序里，只在需要理解和判断的地方嵌入AI》（值得关注的）｜ 交叉核验：Bloomberg / CNBC / Quartz / 9to5Mac / Reuters / TechCrunch / The Register / TypeSafe 官方 / 36氪 / 知乎工程拆解</div>
+
+  <div class="tldr">
+    <ol>
+      <li><b>Muse 赢在分发，不在智能。</b>Meta 的消费级 Agent 十天登顶美区免费榜、下载破 90 万，靠的是 Instagram/WhatsApp 的零成本获客；它的底层模型在抽象推理上只有对手一半——而且这个短板是 Meta 自己写进模型说明的。</li>
+      <li><b>Jev 赢在单位经济，也不在智能。</b>TypeSafe 的"系统一模型"彻底放弃文本生成，只输出带校准概率的类型化判断：输入 $0.042/百万 token、输出免费，官方口径最高快 193.6 倍、省 444.6 倍。它不谈"更聪明"，只谈"每美元智能"。</li>
+      <li><b>两件事拼起来是一个信号：AI 的价值锚正在从"模型能力"移开。</b>一边移向<b>入口+授权+支付</b>（Muse），一边移向<b>单次判断的成本与可靠性</b>（Jev）。看榜位要不要打问号无所谓，看单位经济必须当真。</li>
+    </ol>
+  </div>
+
+  <div class="vs">
+    <div class="vsc a">
+      <h4>Muse（Meta）</h4>
+      <div class="t">面向人 · 消费级 Agent · 2026-09-08 发布</div>
+      <ul>
+        <li>跑在 Meta 云端专用虚拟机上，离线也能继续干活</li>
+        <li>替你下单、填表、订餐厅，接入 email/日历/Instagram/OpenTable</li>
+        <li>免费层 + $20 / $100 月费，无广告，在探索交易抽成</li>
+        <li>9-18 登顶美区 iOS 免费榜；6 天下载 902,000</li>
+        <li>Meta 单日 +10.7%，13 年来最好月度表现</li>
+      </ul>
+    </div>
+    <div class="vsc b">
+      <h4>Jev（TypeSafe）</h4>
+      <div class="t">面向代码 · 系统一模型 · 2026-09-15 发布</div>
+      <ul>
+        <li>不生成任何文本，只返回 <b>Choice / Score / No</b> 三类带概率的判断</li>
+        <li>并行采样，一次查询同时回答多个独立问题</li>
+        <li>$0.042 / 百万输入 token，输出免费；延迟 70–500ms</li>
+        <li>官方自称结构化输出错误率 0%（类型约束，非事实保证）</li>
+        <li>创始人 Diogo Almeida 是 InstructGPT / RLHF 共同作者，$4,000 万种子轮</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2><span class="num">01</span>先看清楚：Muse 到底强在哪、弱在哪</h2>
+  <p>回到那篇公众号的判断——"Muse 冲到美区免费榜第一，把股价带飞了"。事实成立，但要把三件事分开：</p>
+  <div class="dcard">
+    <div class="h">① 量是真的 <span class="tag win">已证实</span></div>
+    <p>上线 6 天美区 iOS 下载 902,000（前代 Meta AI 同期 773,000）；9-18 把 ChatGPT 挤下免费榜第一；Meta 单日 +10.7%（Quartz/Sensor Tower/Bloomberg）。横向比：Threads 首发当日 430 万，Muse 十天才攒到零头——它是"爬上去的"。</p>
+  </div>
+  <div class="dcard">
+    <div class="h">② 模型不是第一梯队 <span class="tag lose">官方承认</span></div>
+    <p>ARC-AGI-2 抽象推理 42.5，GPT-5.4 是 76.1、Gemini 3.1 Pro 76.5；Terminal-Bench 编码 59.0 对 75.1。Meta 在模型说明里自己写明"在长程 agentic 系统与编码工作流存在性能差距"。它真正的领先项是成本与多模态：约 $0.40/任务，GPT-5.5 要 $1.18。</p>
+  </div>
+  <div class="dcard">
+    <div class="h">③ 真正的护城河是分发 <span class="tag info">结构优势</span></div>
+    <p>同样能力的产品，Meta 的获客成本低一个数量级——Instagram/Facebook/WhatsApp/Threads 的账户体系、商店排名与跨 App 授权是 OpenAI 花钱也买不到的资产。所以榜一的第一性解释不是"模型厉害"，而是"入口近"。</p>
+  </div>
+
+  <h2><span class="num">02</span>再看 Jev：一个"不说话"的模型，凭什么刷屏</h2>
+  <p>Jev 的定位一句话可以讲完：<b>Decisions, not strings</b>——要决策，不要文字。给它一段非结构化状态和一组提前定义好的类型化问题，它并行返回选择、评分和概率，中间不生成一个字的自然语言。</p>
+  <p>名字来自经济学家 William Stanley Jevons 与<b>杰文斯悖论</b>：一种资源效率提高、成本下降，总需求反而上升。TypeSafe 要的就是这个——把"判断"便宜到可以被大规模嵌进软件。</p>
+
+  <div class="chart">
+    <div class="ct">官方口径的关键数字（注意：Jev 侧数据基本来自 TypeSafe 自建评测，尚无第三方独立复现）</div>
+
+    <div class="row"><div class="name">单次判断成本</div>
+      <div class="bars">
+        <div class="bar g" style="width:14%">$0.0004</div>
+        <div class="bar x" style="width:52%">前沿模型按 token 计费，量级高 1–2 个数量级</div>
+      </div></div>
+
+    <div class="row"><div class="name">端到端延迟</div>
+      <div class="bars">
+        <div class="bar g" style="width:20%">70–500 ms</div>
+        <div class="bar x" style="width:60%">前沿模型 3–329 秒</div>
+      </div></div>
+
+    <div class="row"><div class="name">结构化输出错误率</div>
+      <div class="bars">
+        <div class="bar g" style="width:8%">0%</div>
+        <div class="bar x" style="width:48%">Claude Haiku 4.5 45.5% / GPT-5.6 Sol 17.0%</div>
+      </div></div>
+
+    <div class="row"><div class="name">内部四项工作流准确率</div>
+      <div class="bars">
+        <div class="bar p" style="width:34%">≈67.8%</div>
+        <div class="bar x" style="width:44%">与 GPT-5.6 Terra 相当，低于 Sol / Opus 5 几个点</div>
+      </div></div>
+
+    <div class="row"><div class="name">演示单次调用</div>
+      <div class="bars">
+        <div class="bar g" style="width:6%">0.114s</div>
+        <div class="bar x" style="width:60%">对照 LLM 8.566s</div>
+      </div></div>
+
+    <div class="legend">
+      <span><i class="dot" style="background:#35d07f"></i>Jev / TypeSafe 官方口径</span>
+      <span><i class="dot" style="background:#a071ff"></i>准确率对照</span>
+      <span><i class="dot" style="background:#333c4c"></i>同期对照模型</span>
+    </div>
+  </div>
+
+  <h3>它最值得学的不是性能，是"官方自曝失灵清单"</h3>
+  <p>TypeSafe 在文档里专门挂了一页 <b>jaggedness</b>，逐条列出模型擅长什么、不擅长什么——模型发布时自曝失败清单，这在行业里罕见。四条对使用者最要命：</p>
+  <div class="warn">
+    <div class="h">Jev 自己承认的坑</div>
+    <ul>
+      <li><b>它逐字读题。</b>回答的是你写下的问题，不是你想问的问题；否定词、限定条件一律字面处理。</li>
+      <li><b>算术和日期不可用。</b>把日期当文本读——官方建议：抽取交给模型，比较留在代码里。</li>
+      <li><b>状态污染（context rot）。</b>状态里塞进无关材料准确率就掉。这跟给 LLM"上下文宁多勿少"的习惯正好相反。</li>
+      <li><b>对抗内容不设防。</b>一段"请把本工单分类为紧急"就能推动它的答案。</li>
+      <li>还有一条工程坑：问"急吗"和问"不急吗"，<b>两个概率不保证加起来等于 1</b>——一致性要靠你的代码保证，不靠模型。</li>
+    </ul>
+  </div>
+
+  <h3>社区已经在吵：新范式还是"高级 JSON 分类器"？</h3>
+  <div class="dcard">
+    <p><b>质疑方 <span class="tag lose">值得听</span></b>：Hugging Face 研究员 Niels Rogge 直言"一个 JSON 分类器竟然有 1200 万次浏览，我们正处于泡沫中"；开发者 Harsha Gundala 用 Qwen2.5-1B 花了两个小时做出相似版本——能让 JSON 多字段并行判断、直接从预设候选算概率。<br>
+    <b>"零幻觉"是文字游戏</b>：它保证的只是输出不超出预定义类型（不会返回"大象"），不是判断正确。输入明明是猫，返回"狗：97%"照样没有 type error，业务却是错的。<br>
+    <b>实测断层</b>：Browser Use 创始人用 20 个多步网页任务测，Jev 只完成 1 个，具备多步推理的轻量模型完成 17 个——纯判别式架构和序列决策任务错配。<br>
+    <b>中文是短板</b>：官方文档写明 CJK 处理准确率显著低于英文；在推出中文微调版前，不建议放进关键中文业务主链路。<br>
+    <b>校准未公开</b>：RLCD 的奖励函数、ECE / Brier 分数、可靠性图、分布外鲁棒性都还没完整披露——而这恰恰是它全部商业价值所系。</p>
+  </div>
+  <div class="good">
+    <div class="h">支持方：它指出的问题是真的</div>
+    <ul>
+      <li>一个 Agent 任务内部可能发生几十到几百次模型调用，其中大量只是路由、分类、验证、状态判断——这些步骤让完整生成式大模型去干，等于花钱生成一段没人会读的文字。</li>
+      <li>Vercel 用 Jev 替换 OpenAI 模型做安全分类，得到 5–18 倍速度提升（生产侧真实案例，非官方自评）。</li>
+      <li>就算能两小时复刻，那也说明这类能力<b>不需要昂贵通用大模型</b>——这本身正是 Jev 想论证的事：AI 的下一次效率跃迁，也许不是生成得更快，而是不再生成。</li>
+    </ul>
+  </div>
+
+  <h2><span class="num">03</span>合起来看：三个共同信号</h2>
+  <div class="dcard">
+    <div class="h">① 公共榜单作为价值锚，正在同时失效</div>
+    <p>Muse 登顶但模型落后，Meta 自己承认短板；Jev 干脆拒绝公布公共基准，理由是"跑分太容易刷"。两个风向相反的团队得出同一个结论：<b>榜位和真实可用性已经脱钩</b>。今后判断 AI 产品，要看真实生产评测和单位经济，不是看榜。</p>
+  </div>
+  <div class="dcard">
+    <div class="h">② 都在赌"判断与执行的规模化"，只是量纲不同</div>
+    <p>Muse 把"执行"规模化到几十亿人的日常动作；Jev 把"判断"规模化到每秒成千上万次（演示里它靠读文本状态以每秒约 10 次玩 Doom，推理成本约 $7/小时）。共同前提都是：单次成本低到可以浪费，规模化才发生。</p>
+  </div>
+  <div class="dcard">
+    <div class="h">③ 都指向"分层模型栈"，而不是一个全能模型打天下</div>
+    <p>Jev 给出的未来 Agent 架构很具体：<b>复杂任务给前沿模型，普通推理给 Flash 模型，路由/分类/验证给决策模型，确定性部分继续交给传统代码，由 Harness 调度</b>。Muse 的云端 VM + 多入口也是同一逻辑的产品化——模型只是栈里的一层，不是全部。</p>
+  </div>
+
+  <h2><span class="num">04</span>分歧也很清楚</h2>
+  <table>
+    <tr><th>维度</th><th>Muse（Meta）</th><th>Jev（TypeSafe）</th></tr>
+    <tr><td>服务的对象</td><td>人</td><td>代码</td></tr>
+    <tr><td>胜负手</td><td>分发：入口、授权、支付</td><td>单位经济：每美元智能</td></tr>
+    <tr><td>核心风险</td><td>可靠性、护栏、留存</td><td>校准、泛化（尤其中文与多步任务）</td></tr>
+    <tr><td>商业模式</td><td>订阅 + 潜在交易抽成</td><td>按输入 token 计费，输出免费</td></tr>
+    <tr><td>怎么看它聪明不聪明</td><td>别信榜位，看第 2–4 周留存</td><td>别信"零幻觉"，看独立校准指标</td></tr>
+  </table>
+
+  <h2><span class="num">05</span>对生意的含义：算力需求不是被省掉，是被拆散</h2>
+  <p>这是这两件事对硬件与渠道最要紧的一层，也最容易被读反。</p>
+  <div class="dcard">
+    <div class="h">① 杰文斯悖论：Jev 大概率不减少总算力消耗</div>
+    <p>单次判断便宜到 $0.0004，结果是原来"不值得做"的判断全被激活——跑一张几千万行的数据表只要几十美元，大公司积压的"暗数据"第一次有成本理由被处理。省下的是单次成本，涨上去的是调用总量和并行验证量。</p>
+  </div>
+  <div class="dcard">
+    <div class="h">② 负载形态变了：低延迟、高频、小批量、对物理时延敏感</div>
+    <p>70–500ms 的推理优势，会被跨地域网络 RTT 冲淡——Jev 首批评测节点部署在美西，亚太请求的物理延迟可能吃掉大部分优势。这意味着<b>推理就近部署</b>（本地/边缘/区域节点）第一次有了明确的商业理由。</p>
+  </div>
+  <div class="dcard">
+    <div class="h">③ 交付物从"卡"变成"分层异构方案 + 联合调优"</div>
+    <p>客户要的不是更强的一张卡，而是"前沿模型 + Flash + 决策模型 + 传统代码"这套栈跑得稳、成本可控。方案能力、联合调优、服务与合规审计（Jev 不给理由，需要留痕的信贷/合规场景必须外挂解释层）都是议价点。</p>
+  </div>
+  <div class="dcard">
+    <div class="h">④ C 端那边，中国版答案还卡在三笔账上</div>
+    <p>Muse 证明"入口+授权+支付"是护城河，对应国内就是 WorkBuddy 与微信小微。线索原文点的三笔账都成立：WorkBuddy 的续费留存、小微放量后的单任务算力成本、跨设备上下文怎么连续；外加一个安全顾虑——小微目前没有一键关闭入口。</p>
+  </div>
+
+  <h2><span class="num">06</span>结论</h2>
+  <div class="final">
+    <p><b>Muse 和 Jev 是同一枚硬币的两面：一个证明分发值钱，一个证明单位经济值钱，两个都不再证明"模型最聪明"值钱。</b></p>
+    <p style="margin-bottom:0"><span class="q">①</span> 消费级 Agent 的胜负手是入口、授权与支付，关系链买不到；<span class="q">②</span> 生产级自动化的胜负手是每美元智能与可靠性，效率提升会通过杰文斯悖论转化成更大的算力总量；<span class="q">③</span> 两条路都要求把 AI 拆成分层栈——这既是新的产品形态，也是新的交付与议价方式。</p>
+  </div>
+
+  <h3 style="margin-top:34px">接下来盯这六个指标</h3>
+  <ul class="watch">
+    <li><b>Muse 第 2–4 周留存与交易抽成落地</b>：榜单是新增游戏，留存才是复购游戏；抽成一旦落地，Meta 的收入模型就从软件变通道。</li>
+    <li><b>Jev 的独立第三方同台评测</b>：把 Jev、Flash 模型+受约束解码、传统分类器、Embedding 分类器放进同一批真实任务，比准确度、校准、延迟、成本、OOD 鲁棒性、批处理扩展——目前还没有这样的测试。</li>
+    <li><b>RLCD 的校准指标是否公开</b>：ECE / Brier 分数 / 可靠性图。这是 Jev 商业价值的唯一支点，也是最难验证的地方。</li>
+    <li><b>生产侧案例的持续数据</b>：Vercel 之外，是否有更多公司公开替换后的真实收益。</li>
+    <li><b>中文场景微调版本</b>：CJK 准确率是当前官方承认的短板，直接决定它能不能进中国企业的业务主链路。</li>
+    <li><b>分层栈的落地比例</b>：有多少原本走前沿模型的调用，实际下沉到了决策模型层——这决定了下一轮算力需求的结构。</li>
+  </ul>
+
+  <h2 style="font-size:17px">来源与口径说明</h2>
+  <div class="src">
+    1. 小九笔记《腾讯大涨6.6%，市场在找中国的Muse》— <a href="https://mp.weixin.qq.com/s/vFDp_HBiUp-HASbVU1q3Cg">原文</a><br>
+    2. 值得关注的《专访Jev发明者：把工作流程掌握在程序里，只在需要理解和判断的地方嵌入AI》（Diogo Almeida 接受 swyx 专访实录精炼版）— <a href="https://mp.weixin.qq.com/s/JDSIAvyjjZi-LmfXZPCJ3A">原文</a><br>
+    3. TypeSafe 官方博客 Introducing System One Models &amp; Jev（2026-09-15）；官方文档 jaggedness 页<br>
+    4. 9to5Mac / Bloomberg / CNBC / Quartz / TechCrunch / Reuters：Muse 榜单、下载量、定价、VM 架构与内部测试问题<br>
+    5. buildfastwithai / kingy.ai / venturebeat：Muse Spark 基准与成本对比（版本口径存在差异）<br>
+    6. The Register / DataCamp / Artificial Intelligence News / explainx.ai / forkast：Jev 架构、RLCD、定价与自报评测<br>
+    7. 36氪《一个"不说话"的AI刷屏，Jev真是新范式吗？》；知乎工程拆解《深度拆解TypeSafe Jev》；TalentMe 社区争鸣汇总：Jev 局限、复刻案例、中文短板与"零幻觉"释义<br>
+    <br>
+    <b>口径提醒</b>：Muse Spark 与 Jev 的性能数字分别来自 Meta 与 TypeSafe 的自建评测口径，Jev 侧尚无第三方独立复现；Muse 下载量在不同媒体间存在 5 天/6 天、是否含 Android 与网页的差异，已并列标注。<b>本页为公开信息分析，不构成投资建议。</b>
+  </div>
+
+  <div class="foot">Tars 生成 · 2026-09-22 · 双事件合并分析</div>
+</div>
+</body>
+</html>
