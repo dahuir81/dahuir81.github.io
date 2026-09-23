@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>阿里 vs 华为：下一代 AI 芯片都改到 2027 年春天</title>
+<style>
+  :root{
+    --bg:#0a0c10; --card:#12151c; --line:#242a36;
+    --tx:#e6eaf2; --tx2:#9aa5b8; --tx3:#697487;
+    --blue:#4ea1ff; --green:#35d07f; --amber:#ffb340; --red:#ff5f6d; --purple:#a071ff;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--tx);
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    line-height:1.75;font-size:16px;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:820px;margin:0 auto;padding:56px 22px 80px}
+  .kicker{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--blue);font-weight:600;margin-bottom:14px}
+  h1{font-size:33px;line-height:1.3;margin:0 0 14px;letter-spacing:-.02em}
+  .sub{color:var(--tx2);font-size:16px;margin:0 0 28px}
+  .meta{color:var(--tx3);font-size:13px;border-top:1px solid var(--line);padding-top:14px;margin-bottom:40px}
+  h2{font-size:22px;margin:52px 0 16px;letter-spacing:-.01em}
+  h2 .num{color:var(--blue);font-variant-numeric:tabular-nums;margin-right:10px;font-weight:700}
+  h3{font-size:16.5px;margin:26px 0 8px}
+  p{margin:0 0 16px;color:#d3dae6}
+  .tldr{background:linear-gradient(180deg,#141a26,#11141b);border:1px solid var(--line);border-left:3px solid var(--blue);
+    border-radius:12px;padding:22px 24px;margin:0 0 8px}
+  .tldr ol{margin:0;padding-left:20px}
+  .tldr li{margin-bottom:12px;color:#dbe3ef}
+  .tldr li:last-child{margin-bottom:0}
+  .tldr b{color:#fff}
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:30px 0 8px}
+  .kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 14px}
+  .kpi .v{font-size:22px;font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+  .kpi .l{font-size:11.5px;color:var(--tx3);margin-top:4px;line-height:1.5}
+  .kpi.b .v{color:var(--blue)} .kpi.g .v{color:var(--green)} .kpi.a .v{color:var(--amber)} .kpi.p .v{color:var(--purple)}
+  table{width:100%;border-collapse:collapse;margin:20px 0;font-size:14px}
+  th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--tx3);font-weight:600;font-size:12px;letter-spacing:.04em;background:#0f1219}
+  td:first-child{color:var(--tx2);width:26%}
+  .num-cell{font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+  .vs{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:22px 0}
+  .vsc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+  .vsc h4{margin:0 0 4px;font-size:17px}
+  .vsc .t{font-size:12px;color:var(--tx3);margin-bottom:12px}
+  .vsc ul{margin:0;padding-left:18px;font-size:13.8px;color:#c6d1e0}
+  .vsc li{margin-bottom:7px}
+  .vsc.a{border-top:3px solid var(--blue)} .vsc.b{border-top:3px solid var(--purple)}
+  .chart{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:22px;margin:22px 0}
+  .chart .ct{font-size:13px;color:var(--tx2);margin-bottom:18px}
+  .row{display:grid;grid-template-columns:126px 1fr;gap:12px;align-items:center;margin-bottom:9px;font-size:12.5px}
+  .row .name{color:var(--tx2);text-align:right}
+  .bars{display:flex;flex-direction:column;gap:3px}
+  .bar{height:14px;border-radius:3px;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;
+    font-size:10.5px;color:#0a0c10;font-weight:700;min-width:34px}
+  .bar.p{background:linear-gradient(90deg,#6f45c9,#a071ff)}
+  .bar.b{background:linear-gradient(90deg,#2f7fd6,#4ea1ff)}
+  .bar.g{background:linear-gradient(90deg,#1e9c63,#35d07f)}
+  .bar.a{background:linear-gradient(90deg,#c98a1f,#ffb340)}
+  .bar.x{background:#333c4c;color:#c8d2e2}
+  .legend{display:flex;gap:18px;font-size:12px;color:var(--tx3);margin-top:16px;padding-top:14px;border-top:1px solid var(--line);flex-wrap:wrap}
+  .dot{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:6px;vertical-align:middle}
+  .dcard{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:14px 0}
+  .dcard .h{font-weight:700;margin-bottom:6px;color:#fff;font-size:15px}
+  .dcard p{margin:0;font-size:14px;color:#becad9}
+  .tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:20px;margin-left:8px;vertical-align:1px;font-weight:600}
+  .tag.win{background:rgba(53,208,127,.14);color:var(--green);border:1px solid rgba(53,208,127,.3)}
+  .tag.lose{background:rgba(255,95,109,.14);color:var(--red);border:1px solid rgba(255,95,109,.3)}
+  .tag.mid{background:rgba(255,179,64,.14);color:var(--amber);border:1px solid rgba(255,179,64,.3)}
+  .tag.info{background:rgba(78,161,255,.14);color:var(--blue);border:1px solid rgba(78,161,255,.3)}
+  .warn{background:rgba(255,95,109,.06);border:1px solid rgba(255,95,109,.28);border-radius:12px;padding:18px 22px;margin:20px 0}
+  .warn .h{color:var(--red);font-weight:700;margin-bottom:10px;font-size:15px}
+  .warn ul{margin:0;padding-left:18px;font-size:14px;color:#dbe3ef}
+  .warn li{margin-bottom:8px}
+  .src{font-size:12px;color:var(--tx3);margin-top:6px}
+  .tl{position:relative;margin:26px 0 10px;padding-left:26px}
+  .tl:before{content:"";position:absolute;left:7px;top:6px;bottom:6px;width:1px;background:var(--line)}
+  .tli{position:relative;margin-bottom:20px}
+  .tli:last-child{margin-bottom:0}
+  .tli:before{content:"";position:absolute;left:-24px;top:8px;width:9px;height:9px;border-radius:50%;background:var(--blue);box-shadow:0 0 0 3px rgba(78,161,255,.14)}
+  .tli .d{font-size:12px;color:var(--tx3);font-variant-numeric:tabular-nums}
+  .tli .h{font-weight:600;color:#fff;font-size:15px}
+  .tli .b{font-size:13.8px;color:#c6d1e0}
+  footer{margin-top:56px;border-top:1px solid var(--line);padding-top:20px;font-size:12.5px;color:var(--tx3)}
+  footer b{color:var(--tx2)}
+  @media (max-width:640px){
+    .kpis{grid-template-columns:repeat(2,1fr)}
+    .vs{grid-template-columns:1fr}
+    h1{font-size:26px}
+    .row{grid-template-columns:92px 1fr}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="kicker">国产算力 · 双雄对照</div>
+  <h1>阿里 vs 华为：下一代 AI 芯片，两家都把量产改到了 2027 年春天</h1>
+  <p class="sub">9 月 22 日云栖大会，平头哥真武 V900 量产提前两个季度；五天前，华为昇腾 960DT 提前三个季度。中国云端 AI 加速器市场的前两名，把旗舰交付窗口压进了同一个季度。</p>
+  <div class="meta">数据来源：2026 云栖大会公开披露 · 华为公开路线图 · IDC《中国云端 AI 加速器市场跟踪》（2026-04）· NVIDIA 公开规格　|　整理：Tars　|　2026-09-23</div>
+
+  <div class="tldr">
+    <ol>
+      <li><b>交付窗口撞车</b>：真武 V900 从 2027 Q3 提到 2027 Q1（提前两个季度）；昇腾 960DT 提前三个季度，落点同为 2027 Q1。</li>
+      <li><b>披露口径不同</b>：V900 只给三项硬指标 + 相对算力（M890 的 3 倍），<b>不公布绝对算力</b>；960DT 给出绝对值 FP4 4 PFLOPS / FP8 2 PFLOPS。</li>
+      <li><b>差距仍在两代半</b>：对比英伟达 Rubin（FP4 50 PFLOPS）与 Rubin Ultra（100 PFLOPS），单卡峰值与上市时间都差 2.5–3 年。</li>
+      <li><b>两家都放弃"单卡追平"</b>：改打系统牌——V900 靠内存统一编址把集群扩到 50 万卡，华为口径是 100 万卡。</li>
+      <li><b>共同的账单</b>：制程（中芯国际）、HBM（长鑫）、封装、软件生态，四样缺一，集群规模就只是纸面数字。</li>
+    </ol>
+  </div>
+
+  <div class="kpis">
+    <div class="kpi b"><div class="v">2027 Q1</div><div class="l">两家下一代旗舰的共同交付窗口</div></div>
+    <div class="kpi a"><div class="v">4 vs 50</div><div class="l">昇腾 960DT 与 Rubin 的 FP4 算力（PFLOPS）</div></div>
+    <div class="kpi p"><div class="v">49.2% / 16%</div><div class="l">2025 年国产阵营份额：华为 / 平头哥</div></div>
+    <div class="kpi g"><div class="v">100 万卡</div><div class="l">华为超节点集群规模口径（平头哥 50 万卡）</div></div>
+  </div>
+
+  <h2><span class="num">01</span>时间表：同一个季度，两种提前</h2>
+  <div class="tl">
+    <div class="tli">
+      <div class="d">2026-02</div>
+      <div class="h">真武 M890 发布（平头哥上一代）</div>
+      <div class="b">半年后 V900 的单芯片算力被官方口径表述为 M890 的 3 倍 — 科技风车, L9</div>
+    </div>
+    <div class="tli">
+      <div class="d">2026-09-17 前后</div>
+      <div class="h">华为：昇腾 960DT 提前三个季度</div>
+      <div class="b">研发进度快于预期，2027 年一季度准备就绪 — 科技风车, L5</div>
+    </div>
+    <div class="tli">
+      <div class="d">2026-09-22</div>
+      <div class="h">云栖大会：真武 V900 发布，量产提前两个季度</div>
+      <div class="b">原计划 2027 Q3，改为 2027 Q1；官方解释"客户等不起，我们也不能等"（平头哥半导体副总裁高慧）— 科技风车, L3, L4</div>
+    </div>
+    <div class="tli">
+      <div class="d">2027 年</div>
+      <div class="h">英伟达侧参照物</div>
+      <div class="b">Rubin 2026 年下半年量产；Rubin Ultra 2027 年 — 科技风车, L14, L15</div>
+    </div>
+  </div>
+  <p class="src">原文判断：撞车是巧合，动作的同步不是 — 科技风车, L6</p>
+
+  <h2><span class="num">02</span>规格对表：一条完整的可比数据链</h2>
+  <table>
+    <thead>
+      <tr><th>维度</th><th>阿里 · 真武 V900</th><th>华为 · 昇腾 960DT</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>定位</td><td>平头哥 PPU 2.0 代次，下一代旗舰</td><td>昇腾下一代旗舰（DT 训练形态）</td></tr>
+      <tr><td>发布 / 预告</td><td>2026-09-22 云栖大会主论坛正式发布</td><td>2026 年 9 月中旬公开提前的量产节奏</td></tr>
+      <tr><td>量产时间</td><td>2027 Q1（原 2027 Q3）</td><td>2027 Q1（提前三个季度）</td></tr>
+      <tr><td>显存</td><td>216 GB</td><td>未在本次报道中给出容量</td></tr>
+      <tr><td>片间互联带宽</td><td>1200 GB/s</td><td>未在本次报道中给出</td></tr>
+      <tr><td>HBM 带宽</td><td>未公布</td><td>9.6 TB/s</td></tr>
+      <tr><td>低精度算力</td><td>原生支持 FP8 与 FP4；算力以相对值披露（M890 的 3 倍）</td><td>FP4 4 PFLOPS；FP8 2 PFLOPS</td></tr>
+      <tr><td>绝对算力</td><td><span class="tag lose">未公布</span></td><td><span class="tag info">已公布</span></td></tr>
+      <tr><td>集群规模口径</td><td>基于 V900 的单一 AI 集群可扩展至 50 万卡</td><td>100 万卡</td></tr>
+      <tr><td>系统路线</td><td>ICN Switch 互联 + 原生内存语义与内存统一编址，上千颗芯片像一颗芯片协同</td><td>超节点路线：用系统级互联堆算力，弥补单卡差距</td></tr>
+      <tr><td>全栈覆盖</td><td>磐久超节点服务器内装四类自研芯片：真武 V900、ICN Switch、磐脉智能网卡、镇岳 SSD 主控</td><td>互联与调度软件自研，集群规模取决于自研环节完整性</td></tr>
+      <tr><td>2025 年国产阵营份额</td><td>26.5 万张，占 16%</td><td>81.2 万张，占 49.2%</td></tr>
+    </tbody>
+  </table>
+  <p class="src">数据来源：科技风车《阿里和华为，把下一代 AI 芯片的量产都改到了 2027 年春天》 L3–L10、L13–L15、L28、L33–L35；IDC 2026 年 4 月报告。原文注明：真武 V900 除三项硬指标外的算力口径为相对值，阿里未公布绝对算力。</p>
+
+  <h2><span class="num">03</span>把绝对值摆上桌：差距有多直接</h2>
+  <div class="chart">
+    <div class="ct">单卡 FP4 峰值算力（PFLOPS，对数坐标观感；真武 V900 未公布绝对值）</div>
+    <div class="row">
+      <div class="name">真武 V900</div>
+      <div class="bars"><div class="bar x" style="width:12%">未公布</div></div>
+    </div>
+    <div class="row">
+      <div class="name">昇腾 960DT</div>
+      <div class="bars"><div class="bar p" style="width:18%">4</div></div>
+    </div>
+    <div class="row">
+      <div class="name">NVIDIA Rubin</div>
+      <div class="bars"><div class="bar g" style="width:62%">50</div></div>
+    </div>
+    <div class="row">
+      <div class="name">NVIDIA Rubin Ultra</div>
+      <div class="bars"><div class="bar b" style="width:96%">100</div></div>
+    </div>
+    <div class="legend">
+      <span><span class="dot" style="background:#333c4c"></span>未公布绝对值</span>
+      <span><span class="dot" style="background:var(--purple)"></span>华为昇腾</span>
+      <span><span class="dot" style="background:var(--green)"></span>NVIDIA 2026H2 量产</span>
+      <span><span class="dot" style="background:var(--blue)"></span>NVIDIA 2027</span>
+    </div>
+  </div>
+  <p class="src">结论：2027 年一季度国产最强摸到 FP4 四 PFLOPS 门槛，英伟达 Rubin 是 50、Rubin Ultra 是 100——单卡峰值差两代半，上市时间差两年半到三年 — 科技风车, L18。条形长度为按数值等比换算后的示意。</p>
+
+  <h2><span class="num">04</span>国产阵营里，两家不在同一条船上</h2>
+  <div class="chart">
+    <div class="ct">2025 年中国云端 AI 加速器 · 国产阵营份额（IDC 2026 年 4 月报告）</div>
+    <div class="row">
+      <div class="name">华为昇腾</div>
+      <div class="bars"><div class="bar p" style="width:49.2%">49.2% · 81.2 万张</div></div>
+    </div>
+    <div class="row">
+      <div class="name">阿里平头哥</div>
+      <div class="bars"><div class="bar b" style="width:16%">16% · 26.5 万张</div></div>
+    </div>
+    <div class="row">
+      <div class="name">其余国产合计</div>
+      <div class="bars"><div class="bar a" style="width:34.8%">34.8%</div></div>
+    </div>
+  </div>
+  <p class="src">阿里自有口径更细：截至 2026 年 4 月平头哥 AI 芯片累计出货 56 万片；截至 2026 年 6 月客户超过 650 家，覆盖智驾、金融、大模型、具身智能、能源、制造 — 科技风车, L28, L30。原文对这段差距的判断：16% 到接近一半之间隔着的东西，就是这一代产品要打的仗 — L31</p>
+
+  <div class="vs">
+    <div class="vsc a">
+      <h4>阿里 · 平头哥</h4>
+      <div class="t">云原生基因 · 全栈自研闭环</div>
+      <ul>
+        <li>真武 M890 → V900，半年一代，官方口径单芯片算力 ×3</li>
+        <li>磐久超节点服务器四类自研芯片：算、存、网全栈自己做</li>
+        <li>ICN Switch 互联带来原生内存语义与内存统一编址</li>
+        <li>单一集群可扩展至 50 万卡；累计出货 56 万片、客户 650+ 家</li>
+        <li>优势：阿里云闭环 + 商业化更快</li>
+      </ul>
+    </div>
+    <div class="vsc b">
+      <h4>华为 · 昇腾</h4>
+      <div class="t">系统级堆料 · 生态完整性</div>
+      <ul>
+        <li>960DT 给出绝对值：FP4 4 PFLOPS、FP8 2 PFLOPS</li>
+        <li>HBM 带宽 9.6 TB/s，效率指标同时披露</li>
+        <li>超节点路线：把更多芯片当一颗用，集群口径 100 万卡</li>
+        <li>份额领先：81.2 万张卡、国产阵营 49.2%</li>
+        <li>优势：生态完整 + 政府与行业市场支持</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2><span class="num">05</span>真正难的地方：四件套缺一不可</h2>
+  <div class="warn">
+    <div class="h">原文的"电站"类比</div>
+    <ul>
+      <li><b>制程</b>卡在中芯国际</li>
+      <li><b>HBM</b>卡在长鑫</li>
+      <li><b>封装</b>与<b>软件生态</b>各有各的欠账</li>
+      <li>四样东西凑齐，才算一座能发电的电站——国产算力缺的往往不是那颗芯片，而是跟芯片配套的另外三样 — 科技风车, L20</li>
+    </ul>
+  </div>
+  <div class="dcard">
+    <div class="h">路线之争已分胜负：不比单卡，比谁能把更多芯片当一颗用</div>
+    <p>前提是互联芯片、网络架构、调度软件都得攥在自己手里。任何一环外购，集群规模就只是纸面数字 — 科技风车, L37, L38</p>
+  </div>
+
+  <h2><span class="num">06</span>同一场发布会上的另一半叙事</h2>
+  <div class="kpis" style="grid-template-columns:repeat(3,1fr)">
+    <div class="kpi b"><div class="v">3% → 1000×</div><div class="l">吴泳铭判断：机器承担的思考量将从不到人类总量 3% 走向人类的 1000 倍以上</div></div>
+    <div class="kpi p"><div class="v">20 GW</div><div class="l">2032 年阿里云运营的全球数据中心规模目标（两万兆瓦）</div></div>
+    <div class="kpi a"><div class="v">5–10 万亿</div><div class="l">模型侧计划训练的参数规模（现旗舰 Qwen 3.8 Max 为 2.4 万亿）</div></div>
+  </div>
+  <p>同一个演讲里还有一句不太像发布会的台词：吴泳铭承认全球 AI 数据中心供应链存在短缺，限制了扩张速度——"行业的中长期需求远超我们的供给能力"。喊出 20GW 的人，和承认卡在供应链上的人，是同一个 — 科技风车, L40–L43, L50, L51</p>
+  <p class="src">参照：一座大型数据中心园区的用电规模，通常在几百兆瓦的量级 — 科技风车, L42</p>
+
+  <h2><span class="num">07</span>观察点：表能不能按时兑现</h2>
+  <div class="dcard">
+    <div class="h">三家同时在等同一批东西</div>
+    <p>柏林的 Rubin Ultra，乌兰察布的昇腾集群，杭州的磐久超节点——都在等 HBM 的产能、先进制程的良率，以及客户愿不愿意离开用了十年的 CUDA — 科技风车, L53</p>
+  </div>
+  <div class="dcard">
+    <div class="h">2027 Q1 是厂商自己定的时间表</div>
+    <p>价格、良率、实际交付量，才是这张表真正的落点。发布会说了不算 — 科技风车, L54</p>
+  </div>
+  <div class="dcard">
+    <div class="h">给采购与观察者的三条口径</div>
+    <p>① 看系统而非单卡：互联带宽、内存统一编址、调度软件决定集群能不能真跑起来；② 看绝对值是否披露：相对倍数（"3 倍性能"）与绝对 PFLOPS 是两种口径；③ 看交付量而非时间表：提前量产的可信度最终由良率与客户迁移速度验证。</p>
+  </div>
+
+  <footer>
+    <p><b>一手来源</b>：微信公众号「科技风车」《阿里和华为，把下一代 AI 芯片的量产都改到了 2027 年春天》（2026-09-22/23），原文行号见 L1–L56；<b>外部数据</b>：IDC 2026 年 4 月《中国云端 AI 加速器市场跟踪》、2026 云栖大会平头哥发布、华为公开路线图、NVIDIA 公开规格。</p>
+    <p>本页为数据对照整理，非投资建议。真武 V900 的绝对算力原文未公布，本页不做推算。— Tars · 2026-09-23</p>
+  </footer>
+
+</div>
+</body>
+</html>
