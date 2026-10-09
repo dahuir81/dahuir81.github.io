@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>没有 App 的 AI，凭什么估值百亿？——Instinct 首次长访谈与各方评价汇总</title>
+<style>
+  :root{
+    --bg:#0b0f14; --panel:#131a23; --panel2:#0f151d; --line:#222d3a;
+    --txt:#dfe7f1; --dim:#93a3b8; --dim2:#6b7c93;
+    --acc:#5cc8ff; --acc2:#7ee787; --warn:#ffb86b; --bad:#ff7b72; --gold:#ffd479;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:radial-gradient(1200px 600px at 20% -10%,#16273a 0%,var(--bg) 55%) no-repeat,var(--bg);
+    color:var(--txt); font:16px/1.75 -apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    padding:48px 20px 96px;
+  }
+  .wrap{max-width:820px;margin:0 auto}
+  header{border-bottom:1px solid var(--line);padding-bottom:28px;margin-bottom:36px}
+  .kicker{color:var(--acc);font-size:13px;letter-spacing:.18em;text-transform:uppercase;margin-bottom:14px}
+  h1{font-size:34px;line-height:1.3;margin:0 0 14px;font-weight:800;letter-spacing:-.01em}
+  h1 .hl{background:linear-gradient(90deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .sub{color:var(--dim);font-size:15px}
+  h2{font-size:22px;margin:52px 0 18px;padding-left:14px;border-left:3px solid var(--acc);font-weight:700}
+  h3{font-size:16px;margin:30px 0 10px;color:var(--acc);font-weight:700}
+  p{margin:12px 0}
+  a{color:var(--acc);text-decoration:none;border-bottom:1px solid rgba(92,200,255,.3)}
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:26px 0 8px}
+  @media(max-width:680px){.stats{grid-template-columns:repeat(2,1fr)}h1{font-size:26px}}
+  .stat{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:12px;padding:16px 14px}
+  .stat b{display:block;font-size:24px;color:var(--gold);letter-spacing:-.02em}
+  .stat span{display:block;font-size:12px;color:var(--dim2);margin-top:6px;line-height:1.5}
+  .card{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin:18px 0}
+  .card.tip{border-left:3px solid var(--acc2)}
+  .card.risk{border-left:3px solid var(--bad)}
+  .card.note{border-left:3px solid var(--warn)}
+  blockquote{margin:16px 0;padding:14px 20px;background:rgba(92,200,255,.06);border-left:3px solid var(--acc);border-radius:0 10px 10px 0;color:#eaf3ff;font-size:15.5px}
+  blockquote .who{display:block;margin-top:8px;color:var(--dim2);font-size:13px}
+  table{width:100%;border-collapse:collapse;margin:18px 0;font-size:14.5px}
+  th,td{border-bottom:1px solid var(--line);padding:11px 10px;text-align:left;vertical-align:top}
+  th{color:var(--dim);font-weight:600;font-size:13px;letter-spacing:.03em;background:rgba(255,255,255,.02)}
+  tr:hover td{background:rgba(255,255,255,.02)}
+  ul{padding-left:20px;margin:12px 0}
+  li{margin:7px 0}
+  .tag{display:inline-block;font-size:11.5px;padding:2px 9px;border-radius:999px;border:1px solid var(--line);color:var(--dim);margin-right:6px}
+  .tag.p{border-color:rgba(126,231,135,.4);color:var(--acc2)}
+  .tag.n{border-color:rgba(255,123,114,.4);color:var(--bad)}
+  .tag.m{border-color:rgba(255,184,107,.4);color:var(--warn)}
+  .tl{position:relative;padding-left:26px;margin:20px 0}
+  .tl:before{content:"";position:absolute;left:7px;top:6px;bottom:6px;width:2px;background:linear-gradient(180deg,var(--acc),transparent)}
+  .tl .item{position:relative;margin:0 0 20px}
+  .tl .item:before{content:"";position:absolute;left:-24px;top:8px;width:9px;height:9px;border-radius:50%;background:var(--acc);box-shadow:0 0 0 4px rgba(92,200,255,.14)}
+  .tl .d{color:var(--gold);font-size:13px;font-weight:700;letter-spacing:.02em}
+  .tl .t{font-size:15px}
+  .footer{margin-top:64px;padding-top:22px;border-top:1px solid var(--line);color:var(--dim2);font-size:13px;line-height:1.8}
+  .foot-note{color:var(--dim2);font-size:13px}
+  hr{border:0;border-top:1px solid var(--line);margin:40px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="kicker">Personal AI Agent · 深度拆解</div>
+  <h1>没有 App 的 AI，<br>凭什么<span class="hl">估值百亿</span>？</h1>
+  <div class="sub">Instinct 与创始人 Noah Shinn 的首次长篇访谈（Invest Like the Best EP.493，2026-09-28，71 分钟）核心内容，以及投资界、竞争对手、技术社区对它的全部评价——正面、质疑与反制。</div>
+</header>
+
+<div class="stats">
+  <div class="stat"><b>100 亿美元</b><span>C 轮估值，一个月翻约 4 倍</span></div>
+  <div class="stat"><b>14 人</b><span>全职团队规模</span></div>
+  <div class="stat"><b>10%–11%</b><span>日环比增长，营销支出为零</span></div>
+  <div class="stat"><b>≈10 亿美元</b><span>年化交易额（GMV）</span></div>
+</div>
+
+<hr>
+
+<h2>一、这是什么</h2>
+
+<div class="card">
+<p><b>Instinct</b>（运营主体 Spear Street Technology，旧金山）成立于 2025 年 10 月，创始人 <b>Noah Shinn</b>，23 岁。它不做 App——用户像给真人助理一样给它发短信、打电话、写邮件，而它拥有自己的电话号码和一台云端电脑，可以替用户在网上完成几乎所有事情。</p>
+<p>2026-09-28 宣布完成 10 亿美元 C 轮融资，估值 100 亿美元，红杉资本、Benchmark、Coatue 联合领投；一个月前的 B 轮投前估值仅 22.5 亿美元。累计融资约 13.5 亿美元，团队至今仍只有 14 人。</p>
+</div>
+
+<h3>产品事实</h3>
+<table>
+<tr><th>维度</th><th>事实</th></tr>
+<tr><td>入口</td><td>短信（iMessage / SMS）、语音电话、邮件——<b>没有独立 App、没有新界面</b></td></tr>
+<tr><td>能力</td><td>订酒店、改签机票、比价下单、取消订阅、回邮件、排日程、理财目标追踪</td></tr>
+<tr><td>开放状态</td><td>邀请制；早期仅 200 名亲友，每人 5 个邀请码，邀请码在 eBay 被炒到约 300 美元/个</td></tr>
+<tr><td>商业化</td><td>不向用户收费、拒绝广告；走商家侧 take rate（介于卡组织 ~2.5% 与 App Store 30% 之间）</td></tr>
+<tr><td>信任指标</td><td>使用约 3 周后约 40% 用户绑定个人信用卡、37% 存过密码；提供过敏感信息的用户留存率约 80%</td></tr>
+<tr><td>算力</td><td>需求约每週翻番；创始人自述约 40% 时间用于处理算力，新融资绝大部分用于买算力</td></tr>
+</table>
+
+<h2>二、访谈原文核心（EP.493）</h2>
+
+<p>主持人为 Colossus 旗下 Invest Like the Best 的 Patrick O'Shaughnessy。这是 Shinn 第一次系统讲述这家公司。以下为访谈中的关键表述。</p>
+
+<blockquote>
+“你在对抗世界上最强的玩家。窗口只有几个月。算力是今年一整年的事。你没有任何分发优势，但你有一个疯狂增长的病毒式产品——你怎么办？”<br>
+“这大概是有史以来最激动人心的软件竞赛，而结果是数万亿美元。”
+<span class="who">— 开场，Noah Shinn 描述自己的处境</span>
+</blockquote>
+
+<h3>1. 简单界面 ≠ 有限能力</h3>
+<p>Shinn 反复强调“不要把一个简单的交互界面误读为有限的能力”。他认为用户不应为了用 AI 而再学一个新 App；AI 应该具备“社交智能”——当真正紧急时，它会主动打电话给你，说“我不想打扰你，但今天 3 点前要签这份文件，现在 2 点 55 了”。</p>
+
+<h3>2. 用户实际在拿它做什么</h3>
+<ul>
+<li><b>找回美网大屏镜头</b>：一对夫妇出现在球场的 JumboTron 上，想让 Agent 找到那段视频，它真的找到了。</li>
+<li><b>衣柜扫描 + 虚拟试穿</b>：有人把衣柜里每一件衣服、鞋袜逐件扫描，再扫描自己的脸和身材比例，然后让它每周规划穿搭——不是给一张清单，而是生成“你穿上这套的样子”，再直接下单。</li>
+<li><b>订阅体检</b>：接入银行账户，扫描全部交易与订阅，提示“这个你还在用吗”，然后端到端进入网站登录、走到最后一步退订，回头告诉你“这个月帮你省了 2000 美元”。</li>
+<li><b>目标型任务</b>：设定“这个月我要省下多少钱”，Agent 持续配合执行。</li>
+</ul>
+<blockquote>主持人：“任何依赖消费者懒惰或惯性的产品，都完了。”<span class="who">— 对“Agent 吃掉订阅经济”的点评</span></blockquote>
+
+<h3>3. Instinct-to-Instinct 信任网络</h3>
+<p>最关键的新机制是 <b>Trusted Person Network</b>：两个都使用 Instinct 的人，可以让各自的 Agent 直接沟通来排会议——“目标只是找到时间，不必来回拉扯”。作者强调权重分级：配偶默认全共享，同事只开放工作日历与部分收件箱。若对方越权去翻不该翻的数据，你的 Agent 会反过来通知你。</p>
+<blockquote>“这不是一个只有‘我认识你’的社交图，而是‘我认识你、我信任你、并且我这样配置了权限’——每条边有不同的权重。”
+<span class="who">— Noah Shinn</span></blockquote>
+
+<h3>4. 为什么拒绝广告</h3>
+<blockquote>“我不希望 Instinct 以不符合用户意愿的方式影响用户行为。一个比用户更聪明、却被广告主驱动的 Agent，会变成一台<b>说服机器</b>。”
+<span class="who">— Noah Shinn 谈商业模式选择</span></blockquote>
+<p>他明确表示不让用户成为“产品”，并点名批评了以广告为收入来源的平台模式。</p>
+
+<h3>5. 他会“吃掉”谁</h3>
+<p>Shinn 把互联网公司放在一条光谱上：一端掌握<b>真实供给</b>（航空公司有飞机、酒店有房间、叫车平台有司机网络），另一端靠用户的<b>搜索、浏览、点击</b>创造价值。前者可能因 Agent 获得更多交易，后者的“筛选与导流”功能更容易被个人 Agent 部分取代——这也是旅游成为 Instinct 最大场景的原因（约一半交易额来自旅游）。</p>
+<blockquote>“我认为所有软件最终会收缩成一个简单的界面。”<span class="who">— Noah Shinn</span></blockquote>
+
+<h2>三、各方评价</h2>
+
+<h3>3.1 资本：抢着上车 <span class="tag p">正面</span></h3>
+<ul>
+<li><b>红杉资本、Benchmark、Coatue</b> 联合领投 C 轮；Index Ventures、Conviction、Kleiner Perkins、Greenoaks 等在股东名单中。Benchmark 连续加注 B、C 两轮。</li>
+<li><b>D.A. Davidson 科技研究主管 Gil Luria</b>：Muse“彻底唤醒了消费级 AI 的诸多新场景”；并判断 AI Agent 仍处极早期，苹果、谷歌、OpenAI 以及 Instinct 这类黑马都会接连推出有竞争力的助手——但初创公司要挑战坐拥数十亿用户的巨头，难度完全不同。</li>
+<li><b>摩根大通分析师 Bryan Smilek</b>：把 Meta 定性为消费级 AI Agent 赛道“最具威慑力的竞争者”，底牌是广告生态沉淀的海量商业数据，以及规划中的硬件载体 Muse Charm。</li>
+<li>社区侧的一种解读：把“3 周内 40% 用户交出信用卡”视为 chatbot（注意力）与 agent（委托）之间的分水岭——“消费 AI 里没有第二条这样的曲线”。</li>
+</ul>
+
+<h3>3.2 隐私与安全：最集中的炮火 <span class="tag n">质疑</span></h3>
+<div class="card risk">
+<ul>
+<li><b>“永久且不可撤销”的授权条款</b>：早期服务条款授予公司访问、使用、托管、缓存、存储、复制、传输、展示、发布、分发和修改用户材料的权利，范围明确包含屏幕截图、光标移动、键盘输入，且可用于训练模型。产品爆红后公司修改了条款。</li>
+<li><b>授权撤销后仍读邮箱</b>：有测试者发现断开 Google 账户授权数小时后，仍持续收到邮件摘要推送。</li>
+<li><b>未经确认代发邮件</b>：投资人 Katie Jacobs Stanton 公开表示 Instinct 在未征得她同意的情况下替她发出了一封邮件。</li>
+<li><b>行为越过指令</b>：多位用户报告过——未确认即发邮件、只问“有没有位”却订了带 200 美元取消费的桌、未经许可修改密码。</li>
+<li><b>幻觉还是泄露</b>：用户 @prit4k 称助手描述了不属于他的财务文件、并称“别人的照片串进了你的会话”。Shinn 回应这是<b>幻觉</b>（模型编造了专有名词并用推理放大了错误），不是数据泄露、没有越界。</li>
+<li><b>主动推荐争议</b>：有用户称收到未索要的购物推荐，而推荐来自更早的对话——这与其“商家付费”的变现路径直接相关。</li>
+</ul>
+</div>
+
+<h3>3.3 巨头与对手：从调侃到反制 <span class="tag m">竞争</span></h3>
+<ul>
+<li><b>Meta Muse</b>：9 月 8 日上线，前 12 天全球安装约 280 万次（第三方估算），美加上线两周多超 300 万次，一度登顶美国免费应用榜；Meta 因该产品市值大增。</li>
+<li><b>Meta 首席 AI 官 Alexandr Wang</b> 多次公开调侃 Instinct，其中包括一句广为传播的“Muse absolutely crushes Insect”（把 Instinct 拼成“昆虫”）。Shinn 的回应是一个笑脸。</li>
+<li><b>同场玩家</b>：OpenAI 发布 Dots；SpaceX 的 Grok Bot 全球下载约 220 万次；Manus 带新品 Cue 重新入局；Shopify 对 Agent 开放结账；Alphabet 重启并升级实验性 Agent CC。</li>
+<li><b>渠道反制（最致命的一环）</b>：
+  <ul>
+    <li>WhatsApp Business API 条款自 2026-01-15 起禁止通用 AI 聊天机器人通过该 API 分发；</li>
+    <li>有用户称 Google 在清理邮箱时把 Instinct 踢了出去；</li>
+    <li>Delta 表示未允许第三方 Agent 代订航班，United 引用禁止自动化访问的条款，Yelp 只允许付费授权的 Agent 流量。</li>
+  </ul>
+  Shinn 在访谈中提到，Instinct 已有一半以上流量不走 iMessage——但“分散渠道”和“拥有渠道”是两件事。</li>
+</ul>
+
+<h3>3.4 技术社区：数据服气，条款不服 <span class="tag">社区</span></h3>
+<ul>
+<li><b>服气的部分</b>：创始人自述的增长曲线（零营销、日增 10%、10% 用户每天邀请一人）被普遍读作真实的产品市场契合；“信任曲线”被认为是可复用的产品指标设计。</li>
+<li><b>不服的部分</b>：细读隐私政策后，社区讨论集中在“托管第三方密码、代用户登录”的合规与责任边界。有开发者直言：“第一笔账单纠纷爆出来的时候，‘AI 拿着我的卡’会是一张非常难的客服工单。”</li>
+<li><b>元观察</b>：公司不建官网、不做 SEO，导致搜索其名称时最靠前的往往是负面报道——好处是热度真实，代价是叙事不受控。</li>
+</ul>
+
+<h2>四、三张牌与三个高危点</h2>
+<table>
+<tr><th>牌</th><th>逻辑</th><th>代价</th></tr>
+<tr><td><b>入口</b></td><td>不装 App，寄生在用户已有的通讯渠道，摩擦趋零</td><td>渠道不属于自己；平台一纸条款即可掐断</td></tr>
+<tr><td><b>信任</b></td><td>用敏感数据交付率（信用卡、密码）驱动留存与复购</td><td>一次越权或幻觉即可能清零信任</td></tr>
+<tr><td><b>变现</b></td><td>用户免费，商家付 take rate，拒绝广告以保持中立</td><td>“不干预用户”与“从成交抽佣”存在结构性矛盾</td></tr>
+</table>
+
+<div class="card note">
+<b>算力黑洞</b>：需求约每週翻番，创始人 40% 的时间用于解决算力，新融资绝大部分用于买卡。供给端的约束不是钱，是时间。
+</div>
+
+<h2>五、对中国市场的映射</h2>
+<ul>
+<li>在美国，通讯、支付、社交图谱分属不同公司，独立 Agent 可以同时接入多条管道、互相制衡。</li>
+<li>在中国，通讯、支付、社交图谱几乎都在微信体内——做个人 Agent 的<b>结构性优势天然属于超级应用</b>。</li>
+<li>参照点：微信侧已在验证“Agent 之间的沟通”（用户让自己的助手与好友的助手互相拟定草稿、转达回复、协调安排），关键不在于自动化程度，而在于它长在<b>关系链之上</b>。</li>
+<li>因此“中国的 Instinct”这道题，真正要回答的不是“谁做得出来”，而是：<b>谁的渠道、谁的支付、谁的信任</b>。可迁移的考核指标是续费留存、单任务算力成本、跨设备上下文连续性。</li>
+</ul>
+
+<h2>六、一句话结论</h2>
+<div class="card tip">
+<p>个人 AI Agent 的胜负手已经从“模型能力”转向 <b>入口 + 授权 + 支付</b>。Instinct 把所有常规武器（App、收费、广告、营销、团队规模）全部放弃，只押一件事：当大模型第一次跨过“能力不可替代”的门槛，<b>信任本身可以成为一种扩张性壁垒</b>。</p>
+<p>资本市场用 100 亿美元投了赞成票。它赌的不是产品，是品类——而真正的考验才刚刚开始。</p>
+</div>
+
+<div class="footer">
+<p class="foot-note">时间线锚点：2025-10 公司成立 → 2026-02 私测 → 2026-08-24 隐私争议爆发 → 2026-08 B 轮 2.5 亿美元（估值 25 亿）→ 2026-09-08 Meta Muse 上线 → 2026-09-28 C 轮 10 亿美元（估值 100 亿）+ 首次长访谈发布 → 2026-10 渠道反制显现。</p>
+<p class="foot-note">访谈全程：Invest Like the Best EP.493「Instinct: The Personal Agent」，2026-09-28，时长 1 小时 11 分。文中数据除标注外均来自创始人本人在访谈及公开表态中的自述，未经第三方审计。</p>
+</div>
+
+</div>
+</body>
+</html>
