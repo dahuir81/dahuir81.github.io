@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>太阳系运行原理 · 交互演示</title>
+<meta name="description" content="用 Canvas 动画直观演示太阳系八大行星公转：引力提供向心力、椭圆轨道、距日越远公转越慢。">
+<style>
+:root{
+  --bg:#05060d;--fg:#e9eef8;--dim:#8e9ab1;--acc:#7fb0ff;--acc2:#ffd58a;
+  --card:rgba(19,25,45,.72);--line:rgba(120,150,220,.22);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:radial-gradient(1200px 700px at 50% -12%,#101a3a 0%,#070a16 52%,#03040a 100%);
+  color:var(--fg);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  line-height:1.68;-webkit-font-smoothing:antialiased;padding:18px 14px 46px;
+}
+.wrap{max-width:880px;margin:0 auto}
+.badge{display:inline-block;font-size:11px;color:var(--acc2);border:1px solid var(--line);
+  border-radius:999px;padding:2px 11px;margin-bottom:10px;background:rgba(255,213,138,.06);letter-spacing:.5px}
+h1{font-size:clamp(19px,4.6vw,27px);margin:0 0 6px;letter-spacing:.5px}
+.sub{color:var(--dim);font-size:clamp(12.5px,3vw,14.5px);margin:0 0 16px}
+.sub code{background:rgba(126,168,255,.12);color:var(--acc);padding:1px 6px;border-radius:5px;font-size:.92em}
+.stage{position:relative;border:1px solid var(--line);border-radius:16px;overflow:hidden;
+  background:#04050c;box-shadow:0 18px 46px rgba(0,0,0,.5)}
+canvas{display:block;width:100%;touch-action:manipulation;cursor:crosshair}
+.tip{position:absolute;pointer-events:none;background:rgba(7,11,24,.94);border:1px solid var(--line);
+  border-radius:10px;padding:8px 12px;font-size:12.5px;line-height:1.55;white-space:nowrap;
+  opacity:0;transition:opacity .12s;backdrop-filter:blur(7px);z-index:6}
+.tip b{color:var(--acc2);font-weight:600;font-size:13.5px}
+.tip i{color:var(--acc);font-style:normal}
+.tip.on{opacity:1}
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:14px 0 10px}
+.btn{appearance:none;border:1px solid var(--line);background:linear-gradient(180deg,rgba(126,168,255,.16),rgba(126,168,255,.06));
+  color:var(--fg);font-size:14px;padding:9px 16px;border-radius:10px;cursor:pointer;font-family:inherit;transition:.15s}
+.btn:hover{background:rgba(126,168,255,.24);border-color:rgba(126,168,255,.5)}
+.btn:active{transform:translateY(1px)}
+.btn.ghost{background:transparent}
+.spd{display:flex;align-items:center;gap:9px;font-size:13.5px;color:var(--dim);margin-left:auto}
+input[type=range]{-webkit-appearance:none;width:130px;height:4px;border-radius:4px;
+  background:linear-gradient(90deg,var(--acc),rgba(126,168,255,.25));outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;
+  background:#fff;box-shadow:0 0 0 4px rgba(126,168,255,.3);cursor:pointer}
+#spdv{width:44px;color:var(--acc);font-variant-numeric:tabular-nums}
+.readout{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 15px;
+  font-size:13.5px;color:var(--dim);min-height:52px}
+.readout b{color:var(--acc2)}
+.readout .row{display:flex;flex-wrap:wrap;gap:6px 22px;margin-top:4px;color:var(--fg);font-size:14px}
+.readout .row span i{color:var(--dim);font-style:normal;font-size:12.5px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin-top:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.card h3{margin:0 0 6px;font-size:14.5px;color:var(--acc)}
+.card p{margin:0;font-size:13px;color:var(--dim)}
+.card em{color:var(--acc2);font-style:normal}
+footer{margin-top:24px;font-size:12px;color:#5d6880;text-align:center}
+@media(max-width:480px){
+  .spd{margin-left:0;width:100%}
+  input[type=range]{flex:1;width:auto}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <span class="badge">交互演示 · Level 3</span>
+  <h1>太阳系是怎么转起来的？</h1>
+  <p class="sub">八颗行星在同一张引力网里各走各的椭圆轨道。鼠标悬停（手机点一下）看数据 ——
+    距日 <code>AU</code> 与 <code>公转周期</code>，注意：<b>离太阳越远，跑得越慢</b>。</p>
+
+  <div class="stage" id="stage">
+    <canvas id="sky"></canvas>
+    <div class="tip" id="tip"></div>
+  </div>
+
+  <div class="bar">
+    <button class="btn" id="toggle">⏸ 暂停</button>
+    <button class="btn ghost" id="reset">↺ 重置</button>
+    <label class="spd">速度
+      <input type="range" id="speed" min="0" max="4" step="0.1" value="1">
+      <span id="spdv">1.0×</span>
+    </label>
+  </div>
+
+  <div class="readout" id="readout">把鼠标移到行星上（手机点一下），即可看到它离太阳多远、绕一圈要多久。</div>
+
+  <div class="cards">
+    <div class="card">
+      <h3>① 引力 = 向心力</h3>
+      <p>太阳的引力始终指向太阳中心，正好充当圆周运动需要的<em>向心力</em>，把行星"锁"在轨道上，而不是让它飞走。</p>
+    </div>
+    <div class="card">
+      <h3>② 其实在"直飞"</h3>
+      <p>行星天生想沿切线直线飞出去，是引力<em>不断把它拽弯</em>。拽的力度刚好，就变成了永不停歇的绕圈。</p>
+    </div>
+    <div class="card">
+      <h3>③ 越远越慢</h3>
+      <p>开普勒第三定律：<em>T² ∝ a³</em>。水星 88 天绕一圈，海王星要 165 年——距离一拉开，周期呈平方级暴涨。</p>
+    </div>
+  </div>
+
+  <footer>数据来源：NASA 行星轨道要素（半长轴 / 恒星周期）。轨道半径已做压缩显示，非等比例。</footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var TAU = Math.PI * 2;
+
+  // au=半长轴(AU)  period=恒星周期(年)  e=偏心率
+  var PLANETS = [
+    {name:'水星',  en:'Mercury', au:0.387,  period:0.2408, e:0.2056, r:3.4,  color:'#b3a394'},
+    {name:'金星',  en:'Venus',   au:0.723,  period:0.6152, e:0.0068, r:4.7,  color:'#e6c07d'},
+    {name:'地球',  en:'Earth',   au:1.000,  period:1.0000, e:0.0167, r:5.0,  color:'#5aa9e6'},
+    {name:'火星',  en:'Mars',    au:1.524,  period:1.8808, e:0.0934, r:3.9,  color:'#d1653a'},
+    {name:'木星',  en:'Jupiter', au:5.203,  period:11.862, e:0.0484, r:11.5, color:'#d9a066'},
+    {name:'土星',  en:'Saturn',  au:9.537,  period:29.457, e:0.0542, r:9.6,  color:'#e0c98a', ring:true},
+    {name:'天王星',en:'Uranus',  au:19.191, period:84.011, e:0.0472, r:6.6,  color:'#8fd6d6'},
+    {name:'海王星',en:'Neptune', au:30.069, period:164.79, e:0.0086, r:6.3,  color:'#4f6fce'}
+  ];
+
+  var cv = document.getElementById('sky');
+  var ctx = cv.getContext('2d');
+  var stage = document.getElementById('stage');
+  var tip = document.getElementById('tip');
+  var readout = document.getElementById('readout');
+  var speedEl = document.getElementById('speed');
+  var spdvEl = document.getElementById('spdv');
+  var toggleBtn = document.getElementById('toggle');
+
+  var W = 0, H = 0, DPR = 1, Rmax = 100, sunR = 14;
+  var PSCALE = Math.pow(30.069, 0.42);   // 压缩径向尺度：内行星也看得清
+  var speed = 1, paused = false, hover = -1, pinned = -1;
+  var t = 0, last = 0;
+  var stars = [];
+
+  function buildStars(){
+    stars = [];
+    var n = 320;
+    for (var i = 0; i < n; i++){
+      stars.push({x:Math.random(), y:Math.random(), r:Math.random()*1.25+0.25,
+                  a:Math.random()*0.6+0.18, p:Math.random()*TAU});
+    }
+  }
+
+  function resize(){
+    DPR = Math.min(window.devicePixelRatio || 1, 2);
+    W = Math.max(280, stage.clientWidth);
+    H = Math.round(Math.max(320, Math.min(W * 0.80, 660)));
+    cv.style.height = H + 'px';
+    cv.width = Math.round(W * DPR);
+    cv.height = Math.round(H * DPR);
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    Rmax = Math.min(W, H) / 2 - 26;
+    sunR = Math.max(9, Rmax * 0.055);
+    // 每个行星的半长轴像素值
+    for (var i = 0; i < PLANETS.length; i++){
+      var p = PLANETS[i];
+      var norm = Math.pow(p.au, 0.42) / PSCALE;          // 0..1
+      p.a = sunR * 1.5 + norm * (Rmax - sunR * 1.5);
+      p.b = p.a * Math.sqrt(1 - p.e * p.e);
+      p.c = p.a * p.e;                                    // 焦点偏移
+      p.omega = TAU / (p.period * 5.0);                   // 地球 5 秒一圈（速度 1×）
+      p.theta0 = (i * 1.7) % TAU;
+    }
+  }
+
+  function posOf(p, theta){
+    return {
+      x: W / 2 + (p.a * Math.cos(theta) - p.c),
+      y: H / 2 + p.b * Math.sin(theta)
+    };
+  }
+
+  function drawStars(){
+    for (var i = 0; i < stars.length; i++){
+      var s = stars[i];
+      var tw = 0.72 + 0.28 * Math.sin(t * 0.9 + s.p);
+      ctx.globalAlpha = s.a * tw;
+      ctx.fillStyle = '#cfe0ff';
+      ctx.beginPath();
+      ctx.arc(s.x * W, s.y * H, s.r, 0, TAU);
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  function drawSun(){
+    var cx = W / 2, cy = H / 2;
+    var pulse = 1 + 0.03 * Math.sin(t * 1.7);
+    var g = ctx.createRadialGradient(cx, cy, 0, cx, cy, sunR * 8 * pulse);
+    g.addColorStop(0,   'rgba(255,238,180,.95)');
+    g.addColorStop(0.14,'rgba(255,196,86,.55)');
+    g.addColorStop(0.42,'rgba(255,140,40,.16)');
+    g.addColorStop(1,   'rgba(255,120,20,0)');
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(cx, cy, sunR * 8 * pulse, 0, TAU); ctx.fill();
+
+    var c = ctx.createRadialGradient(cx - sunR*0.3, cy - sunR*0.3, 1, cx, cy, sunR);
+    c.addColorStop(0, '#fffdf2');
+    c.addColorStop(0.55, '#ffd45e');
+    c.addColorStop(1, '#ff9b1f');
+    ctx.fillStyle = c;
+    ctx.beginPath(); ctx.arc(cx, cy, sunR, 0, TAU); ctx.fill();
+  }
+
+  function drawRing(x, y, r, front){
+    ctx.save();
+    if (front){ ctx.beginPath(); ctx.rect(0, y, W, H - y); ctx.clip(); }
+    else      { ctx.beginPath(); ctx.rect(0, 0, W, y);     ctx.clip(); }
+    ctx.translate(x, y);
+    ctx.rotate(-0.38);
+    ctx.lineWidth = r * 0.62;
+    ctx.strokeStyle = front ? 'rgba(226,206,150,.60)' : 'rgba(226,206,150,.34)';
+    ctx.beginPath(); ctx.ellipse(0, 0, r * 1.95, r * 0.70, 0, 0, TAU); ctx.stroke();
+    ctx.lineWidth = r * 0.20;
+    ctx.strokeStyle = front ? 'rgba(255,244,210,.42)' : 'rgba(255,244,210,.20)';
+    ctx.beginPath(); ctx.ellipse(0, 0, r * 1.42, r * 0.51, 0, 0, TAU); ctx.stroke();
+    ctx.restore();
+  }
+
+  function drawPlanet(p, x, y, isActive){
+    var r = p.r * (Rmax / 150 + 0.55);
+    if (p.ring) drawRing(x, y, r, false);
+
+    // 辉光
+    var g = ctx.createRadialGradient(x, y, r * 0.4, x, y, r * (isActive ? 3.4 : 2.4));
+    g.addColorStop(0, hexA(p.color, isActive ? 0.55 : 0.30));
+    g.addColorStop(1, hexA(p.color, 0));
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(x, y, r * (isActive ? 3.4 : 2.4), 0, TAU); ctx.fill();
+
+    // 本体
+    var b = ctx.createRadialGradient(x - r*0.35, y - r*0.35, r*0.1, x, y, r);
+    b.addColorStop(0, lighten(p.color));
+    b.addColorStop(1, p.color);
+    ctx.fillStyle = b;
+    ctx.beginPath(); ctx.arc(x, y, r, 0, TAU); ctx.fill();
+
+    if (isActive){
+      ctx.strokeStyle = 'rgba(255,255,255,.85)';
+      ctx.lineWidth = 1.4;
+      ctx.beginPath(); ctx.arc(x, y, r + 5, 0, TAU); ctx.stroke();
+    }
+    if (p.ring) drawRing(x, y, r, true);
+
+    // 中文名
+    ctx.font = '600 ' + (W < 480 ? 10.5 : 12) + 'px -apple-system,"PingFang SC",sans-serif';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillStyle = isActive ? '#ffffff' : 'rgba(214,228,255,.86)';
+    ctx.shadowColor = 'rgba(0,0,0,.9)'; ctx.shadowBlur = 4;
+    ctx.fillText(p.name, x, y - r - (W < 480 ? 9 : 12));
+    ctx.shadowBlur = 0;
+    return {x:x, y:y, r:r};
+  }
+
+  function hexA(hex, a){
+    var n = parseInt(hex.slice(1), 16);
+    return 'rgba(' + ((n>>16)&255) + ',' + ((n>>8)&255) + ',' + (n&255) + ',' + a + ')';
+  }
+  function lighten(hex){
+    var n = parseInt(hex.slice(1), 16);
+    var r = Math.min(255, ((n>>16)&255) + 70);
+    var g = Math.min(255, ((n>>8)&255) + 70);
+    var b = Math.min(255, (n&255) + 70);
+    return 'rgb(' + r + ',' + g + ',' + b + ')';
+  }
+
+  var hits = [];
+
+  function frame(now){
+    if (!last) last = now;
+    var dt = Math.min((now - last) / 1000, 0.05);
+    last = now;
+    if (!paused) t += dt * speed;
+
+    ctx.clearRect(0, 0, W, H);
+    drawStars();
+
+    // 轨道
+    for (var i = 0; i < PLANETS.length; i++){
+      var p = PLANETS[i];
+      ctx.strokeStyle = (i === hover || i === pinned) ? 'rgba(150,190,255,.5)' : 'rgba(120,155,225,.16)';
+      ctx.lineWidth = (i === hover || i === pinned) ? 1.3 : 1;
+      ctx.beginPath();
+      ctx.ellipse(W/2 - p.c, H/2, p.a, p.b, 0, 0, TAU);
+      ctx.stroke();
+    }
+
+    drawSun();
+
+    hits = [];
+    for (var j = 0; j < PLANETS.length; j++){
+      var q = PLANETS[j];
+      var th = q.theta0 + q.omega * t;
+      var pt = posOf(q, th);
+      var info = drawPlanet(q, pt.x, pt.y, (j === hover || j === pinned));
+      hits.push({i:j, x:info.x, y:info.y, r:info.r});
+    }
+
+    requestAnimationFrame(frame);
+  }
+
+  function findPlanet(mx, my){
+    for (var i = 0; i < hits.length; i++){
+      var h = hits[i];
+      var d = Math.hypot(mx - h.x, my - h.y);
+      if (d < Math.max(h.r + 13, 17)) return i;
+    }
+    return -1;
+  }
+
+  function fmtPeriod(y){
+    if (y < 1) return (y * 365.25).toFixed(0) + ' 天';
+    return y.toFixed(2) + ' 年';
+  }
+
+  function showTip(i, mx, my){
+    var p = PLANETS[i];
+    tip.innerHTML = '<b>' + p.name + '</b> <i>' + p.en + '</i><br>' +
+      '距日 <i>' + p.au.toFixed(2) + ' AU</i><br>' +
+      '公转周期 <i>' + fmtPeriod(p.period) + '</i>';
+    tip.classList.add('on');
+    var tw = tip.offsetWidth, th = tip.offsetHeight;
+    var x = Math.min(Math.max(mx + 16, 8), W - tw - 8);
+    var y = Math.min(Math.max(my - th - 12, 8), H - th - 8);
+    tip.style.left = x + 'px';
+    tip.style.top = y + 'px';
+  }
+
+  function hideTip(){ tip.classList.remove('on'); }
+
+  function updateReadout(i){
+    if (i < 0){
+      readout.innerHTML = '把鼠标移到行星上（手机点一下），即可看到它离太阳多远、绕一圈要多久。';
+      return;
+    }
+    var p = PLANETS[i];
+    readout.innerHTML = '<b>' + p.name + '</b>（' + p.en + '）' +
+      '<div class="row">' +
+      '<span><i>距日</i> ' + p.au.toFixed(2) + ' 天文单位</span>' +
+      '<span><i>公转周期</i> ' + fmtPeriod(p.period) + '</span>' +
+      '<span><i>轨道偏心率</i> ' + p.e.toFixed(3) + '</span>' +
+      '</div>';
+  }
+
+  // 交互
+  function relPos(ev){
+    var r = cv.getBoundingClientRect();
+    return {x: ev.clientX - r.left, y: ev.clientY - r.top};
+  }
+  cv.addEventListener('pointermove', function(ev){
+    var m = relPos(ev), i = findPlanet(m.x, m.y);
+    hover = i;
+    if (i >= 0) showTip(i, m.x, m.y); else hideTip();
+  });
+  cv.addEventListener('pointerleave', function(){ hover = -1; hideTip(); });
+  cv.addEventListener('pointerdown', function(ev){
+    var m = relPos(ev), i = findPlanet(m.x, m.y);
+    if (i >= 0){
+      pinned = (pinned === i) ? -1 : i;
+      updateReadout(pinned);
+      showTip(i, m.x, m.y);
+    } else {
+      pinned = -1; updateReadout(-1); hideTip();
+    }
+  });
+
+  toggleBtn.addEventListener('click', function(){
+    paused = !paused;
+    toggleBtn.textContent = paused ? '▶ 继续' : '⏸ 暂停';
+  });
+  document.getElementById('reset').addEventListener('click', function(){
+    t = 0; pinned = -1; hover = -1; updateReadout(-1); hideTip();
+  });
+  speedEl.addEventListener('input', function(){
+    speed = parseFloat(speedEl.value);
+    spdvEl.textContent = speed.toFixed(1) + '×';
+  });
+
+  window.addEventListener('resize', function(){
+    var keep = t;
+    resize();
+    t = keep;
+  });
+
+  buildStars();
+  resize();
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
