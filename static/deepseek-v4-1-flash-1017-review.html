@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DeepSeek V4.1-Flash-1017：跑分涨了，口碑为什么劈成两半</title>
+<style>
+  :root{
+    --bg:#f6f7fb; --ink:#12141a; --muted:#5b6270; --line:#e5e7ef;
+    --blue:#4d6bfe; --cyan:#06b6d4; --green:#0f9d76; --amber:#b45309; --red:#c2410c;
+    --card:#fff; --shadow:0 1px 2px rgba(18,20,26,.04),0 8px 28px rgba(18,20,26,.06);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    -webkit-font-smoothing:antialiased;line-height:1.75}
+  a{color:var(--blue);text-decoration:none;border-bottom:1px solid rgba(77,107,254,.25)}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+
+  .hero{background:
+      radial-gradient(900px 420px at 15% -10%, rgba(124,140,255,.42), transparent 60%),
+      radial-gradient(700px 380px at 92% 0%, rgba(6,182,212,.25), transparent 62%),
+      linear-gradient(160deg,#0b0f20 0%,#121a33 55%,#0c1124 100%);
+    color:#fff;padding:54px 0 46px;position:relative;overflow:hidden}
+  .hero:after{content:"";position:absolute;inset:0;
+    background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);
+    background-size:44px 44px;mask-image:linear-gradient(180deg,rgba(0,0,0,.55),transparent 78%);pointer-events:none}
+  .kicker{display:inline-flex;align-items:center;gap:8px;font-size:13px;letter-spacing:.08em;
+    text-transform:uppercase;color:#b9c4ff;border:1px solid rgba(185,196,255,.28);
+    padding:6px 12px;border-radius:999px;background:rgba(255,255,255,.05)}
+  h1{font-size:42px;line-height:1.2;margin:18px 0 12px;letter-spacing:-.02em;font-weight:800}
+  h1 span{background:linear-gradient(92deg,#9db1ff,#6ee7f9);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .sub{color:#c3c9dd;font-size:16px;max-width:780px;margin:0}
+  .verdict{margin-top:26px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);
+    border-radius:16px;padding:20px 22px}
+  .verdict p{margin:0;color:#e6eaf7;font-size:16.5px}
+  .tagrow{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+  .tag{font-size:13px;color:#dbe2ff;background:rgba(124,140,255,.16);
+    border:1px solid rgba(124,140,255,.32);border-radius:999px;padding:5px 12px}
+
+  section{padding:44px 0 4px}
+  .sec-h{display:flex;align-items:baseline;gap:12px;margin-bottom:6px}
+  .sec-h .num{font-size:13px;font-weight:700;color:var(--blue);letter-spacing:.12em}
+  h2{font-size:26px;margin:0;letter-spacing:-.01em}
+  .lead{color:var(--muted);margin:6px 0 22px;font-size:15px}
+
+  .grid{display:grid;gap:16px}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  .g2{grid-template-columns:repeat(2,1fr)}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:var(--shadow)}
+  .metric .k{font-size:13px;color:var(--muted);margin-bottom:8px}
+  .metric .v{font-size:31px;font-weight:800;letter-spacing:-.02em}
+  .metric .d{font-size:13px;color:var(--green);font-weight:600;margin-top:2px}
+  .metric .bar{height:6px;border-radius:6px;background:#eef0f7;margin-top:12px;overflow:hidden}
+  .metric .bar i{display:block;height:100%;border-radius:6px;background:linear-gradient(90deg,var(--blue),var(--cyan))}
+
+  ul.clean{margin:0;padding-left:0;list-style:none}
+  ul.clean li{position:relative;padding-left:20px;margin:9px 0;color:#2b3040}
+  ul.clean li:before{content:"";position:absolute;left:2px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--blue)}
+
+  table{width:100%;border-collapse:separate;border-spacing:0;font-size:14.5px;background:#fff;
+    border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:var(--shadow)}
+  th,td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+  th{background:#f2f4fb;font-size:13px;color:#424a5c;font-weight:700}
+  tr:last-child td{border-bottom:none}
+  td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+  .up{color:var(--green);font-weight:700}
+
+  /* 舆论场 */
+  .voices{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:6px}
+  .voice{background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+  .voice:before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px}
+  .voice.hype:before{background:#f59e0b}
+  .voice.crit:before{background:#ef4444}
+  .voice.calm:before{background:#10b981}
+  .voice h3{margin:0 0 4px;font-size:16.5px}
+  .voice .who{font-size:12.5px;color:var(--muted);margin-bottom:10px}
+  .voice p{margin:0 0 8px;color:#33394a;font-size:14.5px}
+  .voice q{quotes:"「" "」";color:#1e2434}
+
+  .case{display:grid;grid-template-columns:120px 1fr;gap:16px;padding:18px 0;border-bottom:1px dashed var(--line)}
+  .case:last-child{border-bottom:none}
+  .case .name{font-weight:800;font-size:15.5px}
+  .case .score{display:inline-block;margin-top:8px;font-size:12px;padding:3px 9px;border-radius:999px;background:#eef1ff;color:#3b52d4;font-weight:700}
+  .case .score.bad{background:#fff1e8;color:#b45309}
+  .case .score.mid{background:#eefaf6;color:#0f7c60}
+  .case p{margin:0;color:#3a4152}
+  .case p + p{margin-top:7px}
+
+  .pill{display:inline-block;font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px}
+  .pill.ok{background:#e9f8f2;color:#0b7a5c}
+  .pill.warn{background:#fff7e6;color:#a35a00}
+
+  .price .hl{background:#f7f9ff}
+  .note{font-size:13px;color:var(--muted);margin-top:10px}
+
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .box{border-radius:16px;padding:20px;border:1px solid var(--line);background:#fff;box-shadow:var(--shadow)}
+  .box h3{margin:0 0 10px;font-size:16.5px}
+  .box.good{border-top:4px solid #10b981}
+  .box.bad{border-top:4px solid #f59e0b}
+
+  .timeline{border-left:2px solid #dfe3f0;margin:6px 0 0 8px;padding-left:20px}
+  .tl{position:relative;padding:10px 0}
+  .tl:before{content:"";position:absolute;left:-27px;top:18px;width:11px;height:11px;border-radius:50%;background:#fff;border:2.5px solid var(--blue)}
+  .tl .date{font-size:12.5px;color:var(--blue);font-weight:800}
+  .tl .what{font-size:15px;color:#232838}
+  .tl .what small{color:var(--muted)}
+
+  .callout{background:#fff8ee;border:1px solid #f6dfc2;border-left:4px solid #f59e0b;border-radius:14px;padding:16px 18px;font-size:14.5px;color:#5b4a2f}
+
+  footer{margin-top:46px;background:#0d1226;color:#aeb7cf;padding:28px 0 34px;font-size:13px}
+  footer .wrap{display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap}
+  footer a{color:#c9d3ff;border-bottom-color:rgba(201,211,255,.3)}
+  .src{margin:0;padding-left:18px}
+  .src li{margin:5px 0}
+
+  @media (max-width:860px){
+    h1{font-size:31px}
+    .g3,.g2,.two,.voices{grid-template-columns:1fr}
+    .case{grid-template-columns:1fr;gap:6px}
+    section{padding:34px 0 2px}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="kicker">2026-10-17 · 版本快照 · 口碑复盘</div>
+    <h1>DeepSeek V4.1-Flash-1017<br><span>跑分涨了，口碑为什么劈成两半</span></h1>
+    <p class="sub">官方口径是“性能–费用的帕累托改进”，榜单也确实全面上涨；但翻一遍主流实测，画风立刻分成两派：一边喊“前端世一、斩杀线”，一边说“3D 抽象、长程翻车”。这篇不站队，把两边的话摆在一起看。</p>
+    <div class="verdict">
+      <p><b>结论：</b>这是一次“工程指标型”升级，不是能力跃迁。日常编码、Agent 工具链、网页还原确实更强更便宜；但复杂 3D、长程自主、审美细节这些真正拉开差距的地方，主流实测并没有跟着跑分一起涨。把它当高性价比工人可以，当“一次交付的大师”会失望。</p>
+    </div>
+    <div class="tagrow">
+      <span class="tag">价格不变</span>
+      <span class="tag">Terminal-Bench 4.0 +11.1</span>
+      <span class="tag">实测口碑分裂</span>
+      <span class="tag">3D / 长程仍是短板</span>
+      <span class="tag">1M 上下文</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section>
+    <div class="sec-h"><span class="num">01</span><h2>先看官方数字：确实涨了</h2></div>
+    <p class="lead">以下为官方更新日志口径，括号内为上一版 V4.1-Flash（9 月 10 日）。注意：这些是厂商自测，且多在特定 Harness 下跑出。</p>
+    <div class="grid g3">
+      <div class="card metric">
+        <div class="k">Terminal-Bench 4.0</div>
+        <div class="v">42.3</div>
+        <div class="d">+11.1（原 31.2，约 +35.6%）</div>
+        <div class="bar"><i style="width:71%"></i></div>
+      </div>
+      <div class="card metric">
+        <div class="k">HLE（无工具）</div>
+        <div class="v">42.6</div>
+        <div class="d">+5.8（纯文本子集 44.0）</div>
+        <div class="bar"><i style="width:66%"></i></div>
+      </div>
+      <div class="card metric">
+        <div class="k">ProgramBench</div>
+        <div class="v">29.1</div>
+        <div class="d">+8.8（原 20.3，约 +43%）</div>
+        <div class="bar"><i style="width:52%"></i></div>
+      </div>
+    </div>
+    <div style="height:16px"></div>
+    <table>
+      <thead><tr><th>基准</th><th>V4.1-Flash（9/10）</th><th>1017</th><th>变化</th></tr></thead>
+      <tbody>
+        <tr><td>Terminal-Bench 4.0</td><td class="num">31.2</td><td class="num">42.3</td><td class="up">+11.1</td></tr>
+        <tr><td>DeepSWE v1.1</td><td class="num">74.2</td><td class="num">77.0</td><td class="up">+2.8</td></tr>
+        <tr><td>ProgramBench</td><td class="num">20.3</td><td class="num">29.1</td><td class="up">+8.8</td></tr>
+        <tr><td>NL2Repo-Bench</td><td class="num">65.4</td><td class="num">68.2</td><td class="up">+2.8</td></tr>
+        <tr><td>Automation-Bench v1.0.6</td><td class="num">54.8</td><td class="num">60.5</td><td class="up">+5.7</td></tr>
+        <tr><td>Agents' Last Exam</td><td class="num">31.8</td><td class="num">35.4</td><td class="up">+3.6</td></tr>
+        <tr><td>Chartography（带工具）</td><td class="num">78.9</td><td class="num">83.0</td><td class="up">+4.1</td></tr>
+        <tr><td>BabyVision（带工具）</td><td class="num">89.6</td><td class="num">92.5</td><td class="up">+2.9</td></tr>
+      </tbody>
+    </table>
+    <p class="note">口径提醒：Terminal-Bench 4.0 用 Claude Code 框架、DeepSWE 用 Mini-SWE-V2；厂商基准只能横向参考，不能直接换算成“你的项目成功率”。</p>
+  </section>
+
+  <section>
+    <div class="sec-h"><span class="num">02</span><h2>舆论场：三种声音，各说各的</h2></div>
+    <p class="lead">同一天、同一个模型，B 站标题在“震鲸瘫坐”，公众号在“还是难评”，知乎在“审美离第一梯队还有差距”。这不是谁撒谎，而是测试集和期待值完全不同。</p>
+    <div class="voices">
+      <div class="voice hype">
+        <h3>吹爆派：前端和单页确实能打</h3>
+        <div class="who">B 站测评区 / X 部分博主</div>
+        <p><q>V4.1 Flash 1017：前端能力世一</q><q>拉爆 Opus 5？震鲸瘫坐</q><q>鹈鹕骑车、樱花电车，效果惊人</q></p>
+        <p>他们的用例集中在：单页前端、SVG/Canvas 动画、网页复刻、短平快的“一句话生成”。这类任务正是 1017 提升最明显的地方，出片效果也确实抓眼球。</p>
+      </div>
+      <div class="voice crit">
+        <h3>泼冷水派：复杂 3D 和长程照样翻车</h3>
+        <div class="who">公众号实测《DeepSeek 新版，还是难评！》</div>
+        <p><q>桥的摆放位置和角度不对</q><q>座椅插到屁股了，腿折了</q><q>坦克在地上打滚，左右还反了</q></p>
+        <p>五个偏难的“许愿式”案例里，只有网页复刻和开局界面算过关；3D 车库做了 3 小时，效果提升有限。作者的原话：<q>不是不让你等，是等久了效果还不好，就比较痛苦</q>。</p>
+      </div>
+      <div class="voice calm" style="grid-column:1 / -1">
+        <h3>理性派：进步在工程指标，不在审美和世界知识</h3>
+        <div class="who">知乎测评 / 开发者社区</div>
+        <p>知乎高赞测评的判断很克制：<q>综合审美能力比 V4 各版本显著更高，但离第一梯队还有差距</q>；<q>对间距、配色、复杂高级建模、动效、转场，表现还不及预期</q>；Agent Coding <q>提升幅度有限，略好于前代 Pro</q>。另有开发者反馈：拿它替大模型跑数据清洗，前几轮很稳，长会话后半段会把字段名偷偷改掉，最后仍要人工兜底。</p>
+      </div>
+    </div>
+    <div class="callout" style="margin-top:16px">
+      <b>为什么差这么多？</b>三个变量：<b>①用例</b>——单页前端 vs 多文件 3D 工程，难度不是一个量级；<b>②档位</b>——max 档更啰嗦也更慢，low/high 档体验完全不同；<b>③Harness</b>——官方明确针对 DeepSeek Harness 0.2.1-rc.1+、CodeBuddy、WorkBuddy 优化，换个壳子跑，成绩会掉。再加上流量标题天然偏爱“世一/斩杀”，差评天然更具体——两边都不能全信。
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-h"><span class="num">03</span><h2>官方这次到底改了什么</h2></div>
+    <div class="grid g2">
+      <div class="card">
+        <ul class="clean">
+          <li><b>训练：</b>基于自反馈的强化学习，重点补“从零搭完整项目”，官方称之为“许愿式编程”。</li>
+          <li><b>效率：</b>任务运行时间与输出长度同时缩短，价格不变，才构成“帕累托改进”。</li>
+          <li><b>适配：</b>针对 DeepSeek Harness、腾讯 CodeBuddy / WorkBuddy 专项优化，Harness 需 ≥ 0.2.1-rc.1。</li>
+        </ul>
+      </div>
+      <div class="card">
+        <ul class="clean">
+          <li><b>同日第二件事：</b>开放自研搜索 API（Search / Fetch），千亿级网页索引，主打反 SEO 作弊与低质 AIGC。</li>
+          <li><b>计费：</b>各 5 元 / 千次成功请求；Harness 内调用目前免费，<b>2026-11-1 起收费</b>。</li>
+          <li><b>接入：</b>模型名仍是 <code>deepseek-flash</code>，网页端与 App 已同步，旧模型名自动路由到 1017。</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-h"><span class="num">04</span><h2>实测案例：五个“许愿式”任务</h2></div>
+    <p class="lead">来自公众号逐项实测。例子偏难，失败不代表日常任务不行，但能看清天花板。</p>
+    <div class="card" style="padding:6px 22px">
+      <div class="case">
+        <div><div class="name">赛博上河图</div><div class="score mid">明显进步</div></div>
+        <p>空间层次、建筑轮廓、远山剪影和河里那条“大肥鱼”都出来了，河岸房屋与柳树更精致。<b>硬伤：</b>桥的位置和角度不对，一眼假。</p>
+      </div>
+      <div class="case">
+        <div><div class="name">天文机械表</div><div class="score bad">仍不合格</div></div>
+        <p>功能能跑，但表盘线条怪异、秒针透明、两个小表盘含义不明。对比之下，GPT / Claude 新一代能干净处理，连 Haiku 5.5 都不错。</p>
+      </div>
+      <div class="case">
+        <div><div class="name">超级玛丽</div><div class="score bad">反而退步</div></div>
+        <p>跳跃逻辑出问题，后半张地图全乱。它没去查资料，直接“脑补”——提示词允许它自信，它选择了盲目自信。</p>
+      </div>
+      <div class="case">
+        <div><div class="name">甲维斯的车库</div><div class="score mid">一半合格</div></div>
+        <p>网页复刻到位：布局、配色、控件基本还原。3D 建模依旧抽象——座椅穿模、腿折、汽车轮廓乱。耗时约 3 小时，大半花在自我验证。</p>
+      </div>
+      <div class="case">
+        <div><div class="name">坦克世界</div><div class="score mid">大幅进步</div></div>
+        <p>开局界面很有感觉，UI 与基本结构都在。进场后坦克满地打滚、左右操控反向，离 3A 差得远；作为“搞笑游戏”倒是合格。</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-h"><span class="num">05</span><h2>价格没动，这才是它的护城河</h2></div>
+    <table class="price">
+      <thead><tr><th>项目（元 / 百万 tokens）</th><th>deepseek-flash<br><span style="font-weight:400;color:#6b7280">V4.1-Flash-1017</span></th><th>deepseek-v4-pro<br><span style="font-weight:400;color:#6b7280">V4-Pro-0813</span></th></tr></thead>
+      <tbody>
+        <tr><td>输入 · 缓存命中（高峰 / 闲时）</td><td class="num hl">0.04 / 0.02</td><td class="num">0.30 / 0.15</td></tr>
+        <tr><td>输入 · 未命中（高峰 / 闲时）</td><td class="num hl">2 / 1</td><td class="num">9 / 4.5</td></tr>
+        <tr><td>输出（高峰 / 闲时）</td><td class="num hl">8 / 4</td><td class="num">27 / 13.5</td></tr>
+        <tr><td>上下文 / 最大输出</td><td class="num hl">1M / 384K</td><td class="num">1M / 384K</td></tr>
+        <tr><td>并发上限</td><td class="num hl">2500</td><td class="num">500</td></tr>
+        <tr><td>图像理解</td><td class="hl"><span class="pill ok">支持</span></td><td><span class="pill warn">不支持</span></td></tr>
+      </tbody>
+    </table>
+    <p class="note">高峰时段：工作日 9:00–12:00、14:00–18:00；其余时间、周末与法定节假日为闲时，价格减半。</p>
+  </section>
+
+  <section>
+    <div class="sec-h"><span class="num">06</span><h2>到底该怎么用</h2></div>
+    <div class="two">
+      <div class="box good">
+        <h3>可以放心交给它</h3>
+        <ul class="clean">
+          <li>仓库级重构、CI 排障、多轮工具调用的编码 Agent</li>
+          <li>网页/DOM 复刻、单页前端、SVG/Canvas 动画</li>
+          <li>图像理解 + 文档流水线（原生多模态）</li>
+          <li>高并发、成本敏感的批处理（并发 2500）</li>
+        </ul>
+      </div>
+      <div class="box bad">
+        <h3>必须人盯人</h3>
+        <ul class="clean">
+          <li>大型 3D 场景、精细道具建模</li>
+          <li>数小时自主规划的长程项目</li>
+          <li>对间距、配色、动效苛刻的交付</li>
+          <li>长会话后段容易指令漂移，需阶段校验</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card" style="margin-top:16px">
+      <p style="margin:0 0 10px"><b>一句话选型：</b>把它当“高频主力工人”，不是“一次交付的大师”。任务在能力圈内，它是当下性价比最锋利的那把刀；超出圈子的活，拆小、加校验、人兜底。</p>
+      <p style="margin:0"><b>值不值得换：</b>已经在用 <code>deepseek-flash</code> 的，零成本升级；只在跑重 3D / 超长自主任务的，先小样本复测再放量。别拿榜单当验收标准，拿你自己那三个最难的用例当标准。</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-h"><span class="num">07</span><h2>版本节奏</h2></div>
+    <div class="timeline">
+      <div class="tl"><div class="date">2026-04-24</div><div class="what">DeepSeek-V4 预览版 <small>1M 上下文、Pro / Flash 双版本</small></div></div>
+      <div class="tl"><div class="date">2026-07-31</div><div class="what">V4-Flash 正式版 <small>Agent 能力大幅增强</small></div></div>
+      <div class="tl"><div class="date">2026-08-13</div><div class="what">V4-Pro 正式版 <small>思考强度三档、原生 Responses API</small></div></div>
+      <div class="tl"><div class="date">2026-09-10</div><div class="what">V4.1-Flash <small>CED 新架构，8B/16B 激活，原生多模态</small></div></div>
+      <div class="tl"><div class="date">2026-10-17</div><div class="what"><b>V4.1-Flash-1017 + 自研搜索 API</b> <small>性能–费用帕累托改进</small></div></div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <div style="color:#e6ebff;font-weight:700;margin-bottom:6px">资料来源</div>
+      <ul class="src">
+        <li><a href="https://api-docs.deepseek.com/zh-cn/updates">DeepSeek API 更新日志（2026-10-17）</a></li>
+        <li><a href="https://api-docs.deepseek.com/zh-cn/quick_start/pricing">DeepSeek 模型 &amp; 价格</a></li>
+        <li><a href="https://mp.weixin.qq.com/s/b8sHp7Vk0EOva22GeSc7QQ">公众号实测《DeepSeek 新版，还是难评！》</a></li>
+        <li><a href="https://www.ithome.com/1/014/328.htm">IT之家：V4.1 Flash-1017 发布</a></li>
+        <li><a href="https://www.zhihu.com/question/2081380378493961583">知乎：如何评价 V4.1 Flash</a></li>
+        <li>B 站测评区、X 开发者讨论（标题与评论）</li>
+      </ul>
+    </div>
+    <div style="text-align:right;align-self:flex-end">
+      <div>整理：Tars · 2026-10-18</div>
+      <div style="opacity:.7">厂商基准与自媒体测评均只作参考，验收以自己业务为准</div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
