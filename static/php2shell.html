@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PHP2Shell：PHP 两个 9.2 分 RCE 漏洞全景汇总（2026-10-21）</title>
+<style>
+:root{--bg:#0d1117;--card:#161b22;--line:#30363d;--txt:#e6edf3;--dim:#8b949e;--red:#f85149;--orange:#d29922;--green:#3fb950;--blue:#58a6ff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--txt);font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;padding:0 0 60px}
+.wrap{max-width:900px;margin:0 auto;padding:0 20px}
+header{background:linear-gradient(160deg,#1a0505,#0d1117 60%);border-bottom:1px solid var(--line);padding:48px 0 36px;margin-bottom:36px}
+.tag{display:inline-block;background:rgba(248,81,73,.15);color:var(--red);border:1px solid rgba(248,81,73,.4);font-size:13px;padding:3px 12px;border-radius:20px;margin-bottom:16px;font-weight:600}
+h1{font-size:32px;line-height:1.35;margin-bottom:14px;letter-spacing:-.5px}
+.sub{color:var(--dim);font-size:15px}
+.meta{display:flex;flex-wrap:wrap;gap:18px;margin-top:20px;font-size:13px;color:var(--dim)}
+.meta b{color:var(--txt)}
+h2{font-size:22px;margin:44px 0 18px;padding-left:12px;border-left:4px solid var(--blue);line-height:1.3}
+h3{font-size:17px;margin:26px 0 10px;color:var(--blue)}
+p{margin-bottom:14px;color:#c9d1d9}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:22px 24px;margin-bottom:18px}
+.card.crit{border-color:rgba(248,81,73,.45);box-shadow:0 0 0 1px rgba(248,81,73,.1) inset}
+.cve-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:12px}
+.cve-id{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:19px;font-weight:700;color:var(--red)}
+.score{background:var(--red);color:#fff;font-size:13px;font-weight:700;padding:3px 12px;border-radius:6px}
+table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px}
+th,td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--line)}
+th{color:var(--dim);font-weight:600;font-size:13px;background:#11161d}
+td{color:#c9d1d9}
+code{background:#21262d;padding:2px 7px;border-radius:5px;font-family:ui-monospace,Menlo,monospace;font-size:13px;color:#ffa657}
+pre{background:#0b0f14;border:1px solid var(--line);border-radius:10px;padding:16px 18px;overflow-x:auto;margin:14px 0;font-size:13px;line-height:1.65}
+pre code{background:none;padding:0;color:#c9d1d9}
+ul,ol{margin:0 0 16px 22px;color:#c9d1d9}
+li{margin-bottom:9px}
+.warn{background:rgba(210,153,34,.1);border:1px solid rgba(210,153,34,.4);border-radius:10px;padding:16px 20px;margin:18px 0;font-size:14px}
+.warn b{color:var(--orange)}
+.ok{background:rgba(63,185,80,.08);border:1px solid rgba(63,185,80,.35);border-radius:10px;padding:16px 20px;margin:18px 0;font-size:14px}
+.ok b{color:var(--green)}
+.bad{background:rgba(248,81,73,.08);border:1px solid rgba(248,81,73,.35);border-radius:10px;padding:16px 20px;margin:18px 0;font-size:14px}
+.bad b{color:var(--red)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin:18px 0}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px;text-align:center}
+.stat .n{font-size:26px;font-weight:800;color:var(--red);font-family:ui-monospace,Menlo,monospace}
+.stat .l{font-size:12px;color:var(--dim);margin-top:6px}
+a{color:var(--blue);text-decoration:none;word-break:break-all}
+a:hover{text-decoration:underline}
+.src{font-size:13px;color:var(--dim);border-top:1px solid var(--line);padding-top:14px;margin-top:32px}
+.src li{margin-bottom:6px}
+footer{text-align:center;color:var(--dim);font-size:12px;margin-top:48px;padding-top:20px;border-top:1px solid var(--line)}
+.pill{display:inline-block;font-size:12px;padding:2px 9px;border-radius:5px;background:#21262d;color:var(--dim);margin-right:6px}
+@media(max-width:600px){h1{font-size:24px}h2{font-size:19px}.wrap{padding:0 16px}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+<span class="tag">🔴 CRITICAL · CVSS 9.2</span>
+<h1>PHP2Shell：PHP 两个满分级 RCE 漏洞<br>全网信息汇总</h1>
+<p class="sub">PHP 官方 2026-10-21 15:00（北京时间）发布安全公告，修复两个未经身份验证即可远程执行代码的严重漏洞。本文汇总官方公告、各发行版与安全厂商信息。</p>
+<div class="meta">
+<span>事件日期：<b>2026-10-21</b></span>
+<span>代号：<b>php2shell</b></span>
+<span>紧急程度：<b style="color:#f85149">极高</b></span>
+</div>
+</div></header>
+
+<div class="wrap">
+
+<h2>一句话结论</h2>
+<div class="bad">
+<b>如果你服务器上有 PHP 在对外提供服务，立刻升级，不要等。</b>官方原话：「没有任何完整的缓解措施，升级是唯一安全的选择」。已确认最高风险场景是 <code>mod_php</code>，攻击者在应用代码执行之前就能触发攻击——意味着<b>应用层写的任何防护代码都拦不住</b>。
+</div>
+
+<div class="grid">
+<div class="stat"><div class="n">9.2</div><div class="l">CVSS v4.0 评分</div></div>
+<div class="stat"><div class="n">2</div><div class="l">独立 RCE 漏洞</div></div>
+<div class="stat"><div class="n">无需认证</div><div class="l">攻击门槛</div></div>
+<div class="stat"><div class="n">PHP 5+</div><div class="l">疑似受影响范围</div></div>
+</div>
+
+<h2>漏洞档案</h2>
+
+<div class="card crit">
+<div class="cve-head">
+<span class="cve-id">CVE-2026-109618</span>
+<span class="score">CVSS v4.0 · 9.2 Critical</span>
+</div>
+<h3>RCE via OOM corruption（内存耗尽导致的损坏）</h3>
+<p><b>根因：</b>当一个请求耗尽 PHP 的每请求内存上限时，PHP 会通过"直接跳出当前执行"的方式中断它。在若干处代码中，此刻请求内存只初始化了一半，中断让这部分数据停留在坏状态；请求结束时的清理代码随后把这份无效数据当成有效数据来处理。</p>
+<p><b>攻击方式：</b>攻击者可以用精心构造的 <b>文件上传（multipart）请求</b>主动制造内存耗尽——例如一个 part 携带海量 header，或者塞入大量空文件字段——而请求体积始终控制在服务器允许范围内。内存耗尽后，清理阶段就会被导向可利用的路径。</p>
+<p><b>为什么危险：</b>这是"先于应用代码触发"的漏洞。攻击请求不需要命中任何 PHP 脚本业务逻辑。</p>
+<p><span class="pill">GHSA-w8hw-w9fx-j79w</span><span class="pill">CWE-内存处理</span></p>
+</div>
+
+<div class="card crit">
+<div class="cve-head">
+<span class="cve-id">CVE-2026-109619</span>
+<span class="score">CVSS v4.0 · 9.2 Critical</span>
+</div>
+<h3>RCE via stale global state（残留全局状态）</h3>
+<p><b>根因：</b>请求持有的内部状态在背后的内存被释放之后仍然残留。同一个 worker 处理下一个请求时，可能在正常初始化重置之前就用到这份过期状态——典型的<b>跨请求污染</b>。</p>
+<p><b>攻击方式：</b>已确认的路径包括 <code>session.upload_progress</code> 机制，以及 PHP 8.5 的致命错误回溯（fatal error backtrace）。攻击者先构造一个请求把状态"做脏"，再由后续请求踩中。</p>
+<p><b>为什么阴险：</b>跨请求的状态泄漏意味着攻击可能分多步完成，单个请求看起来完全正常，日志审计容易漏掉。</p>
+<p><span class="pill">GHSA-6wmf-4rv5-p3rp</span><span class="pill">CWE-状态残留</span></p>
+</div>
+
+<h2>受影响范围与修复版本</h2>
+
+<table>
+<thead><tr><th>分支</th><th>修复版本</th><th>说明</th></tr></thead>
+<tbody>
+<tr><td><b>PHP 8.5</b></td><td style="color:#3fb950;font-weight:700">8.5.12</td><td>当前主线，立即升级</td></tr>
+<tr><td><b>PHP 8.4</b></td><td style="color:#3fb950;font-weight:700">8.4.27</td><td>主流生产版本</td></tr>
+<tr><td><b>PHP 8.3</b></td><td style="color:#3fb950;font-weight:700">8.3.36</td><td>仍受支持</td></tr>
+<tr><td><b>PHP 8.2</b></td><td style="color:#3fb950;font-weight:700">8.2.35</td><td>2026-12-31 即 EOL，尽快迁走</td></tr>
+<tr><td><b>PHP 8.1 及更早</b></td><td style="color:#d29922">官方不发版</td><td>安全团队罕见地提供了 7.4 / 8.0 / 8.1 的<b>最小源码回溯分支</b></td></tr>
+</tbody>
+</table>
+
+<div class="warn">
+<b>⚠️ 三个容易踩的坑</b>
+<ul style="margin-top:8px;margin-bottom:0">
+<li><b>rpms.remirepo.net 用户当天拿不到更新</b>。官方明确建议改用发行版官方包或自行编译源码。</li>
+<li><b>受影响的服务面比想象中广</b>：PHP-FPM、Apache mod_php、php-cgi、FrankenPHP、LiteSpeed 全部在列。</li>
+<li><b>PHP 8.2 只剩 2 个多月寿命</b>（2026-12-31 EOL），打完补丁就该规划迁移了。</li>
+</ul>
+</div>
+
+<h2>升级命令速查</h2>
+
+<h3>Debian / Ubuntu</h3>
+<pre><code>sudo apt update
+sudo apt install --only-upgrade php8.4-fpm php8.4-cli
+sudo systemctl restart php8.4-fpm</code></pre>
+
+<h3>RHEL / AlmaLinux / Rocky</h3>
+<pre><code>sudo dnf clean metadata && sudo dnf upgrade 'php*'
+sudo systemctl restart php-fpm
+# 用 mod_php 的改为：
+sudo systemctl restart httpd</code></pre>
+
+<h3>AlmaLinux 验证补丁已生效</h3>
+<pre><code>rpm -q php-common
+# PHP 8.4 on AlmaLinux 10: rpm -q php8.4-common</code></pre>
+
+<h3>Docker</h3>
+<pre><code>docker pull php:8.4.27-fpm
+docker pull php:8.3.36-fpm
+# 或 Alpine 变体
+docker pull php:8.4.27-fpm-alpine</code></pre>
+
+<h3>编译安装</h3>
+<pre><code># 源码与 Windows 二进制
+https://www.php.net/downloads.php</code></pre>
+
+<div class="ok">
+<b>✅ 升级后必须确认一件事</b>
+<p style="margin:8px 0 0">升级完 <b>一定要重启所有 worker</b>（php-fpm / httpd / 容器实例），否则旧的进程带着旧二进制继续跑，补丁等于没打。用 <code>php -v</code> 和 <code>php-fpm -v</code> 分别确认版本号。</p>
+</div>
+
+<h2>暂时升不了？这是官方给的应急缓解</h2>
+
+<div class="bad">
+<b>必须先说清楚：以下措施只能减少部分攻击路径，不能让系统变安全。</b>官方原话如此，别把它们当解决方案。
+</div>
+
+<h3>针对 CVE-2026-109618（OOM 路径）</h3>
+<ul>
+<li><b>设置 <code>memory_limit=-1</code></b>，用 <code>php_admin_value</code>（FPM pool 或 Apache 配置）这种应用改不了的方式设置，并逐一检查没有 pool / 目录 / 应用配置把有限制的值改回来。注意：这消除了"可控的内存上限失败"，但底层分配失败仍可能走到漏洞路径。</li>
+<li><b>压低 <code>post_max_size</code></b>：不需要上传的场景设 <code>8M</code>；有上传需求设 <code>32M</code>，并保证 <code>upload_max_filesize</code> 小于它。</li>
+<li><b>在 Web 服务器 / 反向代理层限流</b>：解码后请求体大小、输入字段数、multipart part 数、header 数量、嵌套深度，全部设上限。<b>这些限制必须覆盖没有可用 Content-Length 的请求。</b></li>
+<li><b>用容器或 cgroup 做可用性边界</b>，策略上只杀受影响的 worker。<b>不要</b>改用 <code>RLIMIT_AS</code> / <code>RLIMIT_DATA</code> 限制内存——反而可能触发漏洞。</li>
+</ul>
+
+<h3>针对 CVE-2026-109619（状态残留路径）</h3>
+<ul>
+<li><b>设置 <code>session.upload_progress.enabled=0</code>，然后重启所有 worker</b>。写在 <code>php.ini</code> 或 FPM pool / 服务器配置里，<b>不能靠 <code>ini_set()</code> 或 FPM 的 <code>.user.ini</code></b>。</li>
+<li><b>PHP 8.5 额外设 <code>fatal_error_backtraces=0</code></b>，同样要重启所有 worker。</li>
+<li><b>移除每请求生效的无效或废弃配置项</b>——它们在初始化之前就会产生诊断输出。用 <code>error_reporting</code>、<code>display_errors</code> 或 <code>@</code> 掩盖诊断信息<b>没用</b>。</li>
+<li><b>修掉攻击者可触发的致命错误和执行超时</b>，包括回调、上传/导入处理、清理阶段的失败。</li>
+</ul>
+
+<h2>全网舆论与时间线</h2>
+
+<table>
+<thead><tr><th>时间</th><th>事件</th></tr></thead>
+<tbody>
+<tr><td>2026-10-20</td><td>PHP 安全团队在 oss-security 发布<b>预警</b>，宣布 10-21 14:00 UTC 发布安全更新；慢雾同步发出安全预警</td></tr>
+<tr><td>2026-10-21 15:00</td><td>PHP 官方发布公告与 8.5.12 / 8.4.27 / 8.3.36 / 8.2.35 四个修复版本</td></tr>
+<tr><td>2026-10-21 当日</td><td>AlmaLinux 先推 testing repo，21:15 UTC 转入生产仓库</td></tr>
+<tr><td>2026-10-21 同日</td><td>Node.js 与 Go 亦紧急释出安全更新（RCE、TLS 证书校验绕过、中间 CA 私钥风险），被港台媒体戏称"今晚 IT 人不用睡"</td></tr>
+<tr><td>截至本文</td><td><b>未发现公开 PoC，未发现在野利用</b></td></tr>
+</tbody>
+</table>
+
+<div class="warn">
+<b>关于"有没有被打"</b>
+<p style="margin:8px 0 0">watchTowr、Beazley Security 等机构在 10-21 均表示：<b>尚无在野利用报告，也无公开 PoC</b>。但这不等于安全——PHP 的部署量意味着 PoC 一旦公开，扫描器会在数小时内铺满全网。修复窗口就是现在。</p>
+</div>
+
+<h2>一个行业视角的判断</h2>
+<div class="card">
+<p><b>这不是"应用写错了"，是"语言运行时自己裂了"。</b>两个漏洞都发生在请求生命周期的收尾阶段——清理和状态重置。这类 bug 的共性在于：一旦被触发，攻击者已经在 PHP 解释器内部拿到了执行权，应用层的 WAF、参数校验、鉴权中间件全部失效。</p>
+<p><b>所以 mod_php 风险最高不是偶然</b>：它把 PHP 直接嵌在 Apache 进程里，请求在进入任何应用代码前就要走完 PHP 的解析和清理流程。换成 PHP-FPM 会好一些，但也只是把攻击面从"进程内"挪到"worker 内"。</p>
+<p style="margin-bottom:0"><b>长期启示：</b>运行时级别的漏洞只能靠"快速升级能力"来兜底。你的升级链路如果是"等运维排期"或"走 remi 源"，这次就是一次压力测试——测出来的都是真问题。</p>
+</div>
+
+<h2>参考来源</h2>
+<ul class="src">
+<li>PHP 官方安全公告（2026-10-21）：<a href="https://www.php.net/archive/2026.php#2026-10-21-5">php.net/archive/2026.php</a></li>
+<li>GHSA-w8hw-w9fx-j79w（CVE-2026-109618）：<a href="https://github.com/php/php-src/security/advisories/GHSA-w8hw-w9fx-j79w">github.com/php/php-src/security/advisories</a></li>
+<li>GHSA-6wmf-4rv5-p3rp（CVE-2026-109619）：<a href="https://github.com/php/php-src/security/advisories/GHSA-6wmf-4rv5-p3rp">github.com/php/php-src/security/advisories</a></li>
+<li>AlmaLinux 补丁公告：<a href="https://almalinux.org/blog/2026-10-21-php2shell-cve-2026-109618-cve-2026-109619">almalinux.org/blog</a></li>
+<li>watchTowr FAQ：<a href="https://watchtowr.com/intelligence/php-cve-2026-109618-faq">watchtowr.com/intelligence</a></li>
+<li>Beazley Security 通告 BSL-A1233：<a href="https://labs.beazley.security/advisories/BSL-A1233">labs.beazley.security</a></li>
+<li>Aikido 分析文章：<a href="https://www.aikido.dev/blog/critical-vulnerabilities-in-php-php2shell">aikido.dev/blog</a></li>
+<li>PHP 提前预警（oss-security）：<a href="https://www.openwall.com/lists/oss-security/2026/10/20/34">openwall.com/lists/oss-security</a></li>
+</ul>
+
+<footer>信息汇总时间：2026-10-22 08:15 (UTC+8) · 以 PHP 官方公告为准 · 由 Tars 整理</footer>
+</div>
+</body>
+</html>
