@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>M2 螺丝 × 桌面机器人：电动螺丝刀扭矩实测对照 | 2026-10-23</title>
+<title>M2 螺丝 × 桌面机器人 × X1 救砖：工具决策全记录 | 2026-10-23</title>
 <style>
 :root{--bg:#0e1116;--card:#161b23;--line:#252c37;--txt:#e6e9ef;--dim:#9aa4b2;--red:#ff5c5c;--green:#3ddc97;--amber:#f5b942;--blue:#5b9cff;--purple:#a78bfa}
 *{box-sizing:border-box}
@@ -11,7 +11,7 @@ body{margin:0;background:var(--bg);color:var(--txt);font:400 15px/1.75 -apple-sy
 .wrap{max-width:900px;margin:0 auto;padding:28px 20px 80px}
 header{border-bottom:1px solid var(--line);padding-bottom:22px;margin-bottom:28px}
 .kicker{color:var(--amber);font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;margin-bottom:10px}
-h1{font-size:28px;line-height:1.32;margin:0 0 12px;letter-spacing:-.3px}
+h1{font-size:27px;line-height:1.34;margin:0 0 12px;letter-spacing:-.3px}
 .sub{color:var(--dim);font-size:14px}
 h2{font-size:20px;margin:46px 0 14px;padding-left:11px;border-left:3px solid var(--amber);line-height:1.4}
 h3{font-size:16px;margin:26px 0 8px;color:#cfd6e2}
@@ -21,7 +21,7 @@ p{margin:11px 0}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:20px 0}
 .stat{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:15px 16px}
 .stat .lbl{font-size:12.5px;color:var(--dim);margin-bottom:6px}
-.stat .num{font-size:22px;font-weight:700;letter-spacing:-.5px}
+.stat .num{font-size:21px;font-weight:700;letter-spacing:-.5px}
 .stat .note{font-size:12px;color:var(--dim);margin-top:5px}
 .red{color:var(--red)}.green{color:var(--green)}.amber{color:var(--amber)}.blue{color:var(--blue)}.purple{color:var(--purple)}
 table{width:100%;border-collapse:collapse;margin:16px 0;font-size:13.5px}
@@ -35,6 +35,7 @@ tr:last-child td{border-bottom:none}
 .q{border-left:3px solid var(--line);padding:2px 0 2px 15px;color:#c3cbd8;margin:14px 0}
 .q cite{display:block;color:var(--dim);font-size:13px;margin-top:6px;font-style:normal}
 ul{padding-left:20px}li{margin:6px 0}
+ol{padding-left:22px}
 .callout{background:linear-gradient(135deg,rgba(91,156,255,.1),rgba(91,156,255,.03));border:1px solid rgba(91,156,255,.28);border-radius:12px;padding:18px 20px;margin:20px 0}
 .callout.warn{background:linear-gradient(135deg,rgba(255,92,92,.1),rgba(255,92,92,.03));border-color:rgba(255,92,92,.28)}
 .callout.ok{background:linear-gradient(135deg,rgba(61,220,151,.1),rgba(61,220,151,.03));border-color:rgba(61,220,151,.28)}
@@ -43,243 +44,195 @@ ul{padding-left:20px}li{margin:6px 0}
 .bar .fill{position:absolute;left:0;top:0;bottom:0;border-radius:5px 0 0 5px}
 .bar .lbl{position:absolute;left:10px;top:0;line-height:26px;font-size:11.5px;font-weight:600;z-index:2}
 .bar .val{position:absolute;right:10px;top:0;line-height:26px;font-size:11.5px;color:#cfd6e2;z-index:2}
-.scale{position:relative;height:34px;margin:26px 0 8px;border-bottom:1px solid var(--line)}
-.tick{position:absolute;top:0;font-size:10.5px;color:var(--dim);transform:translateX(-50%)}
-.tick::before{content:'';position:absolute;left:50%;top:16px;width:1px;height:8px;background:var(--line)}
-.zone{position:relative;height:10px;border-radius:5px;margin:6px 0 22px;background:linear-gradient(90deg,#3ddc9740 0%,#3ddc9740 20%,#f5b94240 20%,#f5b94240 45%,#ff5c5c40 45%,#ff5c5c40 100%)}
+.zone{position:relative;height:10px;border-radius:5px;margin:26px 0 22px;background:linear-gradient(90deg,#3ddc9740 0%,#3ddc9740 20%,#f5b94240 20%,#f5b94240 45%,#ff5c5c40 45%,#ff5c5c40 100%)}
 .zone span{position:absolute;top:-22px;font-size:11px;color:var(--dim);transform:translateX(-50%)}
 a{color:var(--blue);text-decoration:none}
 code{background:#0b0e13;padding:1px 6px;border-radius:4px;font-size:12.5px;color:#e0c68a}
+.tl{position:relative;padding-left:26px;margin:18px 0}
+.tl::before{content:'';position:absolute;left:7px;top:6px;bottom:6px;width:2px;background:var(--line)}
+.tl-item{position:relative;margin:16px 0}
+.tl-item::before{content:'';position:absolute;left:-22px;top:7px;width:10px;height:10px;border-radius:50%;background:var(--amber);border:2px solid var(--bg)}
+.tl-item.no::before{background:var(--red)}
+.tl-item.yes::before{background:var(--green)}
+.tl-item .when{font-size:12px;color:var(--dim);margin-bottom:2px}
 </style>
 </head>
 <body>
 <div class="wrap">
 <header>
-  <div class="kicker">工具调研 · 数据版 · 2026-10-23</div>
-  <h1>M2 螺丝 × 桌面机器人：电动螺丝刀该怎么选</h1>
-  <div class="sub">用官方参数和实测数据，对比 HOTO SNAPBLOQ / 博世 IXO / 德力西 / 牧田 DF012 / 得伟 DCF680 在 3D 打印小螺丝场景下的真实表现</div>
+  <div class="kicker">工具决策全记录 · v2 · 2026-10-23</div>
+  <h1>M2 螺丝 × 桌面机器人 × X1 救砖：这三件事决定了该买什么</h1>
+  <div class="sub">用官方参数、工程规范和你真实的作业场景，把「电烙铁 / 打磨机 / 电动螺丝刀」三个购买决策一次算清</div>
 </header>
 
-<h2>一、先把「需求」变成「数字」</h2>
-<p>你问得对——这事得从扭矩数据算起，而不是凭感觉。先定标准。</p>
+<div class="callout warn">
+<strong>本文的边界，先说清楚：</strong><br>
+关于 X1，我只掌握了搜索结果里公开的技术资料，<strong>没有读到 air 上 DSH / Codex 的实际处理记录</strong>（SSH 认证通道目前不通）。所以 X1 部分给的是「按公开方法论的判定树」，不是「你机器现在的具体状态」。凡涉及你机器实际情况的推断，都会明确标注。
+</div>
 
-<h3>M2 在塑料里的合理拧紧扭矩：约 <span class="amber">0.3 N·m</span></h3>
-<p>这是有公开工程数据的：</p>
+<h2>一、三个场景，三种结论</h2>
+<div class="grid">
+  <div class="stat"><div class="lbl">M2 / M1.6 装配</div><div class="num amber">52 颗</div><div class="note">RIG-Puppy 官方 BOM，核心刚需</div></div>
+  <div class="stat"><div class="lbl">边缘修复</div><div class="num blue">已下单</div><div class="note">四件套含打磨机，判断修正</div></div>
+  <div class="stat"><div class="lbl">电烙铁</div><div class="num green">待定</div><div class="note">取决于 X1 是否要飞线</div></div>
+</div>
+
+<h2>二、M2 螺丝：为什么最低档才是关键</h2>
+
+<h3>先定标准：M2 在塑料里约 0.3 N·m</h3>
 <ul>
-  <li><strong>Freefly（工业级云台厂商）扭矩规范</strong>：M2 标准紧固件 <strong>0.3 N·m</strong>，M2.5 为 0.4 N·m，M1.6 为 0.2 N·m。</li>
-  <li><strong>NBK 塑料螺丝（PC 材质）规格书</strong>：M2 的扭转扭力（破坏值）<strong>0.055 N·m</strong>，并明确写「<strong>建议的拧紧扭矩是扭力的 50%</strong>」。注意这是「塑料螺丝拧塑料」的极端场景。</li>
-  <li><strong>PEM 自攻嵌件数据</strong>：M2 在 ABS 中的推荐值约 <strong>0.3 N·m</strong>。</li>
+  <li><strong>Freefly 工业扭矩规范</strong>：M2 标准紧固件 <strong>0.3 N·m</strong>（M1.6 = 0.2，M2.5 = 0.4）</li>
+  <li><strong>PEM 自攻嵌件数据</strong>：M2 在 ABS 中约 <strong>0.3 N·m</strong></li>
+  <li><strong>NBK 塑料螺丝规格书</strong>：M2 破坏扭力 0.055 N·m，明确要求「<strong>拧紧扭矩取其 50%</strong>」——这是塑料螺丝最极端场景</li>
 </ul>
-<p>综合下来，<strong>3D 打印件 + M2 自攻螺丝，合理区间是 0.15–0.35 N·m</strong>。超过 0.5 N·m 就开始进入「滑牙 / 撑裂打印件」的高风险区。这和 WIRED 实测的「0.5 N·m 连稍微紧点的螺丝都松不动」正好对上——不是拧不动，是设计上就压在这个区间。</p>
+<p>综合：<strong>3D 打印件 + M2 自攻，安全区间 0.15–0.35 N·m；超过 0.5 进入滑牙 / 撑裂高风险区。</strong></p>
 
 <div class="zone">
-  <span style="left:10%">安全区 0.05–0.35</span>
+  <span style="left:10%">安全 0.05–0.35</span>
   <span style="left:32%">临界 0.35–0.6</span>
   <span style="left:72%">危险 &gt;0.6</span>
 </div>
 
-<h2>二、RIG-Puppy 这种项目，到底用多少螺丝</h2>
-<p>查了官方 BOM（wiki.xgorobot.com 复刻指南第一阶段「硬核物资采购」）：</p>
+<h3>RIG-Puppy 实际用量（官方复刻指南 BOM）</h3>
 <table>
-<tr><th>零件</th><th>规格</th><th>数量</th><th>类型</th></tr>
-<tr><td>自攻螺丝</td><td><strong>沉头 M2×6</strong></td><td><strong>40 颗</strong></td><td>自攻（拧进塑料孔）</td></tr>
-<tr><td>自攻螺丝</td><td><strong>沉头 M1.6×4</strong></td><td><strong>12 颗</strong></td><td>自攻</td></tr>
-<tr><td>激光剑相关</td><td>M2.5×10</td><td>—</td><td>普通</td></tr>
+<tr><th>零件</th><th>规格</th><th>数量</th><th>备注</th></tr>
+<tr><td>自攻螺丝</td><td><strong>沉头 M2×6</strong></td><td><strong>40 颗</strong></td><td>含冗余备用</td></tr>
+<tr><td>自攻螺丝</td><td><strong>沉头 M1.6×4</strong></td><td><strong>12 颗</strong></td><td>更娇气，推荐 0.2 N·m</td></tr>
+<tr><td>其他</td><td>M2.5×10</td><td>—</td><td>激光剑相关</td></tr>
 </table>
-<p><strong>注意两个关键词：</strong></p>
-<ul>
-  <li><strong>「自攻螺丝」</strong>——不是机螺丝配螺母，是直接拧进打印出来的塑料孔里。这意味着每一颗都在「切」塑料，扭矩需求比机螺丝更高，也更容易过热熔化。</li>
-  <li><strong>「冗余备用」</strong>——官方给的 40 颗是含备用的数量。实际装配量略低，但仍是一个量级的「几十颗」。</li>
-</ul>
-<p>而且 M1.6 也上了 <strong>12 颗</strong>。M1.6 的推荐扭矩只有 <strong>0.2 N·m</strong>，比 M2 更娇气。</p>
+<p><strong>关键：都是「自攻螺丝」</strong>——直接拧进打印出来的塑料孔，每一颗都在切塑料。扭矩需求比机螺丝高，也更容易摩擦生热。</p>
 
-<div class="callout warn">
-<strong>所以真正的问题不是「能不能拧动」，是「拧到多少必须停」。</strong><br>
-40 颗 M2 + 12 颗 M1.6，全程在 0.2–0.35 N·m 这个窄带里。<strong>一把最大 0.5 N·m 的螺丝刀，是从下方逼近上限；一把最小 0.3 N·m 的螺丝刀，是从下方贴着上限走。</strong>两者都可能过冲，但后者的余量小得多。
-</div>
-
-<h2>三、把候选机型全部列成数字</h2>
+<h3>候选机型全部列成数字</h3>
 <table>
-<tr>
-<th>机型</th><th>扭矩档位 / 范围</th><th>转速</th><th>M2 适用性</th><th>参考价</th>
-</tr>
-<tr>
-  <td><strong>HOTO SNAPBLOQ S-A01</strong></td>
-  <td><strong>3 档：0.05 / 0.35 / 0.5 N·m</strong></td>
-  <td>600 / 900 / 1200 RPM</td>
-  <td><span class="tag t-ok">最贴</span> 0.05 起步覆盖 M1.6，0.35 卡在 M2 上限附近</td>
-  <td>套装 ¥1099（三合一）</td>
-</tr>
-<tr>
-  <td><strong>博世 IXO 3</strong></td>
-  <td>本体 <strong>3 / 4 N·m</strong>（软/硬）<br>加扭矩附件：<strong>10 档 0.30–1.70 N·m</strong></td>
-  <td>180 RPM 单速</td>
-  <td><span class="tag t-mid">需加附件</span> 裸机 3 N·m 直接废掉 M2；加了附件最低 0.30，<strong>低于这个值就没有了</strong></td>
-  <td>¥300–500 + 附件 ¥120</td>
-</tr>
-<tr>
-  <td><strong>德力西 3.6V 电动螺丝刀</strong></td>
-  <td><strong>5 N·m，不可调速</strong></td>
-  <td>250 RPM</td>
-  <td><span class="tag t-no">不可用</span> 5 N·m 且无调速，一颗 M2 就滑牙</td>
-  <td>几十元</td>
-</tr>
-<tr>
-  <td><strong>牧田 DF012D</strong></td>
-  <td>0.15–3.6 N·m（软）<strong>21 档限扭</strong></td>
-  <td>0–200 / 0–650 RPM 双速</td>
-  <td><span class="tag t-ok">优秀</span> 21 档能从 0.15 一路细调，双速可低速攻丝</td>
-  <td>¥600–900</td>
-</tr>
-<tr>
-  <td><strong>威克士 WX242</strong></td>
-  <td><strong>0.15 / 5 N·m</strong>（软/硬），7 档</td>
-  <td>320 RPM</td>
-  <td><span class="tag t-mid">勉强</span> 软扭 0.15 可用，但 7 档跨度大，档间不连续</td>
-  <td>¥200–300</td>
-</tr>
-<tr>
-  <td><strong>得伟 DCF680G2</strong></td>
-  <td>最大 <strong>4 N·m，15+1 档</strong></td>
-  <td>0–430 RPM，陀螺仪无级变速</td>
-  <td><span class="tag t-mid">看档位</span> 15 档细密，但官方未公开每档具体值；最小档<strong>可手捏停</strong>（用户实测）</td>
-  <td>¥700–900</td>
-</tr>
-<tr>
-  <td><strong>Katerk 精密电动螺丝刀</strong></td>
-  <td><strong>5 档：0.15 – 0.75 N·m</strong></td>
-  <td>200 RPM</td>
-  <td><span class="tag t-ok">贴</span> 宣传语直接写「3D 打印机、RC 车、无人机」</td>
-  <td>¥150–250</td>
-</tr>
+<tr><th>机型</th><th>扭矩档位 / 范围</th><th>转速</th><th>M2 / M1.6 适用性</th><th>参考价</th></tr>
+<tr><td><strong>HOTO SNAPBLOQ S-A01</strong></td><td><strong>0.05 / 0.35 / 0.5</strong>（3档）</td><td>600 / 900 / 1200</td><td><span class="tag t-ok">最优</span> 0.05 起步覆盖 M1.6</td><td>套装 ¥1099</td></tr>
+<tr><td><strong>Katerk 精密起子</strong></td><td><strong>0.15–0.75</strong>（5档）</td><td>200</td><td><span class="tag t-ok">贴</span> 页面直指 3D打印/RC/无人机</td><td>¥150–250</td></tr>
+<tr><td><strong>牧田 DF012D</strong></td><td>0.15–3.6（软扭）<strong>21 档</strong></td><td>0–200 / 0–650 双速</td><td><span class="tag t-ok">优秀</span> 能低速攻丝</td><td>¥600–900</td></tr>
+<tr><td><strong>HOTO PivotDrive QWLPZ004</strong></td><td><strong>0.5 / 1 / 2 / 3 / 4</strong>（5档）</td><td>180（详情页称双速100/180）</td><td><span class="tag t-no">不达标</span> 最低 0.5 越过上限，M1.6 无解</td><td><strong>券后 ¥394</strong></td></tr>
+<tr><td><strong>博世 IXO 3 裸机</strong></td><td>3 / 4 N·m</td><td>180 单速</td><td><span class="tag t-no">不可用</span></td><td>¥300–500</td></tr>
+<tr><td><strong>博世 IXO 3 + 扭矩附件</strong></td><td><strong>0.30–1.70</strong>（10档）</td><td>180</td><td><span class="tag t-mid">半能</span> M2 卡下限，M1.6 够不着</td><td>+¥120</td></tr>
+<tr><td><strong>德力西 3.6V</strong></td><td><strong>5 N·m 不可调速</strong></td><td>250</td><td><span class="tag t-no">不可用</span></td><td>几十元</td></tr>
 </table>
 
-<h2>四、把数据画出来</h2>
-<p>下面每条代表一把螺丝刀能覆盖的扭矩区间。绿色是 M2/M1.6 安全区（0.05–0.35 N·m）。</p>
-
+<h3>画出来看</h3>
 <div class="card">
-<div style="margin-bottom:6px;font-size:12.5px;color:var(--dim)">0 ──────────────── 0.5 ──────────────── 1.0 ──────────────── 1.7 N·m</div>
+<div style="margin-bottom:6px;font-size:12.5px;color:var(--dim)">0 ─────────── 0.5 ─────────── 1.0 ─────────── 1.7 N·m</div>
 <div class="bar"><div class="fill" style="left:0%;width:32%;background:linear-gradient(90deg,#3ddc9799,#3ddc9755)"></div><div class="lbl">安全区 0–0.35</div></div>
-
 <div class="bar"><div class="fill" style="left:3%;width:27%;background:linear-gradient(90deg,#5b9cffcc,#5b9cff66)"></div><div class="lbl">HOTO S-A01 · 0.05/0.35/0.5</div><div class="val">0.05–0.5</div></div>
-
-<div class="bar"><div class="fill" style="left:9%;width:20%;background:linear-gradient(90deg,#a78bfacc,#a78bfa66)"></div><div class="lbl">Katerk · 5 档 0.15–0.75</div><div class="val">0.15–0.75</div></div>
-
-<div class="bar"><div class="fill" style="left:9%;width:3.5%;background:linear-gradient(90deg,#f5b942cc,#f5b94266)"></div><div class="lbl">威克士 · 软扭 0.15</div><div class="val">0.15</div></div>
-
-<div class="bar"><div class="fill" style="left:18%;width:80%;background:linear-gradient(90deg,#f5b942cc,#f5b94266)"></div><div class="lbl">博世 IXO + 扭矩附件 · 10 档</div><div class="val">0.30–1.70</div></div>
-
-<div class="bar"><div class="fill" style="left:100%;width:80%;background:linear-gradient(90deg,#ff5c5ccc,#ff5c5c66)"></div><div class="lbl">德力西 3.6V · 不可调速</div><div class="val">5.0</div></div>
-</div>
-
-<div class="callout ok">
-<strong>这张图说明的事：</strong><br>
-HOTO 的 0.05 起步是<strong>唯一能安全处理 M1.6（0.2 N·m）的电动选项</strong>。博世加附件最低 0.30，刚好卡在 M2 上限——<strong>M1.6 它下不去</strong>。<br>
-德力西 5 N·m 不可调速，在这张图上是完全出界的一条。
-</div>
-
-<h2>五、扭矩对了，还有三件被忽略的事</h2>
-
-<h3>1. 转速决定「攻丝」还是「熔化」</h3>
-<p>M2 自攻螺丝是<strong>自己切出螺纹</strong>的。转速越高，塑料局部升温越快。</p>
-<ul>
-  <li><strong>HOTO：600/900/1200 RPM</strong>——600 可用，1200 在 PLA 上会导致局部磨擦过热</li>
-  <li><strong>牧田 DF012：0–200 RPM 低速档</strong>——这个才是攻丝正确姿势</li>
-  <li><strong>博世 IXO：180 RPM 单速</strong>——转速反而合理，问题是扭矩上限</li>
-</ul>
-<p>芯片论坛（Chiphell）装机老手的共识：<strong>「主板上 DF012 这种根本下不去，到处撞，长头也不行，扭力太大。可能还是手动扭力螺丝刀靠谱。」</strong>——连牧田这种 21 档的机器在板子上都吃亏，说明<strong>机身体积和探头直径也是硬约束</strong>。</p>
-
-<h3>2. 批头直径：M2 沉头的坑</h3>
-<p>RIG-Puppy 用的是<strong>沉头 M2×6</strong>。沉头意味着螺丝帽要沉进孔里——<strong>批头必须足够细长，才能伸进沉孔</strong>。</p>
-<p>WIRED 实测 HOTO：「圆形设计让电钻在瞄准上不如标准手钻精准」——这对沉孔是个劣势。反过来博世的细长机身在这里有优势，但扭矩又不合适。</p>
-
-<h3>3. 电池续航：40 颗是「一轮」，不是「一天」</h3>
-<ul>
-  <li><strong>HOTO S-A01</strong>：800mAh，标称 <strong>60 分钟</strong>续航</li>
-  <li><strong>Katerk</strong>：500mAh，宣传「充满可拧 800 颗 M2.5×5mm」</li>
-  <li><strong>博世 IXO 3</strong>：充电 4 小时</li>
-</ul>
-<p>40 颗 M2 一轮装配，HOTO 的 60 分钟够用但没余量；装一整台机器狗 + 调试反复拆装，大概率要中途充电。</p>
-
-<h2>六、关于「丝锥」这个误会的更正</h2>
-<p>你说得对，我上一条说错了。<strong>如果普通螺丝刀就能拧进去，说明你的打印件孔径已经足够，不需要攻丝。</strong></p>
-<p>丝锥（tap）是<strong>给光孔切出新螺纹</strong>的工具——只适用于「孔里完全没有纹路、螺丝拧不进」的情况。你的情况是「能拧但费力」，这是<strong>摩擦力问题</strong>，不是「没有螺纹」的问题。</p>
-<p><strong>那么「费力」到底费在哪？</strong>三个可能，逐个排查：</p>
-<ul>
-  <li><strong>孔偏小 0.1–0.2mm</strong>——FDM 打印水平圆孔会收缩（桥接材料冷却拉小）。对策：切片器开「水平孔补偿 +0.15~0.25mm」，或拿 Ø2.5 钻头过一下</li>
-  <li><strong>螺丝过长顶到底</strong>——沉头 M2×6 进 4mm 深的孔，末端会硬顶</li>
-  <li><strong>螺纹咬合段太长</strong>——这是自攻螺丝的正常阻力，<strong>用电动螺丝刀确实能明显省力</strong>，你的直觉是对的</li>
-</ul>
-<p>所以：<strong>你要买电动螺丝刀的理由成立</strong>，只是理由不是「攻丝」，是「用连续旋转替代反复手拧」。</p>
-
-<h2>七、结论：在这四个场景下，该买什么</h2>
-
-<div class="card">
-<h3>① M2/M1.6 大批量装配（你的核心刚需）</h3>
-<p><strong>推荐：HOTO SNAPBLOQ S-A01（0.05/0.35/0.5）</strong> 或 <strong>牧田 DF012D（21 档 0.15–3.6）</strong></p>
-<p>理由：这是唯一两个「低扭矩起步」的选项。<strong>HOTO 胜在 0.05 起步能保 M1.6，牧田胜在 21 档连续可调 + 0–200 RPM 低速档。</strong></p>
-<p>如果预算优先：<strong>Katerk（0.15–0.75，5 档，¥150-250）</strong> 定位就是「3D 打印机 / RC / 无人机」，性价比最高。</p>
-<p>如果只装一台机器狗、以后不再大批量：<strong>手动精修螺丝刀（¥80）</strong> 仍然是最省心的选择，Chiphell 上老手的原话是「可能还是手动扭力螺丝刀靠谱」。</p>
-</div>
-
-<div class="card">
-<h3>② 电烙铁（你说想试试）</h3>
-<p><strong>推荐：入门焊台 ¥200-300（德力西数显 60W 即可）</strong></p>
-<p>你的态度其实很清晰——<strong>「就算不买，我可以不去拆 X1，我只是想试试电烙铁这种工具，看看后续会不会有场景」</strong>。</p>
-<p>这是<strong>探索性需求</strong>，不是刚需。探索性需求的正确买法：<strong>买便宜的、能用的，别买贵的。</strong></p>
-<p>德力西的评价里有一条很有代表性：「370 度的温度，20 秒左右就到了，温度也很稳定」——对入门够用。你已经有德力西电表，品牌信任度也在。</p>
-<p><strong>但要注意</strong>：德力西京东评价里有 98% 好评，但内容高度重复（大量「国货之光」「大品牌值得信赖」），<strong>参考价值要打折</strong>。真正该看的是「焊台化锡快不快、回温稳不稳」，这个级别的机器足够。</p>
-<p>如果你更想有一台「会经常拿出来用」的：HOTO I-A06 的 140W 有线模式 + C245 头，实测 8 秒到 550℃，性能是够的，<strong>但它卖的是便携，不是性能</strong>。</p>
-</div>
-
-<div class="card">
-<h3>③ 打磨机修 3D 手办毛刺</h3>
-<p><strong>不建议买电动打磨机。真正的顺序是：</strong></p>
-<ol>
-<li><strong>去毛刺刮刀（¥15）</strong>——PDD/淘宝搜「模型去毛刺刀」，刀刃弧形，顺着边缘刮，不会削肉</li>
-<li><strong>砂纸 400/800/1200 目（¥20）</strong>——包在小木块或海绵上打磨，比手持稳</li>
-<li><strong>模型锉刀组（¥30）</strong>——平面和直角边的毛刺</li>
-<li>只有这三样都搞不定，<strong>再考虑低速旋转工具</strong>（Dremel 或同类，且必须能降到 5000 RPM 以下）</li>
-</ol>
-<p>WIRED 对 SNAPBLOQ 打磨机（R-A04）的实测结论：<strong>「Rotary tool overheats fast」「用久了掉速维持不住转速」</strong>。22,000 RPM 打在 PLA 上，一秒就是一坨熔痕。<strong>转速太高是这个品类的问题，不是品牌的。</strong></p>
-</div>
-
-<div class="card">
-<h3>④ 博世 IXO：到底能不能用于 3D 打印？</h3>
-<p><strong>结论：能，但必须加扭矩附件，且下不去 M1.6。</strong></p>
-<table style="margin-top:10px">
-<tr><th>配置</th><th>覆盖范围</th><th>能不能干你的活</th></tr>
-<tr><td>IXO 3 裸机</td><td>3–4 N·m</td><td><span class="tag t-no">不能</span> 一颗 M2 就滑牙</td></tr>
-<tr><td>IXO 3 + 扭矩附件（10 档）</td><td>0.30–1.70 N·m</td><td><span class="tag t-mid">半能</span> M2（0.3）刚好卡下限，M1.6（0.2）<strong>下不去</strong></td></tr>
-</table>
-<p><strong>那句「博世是做家具装修的，不建议做精细工作」——客服结论对，但理由讲错了。</strong>不是「做不了精细」，是<strong>扭矩下限太高，精细螺丝它够不着</strong>。加附件后才勉强够到 M2，但 RIG-Puppy 那 12 颗 M1.6 依然不行。</p>
-</div>
-
-<h2>八、最终建议：分两步走</h2>
-
-<div class="callout ok">
-<strong>第一步（现在）：只解决 M2 大批量装配</strong><br>
-买一把<strong>低扭矩起步的电动精修螺丝刀</strong>。预算¥150-250 选 Katerk（0.15–0.75 / 5 档），预算¥300+ 选 HOTO 单件（0.05/0.35/0.5）。<br>
-<strong>这是唯一有硬数据支撑的刚需项。</strong>
+<div class="bar"><div class="fill" style="left:9%;width:20%;background:linear-gradient(90deg,#a78bfacc,#a78bfa66)"></div><div class="lbl">Katerk · 0.15–0.75</div><div class="val">0.15–0.75</div></div>
+<div class="bar"><div class="fill" style="left:18%;width:80%;background:linear-gradient(90deg,#f5b942cc,#f5b94266)"></div><div class="lbl">博世 IXO + 附件 · 0.30–1.70</div><div class="val">0.30–1.70</div></div>
+<div class="bar"><div class="fill" style="left:100%;width:80%;background:linear-gradient(90deg,#ff5c5ccc,#ff5c5c66)"></div><div class="lbl">PivotDrive / 德力西 · 下限 0.5 或 5.0</div><div class="val">0.5–5.0</div></div>
 </div>
 
 <div class="callout">
-<strong>第二步（想清楚了再买）：电烙铁</strong><br>
-你说的是「想看看以后有没有场景」——那就买<strong>德力西入门焊台 ¥200-300</strong>。便宜、够用、坏了不心疼。<br>
-如果真焊出了兴趣，再升级 HOTO（便携）或更好的台式焊台（性能）。
+<strong>PivotDrive 的 ¥394 值得单独说：</strong><br>
+好的一面：<strong>9mm 偏轴</strong>伸进结构件凹槽、<strong>4 角度自锁</strong>（0/30/60/90）、<strong>2000mAh</strong>、180 转低速。<br>
+问题：<strong>415g 偏重</strong>、<strong>充电 3 小时</strong>、<strong>扭矩下限 0.5</strong>。<br>
+<strong>结论：它是「能伸进死角的家装级起子」，不是 M2 精密起子。¥394 买它不亏，但别指望它替代 S-A01。</strong>
 </div>
+
+<h2>三、打磨机：结论修正</h2>
+<p>前一版结论是「不建议买打磨机」，理由是「表面抛光不该上机器」。<strong>那个判断的前提错了。</strong></p>
+
+<h3>你真实的场景是「修边缘」，不是「抛光表面」</h3>
+<table>
+<tr><th>活</th><th>工具</th><th>转速</th></tr>
+<tr><td>去毛刺（平整面）</td><td>刻刀 / 刮刀 ✅ 你已经在用</td><td>—</td></tr>
+<tr><td><strong>修边缘、倒角、磨平凸起</strong></td><td><strong>电磨 ✅ 对口的工具</strong></td><td>中低速</td></tr>
+<tr><td>恢复光泽</td><td>抛光膏 + 布轮</td><td>极低速</td></tr>
+</table>
+<p><strong>为什么刻刀修不平边缘：</strong>刀只能「切」，不能「磨」。边缘溢料、层纹错位造成的台阶，刻刀一削就崩边或留坑。<strong>这种活确实需要旋转磨头。</strong></p>
+
+<div class="callout ok">
+<strong>所以：四件套已下单，不后悔，也不用重新下单。</strong><br>
+打磨机在你「刻刀修不平的边缘」这个场景里是<strong>对口的工具</strong>。
+</div>
+
+<h3>但要注意：砂纸会让表面失光，这不是用错了</h3>
+<p>FDM 件的光泽来自层纹的<strong>规则反光</strong>。砂纸把层纹磨成随机划痕 → 反光变散射 → 看着发白。<strong>磨这个动作本身就破坏光学特性。</strong></p>
+<p>电磨转速更高（15,000–22,000 RPM），<strong>不只是失光，还可能局部摩擦生热熔出亮疤</strong>。WIRED 实测 R-A04 就是「过热快、用久掉速」。</p>
+
+<h3>实操：避免熔疤的四个动作</h3>
+<ol>
+<li><strong>从最低档 15,000 起步</strong>，不直接用最高档</li>
+<li><strong>「点焊式」操作</strong>——点一下、抬起、再点下一处，<strong>绝不在一个点停留</strong></li>
+<li>用<strong>圆柱/圆锥磨头</strong>（接触面积小、散热快），避免球形和砂纸圈</li>
+<li>电磨修完<strong>用 800 目砂纸轻收</strong>，过渡更自然</li>
+</ol>
+<div class="callout">
+<strong>最高效的试错方式：打一个「测试方块」。</strong><br>
+同参数打一个小方块，专门拿来试不同转速、不同磨头、停留多久会熔。<strong>几分钟就能摸清这台机器的脾气</strong>，比在成品上慢慢试安全得多。换材料（PLA→PETG）就重打一个。
+</div>
+
+<h2>四、电烙铁：决策取决于 X1 的处理路径</h2>
 
 <div class="callout warn">
-<strong>不建议买：</strong><br>
-❌ <strong>德力西 3.6V 电动螺丝刀</strong>（5 N·m 不可调速，M2 必滑牙）<br>
-❌ <strong>博世 IXO 3 裸机</strong>（3 N·m 起步太高；加附件也下不去 M1.6）<br>
-❌ <strong>SNAPBLOQ 四合一套装</strong>（除非你确认电钻和打磨机真会用；否则单买螺丝刀更值）<br>
-❌ <strong>任何电动打磨机</strong>（先用刮刀+砂纸，这是行业标准流程）
+<strong>说明：</strong>我没有读到 air 上 DSH / Codex 关于 X1 的实际处理记录（跨机 SSH 通道不通）。下面是<strong>基于公开技术资料的判定树</strong>，你按自己机器的实际状态对号入座。
 </div>
 
+<h3>X1 救砖的公开方法论（X1 PRO 研究站）</h3>
+<div class="tl">
+  <div class="tl-item yes"><div class="when">第 1 步 · 不拆机</div><strong>按键组合进 9008 模式</strong><br>高通紧急下载模式。<strong>不需要焊接，不需要烙铁。</strong></div>
+  <div class="tl-item"><div class="when">第 2 步 · 拆机短接</div><strong>9008 按键进不去 → 拆机短接主板两点</strong><br>用镊子让两个测试点接触，强制进下载模式。<strong>需要的是螺丝刀 + 镊子，仍然不需要烙铁。</strong></div>
+  <div class="tl-item no"><div class="when">第 3 步 · 才是焊接</div><strong>短接点太小 / 接触不良 → 飞线</strong><br><strong>只有这一步才需要烙铁。</strong>而且要焊住 0.2mm 级别的线，这是精密焊接。</div>
+</div>
+
+<h3>判定表：三种情况，三种买法</h3>
+<table>
+<tr><th>X1 现在的情况</th><th>是否需要烙铁</th><th>该买什么</th></tr>
+<tr><td>还没试过 9008 按键</td><td><strong>不需要</strong></td><td>先别买，试按键</td></tr>
+<tr><td>按键进不去，准备拆机短接</td><td><strong>不需要</strong></td><td>精修螺丝刀 + 镊子（¥50）</td></tr>
+<tr><td>短接点要飞线 / 焊盘掉了</td><td><strong>需要，且精度要求高</strong></td><td><strong>台式焊台</strong>（不是便携笔）</td></tr>
+<tr><td>已判定放弃不修</td><td><strong>不需要</strong></td><td>想学焊接 → 德力西 ¥250</td></tr>
+</table>
+
+<div class="callout">
+<strong>为什么「精密飞线」不该用便携笔：</strong><br>
+HOTO I-A06 无线状态只有 <strong>60W</strong>（有线 140W），<strong>415g 握持没有固定支架</strong>。焊 0.2mm 飞线需要「板子固定 + 手稳 + 温度精确」，这正是便携笔最弱的三点。<br>
+<strong>飞线这种活，台式焊台 + 尖头 C245 才是正解。</strong>
+</div>
+
+<h3>焊台 vs 焊接笔：如果只是「想学焊接」</h3>
+<table>
+<tr><th></th><th>德力西入门焊台</th><th>HOTO I-A06 焊接笔</th></tr>
+<tr><td>价格</td><td><strong>¥200–300</strong></td><td>¥400–450</td></tr>
+<tr><td>功率</td><td>60W</td><td><strong>140W 有线 / 60W 无线</strong></td></tr>
+<tr><td>升温</td><td>20 秒到 370℃</td><td><strong>实测 8 秒到 550℃</strong></td></tr>
+<tr><td>形态</td><td>台式 + 支架</td><td><strong>笔式，无线，一体化收纳</strong></td></tr>
+<tr><td>适合</td><td><strong>固定桌面连续作业</strong></td><td>便携、应急、随手取用</td></tr>
+<tr><td>你的状态</td><td><strong>不确定会不会常用 → 选它</strong></td><td>确定会常拿出来 → 选它</td></tr>
+</table>
+
+<div class="callout ok">
+<strong>结论：你现在应该买德力西 ¥200–300 的入门焊台。</strong><br>
+理由不是它性能更好，而是<strong>你还在「被引导」的学习阶段</strong>——焊不熟这件事，用 ¥250 和 ¥450 的工具犯的错没有区别。<br>
+等真焊到「60W 回温跟不上」的时候，你自然知道该升级什么。
+</div>
+
+<h2>五、最终购物清单</h2>
+<table>
+<tr><th>优先级</th><th>东西</th><th>价格</th><th>理由</th></tr>
+<tr><td><span class="tag t-ok">已下单</span></td><td>HOTO 四件套</td><td>—</td><td>螺丝刀 + 打磨机都已确认有用；电烙铁当探索用</td></tr>
+<tr><td><span class="tag t-mid">补一件</span></td><td><strong>手动精修螺丝刀套装</strong></td><td>¥50–80</td><td><strong>M1.6 那 12 颗的保险</strong>；电动拧到快到位，手工收尾</td></tr>
+<tr><td><span class="tag t-mid">补一件</span></td><td>镊子 + 拆机撬棒</td><td>¥30</td><td>X1 第 2 步（短接）必需</td></tr>
+<tr><td><span class="tag t-mid">视情况</span></td><td>德力西入门焊台</td><td>¥200–300</td><td>想学焊接 / X1 真到飞线那一步</td></tr>
+<tr><td><span class="tag t-no">暂不买</span></td><td>PivotDrive ¥394</td><td>—</td><td>扭矩下限 0.5 不达标，除非你特别需要 9mm 偏轴</td></tr>
+<tr><td><span class="tag t-no">暂不买</span></td><td>博世 IXO 3</td><td>—</td><td>裸机 3 N·m；加附件也下不去 M1.6</td></tr>
+<tr><td><span class="tag t-no">暂不买</span></td><td>德力西电动螺丝刀</td><td>—</td><td>5 N·m 不可调速，M2 必滑牙</td></tr>
+<tr><td><span class="tag t-ok">值得加</span></td><td>抛光膏 + 布</td><td>¥20</td><td><strong>恢复失光最有效的办法</strong>，比打磨机管用</td></tr>
+</table>
+
+<h2>六、三句话收尾</h2>
+<ol>
+<li><strong>螺丝刀看下限，不看上限。</strong> 最低档必须 ≤0.35，最好能到 0.1 以下——这条卡死了 PivotDrive 和博世。</li>
+<li><strong>打磨机修边缘是对的，毁表面是必然的。</strong> 别在同一件东西上又磨又要求光泽，这是两套工艺。</li>
+<li><strong>X1 大概率不需要烙铁。</strong> 短接是用镊子，不是用焊枪。真到飞线那一步，再买台式焊台，别用便携笔。</li>
+</ol>
+
 <div class="footer">
-<strong>数据来源：</strong>Freefly 扭矩规范（M2 = 0.3 N·m）、NBK 塑料螺丝规格书（M2 破坏扭力 0.055 N·m，建议拧紧取 50%）、PEM 自攻嵌件数据、博世官方 IXO 3 技术数据（3/4 N·m）+ 博世扭矩附件规格（10 档 0.30–1.70 N·m）、HOTO 官方 S-A01 规格（0.05/0.35/0.5 N·m，600/900/1200 RPM，800mAh/60min）、牧田 DF012D 官方（21 档，0.15–3.6 N·m 软扭，0–200/0–650 RPM）、威克士 WX242 官方（0.15/5 N·m 软硬扭，7 档，320 RPM）、得伟 DCF680G2 规格（4 N·m，15+1 档，0–430 RPM）、Katerk 产品页（5 档 0.15–0.75 N·m，200 RPM）、RIG-Puppy 官方复刻指南 BOM（沉头 M2×6 ×40、M1.6×4 ×12）、WIRED 实测（SNAPBLOQ 续航短、打磨机过热）、Chiphell 装机讨论、什么值得买（HOTO A06 平台评价对比）。<br><br>
-<strong>说明：</strong>扭矩数据来自厂商公开资料与第三方工程规范，各品牌对「软扭/硬扭」定义不完全一致，实际使用请保守取值。本文不构成购买建议之外的任何承诺。
+<strong>数据来源：</strong>Freefly 扭矩规范（M2=0.3 N·m，M1.6=0.2）、PEM 自攻嵌件数据、NBK 塑料螺丝规格书、博世官方 IXO 3 技术数据（3/4 N·m）+ 扭矩附件规格（10 档 0.30–1.70）、HOTO 官方 S-A01（0.05/0.35/0.5，600/900/1200 RPM，800mAh/60min）、HOTO PivotDrive QWLPZ004 官方参数（0.5–4 N·m 5 档，180 RPM，415g，2000mAh，充电 180 分钟，9mm 偏轴，4 角度自锁）、牧田 DF012D 官方（21 档，0.15–3.6 软扭，0–200 RPM）、威克士 WX242（0.15/5，7 档）、得伟 DCF680G2（4 N·m，15+1 档）、Katerk（5 档 0.15–0.75，200 RPM）、RIG-Puppy 官方复刻指南 BOM（沉头 M2×6 ×40、M1.6×4 ×12）、X1 PRO 研究站（9008 模式 / 拆机短接两点）、WIRED 实测（SNAPBLOQ 续航短、打磨机过热）、Chiphell 装机讨论。<br><br>
+<strong>关于 X1 的说明：</strong>本文未读取到 air 设备上 DSH / Codex 的实际处理记录（跨机 SSH 认证通道不通）。X1 部分基于公开技术资料给出判定树，具体机器的当前状态请以你本机记录为准。<br><br>
+<strong>免责：</strong>扭矩数据来自厂商公开资料与第三方工程规范，各品牌对「软扭/硬扭」定义不完全一致，实际使用请保守取值。本文不构成投资建议。
 </div>
 </div>
 </body>
