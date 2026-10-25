@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>皮查伊 Big Technology 访谈整理 · 谷歌的口径变化</title>
+<style>
+:root{--bg:#0f1114;--card:#181b20;--line:#2a2f37;--tx:#e6e8eb;--mu:#9aa3ad;--ac:#5b9cf8;--ok:#3ecf8e;--warn:#f5a623;--bad:#ef5b5b}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.75 -apple-system,"PingFang SC","Helvetica Neue",Arial,sans-serif;padding:28px 18px 60px}
+.wrap{max-width:820px;margin:0 auto}
+h1{font-size:26px;line-height:1.35;margin:0 0 8px}
+.sub{color:var(--mu);font-size:14px;margin-bottom:26px}
+h2{font-size:19px;margin:38px 0 14px;padding-left:11px;border-left:3px solid var(--ac)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+.card+.card{margin-top:14px}
+.q{font-size:17px;font-weight:600;margin:0 0 8px}
+.q .tag{display:inline-block;font-size:12px;font-weight:600;padding:2px 8px;border-radius:6px;margin-right:8px;vertical-align:2px}
+.t-bad{background:rgba(239,91,91,.16);color:var(--bad)}
+.t-warn{background:rgba(245,166,35,.16);color:var(--warn)}
+.t-ok{background:rgba(62,207,142,.16);color:var(--ok)}
+.card p{margin:6px 0;color:#cfd4da;font-size:15px}
+.tbwrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);border-radius:12px}
+table{border-collapse:collapse;width:100%;min-width:620px;font-size:14.5px}
+th,td{padding:11px 13px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:#1e2229;color:#b9c1ca;font-weight:600;white-space:nowrap}
+tr:last-child td{border-bottom:none}
+td.n{white-space:nowrap;color:var(--mu)}
+.up{color:var(--ok);font-weight:600}
+.dn{color:var(--bad);font-weight:600}
+ul{padding-left:20px;margin:10px 0}
+li{margin:7px 0;color:#cfd4da}
+b{color:#fff}
+.k{color:var(--ac);font-weight:600}
+.foot{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--mu);font-size:13px;line-height:1.9}
+@media(max-width:560px){body{padding:20px 14px 44px}h1{font-size:21px}h2{font-size:17px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>皮查伊 Big Technology 访谈整理</h1>
+<div class="sub">核心看点：谷歌在 Gemini 排名争议后，把话题从「守榜」转向「铺摊」· 2026-10-25 整理</div>
+
+<h2>三个最难绕开的话头</h2>
+<div class="card">
+  <div class="q"><span class="tag t-bad">回避</span>「重夺 SOTA 概率基本为零」</div>
+  <p>这是 8 月 SemiAnalysis 给 Gemini 下的判断。皮查伊在访谈里没有直接反驳，而是把议题换成了另一面——<b>Gemini 4 Argon 在具身推理多项测试已达 SOTA</b>，以及世界模型与 LLM 双线并行。</p>
+  <p><b>回应方式本身就是信号</b>：纯语言模型的排名之争，他不再正面接了。</p>
+</div>
+<div class="card">
+  <div class="q"><span class="tag t-warn">松口</span>「递归式自我改进」</div>
+  <p>这个词长期被视作 AI 圈的科幻禁区。皮查伊主动提了，但给足了边界——是<b>工程层面让模型参与改进模型</b>，不是模型自己脱纲开挂。</p>
+  <p>这个口径很关键：它决定了谷歌对外敢承诺到哪一步。</p>
+</div>
+<div class="card">
+  <div class="q"><span class="tag t-ok">加注</span>「世界模型」</div>
+  <p>OpenAI 那边在收缩，谷歌反而同时押两条线。理由说得实在：<b>理解物理规律、准确模拟现实是智能的基础能力</b>。</p>
+  <p>这是个长线赌注，短期内看不到分数。</p>
+</div>
+
+<h2>口径对照：变了什么</h2>
+<div class="tbwrap">
+<table>
+<thead><tr><th>议题</th><th>早前口径</th><th>这次口径</th><th>性质</th></tr></thead>
+<tbody>
+<tr><td class="n">Gemini 排名</td><td>争 SOTA</td><td>换赛道谈具身推理</td><td class="dn">缩 / 回避</td></tr>
+<tr><td class="n">自我改进</td><td>否认自主迭代</td><td>承认工程级、划清边界</td><td class="up">扩 / 松口</td></tr>
+<tr><td class="n">世界模型</td><td>与 LLM 二选一</td><td>双线并行、未来融合</td><td class="up">扩 / 加注</td></tr>
+<tr><td class="n">多智能体</td><td>未表态</td><td>明确在推进</td><td class="up">扩 / 新增</td></tr>
+</tbody>
+</table>
+</div>
+<p style="color:#9aa3ad;font-size:14px;margin-top:12px">四行里三行是扩口径，只有排名那一行在缩。整体读下来是<b>从「守榜」转向「铺摊」</b>的姿态。</p>
+
+<h2>可以直接拿走的判断</h2>
+<div class="card">
+  <ul>
+    <li><b>这是「工程指标型」表态，不是「能力跃迁型」。</b>所有说法都落在可验证的工程动作上——具身测试、双线并行、参与式改进，没有一句是「我们快到 AGI 了」那种表述。</li>
+    <li><b>底气在基建，不在模型。</b>同时跑两条大模型线是很烧钱的活，只有自带 TPU 和现金流的公司做得起。这是在展示<span class="k">成本耐受能力</span>，不是技术领先。</li>
+    <li><b>对竞争者而言</b>，真正的信号不是他答了什么，而是他<b>不再争什么</b>。</li>
+  </ul>
+</div>
+
+<h2>数据口径说明</h2>
+<ul>
+  <li>访谈原话与产品名（Gemini 4 Argon、具身推理测试）来自访谈中文译稿，已入本地知识库。</li>
+  <li>「重夺 SOTA 概率基本为零」为 8 月 SemiAnalysis 的第三方判断，非谷歌官方口径。</li>
+  <li>本页整理为<b>观点归纳</b>，非逐字引用；具体数字以原文为准。</li>
+  <li>英文原始字幕未能获取（字幕源不可达），中文译稿为唯一来源。</li>
+</ul>
+
+<div class="foot">
+资料：谷歌皮查伊 Big Technology 访谈（中文译稿全文 + 五节要点整理）<br>
+知识库条目：原文资料 2 篇 · 实体 Sundar Pichai · 概念 3 篇（递归式自我改进 / 多智能体协作 / 世界模型）<br>
+整理：Tars · 2026-10-25
+</div>
+</div>
+</body>
+</html>
