@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FP32/16/8/4、INT8/4、NVFP4、华为 HiF4 — 数值精度科普</title>
+<style>
+:root{--bg:#0b0e14;--panel:#141a24;--panel2:#1b2333;--line:#2a3546;--txt:#e8eef8;
+--dim:#93a4bd;--acc:#4ec9ff;--acc2:#ffb454;--ok:#3ddc97;--warn:#ff6b6b;--pur:#b48cff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:radial-gradient(1200px 600px at 20% -10%,#152036,transparent),var(--bg);
+color:var(--txt);font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.65;padding:28px 16px 56px}
+.wrap{max-width:1020px;margin:0 auto}
+h1{font-size:clamp(21px,4vw,33px);line-height:1.32;letter-spacing:.5px}
+h1 span{background:linear-gradient(90deg,var(--acc),var(--pur),var(--acc2));
+-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{color:var(--dim);margin-top:10px;font-size:14px}
+section{margin-top:32px;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px 18px}
+h2{font-size:18px;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+h2 i{width:6px;height:18px;border-radius:3px;background:var(--acc);display:inline-block;flex:none}
+.note{color:var(--dim);font-size:13px;margin-bottom:14px}
+/* 1 位宽条 */
+.bitrow{margin:12px 0 18px}
+.bitlabel{display:flex;justify-content:space-between;gap:10px;font-size:13px;margin-bottom:5px}
+.bitlabel b{color:var(--txt)}
+.bitlabel span{color:var(--dim);font-size:12px;text-align:right}
+.bits{display:flex;gap:2px;height:28px;align-items:stretch}
+.bit{display:flex;align-items:center;justify-content:center;font-size:11px;color:#08111c;
+font-weight:700;border-radius:3px;min-width:0;overflow:hidden;
+animation:grow .45s ease both;transform-origin:left}
+@keyframes grow{from{opacity:0;transform:scaleX(.15)}to{opacity:1;transform:scaleX(1)}}
+.s{background:#7ec8ff}.e{background:var(--acc2)}.m{background:var(--ok)}.i{background:var(--pur)}
+/* 2 dots */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.card{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:14px}
+.card h3{font-size:15px;margin-bottom:6px}
+.card p{font-size:13px;color:var(--dim)}
+.tag{font-size:11px;padding:2px 8px;border-radius:6px;background:#0f1621;border:1px solid var(--line);color:var(--dim);font-weight:400}
+.dotline{position:relative;height:64px;margin:16px 0 4px;border-top:1px dashed var(--line)}
+.dot{position:absolute;top:0;width:2px;transform:translateX(-1px);border-radius:1px}
+.axis{display:flex;justify-content:space-between;font-size:11px;color:var(--dim)}
+/* 3 quantization chart */
+.qrow{margin:14px 0}
+canvas{width:100%;height:110px;display:block}
+/* table */
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:9px 8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{color:var(--acc);font-weight:600;font-size:12px;letter-spacing:.4px;white-space:nowrap}
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.row{display:flex;align-items:center;gap:10px;margin:9px 0;font-size:13px}
+.row .k{width:74px;color:var(--dim);flex:none}
+.row .track{flex:1;height:12px;background:#0c1119;border-radius:6px;overflow:hidden}
+.row .fill{height:100%;border-radius:6px;background:linear-gradient(90deg,var(--acc),var(--pur));width:0;animation:fill 1.4s ease both}
+@keyframes fill{to{width:var(--w)}}
+.row .v{width:44px;text-align:right;color:var(--dim);flex:none;font-size:12px}
+.foot{color:var(--dim);font-size:12px;margin-top:24px;text-align:center;line-height:1.7}
+@media (max-width:520px){
+ section{padding:16px 12px}th,td{padding:7px 5px;font-size:12px}
+ .bitlabel{flex-direction:column;gap:2px}.bitlabel span{text-align:left}
+ .bitrow{margin:10px 0 14px}
+}
+</style>
+</head>
+<body><div class="wrap">
+<h1>权重里的每个数字，<span>都在花你的显存和电费</span></h1>
+<p class="sub">从 FP32 到 4bit，从整数到块浮点。动画随滚动或打开自动播放。</p>
+
+<section>
+<h2><i></i>一、位宽：每个数占多大房子</h2>
+<p class="note">S=符号位；E=指数位，决定能表示多大的数；M=尾数位，决定数有多准。</p>
+<div id="bits"></div>
+</section>
+
+<section>
+<h2><i></i>二、整数网格 vs 浮点网格</h2>
+<p class="note">同一个 0~1 量程，INT8 的刻度均匀铺满；FP8 靠近 0 的地方密、远处稀。所以浮点能同时照顾 0.001 和 10000，整数只能靠缩放因子硬撑。</p>
+<div class="grid">
+<div class="card"><h3>INT8 · 256 级等距</h3><p>绝对误差恒定，小数区间浪费大量刻度。</p>
+<div class="dotline" id="intdots"></div><div class="axis"><span>0</span><span>0.5</span><span>1.0</span></div></div>
+<div class="card"><h3>FP8 E4M3 · 对数密铺</h3><p>离 0 越远间距越大，相对误差恒定，动态范围可达 448。</p>
+<div class="dotline" id="fpdots"></div><div class="axis"><span>0</span><span>0.5</span><span>1.0</span></div></div>
+</div>
+</section>
+
+<section>
+<h2><i></i>三、同一组权重，被不同精度记住的样子</h2>
+<p class="note">灰柱是原始权重，彩点是量化后的重建值。位宽越低，点越少、偏离越大。</p>
+<div id="quant"></div>
+</section>
+
+<section>
+<h2><i></i>四、4bit 三强：MXFP4 / NVFP4 / HiF4</h2>
+<p class="note">裸 4bit（E2M1）只有 15 个非零值：±0.5、±1、±1.5、±2、±3、±4、±6。要覆盖真实权重，必须<b>每 N 个数共享一个缩放因子</b>，差别就在块多大、缩放有几层。</p>
+<div class="grid">
+<div class="card"><h3>MXFP4 <span class="tag">OCP 开放标准</span></h3>
+<p>块 32，每块共享 1 个 8bit（E8M0）缩放。元素 E2M1。</p>
+<div class="row"><span class="k">块大小</span><div class="track"><div class="fill" style="--w:50%"></div></div><span class="v">32</span></div>
+<div class="row"><span class="k">平均位宽</span><div class="track"><div class="fill" style="--w:85%;animation-delay:.2s"></div></div><span class="v">4.25</span></div>
+</div>
+<div class="card"><h3>NVFP4 <span class="tag">NVIDIA Blackwell</span></h3>
+<p>块 16，更细，能扛离群值。缩放用 FP8 E4M3，本身也可量化，外加张量级二级缩放。</p>
+<div class="row"><span class="k">块大小</span><div class="track"><div class="fill" style="--w:25%;animation-delay:.1s"></div></div><span class="v">16</span></div>
+<div class="row"><span class="k">平均位宽</span><div class="track"><div class="fill" style="--w:90%;animation-delay:.3s"></div></div><span class="v">4.5</span></div>
+</div>
+<div class="card"><h3>HiF4 <span class="tag">华为 Ascend</span></h3>
+<p>块 64，每单元 64 个 4bit 元素加 32bit 元数据，含三级缩放层级。大块让矩阵乘高度定点化，硬件更省面积功耗。</p>
+<div class="row"><span class="k">块大小</span><div class="track"><div class="fill" style="--w:100%;animation-delay:.15s"></div></div><span class="v">64</span></div>
+<div class="row"><span class="k">平均位宽</span><div class="track"><div class="fill" style="--w:90%;animation-delay:.35s"></div></div><span class="v">4.5</span></div>
+</div>
+</div>
+<div class="scroll" style="margin-top:16px"><table>
+<tr><th>格式</th><th>块</th><th>元素</th><th>缩放</th><th>位宽</th><th>取点</th></tr>
+<tr><td><b>MXFP4</b></td><td>32</td><td>E2M1</td><td>E8M0/块</td><td>4.25</td><td>通用开放，兼容性最好</td></tr>
+<tr><td><b>NVFP4</b></td><td>16</td><td>E2M1</td><td>E4M3/块 + FP32/张量</td><td>4.5</td><td>细粒度抗离群，Blackwell 原生</td></tr>
+<tr><td><b>HiF4</b></td><td>64</td><td>4bit</td><td>三级缩放/32bit 元数据</td><td>4.5</td><td>大块定点化，能效优先</td></tr>
+</table></div>
+</section>
+
+<section>
+<h2><i></i>五、全景对照</h2>
+<div class="scroll"><table>
+<tr><th>精度</th><th>位宽</th><th>结构</th><th>精度</th><th>典型用途</th></tr>
+<tr><td>FP32</td><td>32</td><td>S1 E8 M23</td><td>约 7 位十进制</td><td>训练参考、科学计算</td></tr>
+<tr><td>TF32</td><td>19</td><td>S1 E8 M10</td><td>约 3 位十进制</td><td>NVIDIA 训练加速</td></tr>
+<tr><td>BF16</td><td>16</td><td>S1 E8 M7</td><td>约 2 位十进制</td><td>大模型训练主流</td></tr>
+<tr><td>FP16</td><td>16</td><td>S1 E5 M10</td><td>约 3 位十进制</td><td>推理、混合精度训练</td></tr>
+<tr><td>FP8 E4M3</td><td>8</td><td>S1 E4 M3</td><td>约 2 位十dec</td><td>推理，精度优先</td></tr>
+<tr><td>FP8 E5M2</td><td>8</td><td>S1 E5 M2</td><td>约 1 位十进制</td><td>梯度，范围优先</td></tr>
+<tr><td>INT8</td><td>8</td><td>整数+全局缩放</td><td>256 级</td><td>最成熟的量化推理</td></tr>
+<tr><td>INT4</td><td>4</td><td>整数+组缩放</td><td>16 级</td><td>GPTQ / AWQ</td></tr>
+<tr><td>FP4 (E2M1)</td><td>4</td><td>S1 E2 M1</td><td>15 个非零值</td><td>必须配块缩放</td></tr>
+<tr><td>MXFP4</td><td>4.25</td><td>块32 + E8M0</td><td>—</td><td>OCP 标准</td></tr>
+<tr><td>NVFP4</td><td>4.5</td><td>块16 + E4M3</td><td>—</td><td>Blackwell 推理</td></tr>
+<tr><td>HiF4</td><td>4.5</td><td>块64 + 三级缩放</td><td>—</td><td>Ascend 推理</td></tr>
+</table></div>
+</section>
+
+<section>
+<h2><i></i>六、三句话记住</h2>
+<div class="grid">
+<div class="card"><h3 style="color:var(--acc)">浮点 vs 整数</h3><p>浮点按相对误差省位，天生照顾大数和极小值；整数按绝对刻度省位，快且简单，但量程外只能靠缩放因子兜。</p></div>
+<div class="card"><h3 style="color:var(--acc2)">4bit 为什么必须块缩放</h3><p>裸 4bit 只有 15 个可用值，直接量化必崩。每 16~64 个数配一个缩放因子，等于把动态范围从元素级搬到块级。</p></div>
+<div class="card"><h3 style="color:var(--pur)">NVFP4 与 HiF4 的路线差</h3><p>NVFP4 小块加高精度缩放，适应离群值、兼容性好；HiF4 大块加多级缩放，让算力更像定点、硬件更省，走能效优先。</p></div>
+</div>
+<p class="note" style="margin-top:14px">反例：MX4（1bit 微指数、块 16）因元数据开销过大，精度反而低于原版 4bit BFP，AMD 已放弃。设计更细不等于更好。</p>
+</section>
+
+<p class="foot">来源：NVIDIA NVFP4 技术博客、OCP MX 规范、arXiv:2602.11287《HiFloat4 Format for Language Model Inference》<br>页面为科普示意，动画为概念可视化，非 benchmark 数据</p>
+</div>
+<script>
+/* 1 位宽条 */
+const fmts=[
+ {n:"FP32",s:1,e:8,m:23,h:"训练与数值参考基准"},
+ {n:"TF32",s:1,e:8,m:10,h:"NVIDIA 矩阵乘训练"},
+ {n:"BF16",s:1,e:8,m:7,h:"指数范围同 FP32，大模型训练主力"},
+ {n:"FP16",s:1,e:5,m:10,h:"精度更高但范围小，易溢出"},
+ {n:"FP8 E4M3",s:1,e:4,m:3,h:"推理权重与激活"},
+ {n:"FP8 E5M2",s:1,e:5,m:2,h:"梯度，范围优先"},
+ {n:"INT8",s:0,e:0,m:8,h:"无指数，整数 + 全局缩放"},
+ {n:"INT4",s:0,e:0,m:4,h:"16 级，必须组缩放"}
+];
+const box=document.getElementById('bits');
+fmts.forEach((f,i)=>{
+ const d=document.createElement('div');d.className='bitrow';
+ d.innerHTML='<div class="bitlabel"><b>'+f.n+'</b><span>'+f.h+'</span></div>';
+ const b=document.createElement('div');b.className='bits';let k=0;
+ const add=(cls,label,w)=>{const x=document.createElement('div');
+   x.className='bit '+cls;x.style.flex=w;x.style.animationDelay=(i*.07+k*.02)+'s';
+   if(w>=3)x.textContent=label;b.appendChild(x);k++;};
+ if(f.s)add('s','S',1);
+ if(f.e)add('e','E',f.e);
+ add(f.e?'m':'i',f.e?'M':'值',f.m);
+ d.appendChild(b);box.appendChild(d);
+});
+/* 2 点阵 */
+function put(el,vals,color){
+ vals.forEach((v,i)=>{const p=document.createElement('div');p.className='dot';
+ p.style.left=(v*100)+'%';p.style.background=color;
+ p.style.height=(9+((i*7)%9))+'px';p.style.opacity=.55+((i%3)*.15);el.appendChild(p);});
+}
+const iv=[];for(let i=0;i<=127;i+=2)iv.push(i/127);
+put(document.getElementById('intdots'),iv,'#4ec9ff');
+const fv=[];
+for(let e=-4;e<=0;e++)for(let m=2;m<=3;m++)fv.push(m*Math.pow(2,e));
+put(document.getElementById('fpdots'),fv.concat([1]).filter(v=>v<=1),'#ffb454');
+/* 3 量化图 */
+const qbox=document.getElementById('quant');
+function rnd(i){const x=Math.sin(i*127.1+311.7)*43758.5453;return Math.abs(x-Math.floor(x));}
+const raw=[];for(let i=0;i<26;i++){raw.push(((rnd(i)+rnd(i+5)+rnd(i+11))/3*2-1)*0.85);}
+const qs=[
+ {n:'FP32 / BF16',step:0.004,c:'#3ddc97',e:'几乎无损'},
+ {n:'FP8 E4M3',step:0.05,c:'#4ec9ff',e:'轻微误差'},
+ {n:'NVFP4 / HiF4（块缩放）',step:0.16,c:'#ffb454',e:'可见误差'},
+ {n:'INT4（无块缩放）',step:0.55,c:'#ff6b6b',e:'明显失真'}
+];
+qs.forEach(q=>{
+ const w=document.createElement('div');w.className='qrow';
+ w.innerHTML='<div class="bitlabel" style="align-items:center"><b>'+q.n+'</b><span>'+q.e+'</span></div>';
+ const cv=document.createElement('canvas');w.appendChild(cv);qbox.appendChild(w);
+ const ctx=cv.getContext('2d');
+ let started=false;
+ function draw(p){
+  const dpr=window.devicePixelRatio||1;
+  const W=cv.clientWidth*dpr,Hh=110*dpr;
+  cv.width=W;cv.height=Hh;
+  const mid=Hh*0.5,sc=Hh*0.40;const n=raw.length,step=W/n;
+  ctx.clearRect(0,0,W,Hh);
+  raw.forEach((v,i)=>{
+   const x=i*step+step/2,y=mid-v*sc;
+   const a=Math.max(0,Math.min(1,(p-i/n)*3));
+   ctx.globalAlpha=0.35*a;
+   ctx.fillStyle='#3b4c66';
+   ctx.fillRect(x-7*dpr,Math.min(mid,y),14*dpr,Math.abs(mid-y));
+   const qv=Math.round(v/q.step)*q.step;
+   ctx.globalAlpha=a;ctx.fillStyle=q.c;
+   ctx.beginPath();ctx.arc(x,mid-qv*sc,2.8*dpr,0,7);ctx.fill();
+   ctx.globalAlpha=1;
+  });
+ }
+ draw(1);
+ const io=new IntersectionObserver(es=>{es.forEach(en=>{
+   if(en.isIntersecting&&!started){started=true;
+     const t0=performance.now();
+     const anim=t=>{const p=Math.min(1,(t-t0)/1100);draw(p);if(p<1)requestAnimationFrame(anim);};
+     requestAnimationFrame(anim);}
+ })});
+ io.observe(cv);
+});
+</script>
+</body></html>
