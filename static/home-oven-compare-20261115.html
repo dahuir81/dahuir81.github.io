@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#2e2e33">
+  <meta name="robots" content="noindex">
+  <title>家用烤箱选购与预留对照 · 2026-11-15</title>
+  <style>
+    :root {
+      --theme: rgb(29, 30, 32);
+      --entry: rgb(46, 46, 51);
+      --primary: rgb(218, 218, 219);
+      --secondary: rgb(155, 156, 157);
+      --tertiary: rgb(65, 66, 68);
+      --content: rgb(196, 196, 197);
+      --border: rgb(51, 51, 51);
+      --radius: 8px;
+      --gap: 20px;
+      --max: 760px;
+      --gold: #d4b483;
+      --warn: #c9a06a;
+      --alert: #c9897a;
+      --ok: #8fbf9a;
+      --chip: rgb(55, 56, 62);
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; background: var(--theme); color: var(--content); }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+    a { color: var(--gold); text-decoration: none; border-bottom: 1px solid rgba(212,180,131,.35); }
+    a:hover { border-bottom-color: var(--gold); }
+    .wrap { max-width: var(--max); margin: 0 auto; padding: 0 18px 64px; }
+    header.top {
+      position: sticky; top: 0; z-index: 10;
+      background: rgba(29,30,32,.92);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+    .top-inner {
+      max-width: var(--max); margin: 0 auto;
+      padding: 14px 18px;
+      display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+    }
+    .brand { color: var(--primary); font-weight: 600; letter-spacing: .02em; }
+    .meta { color: var(--secondary); font-size: 13px; }
+    h1 {
+      font-size: 1.55rem; line-height: 1.3; color: var(--primary);
+      font-weight: 650; margin: 28px 0 8px;
+    }
+    h2 {
+      font-size: 1.15rem; color: var(--primary); font-weight: 650;
+      margin: 36px 0 12px; padding-top: 8px;
+      border-top: 1px solid var(--border);
+    }
+    h2:first-of-type { border-top: 0; padding-top: 0; }
+    h3 { font-size: 1.02rem; color: var(--primary); font-weight: 600; margin: 0 0 8px; }
+    p { margin: 0 0 12px; }
+    .lead { color: var(--secondary); margin-bottom: 22px; }
+    .grid { display: grid; gap: 12px; }
+    .grid-3 { grid-template-columns: 1fr; }
+    @media (min-width: 700px) {
+      .grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+      .grid-2 { grid-template-columns: 1fr 1fr; }
+    }
+    .card {
+      background: var(--entry);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 16px 14px;
+    }
+    .card p:last-child { margin-bottom: 0; }
+    .kicker {
+      font-size: 12px; color: var(--secondary); letter-spacing: .08em;
+      text-transform: uppercase; margin-bottom: 6px;
+    }
+    .chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 10px; }
+    .chip {
+      display: inline-block; background: var(--chip); color: var(--secondary);
+      border-radius: 999px; padding: 1px 9px; font-size: 12px; line-height: 1.8;
+    }
+    .chip.gold { color: var(--gold); }
+    .chip.warn { color: var(--warn); }
+    .chip.alert { color: var(--alert); }
+    .price {
+      font-variant-numeric: tabular-nums;
+      font-feature-settings: "tnum";
+      color: var(--gold);
+      font-weight: 650;
+      letter-spacing: .01em;
+    }
+    .muted { color: var(--secondary); }
+    .small { font-size: 13px; line-height: 1.65; color: var(--secondary); }
+    .callout {
+      border-left: 3px solid var(--warn);
+      background: var(--entry);
+      padding: 12px 14px;
+      border-radius: 0 var(--radius) var(--radius) 0;
+      margin: 0 0 14px;
+    }
+    .callout.alert { border-left-color: var(--alert); }
+    .measure {
+      font-variant-numeric: tabular-nums;
+      color: var(--primary);
+      font-weight: 650;
+      font-size: 1.25rem;
+      letter-spacing: .02em;
+    }
+    .unit { font-size: 13px; color: var(--secondary); font-weight: 400; margin-left: 2px; }
+    .row {
+      display: flex; justify-content: space-between; gap: 12px;
+      padding: 7px 0; border-bottom: 1px solid var(--border);
+      font-size: 14px;
+    }
+    .row:last-child { border-bottom: 0; padding-bottom: 0; }
+    .row .lab { color: var(--secondary); flex: 0 0 42%; }
+    .row .val { color: var(--primary); text-align: right; flex: 1; }
+    .links { margin-top: 12px; display: flex; gap: 14px; font-size: 14px; }
+    .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 0 0 8px; }
+    table {
+      width: 100%; border-collapse: collapse; font-size: 14px;
+      min-width: 640px; font-variant-numeric: tabular-nums;
+    }
+    th, td {
+      text-align: left; padding: 10px 10px; border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    th { color: var(--secondary); font-weight: 550; font-size: 12px; letter-spacing: .04em; }
+    td.num, th.num { text-align: right; }
+    tbody tr:hover { background: rgba(255,255,255,.02); }
+    .gap-note { color: var(--alert); }
+    ul { margin: 0; padding: 0 0 0 1.15em; }
+    li { margin: 0 0 8px; }
+    footer.page-foot {
+      margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--border);
+      color: var(--secondary); font-size: 13px;
+    }
+    .reserve-list { margin: 8px 0 0; }
+    .reserve-list li { margin-bottom: 6px; }
+  </style>
+</head>
+<body>
+  <header class="top">
+    <div class="top-inner">
+      <div class="brand">烤箱对照</div>
+      <div class="meta">2026-11-15 · 上海时间</div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <h1>家用烤箱选购与预留对照</h1>
+    <p class="lead">对照 7 款官方页现价与尺寸口径，给新房厨房预留用。京东为当天下午看到的补贴价，天猫为当晚 22:29–22:49 的券后价。价格会变，结算以当时页面为准。</p>
+
+    <h2>先看结论</h2>
+    <div class="grid grid-3">
+      <section class="card">
+        <div class="kicker">做欧包 / 硬欧</div>
+        <h3>优先海氏 SP80，其次新艾瑞斯 E8</h3>
+        <p class="small">面包向来源更看重蒸汽、底部热量和 250℃ 以上，不能只把 40L 换成 60L。SP80 要接受 16A 和更深的机身。</p>
+      </section>
+      <section class="card">
+        <div class="kicker">吐司 / 蛋糕 / 多层同烤</div>
+        <h3>长帝 F60A 或新艾瑞斯 E8 更均衡</h3>
+        <p class="small">不想另配水盘、又要日常多层同烤时，这两款更合适。F60A 是今晚对照里券后价最低的一款。</p>
+      </section>
+      <section class="card">
+        <div class="kicker">预留原则</div>
+        <h3>型号未定，按上限留；两条路都没定，两处都先留</h3>
+        <p class="small">只走台式，不必再做 60 厘米电器柜。开孔不要按京东或天猫「全嵌」去切。</p>
+      </section>
+    </div>
+
+    <h2>装修预留（已冻结，不再改数字）</h2>
+    <div class="grid grid-2">
+      <section class="card">
+        <div class="chips"><span class="chip gold">台式 / 层炉</span></div>
+        <h3>台面净空</h3>
+        <p><span class="measure">80</span><span class="unit">厘米宽</span>&nbsp;&nbsp;<span class="measure">90</span><span class="unit">厘米深</span>&nbsp;&nbsp;<span class="measure">15</span><span class="unit">厘米上方散热</span></p>
+        <ul class="reserve-list small">
+          <li>承重 45 公斤以上，前方抽盘约 1.2 米</li>
+          <li>不要完全包死，左右和后方要能散热</li>
+          <li>16 安三孔专线在侧面，不要正对机背；线径 6 平方铜线，覆盖 4000W（SP80）</li>
+          <li>若已排除 SP80，净深 80 厘米即可</li>
+        </ul>
+      </section>
+      <section class="card">
+        <div class="chips"><span class="chip gold">嵌入式</span></div>
+        <h3>标准电器高柜</h3>
+        <p><span class="measure">60</span><span class="unit">厘米宽</span>&nbsp;&nbsp;<span class="measure">60</span><span class="unit">厘米深</span></p>
+        <ul class="reserve-list small">
+          <li>先留标准 60 厘米高柜，不要先做成 45 厘米矮柜</li>
+          <li>凯度 TD Pro3 开孔按官方说明书：宽 560 × 高 450 × 深 ≥540 毫米，上门后再按实物核对</li>
+          <li>天猫主图全嵌开孔是 600 × 460 × 565，半嵌 560 × 450 × 545；半嵌更接近说明书，仍以说明书为准</li>
+          <li>欧洲 60 厘米嵌入式也走这条柜体预留</li>
+        </ul>
+      </section>
+    </div>
+    <p class="small">两条路都还没定，就按上面两处都先留。只走台式，用 80 × 90，不必再做 60 厘米柜。</p>
+
+    <h2>价格一览</h2>
+    <div class="callout">
+      天猫写的是「券后价」，页上有政府补贴领取按钮，但没有写成已经含进这个券后价。京东写的是「补贴到手价 / 政府补贴价 / 补贴领后价」。高比克 80S 两边差一截，不能直接当同一到手价比。
+    </div>
+    <div class="table-wrap card" style="padding: 0 6px;">
+      <table>
+        <thead>
+          <tr>
+            <th>型号</th>
+            <th>类型</th>
+            <th>参数</th>
+            <th class="num">京东补贴价</th>
+            <th class="num">天猫券后价</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>新艾瑞斯 E8</td>
+            <td>台式</td>
+            <td>60L / 3kW</td>
+            <td class="num price">¥3127.45</td>
+            <td class="num price">¥3292.05</td>
+          </tr>
+          <tr>
+            <td>海氏 S80 四代</td>
+            <td>台式</td>
+            <td>66L / 3.5kW</td>
+            <td class="num price">¥3990.75</td>
+            <td class="num price">¥3999.25</td>
+          </tr>
+          <tr>
+            <td>海氏 SP80</td>
+            <td>台式层炉</td>
+            <td>68L / 4kW</td>
+            <td class="num price">¥6390.30</td>
+            <td class="num price">¥6398.80</td>
+          </tr>
+          <tr>
+            <td>高比克 80S</td>
+            <td>台式</td>
+            <td>59L / 2.6kW</td>
+            <td class="num price">¥3672.00</td>
+            <td class="num price gap-note">¥7556.50</td>
+          </tr>
+          <tr>
+            <td>长帝 F60A 大白鲨</td>
+            <td>台式</td>
+            <td>60L / 3400W</td>
+            <td class="num price">¥2545.92</td>
+            <td class="num price">¥2618.40</td>
+          </tr>
+          <tr>
+            <td>凯度 TD Pro3</td>
+            <td>嵌入式蒸烤</td>
+            <td>60L / 2800W</td>
+            <td class="num price">¥4898.55</td>
+            <td class="num price">¥5824.20</td>
+          </tr>
+          <tr>
+            <td>凯度 TR Pro</td>
+            <td>嵌入式微蒸烤</td>
+            <td>52L / 3000W</td>
+            <td class="num price">¥5998.45</td>
+            <td class="num price">¥5999.30</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="small">京东价为 11 月 15 日约 16:00–16:04 官方/旗舰店页面；天猫价为当晚官方旗舰店商品页。F60A 天猫补贴按钮是 20%，其余多为 15%。部分天猫优惠写了新客首单礼金，不一定人人能用。手机上表格可左右滑动。</p>
+
+    <h2>分款说明</h2>
+
+    <article class="card" id="e8" style="margin-bottom:12px;">
+      <div class="chips"><span class="chip gold">台式</span><span class="chip">欧包向</span><span class="chip">多层同烤</span></div>
+      <h3>新艾瑞斯 E8</h3>
+      <div class="row"><div class="lab">京东补贴到手</div><div class="val price">¥3127.45<span class="muted">（划线 ¥3873）</span></div></div>
+      <div class="row"><div class="lab">天猫券后</div><div class="val price">¥3292.05<span class="muted">（优惠前 ¥4873）</span></div></div>
+      <div class="row"><div class="lab">天猫主图另写</div><div class="val">补贴预估到手价 ¥3292</div></div>
+      <div class="row"><div class="lab">参数</div><div class="val">60L · 3kW · 220V</div></div>
+      <div class="row"><div class="lab">京东产品尺寸</div><div class="val">长 590 × 宽 600 × 高 550 mm</div></div>
+      <div class="row"><div class="lab">天猫参数</div><div class="val">无外形尺寸</div></div>
+      <p class="small" style="margin-top:10px;">店铺：新艾瑞斯旗舰店。面包向来源会把它和硬欧/欧包联系起来，也适合日常多层同烤。</p>
+      <div class="links">
+        <a href="https://item.jd.com/10139822262430.html">京东页面</a>
+        <a href="https://detail.tmall.com/item.htm?id=655272914545">天猫页面</a>
+      </div>
+    </article>
+
+    <article class="card" id="s80" style="margin-bottom:12px;">
+      <div class="chips"><span class="chip gold">台式</span><span class="chip">吐司 / 多层</span></div>
+      <h3>海氏 S80 四代</h3>
+      <div class="row"><div class="lab">京东补贴到手</div><div class="val price">¥3990.75<span class="muted">（划线 ¥4705）</span></div></div>
+      <div class="row"><div class="lab">天猫券后</div><div class="val price">¥3999.25<span class="muted">（优惠前 ¥5999）</span></div></div>
+      <div class="row"><div class="lab">参数</div><div class="val">66L · 3.5kW · 220V · 选型「四代 / 主动排气」</div></div>
+      <div class="row"><div class="lab">京东产品尺寸</div><div class="val">长 600 × 宽 622 × 高 443 mm</div></div>
+      <div class="row"><div class="lab">京东官方问答</div><div class="val">外形尺寸（宽深高）600 × 622 × 443 mm</div></div>
+      <div class="row"><div class="lab">天猫主图手测</div><div class="val">总长 605、总高 443、总宽 710 mm（含把手）</div></div>
+      <p class="small" style="margin-top:10px;">店铺：Hauswirt海氏官方旗舰店。资料更多，定位偏吐司、分批、多层。多家来源说没有内置蒸汽，烤欧包往往要配石板和水盘。天猫参数表没有外形尺寸，710 mm 是主图手测且含把手，预留仍按上限。</p>
+      <div class="links">
+        <a href="https://item.jd.com/10172216845587.html">京东页面</a>
+        <a href="https://detail.tmall.com/item.htm?id=542566753352">天猫页面</a>
+      </div>
+    </article>
+
+    <article class="card" id="sp80" style="margin-bottom:12px;">
+      <div class="chips"><span class="chip gold">台式层炉</span><span class="chip">欧包优先</span></div>
+      <h3>海氏 SP80</h3>
+      <div class="row"><div class="lab">京东补贴到手</div><div class="val price">¥6390.30<span class="muted">（划线 ¥7528）</span></div></div>
+      <div class="row"><div class="lab">天猫券后</div><div class="val price">¥6398.80<span class="muted">（优惠前 ¥9599）</span></div></div>
+      <div class="row"><div class="lab">参数</div><div class="val">68L · 4kW · 220V · 蒸汽功率京东写 1200W</div></div>
+      <div class="row"><div class="lab">京东产品尺寸</div><div class="val">长 598 × 宽 769 × 高 382 mm</div></div>
+      <div class="row"><div class="lab">天猫参数</div><div class="val">无外形尺寸，图文详情当晚会加载失败</div></div>
+      <p class="small" style="margin-top:10px;">店铺：Hauswirt海氏官方旗舰店。2025 年款，天猫选型是「2025 新升级加厚石板」。769 mm 这一边是把台式净深收到 90 厘米的原因。要接 16 安专线。</p>
+      <div class="links">
+        <a href="https://item.jd.com/10158800135151.html">京东页面</a>
+        <a href="https://detail.tmall.com/item.htm?id=682805214530">天猫页面</a>
+      </div>
+    </article>
+
+    <article class="card" id="80s" style="margin-bottom:12px;">
+      <div class="chips"><span class="chip gold">台式</span><span class="chip alert">价差大</span></div>
+      <h3>高比克（UKOEO）80S</h3>
+      <div class="row"><div class="lab">京东政府补贴</div><div class="val price">¥3672.00<span class="muted">（划线 ¥4800）</span></div></div>
+      <div class="row"><div class="lab">天猫券后</div><div class="val price gap-note">¥7556.50<span class="muted">（优惠前 ¥8890）</span></div></div>
+      <div class="row"><div class="lab">参数</div><div class="val">天猫参数 59L · 2.6kW · 220V；主图写 56L，以参数为准</div></div>
+      <div class="row"><div class="lab">京东产品尺寸</div><div class="val">长 519 × 宽 635 × 高 545 mm</div></div>
+      <div class="row"><div class="lab">天猫参数</div><div class="val">无外形尺寸；当晚看的是米色升级 UW 管</div></div>
+      <p class="small" style="margin-top:10px;">店铺：UKOEO高比克旗舰店。天猫券后和京东政府补贴价差一截，不能直接当同一到手价比。京东官方页写 59L / 2600W，和天猫参数一致；外面常见文案仍有 56L / 2500W 的写法。</p>
+      <div class="links">
+        <a href="https://item.jd.com/10034753257061.html">京东页面</a>
+        <a href="https://detail.tmall.com/item.htm?id=624937749423">天猫页面</a>
+      </div>
+    </article>
+
+    <article class="card" id="f60a" style="margin-bottom:12px;">
+      <div class="chips"><span class="chip gold">台式</span><span class="chip">均衡 / 价低</span></div>
+      <h3>长帝 F60A 大白鲨</h3>
+      <div class="row"><div class="lab">京东补贴领后</div><div class="val price">¥2545.92<span class="muted">（划线 ¥3143.11）</span></div></div>
+      <div class="row"><div class="lab">天猫券后</div><div class="val price">¥2618.40<span class="muted">（优惠前 ¥4999）</span></div></div>
+      <div class="row"><div class="lab">参数</div><div class="val">60L · 3400W · 220V · 台式下拉门 · 加热方式写蒸汽加热</div></div>
+      <div class="row"><div class="lab">京东产品尺寸</div><div class="val">长 559 × 宽 593 × 高 545 mm</div></div>
+      <div class="row"><div class="lab">天猫参数</div><div class="val">无外形尺寸；补贴按钮为 20%</div></div>
+      <p class="small" style="margin-top:10px;">店铺：长帝旗舰店 / 长帝京东自营旗舰店。当晚天猫优惠里有新客首单礼金，不一定人人能用。面包向来源对它的欧包评价更谨慎，有蒸汽、可以尝试，但独立长测不多。</p>
+      <div class="links">
+        <a href="https://item.jd.com/100179129087.html">京东页面</a>
+        <a href="https://detail.tmall.com/item.htm?id=738117778884">天猫页面</a>
+      </div>
+    </article>
+
+    <article class="card" id="tdpro3" style="margin-bottom:12px;">
+      <div class="chips"><span class="chip gold">嵌入式蒸烤</span></div>
+      <h3>凯度 TD Pro3</h3>
+      <div class="row"><div class="lab">京东政府补贴</div><div class="val price">¥4898.55<span class="muted">（划线 ¥5998）</span></div></div>
+      <div class="row"><div class="lab">天猫券后</div><div class="val price">¥5824.20<span class="muted">（优惠前 ¥8999）</span></div></div>
+      <div class="row"><div class="lab">认证型号</div><div class="val">SR6028FE24-TD Pro</div></div>
+      <div class="row"><div class="lab">参数</div><div class="val">60L · 2800W · 16A · 净重 30kg</div></div>
+      <div class="row"><div class="lab">官方说明书外形</div><div class="val">宽 × 深 × 高 595 × 555 × 455 mm</div></div>
+      <div class="row"><div class="lab">官方说明书开孔</div><div class="val">宽 560 × 高 450 × 深 ≥540 mm</div></div>
+      <div class="row"><div class="lab">天猫参数尺寸</div><div class="val">595 × 555 × 455 mm（未标长宽高）</div></div>
+      <div class="row"><div class="lab">天猫主图开孔</div><div class="val">全嵌 600 × 460 × 565；半嵌 560 × 450 × 545</div></div>
+      <p class="small" style="margin-top:10px;">店铺：casdon凯度旗舰店 / 凯度京东自营旗舰店。京东开孔口径和说明书不一致，开孔按官方说明书，不要按京东或天猫全嵌去切。独立面包长测很少。</p>
+      <div class="links">
+        <a href="https://item.jd.com/100115280939.html">京东页面</a>
+        <a href="https://detail.tmall.com/item.htm?id=824903871753">天猫页面</a>
+      </div>
+    </article>
+
+    <article class="card" id="trpro" style="margin-bottom:12px;">
+      <div class="chips"><span class="chip gold">嵌入式微蒸烤</span><span class="chip warn">容量口径不一</span></div>
+      <h3>凯度 TR Pro</h3>
+      <div class="row"><div class="lab">京东补贴到手</div><div class="val price">¥5998.45<span class="muted">（划线 ¥7057）</span></div></div>
+      <div class="row"><div class="lab">天猫券后</div><div class="val price">¥5999.30<span class="muted">（优惠前 ¥9999）</span></div></div>
+      <div class="row"><div class="lab">认证型号</div><div class="val">SR52FDF24-TR Pro</div></div>
+      <div class="row"><div class="lab">容量</div><div class="val">天猫参数 52L；京东页此前写 58L</div></div>
+      <div class="row"><div class="lab">功率</div><div class="val">3000W · 京东写 16A · 净重 33kg</div></div>
+      <div class="row"><div class="lab">天猫参数尺寸</div><div class="val">595 × 555 × 455 mm（未标长宽高）</div></div>
+      <div class="row"><div class="lab">京东产品尺寸</div><div class="val">长 595 × 宽 559 × 高 455 mm</div></div>
+      <p class="small" style="margin-top:10px;">店铺：casdon凯度旗舰店 / 凯度京东自营旗舰店。不要和 TR Max、ZR Pro 搞混。天猫参数没有开孔字段，柜体仍按 60 厘米标准高柜预留，上门按实物核对。</p>
+      <div class="links">
+        <a href="https://item.jd.com/100146079413.html">京东页面</a>
+        <a href="https://detail.tmall.com/item.htm?id=897635216797">天猫页面</a>
+      </div>
+    </article>
+
+    <h2>阅读时要注意</h2>
+    <div class="card">
+      <ul>
+        <li>这是选购和装修预留对照，不是下单页。补贴要看资格，券和首单礼金也不一定人人能用。</li>
+        <li>京东「产品尺寸」按页面的长 / 宽 / 高照抄，没有自行改成宽 × 深 × 高；只有同一页官方问答明确对应时才另写。</li>
+        <li>海氏官方网站 S80 页仍是三代信息，不要和四代混用。</li>
+        <li>美国电压的铂富、Anova 等不作为杭州 220V 行货选项。</li>
+      </ul>
+    </div>
+
+    <footer class="page-foot">
+      <p>Tars 整理 · 仅供装修预留与选购对照 · 2026 年 11 月 15 日</p>
+    </footer>
+  </main>
+</body>
+</html>
