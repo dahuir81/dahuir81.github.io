@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BIS 远程算力新规（§744.24）解读与三轮禁令对比</title>
+<style>
+:root{
+  --bg:#0d1117; --panel:#161b22; --panel2:#1c2430; --text:#e6edf3; --muted:#9aa7b4;
+  --line:#2a3441; --accent:#f0b429; --accent2:#58a6ff; --danger:#f85149; --ok:#3fb950;
+  --chip:#21262d;
+}
+@media (prefers-color-scheme: light){
+  :root{--bg:#fafafa;--panel:#ffffff;--panel2:#f3f5f8;--text:#1b2430;--muted:#5b6b7c;--line:#dfe4ea;--accent:#b07d00;--accent2:#0969da;--danger:#cf222e;--ok:#1a7f37;--chip:#eef1f5;}
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;line-height:1.75;font-size:16px;-webkit-font-smoothing:antialiased}
+.wrap{max-width:820px;margin:0 auto;padding:48px 20px 80px}
+.kicker{color:var(--accent);font-size:13px;letter-spacing:.18em;font-weight:700;margin-bottom:14px}
+h1{font-size:clamp(24px,4.6vw,34px);line-height:1.35;margin:0 0 14px;letter-spacing:-.01em}
+.sub{color:var(--muted);font-size:15px;margin-bottom:26px}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:34px}
+.tag{background:var(--chip);border:1px solid var(--line);color:var(--muted);font-size:12.5px;padding:3px 10px;border-radius:999px}
+h2{font-size:21px;margin:44px 0 6px;padding-top:18px;border-top:1px solid var(--line)}
+h2 .num{color:var(--accent);margin-right:8px;font-variant-numeric:tabular-nums}
+h3{font-size:17px;margin:26px 0 8px;color:var(--accent2)}
+p{margin:12px 0}
+.lead{font-size:17px;color:var(--text)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:18px 0}
+.card.hl{border-left:3px solid var(--accent)}
+.card.warn{border-left:3px solid var(--danger)}
+.card.ok{border-left:3px solid var(--ok)}
+.card .ttl{font-weight:700;font-size:15px;margin-bottom:6px}
+ul,ol{margin:10px 0 10px 0;padding-left:22px}
+li{margin:7px 0}
+table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14.5px}
+th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
+th{background:var(--panel2);font-weight:700;font-size:13.5px;color:var(--muted)}
+td strong{color:var(--text)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin:20px 0}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px}
+.stat .v{font-size:26px;font-weight:800;color:var(--accent);letter-spacing:-.02em;line-height:1.2}
+.stat .k{font-size:13px;color:var(--muted);margin-top:4px}
+.tl{position:relative;margin:22px 0 22px 6px;padding-left:22px;border-left:2px solid var(--line)}
+.tl .ev{position:relative;margin-bottom:18px}
+.tl .ev:before{content:"";position:absolute;left:-29px;top:8px;width:11px;height:11px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px var(--bg)}
+.tl .d{font-size:13px;color:var(--accent);font-weight:700}
+.tl .t{font-size:14.5px;color:var(--text)}
+.quote{border-left:3px solid var(--accent2);padding:6px 14px;margin:14px 0;background:var(--panel2);border-radius:0 8px 8px 0;font-size:14px;color:var(--muted)}
+.quote b{color:var(--text)}
+.src{font-size:12.5px;color:var(--muted);font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.foot{margin-top:52px;padding-top:18px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+@media(max-width:560px){
+  .wrap{padding:32px 16px 60px}
+  table{font-size:13px}
+  th,td{padding:8px 9px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="kicker">出口管制 · 法规解读</div>
+<h1>美国把"远程租算力"也管上了：BIS §744.24 新规解读与三轮禁令对比</h1>
+<div class="sub">依据美国商务部 BIS 临时最终规则 RIN 0694-AK50（132 页）逐条核对，对比 2023 年对华芯片管制、2025 年《AI 扩散规则》与本轮新规的管制思路变化。</div>
+<div class="meta">
+  <span class="tag">2026-11-16</span>
+  <span class="tag">规则署名：美国商务部 BIS</span>
+  <span class="tag">撰写主导：财政部 + 国家安全委员会</span>
+  <span class="tag">Interim Final Rule</span>
+</div>
+
+<p class="lead">一句话概括：过去三年美国的算力管制一直卡在"芯片卖不卖给谁"，这次换了个抓手——<strong>不管芯片在哪个国家，只要这个机房在给中国公司提供超过 1200 万总 TPP 的算力，往机房里运先进芯片就得先拿美国许可证。</strong>管制对象从"买家"变成了"机房"，从"出境瞬间"延伸到了"后续每一次转租"。</p>
+
+<h2><span class="num">01</span>新规到底管了什么</h2>
+
+<div class="grid">
+  <div class="stat"><div class="v">1200万</div><div class="k">aggregate TPP 门槛（单机房或关联机房合计）</div></div>
+  <div class="stat"><div class="v">5 国</div><div class="k">印尼、马来西亚、新加坡、泰国、巴西新增许可要求</div></div>
+  <div class="stat"><div class="v">90 天</div><div class="k">存量业务须拿证的时限</div></div>
+  <div class="stat"><div class="v">132 页</div><div class="k">规则全文，含 9 个 CFR 部分的修订</div></div>
+</div>
+
+<h3>1. 新增 §744.24：以"算力用量 + 客户归属"为触发条件</h3>
+<p>规则的条件是三重叠加，全部满足才触发许可要求：</p>
+<ul>
+  <li><strong>物品</strong>：ECCN 3A090（除 .c）、3A001.z、4A090、4A003.z/4A004.z/4A005.z 及配套软件技术等；</li>
+  <li><strong>去向</strong>：出口、再出口或在境内转移至任何国家的数据中心；</li>
+  <li><strong>用途</strong>：出口方"知晓"该机房将向总部（或最终母公司总部）位于<strong>中国澳门、D:5 国家组</strong>的公司提供超过 <strong>1200 万 aggregate TPP</strong> 的算力接入。</li>
+</ul>
+<div class="quote">原文：<b>"more than 12,000,000 'aggregate TPP' either at one data center or through 'linked data centers'"</b> — §744.24(a)(1) <span class="src">[IFR L1586]</span></div>
+
+<h3>2. 关联机房：数字互联也算一家</h3>
+<p>"linked data center"的定义直接把拆分规避堵死——通过数字或物理链路把两个以上机房连起来、可共享资源/均衡负载/整体复制数据的，视作一个整体；<strong>明确包含数字互联，不只是物理拉线</strong>。</p>
+
+<h3>3. 唯一的例外：商业推荐系统</h3>
+<p>电商"猜你喜欢"、社交信息流排序这类<strong>专门且仅用于</strong>排序/过滤/推荐商业内容的系统可以豁免，但须向 BIS 提交公司名、TPP 总量与尽调说明。边界卡得很死：只要系统能生成新文本、图像、音视频、代码，或内嵌了这类模型，即使同时做推荐也不算例外。</p>
+
+<h3>4. 最难的一刀：客户尽调红线（Note 3）</h3>
+<div class="card warn">
+  <div class="ttl">机房不给信息 = 你"知晓"了 = 违规</div>
+  <p>出口方要证明自己没有"knowledge"，必须拿到境外机房的 KYC 尽调信息，查清客户是否被 D:5/澳门主体直接或间接持股、控制。<strong>机房拒绝提供或给不出足以核实的信息，直接被推定为红旗，视为出口方已"知晓"。</strong></p>
+  <p class="src">[IFR Note 3 to §744.24(a)(1)]</p>
+</div>
+
+<h3>5. 后补票与混装：两条老退路一起封</h3>
+<ul>
+  <li><strong>后补票</strong>：芯片合法进机房后改租给中国公司，机房运营方必须自己补办许可（§744.24(e) 通知与授权要求）；</li>
+  <li><strong>混装</strong>：不得再依赖 de minimis（最低含量）规则——只要链条任一环节"知晓"该美国原产物品会用于被禁最终用途，混进外国整机也照样管。</li>
+</ul>
+
+<h3>6. "is informed"：比数字更灵活的暗门</h3>
+<p>§744.24(a)(2) 允许 BIS 单独发函或直接修订 EAR，点名称某主体/某目的地存在"不可接受的转用或转移风险"，加征许可要求，<strong>且不允许任何许可证例外予以豁免</strong>。这条不需要走完整立法程序，弹性远高于 TPP 门槛——也是多数解读文章漏掉的一条。</p>
+
+<h3>7. 五国名单与时间表</h3>
+<p>正式名单为<strong>印尼、马来西亚、新加坡、泰国、巴西</strong>（此前传闻的挪威、南非未列入），理由是"高于正常的转运风险"。收到货方总部或最终母公司在美国的，按 §743.10 报备可豁免。时间上：刊登即生效、60 天征求意见、在途货物 30 天宽限、<strong>存量对华供算力的机房 90 天内拿证，逐案审查、无明确标准</strong>。</p>
+
+<h2><span class="num">02</span>与三轮禁令的对比</h2>
+
+<p>把 2023 年 10 月的对华先进计算管制、2025 年 1 月的《AI 扩散规则》、本轮 §744.24 放在一条线上看，能看到一个清晰的转向：<strong>从"管买家"到"管全球买家"再到"管机房"。</strong></p>
+
+<table>
+  <thead>
+    <tr><th>维度</th><th>2023-10 对华先进计算管制</th><th>2025-01《AI 扩散规则》</th><th>2026-11 §744.24 新规</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>核心抓手</strong></td><td>芯片规格（TPP/性能密度）+ 目的地清单</td><td>按国家分三档配额，盟友白名单</td><td>机房算力用量 + 客户股权归属</td></tr>
+    <tr><td><strong>管制对象</strong></td><td>中国买家与中国境内实体</td><td>全球所有买家（分档配额）</td><td>全球境外机房运营方 + 芯片出口方</td></tr>
+    <tr><td><strong>地理范围</strong></td><td>以中国为主，含 D:5</td><td>全球分层（Tier 1/2/3）</td><td>全球无差别，另点 5 国加强</td></tr>
+    <tr><td><strong>数量门槛</strong></td><td>单芯片性能指标</td><td>单国累计算力配额</td><td>单机房/关联机房 1200 万 aggregate TPP</td></tr>
+    <tr><td><strong>规避路径</strong></td><td>第三国转口、海外机房远程租用</td><td>DUV/整机拆解等；执行成本极高，从未生效</td><td>拆小、中间商、后补票、混装——四路全封</td></tr>
+    <tr><td><strong>执行机制</strong></td><td>实体清单 + 许可推定拒绝</td><td>配额 + VEU 白名单</td><td>KYC 尽调红线 + is informed 点名 + 逐案审查</td></tr>
+    <tr><td><strong>结果</strong></td><td>高端卡进不来，催生东南亚绕道</td><td><strong>2026-11 正式废除</strong>（模型权重管制、国家分档、AIA 许可例外一并删除）</td><td>绕道路径被规则层面关闭</td></tr>
+  </tbody>
+</table>
+
+<div class="card hl">
+  <div class="ttl">三条主线变化</div>
+  <ol>
+    <li><strong>从"物"到"用"</strong>：老办法盯着芯片性能参数，新规盯着"这块算力最后给谁用"——同一批卡，卖给美国公司没事，租给中国公司就得拿证。</li>
+    <li><strong>从"出境那一刻"到"全生命周期"</strong>：出口时合规不算完，后续改用途要通知、要补证，链条上每个人都在射程内（Note 1：即使你不是原始交易方也受约束）。</li>
+    <li><strong>从"清单思维"到"尽调思维"</strong>：以前靠清单+推定拒绝，现在把合规成本前移给机房、代工厂、封测厂——你不查客户股权，责任在你。</li>
+  </ol>
+</div>
+
+<h3>被废除的《AI 扩散规则》到底废了什么</h3>
+<p>这次不是"暂停"，是把 2025 年 1 月那套框架从法规里<strong>逐条删除</strong>：</p>
+<ul>
+  <li>废除模型权重管制（ECCN 4E091 移除、《EAR》第 734.9 条 AI 模型权重 FDP 规则删除、红旗 28 移除、§772.1 中"Model Weights"定义删除）；</li>
+  <li>废除国家分档（Tier 体系）与数据中心 VEU 授权；</li>
+  <li>废除 AIA（License Exception AIA）许可例外，§740.27 保留待用；</li>
+  <li>撤销 AI 扩散规则中的全球区域稳定（RS）许可要求。</li>
+</ul>
+<p>BIS 的说法是：处理模型权重扩散，改用<strong>基于目的地与最终用途的许可要求</strong>更有效。翻译成人话——不管"权重文件"了，改管"能训练出权重的算力"。</p>
+
+<h2><span class="num">03</span>第三处动作：代工与封测收紧</h2>
+<p>规则同时修订了前端晶圆厂与 OSAT（封测）面临的两项推定：给<strong>非核准、非授权 IC 设计公司</strong>做先进制程逻辑芯片（3A090.a），无论在哪个国家，都要拿许可；同时删除了位于 D:1/D:4/D:5 的设计公司推翻该推定的资格。</p>
+<p>含义很直接：以前一家中国设计公司把芯片交给第三国代工厂做，是有机会绕开的；现在这条路被认定"无法推翻"，代工厂必须按最严推定处理。</p>
+
+<h2><span class="num">04</span>时间线</h2>
+<div class="tl">
+  <div class="ev"><div class="d">2023-10</div><div class="t">对华先进计算管制落地，高端卡直接断供，催生"东南亚买卡—云端回租"绕道</div></div>
+  <div class="ev"><div class="d">2025-01-15</div><div class="t">《AI 扩散规则》发布（90 FR 4544），按国家分三档配额</div></div>
+  <div class="ev"><div class="d">2025-05</div><div class="t">BIS 宣布将废除 AI 扩散规则，但一直未正式落地</div></div>
+  <div class="ev"><div class="d">2026-11 上旬</div><div class="t">英伟达芯片外流丑闻发酵（中心为新加坡云算力公司 Megaspeed），黄仁勋辞去 CEO</div></div>
+  <div class="ev"><div class="d">2026-11-15</div><div class="t">BIS 发布 132 页临时最终规则（RIN 0694-AK50），由财政部与国安委撰写主导</div></div>
+  <div class="ev"><div class="d">刊登日</div><div class="t">规则生效，同时开 60 天征求意见；在途货物 30 天宽限</div></div>
+  <div class="ev"><div class="d">生效 + 90 天</div><div class="t">存量对华供算力的境外机房必须拿到许可，否则面临后续出口限制</div></div>
+</div>
+
+<h2><span class="num">05</span>几处需要留意的细节</h2>
+<ul>
+  <li><strong>换算不是法规内容</strong>：网传"1200 万 TPP ≈ 750 张 H100"是作者按单卡 TPP 自算的估算，IFR 里并没有显卡换算表，只有"按 ECCN 3A090 技术注释计算 aggregate TPP"。引用时需标注为估算。</li>
+  <li><strong>规则署名与主导方不同</strong>：新闻稿原文是 "written by and at the direction of the Department of Treasury and the National Security Council"，但规则署名机关仍是商务部。准确表述是"以商务部名义发布、财政部与国安委主导撰写"。</li>
+  <li><strong>版本状态</strong>：本版 PDF 页脚登记日仍为占位符（预公示版），生效日以联邦公报刊登日为准。</li>
+  <li><strong>没有许可证例外可用</strong>：§744.24(b)(1) 明确除 BIS 另有说明外，任何许可例外都不能突破该禁令——包括以前常被拿来救急的 ACM 类例外（该例外本身保留，但不适用于本禁令）。</li>
+</ul>
+
+<h2><span class="num">06</span>对企业意味着什么</h2>
+<div class="card ok">
+  <div class="ttl">三个动作建议</div>
+  <ol>
+    <li><strong>手里有海外算力租约的</strong>：按"可能不发证"做压力测试，别按"能补上"估值。90 天窗口是硬线，逐案审查没有公开标准。</li>
+    <li><strong>做机房/云服务的</strong>：KYC 从"最好有"变成"没有就违规"。股权穿透（直接与间接）要落到纸面，客户拒提供资料应视同红旗，别硬接。</li>
+    <li><strong>做设计的</strong>：先进制程走第三国代工/封测的路径已被规则明确为不可推翻推定，供应链方案需要重新算，别把这条当成还能谈判的空间。</li>
+  </ol>
+</div>
+
+<div class="foot">
+  <p>主要来源：BIS 临时最终规则 RIN 0694-AK50《Addressing Remote Access to Advanced Semiconductors》（132 页）· BIS 新闻稿《BIS Issues Rule Addressing Remote Access to American Super Intelligence Technology》（2026-11-15）· 对比参照：90 FR 4544《Framework for Artificial Intelligence Diffusion》（2025-01-15）。</p>
+  <p>说明：文中引用的条款与数字均来自规则原文；标"估算""判断"处为分析结论，非原文表述。规则处于预公示状态，最终文本以联邦公报为准。</p>
+</div>
+
+</div>
+</body>
+</html>
