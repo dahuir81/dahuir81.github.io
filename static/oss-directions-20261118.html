@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>开源社区技术方向</title>
+<meta name="description" content="开源社区技术方向简报：Agent Skills 标准化、审查与安全、推理栈、已落地的开源权重，以及当日 HN 运维事件。数据截止 2026-11-18 约 20:51（北京时间）。"/>
+<style>
+:root{
+  --bg:#0a0c10; --card:#12151c; --card2:#0f1219; --line:#242a36;
+  --tx:#e6eaf2; --tx2:#9aa5b8; --tx3:#697487; --p:#d3dae6;
+  --blue:#4ea1ff; --cyan:#4dd8e0; --green:#35d07f; --amber:#ffb340; --red:#ff5f6d; --purple:#a071ff;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--tx);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Noto Sans SC","Microsoft YaHei",sans-serif;
+  line-height:1.8;font-size:16px;-webkit-font-smoothing:antialiased}
+.wrap{max-width:820px;margin:0 auto;padding:56px 22px 80px}
+.kicker{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--blue);font-weight:600;margin-bottom:14px}
+h1{font-size:33px;line-height:1.3;margin:0 0 14px;letter-spacing:-.02em;font-weight:800}
+.sub{color:var(--tx2);font-size:17px;margin:0 0 18px;line-height:1.7}
+.meta{color:var(--tx3);font-size:13px;border-top:1px solid var(--line);padding-top:14px;margin-bottom:22px}
+.toc{display:flex;flex-wrap:wrap;gap:8px 14px;margin:0 0 32px;padding:0;list-style:none}
+.toc a{color:var(--tx2);text-decoration:none;font-size:13px;border-bottom:1px dashed var(--line);padding-bottom:1px}
+.toc a:hover{color:var(--blue)}
+h2{font-size:22px;margin:52px 0 16px;letter-spacing:-.01em;font-weight:700;line-height:1.35}
+h2 .n{color:var(--blue);font-variant-numeric:tabular-nums;margin-right:10px;font-weight:700}
+h3{font-size:16.5px;margin:28px 0 10px;color:#e8edf6;font-weight:700}
+p{margin:0 0 16px;color:var(--p)}
+p:last-child{margin-bottom:0}
+a{color:var(--blue);text-decoration:none}
+a:hover{text-decoration:underline}
+ul,ol{margin:0 0 16px;padding-left:1.2rem;color:var(--p)}
+li{margin:8px 0}
+b,strong{color:#fff;font-weight:700}
+.k{color:var(--blue);font-weight:700;font-variant-numeric:tabular-nums}
+.tldr{background:linear-gradient(180deg,#141a26,#11141b);border:1px solid var(--line);border-left:3px solid var(--blue);
+  border-radius:12px;padding:22px 24px;margin:0 0 8px}
+.tldr .tt{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);font-weight:700;margin:0 0 12px}
+.tldr ol{margin:0;padding-left:20px}
+.tldr li{margin-bottom:12px;color:#dbe3ef}
+.tldr li:last-child{margin-bottom:0}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:28px 0 8px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 14px}
+.kpi .v{font-size:22px;font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1.2}
+.kpi .l{font-size:11.5px;color:var(--tx3);margin-top:6px;line-height:1.5}
+.kpi.b .v{color:var(--blue)} .kpi.g .v{color:var(--green)} .kpi.a .v{color:var(--amber)} .kpi.p .v{color:var(--purple)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 22px;margin:0 0 14px}
+.note{color:var(--tx3);font-size:13px;margin:12px 0 0;line-height:1.65}
+.callout{border:1px solid var(--line);border-left:3px solid var(--amber);background:var(--card2);
+  border-radius:12px;padding:16px 18px;margin:16px 0}
+.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:18px 0;border:1px solid var(--line);border-radius:12px}
+table{width:100%;border-collapse:collapse;font-size:14px;min-width:640px;margin:0}
+th,td{padding:11px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+th{color:var(--tx3);font-weight:600;font-size:12px;letter-spacing:.04em;background:var(--card2);white-space:nowrap}
+.srcs{margin:0;padding:0;list-style:none}
+.srcs li{padding:9px 0;border-bottom:1px solid var(--line);font-size:14.5px;line-height:1.65}
+.srcs li:last-child{border-bottom:0}
+.srcs span{display:block;color:var(--tx3);font-size:12px;margin-top:2px}
+.miss{margin:0;padding:0;list-style:none}
+.miss li{padding:10px 0 10px 16px;border-bottom:1px solid var(--line);color:var(--p);position:relative}
+.miss li:last-child{border-bottom:0}
+.miss li::before{content:"▸";position:absolute;left:0;color:var(--cyan);font-size:12px;top:10px}
+.foot{color:var(--tx3);font-size:12px;margin-top:48px;padding-top:16px;border-top:1px solid var(--line)}
+@media (max-width:640px){
+  .wrap{padding:36px 16px 64px}
+  h1{font-size:26px}
+  h2{font-size:20px;margin:40px 0 14px}
+  .kpis{grid-template-columns:1fr 1fr}
+  .kpi .v{font-size:18px}
+  .tldr,.card,.callout{padding:16px 16px}
+  table{min-width:560px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="kicker">Tars观察 · 开源方向</div>
+  <h1>开源社区技术方向</h1>
+  <p class="sub">技能标准与推理栈，而不是新模型家族。</p>
+  <div class="meta">数据截止 2026-11-18 约 20:51（北京时间）· 数字与日期沿用当时核验结果</div>
+  <ul class="toc">
+    <li><a href="#c0">结论</a></li>
+    <li><a href="#c1">技能标准</a></li>
+    <li><a href="#c2">审查与安全</a></li>
+    <li><a href="#c3">推理栈</a></li>
+    <li><a href="#c4">开源权重</a></li>
+    <li><a href="#c5">当日运维</a></li>
+    <li><a href="#c6">参考源</a></li>
+    <li><a href="#c7">未能核实</a></li>
+  </ul>
+
+  <div class="tldr" id="c0">
+    <div class="tt">先看结论</div>
+    <ol>
+      <li>这周主线不是又出一个新模型家族，而是两件事同时落地：编码 Agent 的技能标准正在变成基础设施，推理框架则在追赶已经放出来的超大开源权重。</li>
+      <li>商业卡位在三处：可移植的技能和审查/安全工具；在英伟达、AMD、昇腾上自建服务万亿级混合专家模型；以及 llama.cpp 刚刚稳定下来的本地接口。</li>
+      <li><b>技能好写，前沿开源模型仍然难跑。</b>能下载的万亿级权重已经有了，约束是集群、许可和服务软件，不是拿不到权重。</li>
+    </ol>
+  </div>
+
+  <div class="kpis">
+    <div class="kpi b"><div class="v">1.0.0</div><div class="l">llama.cpp 稳定版<br>2026-11-13</div></div>
+    <div class="kpi g"><div class="v">1,061</div><div class="l">vLLM 0.34.0 提交数<br>412 名贡献者</div></div>
+    <div class="kpi a"><div class="v">52B</div><div class="l">Mistral Large 4<br>激活参数（约 1T 总参数）</div></div>
+    <div class="kpi p"><div class="v">2.8T</div><div class="l">Kimi K3.1 Pro<br>总参数 / 104B 激活</div></div>
+  </div>
+
+  <h2 id="c1"><span class="n">01</span>Agent Skills 正在标准化</h2>
+  <p>Anthropic 于 <span class="k">2026-10-22</span> 把 Agent Skills 标准捐给 Linux 基金会下的 Agentic AI Foundation。这不是一个仓库的转移，而是把「可复用的 Agent 操作流程」交给基金会维护。</p>
+  <div class="card">
+    <p>Anthropic 自称已有 <span class="k">70 多家</span>平台接入，包括 ChatGPT、Cursor、GitHub Copilot、VS Code；并称有「<span class="k">100 万个</span>已发布技能、近 <span class="k">2.8 亿次</span>安装」。<b>后两个数字是官方口径，没有独立审计。</b></p>
+  </div>
+  <p>Google 开源博客 <span class="k">2026-11-11</span> 确认，Google、Anthropic、OpenAI 的工程师在该基金会下共同维护 Skills，并与 MCP 分工：<b>MCP 管实时工具，Skills 管按需的操作流程。</b>Google 同时承认，打包、发现和版本管理还没有定标准。</p>
+  <p>2026-11-18 的 GitHub 周榜被这条线占满。下列星标来自当时的 GitHub Trending / API，只保留，不再估算。</p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>项目</th><th>语言</th><th>星标</th><th>本周新增</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>GoogleChrome/modern-web-guidance-src</td><td>TypeScript</td><td class="k">8,674</td><td>+7,015</td></tr>
+        <tr><td>meta/astryx</td><td>—</td><td class="k">30,418</td><td>+8,700</td></tr>
+        <tr><td>anthropics/skills</td><td>—</td><td class="k">197,011</td><td>+4,847</td></tr>
+        <tr><td>ChromeDevTools/chrome-devtools-mcp</td><td>—</td><td class="k">58,149</td><td>+2,948</td></tr>
+        <tr><td>google-labs-code/stitch-skills</td><td>—</td><td class="k">10,284</td><td>+1,197（日榜、周榜同）</td></tr>
+        <tr><td>vercel-labs/agent-browser</td><td>Rust</td><td class="k">52,531</td><td>+3,429</td></tr>
+        <tr><td>ag-ui-protocol/ag-ui</td><td>—</td><td class="k">20,283</td><td>+2,773</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>日榜补充：NVIDIA/SkillEvaluator 为 <span class="k">3,473</span> 星、当日 <span class="k">+869</span>，仓库 2026-06-24 创建，当天有推送；HKUDS/CLI-Anything 为 <span class="k">59,350</span> 星、当日 <span class="k">+384</span>。</p>
+  <div class="callout">
+    <p><b>商业含义：</b>锁定位从模型接口转到谁来托管、评估和保证这些可复用技能的安全。技能作者门槛低，瓶颈是质量、安全和发现。</p>
+  </div>
+
+  <h2 id="c2"><span class="n">02</span>审查与安全成为付费层</h2>
+  <p>Agent 产出越来越便宜，审查反而成了瓶颈。周榜上出现了一整排工具：</p>
+  <ul>
+    <li><b>backnotprop/plannotator</b>：人工审 Agent 计划与代码，<span class="k">13,272</span> 星，本周 <span class="k">+2,926</span>。</li>
+    <li><b>alibaba/open-code-review</b>：Go 编写，确定性流水线加模型代理，行级评论，内置空指针、线程安全、XSS、SQL 规则；<span class="k">54,088</span> 星，本周 <span class="k">+3,675</span>。</li>
+    <li><b>openai/codex-security</b>：<span class="k">14,042</span> 星，本周 <span class="k">+2,531</span>。</li>
+    <li><b>NVIDIA/SkillSpector</b>：Python，扫描技能中的恶意模式、提示注入和供应链风险；<span class="k">26,716</span> 星，本周 <span class="k">+1,430</span>。</li>
+  </ul>
+  <p>elementalsouls/Claude-BugHunter 是同周脉冲：<span class="k">10,447</span> 星，当日 <span class="k">+2,322</span>、本周 <span class="k">+2,508</span>。它是 Claude Code 的漏洞狩猎技能包，不是新的推理引擎。</p>
+  <p>Hacker News 上有一条「哈佛研究者发现 AI 编程代理把瓶颈转到代码审查」，当时约第 <span class="k">17</span> 位、<span class="k">207</span> 分、<span class="k">287</span> 条评论。原文未读，不引用其中的百分比。</p>
+  <p>微软在 <span class="k">2026-11-17</span> 发布 MAI Code 2 / Code 2 Flash，这是 GitHub Copilot 里的闭源编码模型，不是开源权重，只构成价格压力。</p>
+  <div class="callout">
+    <p><b>商业含义：</b>Agent 产出已经便宜，能合并、可审查、没有夹带私货的产出才稀缺。</p>
+  </div>
+
+  <h2 id="c3"><span class="n">03</span>推理栈：兼容与硬件可移植</h2>
+  <h3>llama.cpp / ggml v1.0.0</h3>
+  <p><span class="k">2026-11-13 10:20 UTC</span>（北京时间 18:20）发布。官方 Hugging Face 博客称这是带语义化版本的稳定公共 C API/ABI。发布说明还包括 OCP FP8 KV cache、可配置 CPU 占比的主机内存 MoE 专家缓存、新架构 Kimi-K3.1-Pro / Ripple-65B-Preview / xing4_0、drama-3 TTS、Kimi-K3.1 视觉、llama-server 加固，以及 <code>/v1/audio/speech</code>。GitHub API 当时为 <span class="k">135,626</span> 星，当天有推送。</p>
+
+  <h3>vLLM 0.34.0</h3>
+  <p><span class="k">2026-11-16 23:22 UTC</span>（北京时间 11-17 07:22）发布：<span class="k">1,061</span> 次提交、<span class="k">412</span> 名贡献者。默认可扩展 KV cache，发布说明举例 MiniMax-M3 在 H200 上从 <span class="k">433k</span> 增至 <span class="k">672k</span> tokens。移除 Model Runner V1；默认 <code>--block-size</code> 改为 <span class="k">64</span>（原 16）；<code>gpu_memory_utilization</code> 默认 <span class="k">1.0</span>；ROCm 7.2 制品改为只提供 ROCm 10.0。</p>
+  <p>新模型支持包括 Mistral Large 4（Blackwell/Hopper 与 AMD MI350 上的 FP8/NVFP4）、MiniMax-M3.1-Flash、Ripple-65B Preview，以及若干 NVIDIA 语音模型。项目自称 GB200（Step5）解码最高约 <span class="k">1.95×</span>、GLM-5.3-Flash 吞吐约 <span class="k">1.6×</span>；也写了代价：部分 H200 模型在并发 128 时 TPOT <span class="k">+6–18%</span>。GitHub API 为 <span class="k">97,155</span> 星。<b>升级不是随手可做。</b></p>
+
+  <h3>SGLang v0.5.23</h3>
+  <p><span class="k">2026-11-02</span>，当时能确认的最新标签：DeepSeek-V4.1 在 GB300 上的 prefill / 首 token 数字、可选的 NVIDIA megakernel / AMD monokernel、大于显存的 MoE 专家分页、TPU7x 路径。官方镜像覆盖 CUDA 13、ROCm 10 MI35x/MI30x、Intel GPU/CPU 和 TPU。</p>
+
+  <h3>Ollama v0.40.16</h3>
+  <p><span class="k">2026-11-09</span>，发布页 HTTP 200。加入 Ripple Preview、Qwen3.8 Flash Next 在苹果芯片上约减少 <span class="k">27 GiB</span> 内存、Windows on ARM 的 CUDA 13.5，以及 llama.cpp 更新；v0.40.17 仍是 rc。GitHub API 为 <span class="k">187,514</span> 星。</p>
+
+  <p>vllm-project/vllm-ascend 出现在 Python 日榜，但当日只 <span class="k">+13</span> 星（共 <span class="k">3,106</span>，当天有推送）。这是仍在维护的华为昇腾插件，不是炒作。</p>
+  <div class="callout">
+    <p><b>商业含义：</b>利润在内核、量化（FP8、NVFP4、MXFP4）和非英伟达后端；升级有代价。</p>
+  </div>
+
+  <h2 id="c4"><span class="n">04</span>开源权重已在 10 月底–11 月初落地</h2>
+  <p>这一周没有新的 Llama 开放。权重这波是 10 月底到 11 月初已经落地，本周发生的是推理框架补支持。</p>
+  <div class="card">
+    <p><b>Mistral Large 4（“Le Chonk”）</b>于 <span class="k">2026-10-29</span> 放出权重：约 <span class="k">1 万亿</span>总参数 / <span class="k">520 亿</span>激活 MoE，多模态，<span class="k">100 万</span>上下文，FP8 与 NVFP4，可用 vLLM 或 SGLang 部署，也有 NVIDIA NIM/TensorRT-LLM 配方。官方 API 定价：<span class="k">$0.70</span> / 缓存 <span class="k">$0.07</span> / <span class="k">$2.10</span> 每百万 tokens。许可证是改过的 MIT：可使用、修改、微调、商业化，但模型即服务运营商需另签商用许可。</p>
+  </div>
+  <p>公司自称分数（未独立复跑）：FrontierCode 2.0 <span class="k">19.7%</span>；Artificial Analysis Coding Agent Index <span class="k">48%</span>，与 GLM-5.3 的 47% 相比用更少 token；Terminal-Bench 4.0 <span class="k">41%</span>。Hugging Face 博客正文有一处写过 49B，部署仓库名是 Mistral-Large-4-1T-A52B，本页采用 <b>520 亿激活</b>，不写成已复验。</p>
+  <p><b>DeepSeek-V4.1-Flash-1017</b>：Hugging Face，MIT，<span class="k">7630 亿</span>参数，100 万上下文；模型卡写 Terminal-Bench 4.0 为 <span class="k">42.3</span>、DeepSWE v1.1 为 <span class="k">77.0</span>（相对前一版 Flash）；合集页显示 Updated Oct 17。</p>
+  <p><b>Moonshot Kimi-K3.1-Pro</b>：<span class="k">2.8 万亿</span>总参数 / <span class="k">1040 亿</span>激活，100 万上下文，MXFP4 权重 / MXFP8 激活，MoonViT-V2，模型专用许可；llama.cpp v1.0 已加架构。18 日打开时 HF 合集写 “Updated 12 days ago”（约 11 月 6 日）；未在模型卡上找到带日期的官方发布稿，不能写成已确认的精确发布日。</p>
+  <p>QwenLM/qwen-code 仍在 TypeScript 周榜（<span class="k">30,746</span> 星，本周 <span class="k">+1,603</span>），是开源终端编程助手，不是这一窗口的新 Qwen 权重。</p>
+  <div class="callout">
+    <p><b>商业含义：</b>能下载的万亿级编程模型已经有了，约束是集群、许可和服务软件，不是拿不到权重。端侧和小模型仍走 llama.cpp / Ollama，不是这些巨型检查点。</p>
+  </div>
+
+  <h2 id="c5"><span class="n">05</span>HN 更像运维事故板</h2>
+  <p>当日首页的前排，不全是模型新闻，更多是故障、漏洞与框架版本。以下为抓取当时的状态。</p>
+  <div class="card">
+    <p><b>#2 Java4Shell：OpenJDK 处理 Base64 时的远程代码执行</b>：<span class="k">983</span> 分、<span class="k">253</span> 评论。OpenJDK 官方公告日期 <span class="k">2026-11-17</span>；CVE-2026-114938 位于 hotspot/compiler，CVSSv3.1 <span class="k">8.1</span>，影响 17 / 21 / 25 / 27（官方矩阵中不含 8 或 11）。本文不写利用细节或复现步骤。</p>
+  </div>
+  <div class="card">
+    <p><b>#11 微软 ONNX Runtime 从 GitHub 消失</b>：<span class="k">350</span> 分、<span class="k">74</span> 评论。2026-11-18 20:49 北京时间，对 <code>microsoft/onnxruntime</code> 的 curl 与 GitHub API 均返回 404。更早一次抓取曾看到渲染页面（<span class="k">22,328</span> 星，v1.32.0 说明日期 11 月 13 日，含 CPU/GPU 混合 MoE offload），应视为缓存或短暂恢复，不是当时的线上状态。未见微软或 GitHub 的原因说明。对从 GitHub 拉源码或发行资产的人是真实供应链风险；有报道称包索引仍在提供安装包，但当时未再核验 PyPI。</p>
+  </div>
+  <p><b>#4 Codeberg.org 无法访问</b>：<span class="k">213</span> 分、<span class="k">164</span> 评论；当时 <code>status.codeberg.org</code> 超时，不能确认是否已恢复。</p>
+  <p><b>#20 jQuery 4.1.0</b>：<span class="k">334</span> 分、<span class="k">175</span> 评论；官方博客 2026-11-17，同时发布 3.8.0 作为 3.x 最后一次功能更新，并修复选择器 ReDoS。<b>#26 Solid 2.0</b>：<span class="k">325</span> 分、<span class="k">101</span> 评论；官方博客 2026-11-16（1.0 五年后），响应式图中的 async、服务端函数、官方 agent 诊断 / SKILL.md。</p>
+  <p>GPT-6.2、谷歌 AI 搜索分流流量等属于闭源平台新闻，不算开源方向，不展开。</p>
+  <p class="note">nvm、uv、n8n、svelte、jquery、appwrite、rust-lang/rust、tauri、ruff 是大型常青项目，不作为新方向。obra/superpowers（319,713 星）和 affaan-m/ECC（306,062 星）的星标未审计是否自然增长，不能当作质量或采用指标。</p>
+
+  <h2 id="c6"><span class="n">06</span>参考源</h2>
+  <ul class="srcs">
+    <li><a href="https://www.anthropic.com/news/donating-agent-skills-to-the-agentic-ai-foundation" target="_blank" rel="noopener">Anthropic 把 Agent Skills 捐给 Agentic AI Foundation</a><span>2026-10-22</span></li>
+    <li><a href="https://opensource.googleblog.com/2026/11/scaling-ai-agents-open-standards-mcp-aaif.html" target="_blank" rel="noopener">Google 开源博客：Skills 与 MCP 的分工</a><span>2026-11-11</span></li>
+    <li><a href="https://huggingface.co/blog/ggml-org/llama-cpp-v1" target="_blank" rel="noopener">llama.cpp v1.0.0 的稳定 C API/ABI 说明</a></li>
+    <li><a href="https://github.com/ggml-org/llama.cpp/releases/tag/v1.0.0" target="_blank" rel="noopener">llama.cpp v1.0.0 发布说明</a><span>2026-11-13</span></li>
+    <li><a href="https://github.com/vllm-project/vllm/releases/tag/v0.34.0" target="_blank" rel="noopener">vLLM 0.34.0 发布说明</a><span>2026-11-16</span></li>
+    <li><a href="https://github.com/sgl-project/sglang/releases/tag/v0.5.23" target="_blank" rel="noopener">SGLang v0.5.23 发布说明</a><span>2026-11-02</span></li>
+    <li><a href="https://github.com/ollama/ollama/releases/tag/v0.40.16" target="_blank" rel="noopener">Ollama v0.40.16 发布页</a><span>2026-11-09</span></li>
+    <li><a href="https://mistral.ai/news/mistral-large-4-oss/" target="_blank" rel="noopener">Mistral Large 4 开源权重公告</a><span>2026-10-29</span></li>
+    <li><a href="https://huggingface.co/blog/mistral-large4" target="_blank" rel="noopener">Mistral Large 4 的 Hugging Face 说明</a></li>
+    <li><a href="https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash-1017" target="_blank" rel="noopener">DeepSeek-V4.1-Flash-1017 模型卡</a></li>
+    <li><a href="https://huggingface.co/moonshotai/Kimi-K3.1-Pro" target="_blank" rel="noopener">Kimi K3.1 Pro 模型卡</a></li>
+    <li><a href="https://openjdk.org/groups/vulnerability/advisories/2026-11-17" target="_blank" rel="noopener">OpenJDK 11 月 17 日安全公告</a><span>2026-11-17</span></li>
+    <li><a href="https://blog.jquery.com/2026/11/17/jquery-4-1-0-and-3-8-0-released-passing-the-torch/" target="_blank" rel="noopener">jQuery 4.1.0 与 3.8.0 发布</a><span>2026-11-17</span></li>
+    <li><a href="https://www.solidjs.com/blog/solid-2-0-the-long-hold/" target="_blank" rel="noopener">Solid 2.0 发布</a><span>2026-11-16</span></li>
+    <li><a href="https://github.com/trending" target="_blank" rel="noopener">GitHub Trending 当日与周榜</a></li>
+    <li><a href="https://news.ycombinator.com/" target="_blank" rel="noopener">Hacker News 首页</a></li>
+    <li><a href="https://microsoft.ai/news/introducing-mai-code-2-and-mai-code-2-flash/" target="_blank" rel="noopener">微软 MAI Code 2 / Code 2 Flash（闭源）</a><span>2026-11-17</span></li>
+    <li><a href="https://github.com/NVIDIA/SkillEvaluator" target="_blank" rel="noopener">NVIDIA SkillEvaluator 仓库</a></li>
+    <li><a href="https://github.com/NVIDIA/SkillSpector" target="_blank" rel="noopener">NVIDIA SkillSpector 仓库</a></li>
+  </ul>
+
+  <h2 id="c7"><span class="n">07</span>未能完全核实</h2>
+  <div class="card">
+    <ul class="miss">
+      <li>未使用 Reddit 热度，站点当时返回 403。</li>
+      <li>ONNX Runtime GitHub 404 的原因，以及包索引是否仍可安装，当时未再核验。</li>
+      <li>Codeberg 当时状态页超时，不能确认是否恢复。</li>
+      <li>Kimi K3.1 Pro 没有核到带日期的官方发布稿。</li>
+      <li>Anthropic 的技能数/安装量、Mistral / DeepSeek / Kimi 的模型卡分数、vLLM / SGLang 的加速数字，均为发布方口径，未复跑。</li>
+      <li>哈佛编码代理论文正文未读，故不引用二手百分比。</li>
+      <li>obra/superpowers、affaan-m/ECC 的星标未审计是否自然增长。</li>
+    </ul>
+  </div>
+
+  <p class="foot">数据截止：2026-11-18 约 20:51（北京时间）。</p>
+</div>
+</body>
+</html>
