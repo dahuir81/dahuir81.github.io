@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>阿里 vs 腾讯：2026年三季度 AI 投入对账</title>
+<style>
+:root{--ink:#16181d;--sub:#5b6270;--line:#e6e8ee;--bg:#f7f8fa;--ali:#ff6a00;--tx:#0052d9;--warn:#c0392b}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.75 -apple-system,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:960px;margin:0 auto;padding:40px 20px 70px}
+header{border-bottom:3px solid var(--ink);padding-bottom:22px;margin-bottom:34px}
+.kicker{font-size:13px;letter-spacing:.18em;color:var(--sub);text-transform:uppercase}
+h1{font-size:34px;line-height:1.3;margin:10px 0 14px;letter-spacing:-.5px}
+.meta{font-size:14px;color:var(--sub)}
+.lead{background:#fff;border-left:5px solid var(--ink);padding:20px 22px;border-radius:4px;margin:34px 0;font-size:16.5px}
+h2{font-size:22px;margin:46px 0 16px;padding-left:12px;border-left:4px solid var(--ali)}
+h2.tx{border-left-color:var(--tx)}
+h3{font-size:17px;margin:26px 0 10px}
+p{margin:12px 0}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:22px 0}
+@media(max-width:720px){.cards{grid-template-columns:1fr}}
+.card{background:#fff;border-radius:10px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.card.alib{border-top:4px solid var(--ali)}
+.card.tent{border-top:4px solid var(--tx)}
+.card .name{font-weight:700;font-size:15px;color:var(--sub);margin-bottom:6px}
+.card .big{font-size:30px;font-weight:700;letter-spacing:-1px;line-height:1.2}
+.card .big small{font-size:14px;font-weight:400;color:var(--sub);margin-left:6px}
+.card ul{margin:14px 0 0;padding-left:18px;font-size:14.5px;color:#333}
+.card li{margin:7px 0}
+table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;font-size:15px;margin:20px 0;box-shadow:0 1px 3px rgba(0,0,0,.06);min-width:560px}
+.tblwrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+th,td{padding:13px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:#eef0f5;font-weight:600;font-size:14px;color:#333}
+td.num{font-variant-numeric:tabular-nums;font-weight:600}
+tr:last-child td{border-bottom:none}
+.hl{background:#fff6ec}
+.bar{height:10px;border-radius:5px;background:#e6e8ee;overflow:hidden;margin-top:6px}
+.bar>i{display:block;height:100%;background:var(--ali);border-radius:5px}
+.bar.tx>i{background:var(--tx)}
+.note{font-size:13.5px;color:var(--sub);margin-top:8px}
+.tag{display:inline-block;font-size:12px;padding:2px 8px;border-radius:10px;background:#eef0f5;color:#555;margin-right:6px}
+.verdict{background:#fff;border-radius:10px;padding:24px;margin:26px 0;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.verdict ol{margin:14px 0 0;padding-left:22px}
+.verdict li{margin:12px 0}
+.warnbox{background:#fff3f0;border-left:5px solid var(--warn);padding:16px 20px;border-radius:4px;margin:24px 0;font-size:15px}
+footer{margin-top:52px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--sub);line-height:1.9}
+a{color:#0a66c2}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="kicker">Q3 2026 · 财报对账</div>
+  <h1>阿里 vs 腾讯：<br>同一种"烧钱"，两种账本</h1>
+  <div class="meta">阿里 2027 财年 Q2（截至 2026-09-30）｜腾讯 2026 年 Q3（截至 2026-09-30）｜口径：集团披露 + 公开报道交叉核对</div>
+</header>
+
+<div class="lead">
+两家同一个季度交卷，都在往 AI 基础设施里砸钱，但报表上呈现的东西完全相反：<strong>阿里是收入端在加速兑现，腾讯是利润端先被削去一块。</strong>这不是谁做得更好，是两家把 AI 放在不同位置——阿里把 AI 当"卖出去的算力"，腾讯把 AI 当"装进产品的燃料"。
+</div>
+
+<h2>一、核心数字对照</h2>
+<div class="tblwrap">
+<table>
+<tr><th>指标</th><th>阿里巴巴</th><th>腾讯</th></tr>
+<tr><td>本季总收入</td><td class="num">—（未单列总额）</td><td class="num">2,073.36 亿 <span class="tag">+8%</span></td></tr>
+<tr class="hl"><td>AI 云 / 企业服务相关</td><td class="num">AI 云与算力服务 609.73 亿 <span class="tag">+53%</span></td><td>云服务收入 <span class="tag">+35%</span>（未单列金额）</td></tr>
+<tr><td>外部客户收入</td><td class="num">增速加快至 +64%</td><td>—</td></tr>
+<tr><td>AI 直接收入</td><td class="num">AI 相关产品 179.18 亿（连续 13 季三位数增长）</td><td>—（未单列，混在云与广告中）</td></tr>
+<tr><td>利润</td><td class="num">未单列本季净利</td><td>期内利润 651.39 亿（+0.3%）<br>Non-IFRS 归母 665.19 亿（<span style="color:#c0392b">−6%</span>）</td></tr>
+<tr><td>剔除新 AI 产品影响后</td><td>—</td><td class="num">经营利润 +8% 至 833 亿</td></tr>
+<tr class="hl"><td>资本开支</td><td>—（未单列季度数）</td><td class="num">814.33 亿 <span class="tag">+527%</span></td></tr>
+<tr><td>资本开支付款（现金口径）</td><td>—</td><td class="num">651 亿 <span class="tag">+226%</span></td></tr>
+<tr><td>研发投入</td><td>—</td><td class="num">323.62 亿 <span class="tag">+42%</span></td></tr>
+<tr><td>自由现金流</td><td>—</td><td class="num" style="color:#c0392b">−691 亿（剔除算力预付后 +169 亿）</td></tr>
+<tr><td>净现金 / 净负债</td><td>—</td><td>净负债 137 亿（上季末为净现金 581.9 亿）</td></tr>
+</table>
+</div>
+<div class="note">灰色"—"表示该口径在公开财报摘要中未单列，本文不推算、不填补。</div>
+
+<h2>二、算力投入：一个在买钱，一个在花利润</h2>
+
+<div class="cards">
+  <div class="card alib">
+    <div class="name">阿里巴巴 · AI 云</div>
+    <div class="big">+53%<small>AI云收入增速</small></div>
+    <div class="bar"><i style="width:53%"></i></div>
+    <ul>
+      <li>外部客户收入 +64%，经常性收入 +67%</li>
+      <li>AI 产品收入 179.18 亿，第 13 个季度三位数增长</li>
+      <li>平安案例：Token 涨 10 倍、算力仅涨不到 2 倍，单位 Token 成本 −76%</li>
+      <li>真武 V900 明年 Q1 量产，架构宣称可扩至 50 万卡集群</li>
+    </ul>
+  </div>
+  <div class="card tent">
+    <div class="name">腾讯 · 基础设施</div>
+    <div class="big">+527%<small>资本开支增速</small></div>
+    <div class="bar tx"><i style="width:100%"></i></div>
+    <ul>
+      <li>资本开支 814.33 亿，去年同期 129.83 亿</li>
+      <li>前三季累计 1,661.53 亿（+179%）</li>
+      <li>自由现金流 −691 亿，主因算力采购预付款</li>
+      <li>管理层：2027 年仍是资本开支峰值，2028 年财务趋势改善</li>
+    </ul>
+  </div>
+</div>
+
+<h3>阿里：收入在追赶支出</h3>
+<p>阿里的账本逻辑很直白——算力是商品。AI 云收入单季 609.73 亿、外部客户增速 64%，说明需求侧的支付意愿还在加速。管理层此前给出的口径是"AI 算力 Capex 三年内回本"。真正的分歧不在增速，而在这套折旧能不能在下行周期里被填满。</p>
+
+<h3>腾讯：支出先撞上利润表</h3>
+<p>腾讯这一季最刺眼的不是 527% 的资本开支，是<strong>净负债从 581.9 亿净现金翻成 137 亿净负债</strong>——一个季度之内。经营现金流只有 26 亿，付款 651 亿，差额全靠预付款和存量现金顶着。腾讯自己的解释是长线合同已签、预付款今年是峰值、后面会回落；剔除算力预付款，自由现金流仍是正的 169 亿。这个说法成立，但它把"什么时候回正"完全押在了 2028 年。</p>
+
+<h2 class="tx">三、钱花出去变成了什么</h2>
+<div class="tblwrap">
+<table>
+<tr><th>维度</th><th>阿里巴巴</th><th>腾讯</th></tr>
+<tr><td>芯片自研</td><td>真武 GPU / 倚天 CPU / 磐脉网卡 / ICN Switch / 镇岳存储控制器，全栈；M890 已上架，V900 明年 Q1 量产</td><td>不自研芯片，走国内供应链采购；管理层称先进算力不足会拖慢下一代模型节奏</td></tr>
+<tr><td>模型</td><td>Qwen4-Max（CodeArena 全球第 6）、Wan3.0（文生视频全球第一）</td><td>混元 Hy4（Agent Arena 中国第一）、Hy4 flash（224B 总参 / 12B 激活，成本大降）</td></tr>
+<tr><td>C 端 AI 产品</td><td>千问 App、千问 Go!、千问办公 2.0</td><td>WorkBuddy 日活 1000 万+、日均 Token 超 100 万亿；微信小微 DAU 3000 万</td></tr>
+<tr><td>开发者 / B 端</td><td>Qoder（中国 AI 编程份额 47.6%，第一）、AgentCore / Agent Studio</td><td>TokenHub、WorkBuddy 企业版（覆盖中国 500 强的 50%）</td></tr>
+<tr><td>变现路径</td><td>卖算力、卖 MaaS、卖编程工具</td><td>靠广告（营销服务 +19%）与游戏反哺，AI 不单独收费</td></tr>
+</table>
+</div>
+
+<h2>四、两种叙事，一处共同的软肋</h2>
+<div class="verdict">
+<ol>
+<li><strong>阿里卖"产能"，腾讯卖"体验"。</strong>阿里必须证明 50 万卡级的产能建出来有人买；腾讯必须证明花出去的 1,661 亿能把 14.49 亿微信用户的留存和广告投放效率抬上去。前者看订单，后者看出价。</li>
+<li><strong>阿里最大的风险是折旧，腾讯最大的风险是时间。</strong>阿里的 V900 已经跳票过（原定 2027 Q3，推迟两个季度），且未公布 FLOPS、制程、功耗；腾讯把改善全押在 2028，等于给市场留了两年的怀疑窗口。</li>
+<li><strong>两家都在赌同一件事：算力会长得比支出便宜。</strong>腾讯管理层给的理由是"设备 2028 年一定降价 + 推理效率逐年翻倍"。这条如果成立，两家的账都能算平；不成立，就先烧钱的那家先难受。</li>
+<li><strong>国产供应链是共同变量。</strong>腾讯明确说训练会受先进算力限制影响、下一代模型要推迟，但推理侧国产芯片已经够用。阿里则是自己下场做芯片。同一道题，一家买、一家造。</li>
+</ol>
+</div>
+
+<div class="warnbox">
+<strong>数据口径提醒：</strong>阿里的 "609.73 亿" 是 <em>AI 云与算力服务</em> 分部收入，不是集团总营收；腾讯的 "云服务 +35%" 是增速而非金额，季度云收入金额未单列。两家的利润口径也不同（阿里未在本季新闻稿中单列集团净利，腾讯同时给出 IFRS 与 Non-IFRS 两套）。<strong>任何把两家"净利润"直接对比的图表都不严谨</strong>，本文刻意避开。
+</div>
+
+<h2>五、一句话结论</h2>
+<p>这一季，<strong>阿里在证明 AI 是生意，腾讯在证明 AI 是成本</strong>。前者若兑现，估值逻辑从"电商公司"改写为"算力公司"；后者若兑现，AI 会像水电一样沉进微信和广告里，看不到单独的收入，但所有人都离不开。两种模式都能成立，只是兑现的时点差了两年——这恰好也是两家股价走势分叉的地方。</p>
+
+<footer>
+数据来源：阿里巴巴 2027 财年 Q2 业绩披露（截至 2026-09-30）；腾讯控股 2026 年第三季度业绩公告（2026-11-18）及管理层电话会议；公开媒体报道交叉核对（第一财经、证券时报、网易科技、Investing.com 等）。<br>
+图表中的进度条仅用于示意增速量级，非等比。灰色"—"为公开摘要未披露口径。<br>
+生成于 2026-11-19 · Tars
+</footer>
+</div>
+</body>
+</html>
