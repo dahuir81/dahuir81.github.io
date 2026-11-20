@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>阿里 FY2027 Q2：云加速是真的，现金流转正还要两年</title>
+<meta name="description" content="阿里巴巴 2026 年 9 月季度（FY2027 Q2）整理：营收略超、调整后利润不及预期；云与闪购改善是真的，会后把近端云增速降档，自由现金流转正指向 2028 下半年。数字截止 2026-11-19 23:55（北京时间）。"/>
+<style>
+:root{
+  --bg:#0a0c10; --card:#12151c; --card2:#0f1219; --line:#242a36;
+  --tx:#e6eaf2; --tx2:#9aa5b8; --tx3:#697487; --p:#d3dae6;
+  --blue:#4ea1ff; --cyan:#4dd8e0; --green:#35d07f; --amber:#ffb340; --red:#ff5f6d; --purple:#a071ff;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--tx);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Noto Sans SC","Microsoft YaHei",sans-serif;
+  line-height:1.8;font-size:16px;-webkit-font-smoothing:antialiased}
+.wrap{max-width:820px;margin:0 auto;padding:56px 22px 80px}
+.kicker{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--blue);font-weight:600;margin-bottom:14px}
+h1{font-size:33px;line-height:1.3;margin:0 0 14px;letter-spacing:-.02em;font-weight:800}
+.sub{color:var(--tx2);font-size:17px;margin:0 0 18px;line-height:1.7}
+.meta{color:var(--tx3);font-size:13px;border-top:1px solid var(--line);padding-top:14px;margin-bottom:22px}
+.toc{display:flex;flex-wrap:wrap;gap:8px 14px;margin:0 0 32px;padding:0;list-style:none}
+.toc a{color:var(--tx2);text-decoration:none;font-size:13px;border-bottom:1px dashed var(--line);padding-bottom:1px}
+.toc a:hover{color:var(--blue)}
+h2{font-size:22px;margin:52px 0 16px;letter-spacing:-.01em;font-weight:700;line-height:1.35}
+h2 .n{color:var(--blue);font-variant-numeric:tabular-nums;margin-right:10px;font-weight:700}
+h3{font-size:16.5px;margin:28px 0 10px;color:#e8edf6;font-weight:700}
+p{margin:0 0 16px;color:var(--p)}
+p:last-child{margin-bottom:0}
+a{color:var(--blue);text-decoration:none}
+a:hover{text-decoration:underline}
+ul,ol{margin:0 0 16px;padding-left:1.2rem;color:var(--p)}
+li{margin:8px 0}
+b,strong{color:#fff;font-weight:700}
+.k{color:var(--blue);font-weight:700;font-variant-numeric:tabular-nums}
+.down{color:var(--red);font-weight:700;font-variant-numeric:tabular-nums}
+.tldr{background:linear-gradient(180deg,#141a26,#11141b);border:1px solid var(--line);border-left:3px solid var(--blue);
+  border-radius:12px;padding:22px 24px;margin:0 0 8px}
+.tldr .tt{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);font-weight:700;margin:0 0 12px}
+.tldr ol{margin:0;padding-left:20px}
+.tldr li{margin-bottom:12px;color:#dbe3ef}
+.tldr li:last-child{margin-bottom:0}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:28px 0 8px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 14px}
+.kpi .v{font-size:22px;font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1.2}
+.kpi .l{font-size:11.5px;color:var(--tx3);margin-top:6px;line-height:1.5}
+.kpi.b .v{color:var(--blue)} .kpi.g .v{color:var(--green)} .kpi.a .v{color:var(--amber)} .kpi.p .v{color:var(--purple)} .kpi.r .v{color:var(--red)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 22px;margin:0 0 14px}
+.note{color:var(--tx3);font-size:13px;margin:12px 0 0;line-height:1.65}
+.callout{border:1px solid var(--line);border-left:3px solid var(--amber);background:var(--card2);
+  border-radius:12px;padding:16px 18px;margin:16px 0}
+.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:18px 0;border:1px solid var(--line);border-radius:12px}
+table{width:100%;border-collapse:collapse;font-size:14px;min-width:640px;margin:0}
+th,td{padding:11px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+td:nth-child(2),td:nth-child(3),th:nth-child(2),th:nth-child(3){font-variant-numeric:tabular-nums;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+th{color:var(--tx3);font-weight:600;font-size:12px;letter-spacing:.04em;background:var(--card2);white-space:nowrap}
+.tag{display:inline-block;font-size:11px;letter-spacing:.04em;border:1px solid var(--line);border-radius:999px;padding:1px 8px;color:var(--tx2);margin-right:6px;vertical-align:middle}
+.tag.off{color:var(--green);border-color:rgba(53,208,127,.35)}
+.tag.tp{color:var(--amber);border-color:rgba(255,179,64,.4)}
+.tag.calc{color:var(--cyan);border-color:rgba(77,216,224,.35)}
+.srcs{margin:0;padding:0;list-style:none}
+.srcs li{padding:9px 0;border-bottom:1px solid var(--line);font-size:14.5px;line-height:1.65}
+.srcs li:last-child{border-bottom:0}
+.srcs span{display:block;color:var(--tx3);font-size:12px;margin-top:2px}
+.miss{margin:0;padding:0;list-style:none}
+.miss li{padding:10px 0 10px 16px;border-bottom:1px solid var(--line);color:var(--p);position:relative}
+.miss li:last-child{border-bottom:0}
+.miss li::before{content:"▸";position:absolute;left:0;color:var(--cyan);font-size:12px;top:10px}
+.foot{color:var(--tx3);font-size:12px;margin-top:48px;padding-top:16px;border-top:1px solid var(--line)}
+@media (max-width:640px){
+  .wrap{padding:36px 16px 64px}
+  h1{font-size:26px}
+  h2{font-size:20px;margin:40px 0 14px}
+  .kpis{grid-template-columns:1fr 1fr}
+  .kpi .v{font-size:18px}
+  .tldr,.card,.callout{padding:16px 16px}
+  table{min-width:560px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="kicker">Tars观察 · 财报整理</div>
+  <h1>阿里 FY2027 Q2：云加速是真的，现金流转正还要两年</h1>
+  <p class="sub">2026 年 9 月季度。营收略超，调整后利润和每股收益不及预期。会后把近端云增速降档，自由现金流转正指向 2028 下半年。</p>
+  <div class="meta">数字与口径核对截止 2026-11-19 23:55（北京时间）。官方投资者关系页当时尚未挂出本季完整问答逐字稿。文中凡标注“第三方”的会后指引，来自电话会第三方转录，已与官方新闻稿、演示稿和吴泳铭准备稿交叉核对，但不能当成官方逐字稿。</div>
+  <ul class="toc">
+    <li><a href="#c0">结论</a></li>
+    <li><a href="#c1">成绩单</a></li>
+    <li><a href="#c2">云与 AI</a></li>
+    <li><a href="#c3">利润与现金流</a></li>
+    <li><a href="#c4">电商与闪购</a></li>
+    <li><a href="#c5">会后新指引</a></li>
+    <li><a href="#c6">芯片与平头哥</a></li>
+    <li><a href="#c7">口径提醒</a></li>
+    <li><a href="#c8">参考源</a></li>
+    <li><a href="#c9">未能核实</a></li>
+  </ul>
+
+  <div class="tldr" id="c0">
+    <div class="tt">先看结论</div>
+    <ol>
+      <li>这季最重要的不是“净利润翻倍”，而是两件事同时发生：<b>云真的加速了，闪购真的减亏了</b>。归母净利润大增，约四分之三来自投资收益；公司口径的非 GAAP 净利和每股 ADS 收益明显不及预期。</li>
+      <li>会后没有出现“全面超预期”的确认，反而把会前最担心的两件事说实了：<b>下一财年云增速要降到 30%–45%，自由现金流要到 2028 下半年才转正</b>。这两条目前只见于第三方转录，还不是官方逐字稿。</li>
+      <li>商业含义很直接：需求和云利润率改善是真的，但未来 6–8 个季度仍是被折旧、资本开支和芯片供应卡住的投入期。接下来看三个数：FY2028 云增速落在 30%–45% 的哪一端、V900 集群能否在 2027 年二季度按期放量、资本开支是否真的低于原先的 20GW 路径。</li>
+    </ol>
+  </div>
+
+  <div class="kpis">
+    <div class="kpi b"><div class="v">2,715.19 亿</div><div class="l">集团营收<br>同比 +10%</div></div>
+    <div class="kpi g"><div class="v">609.73 亿</div><div class="l">AI 云与算力<br>同比 +53%</div></div>
+    <div class="kpi a"><div class="v">199.09 亿</div><div class="l">非 GAAP 净利<br>低于约 266 亿预估</div></div>
+    <div class="kpi r"><div class="v">-344.72 亿</div><div class="l">自由现金流<br>上年同期 -218.40 亿</div></div>
+  </div>
+
+  <h2 id="c1"><span class="n">01</span>成绩单</h2>
+  <p>业绩于 2026 年 11 月 19 日盘前发布，电话会当晚 20:00（香港时间）举行。下面数字除单独注明外，均来自官方中英文新闻稿和业绩演示稿，单位人民币。</p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>指标</th><th>本季</th><th>同比</th><th>怎么读</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>集团营收</td><td class="k">2,715.19 亿</td><td>+10%</td><td>略高于媒体引述的 2,705.3 亿一致预期</td></tr>
+        <tr><td>AI 云与算力服务</td><td class="k">609.73 亿</td><td>+53%</td><td>高于 597.7 亿预估；约占集团营收 22.5%</td></tr>
+        <tr><td>云分部经调整 EBITA</td><td class="k">88.38 亿</td><td>+121%</td><td>利润率 14.5%</td></tr>
+        <tr><td>集团经调整 EBITA</td><td class="k">326.36 亿</td><td>+260%</td><td>不要写成 EBITDA；官方另有 EBITDA 口径</td></tr>
+        <tr><td>集团经调整 EBITDA</td><td class="k">460.55 亿</td><td>+167%</td><td>与 EBITA 相差 134.19 亿，主要是折旧</td></tr>
+        <tr><td>经营利润</td><td class="k">291.16 亿</td><td>+443%</td><td>经营线改善是真的</td></tr>
+        <tr><td>归母净利润</td><td class="k">645.35 亿</td><td>+207%</td><td>约四分之三来自投资处置/重估收益</td></tr>
+        <tr><td>非 GAAP 净利润</td><td class="k">199.09 亿</td><td>+92%</td><td>低于约 266.1 亿预估，大约少 25%</td></tr>
+        <tr><td>非 GAAP 每 ADS</td><td class="k">8.10 元</td><td>+86%</td><td>低于 10.75 元预估；亦有报道写 11.16 元</td></tr>
+        <tr><td>经营现金流</td><td class="k">156.90 亿</td><td>+55%</td><td>盖不住资本开支</td></tr>
+        <tr><td>资本开支</td><td class="k">504.77 亿</td><td>+60%</td><td>主要用于 AI 基础设施，是经营现金流的 3.2 倍</td></tr>
+        <tr><td>自由现金流</td><td class="down">-344.72 亿</td><td>上年 -218.40 亿</td><td>本季最大的“不及预期”</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note">一致预期来自当时中文财经快讯引述；每股收益预估同时出现 10.75 元和 11.16 元两个数，都是媒体口径，不是公司自己给的。上半年非 GAAP 净利润 406.24 亿元，仍同比 -7%，单季高增有低基数成分。</p>
+
+  <h2 id="c2"><span class="n">02</span>云与 AI</h2>
+  <p>本季增量几乎全部来自云。按增量估算，云贡献了集团营收增量的约 <span class="k">89%</span>。</p>
+  <div class="card">
+    <p>AI 云与算力服务 <span class="k">609.73</span> 亿元，同比 <span class="k">+53%</span>。其中外部客户收入约 <span class="k">470</span> 亿元（+64%），外部经常性收入约 <span class="k">370</span> 亿元（+67%），算力设备解决方案约 <span class="k">100</span> 亿元（+55%）。外部经常性收入比云总收入更能代表核心需求，因为总算力里还含增速更低的设备方案。</p>
+  </div>
+  <p>AI 相关产品本季收入 <span class="k">179.18</span> 亿元，连续 13 个季度三位数增长。公司称其年化收入（ARR）已超过 <span class="k">100 亿美元</span>，约占云外部经常性收入的 <span class="k">49%</span>。这两个数字都是官方口径，而且是已实现的年化跑率，不是本季一次确认的收入。</p>
+  <div class="callout">
+    <p><b>49% 的分母要看清。</b>它是云外部经常性收入（约 370 亿元/季），不是全部外部云收入（约 470 亿元/季），更不是全部云收入（约 610 亿元/季）。按全部云收入粗算，大约只占 29%。不要把“AI 已占云收入一半”直接写进判断里。</p>
+  </div>
+  <p>云已经能赚钱：分部经调整 EBITA <span class="k">88.38</span> 亿元，同比 +121%，利润率 <span class="k">14.5%</span>。但 AI 应用层还在烧钱。AI Labs 与应用收入 <span class="k">44.35</span> 亿元（+51%），经调整 EBITA 亏损 <span class="k">105.03</span> 亿元，上年同期亏 34.35 亿元。云赚的还不够补 AI Labs 的亏；两者合计仍亏约 <span class="k">16.65</span> 亿元。好消息是这个缺口环比收得很快：上季两者合计约亏 82.33 亿元。</p>
+  <p>吴泳铭准备稿还提到：千问已在平头哥国产芯片上训练下一代模型，百炼已基于国产芯片做推理；公司称苹果智能深度集成千问，12 月面向中国用户推出。后一条是公司单方面表述，苹果没有在本材料中独立确认。</p>
+
+  <h2 id="c3"><span class="n">03</span>利润与现金流</h2>
+  <p>这是一份“经营改善、每股收益不及预期”的财报，不是“全面超预期”。</p>
+  <p>归母净利润 <span class="k">645.35</span> 亿元，是非 GAAP 净利润的 3.2 倍。投资净收益 <span class="k">733.05</span> 亿元，单独就超过了 GAAP 净利润。非 GAAP 调节表里的投资处置/重估收益达 870.68 亿元，扣除减值和相关税项后，仍贡献约 480 亿元，约占 GAAP 净利润四分之三。</p>
+  <p>经营线其实不差：经调整 EBITA <span class="k">326.36</span> 亿元（+260%），经调整 EBITDA <span class="k">460.55</span> 亿元（+167%），高于媒体引述的约 399 亿元 EBITDA 预期。但按 EBITDA 与 EBITA 之差粗算，折旧约 <span class="k">134.19</span> 亿元，同比大约 +64%。折旧开始咬利润，是“经营改善、每股收益不及预期”的最大单一解释项。</p>
+  <div class="card">
+    <p>资本开支 <span class="k">504.77</span> 亿元，同比 +60%，环比上季的 676.78 亿元大约下降 25%。经营现金流 156.90 亿元，自由现金流净流出 <span class="down">344.72</span> 亿元。上半年资本开支已达 <span class="k">1,181.55</span> 亿元，自由现金流净流出 791.42 亿元。截至 9 月末，现金及其他流动投资 <span class="k">4,879.29</span> 亿元。8 月完成 800 亿港元配股，本季回购只有 2.21 亿美元。股东回报继续让位于算力投入。</p>
+  </div>
+  <p>环比烧得少一些是真的，但绝对缺口仍大。会后给出的转正时点在 2028 下半年，前提是国产算力按节奏放量、资本开支真的降下来。</p>
+
+  <h2 id="c4"><span class="n">04</span>电商与闪购</h2>
+  <p>电商是利润底线，不是增长引擎。收入只是止跌，利润主要靠闪购减亏。</p>
+  <div class="card">
+    <p>电商集团收入 <span class="k">1,972.37</span> 亿元，同比 +2%。客户管理收入 750.33 亿元，同比 -5%；剔除新业务发展计划的收入冲减后，同口径 +1%。即时零售 587.57 亿元（+22%），公司明确说主要由盒马驱动。国际电商 257.23 亿元（-8%），受欧盟海关改革影响。</p>
+  </div>
+  <p>电商经调整 EBITA <span class="k">388.51</span> 亿元，同比 +243%，利润率大约 19.7%，上年同期大约 5.9%。一个电商分部的利润，已经超过集团总经调整 EBITA（326.36 亿元），说明非电商业务整体仍在净消耗。部分补贴从销售费用改记收入冲减，会让费用率看起来下降，但对 EBITA 基本中性，不能当成纯粹的效率提升。</p>
+  <p>电话会第三方转录称：即时零售维持“明年亏损减半、2029 财年盈利”。其中 2029 财年盈利是公司自 2026 年 3 月以来反复重申的旧目标，不是这次新给的。公司没有单独披露即时零售季度亏损额，因此 243% 的利润增长不宜直接外推。闲鱼支付订单同比 +29%、日活跃用户 +23% 是官方数字；“持续盈利”只见于第三方转录。</p>
+
+  <h2 id="c5"><span class="n">05</span>会后新指引</h2>
+  <div class="callout">
+    <p>以下增速、资本开支和现金流时点，均来自电话会第三方转录，官方投资者关系页在 2026-11-19 23:55 仍未挂出本季逐字稿。方向在多家整理稿中一致，但措辞和财年标签必须以日后官方逐字稿为准。</p>
+  </div>
+  <div class="card">
+    <p><span class="tag tp">第三方</span><b>FY2028 云经营目标 30%–45%。</b>对应 2027 年 4 月至 2028 年 3 月，低于本季云收入 +53%、外部收入 +64%。这意味着“连续加速”的纪录，最晚到下一财年就会降档。</p>
+    <p style="margin-top:14px"><span class="tag tp">第三方</span><b>2028 自然年有望回到 50% 以上</b>，前提是国产算力放量。不要把这两个窗口混在一起：30%–45% 是下一财年，50%+ 是 2028 日历年。</p>
+    <p style="margin-top:14px"><span class="tag tp">第三方</span><b>2032 年 20GW 目标“可能下调”</b>，没有给出新数字。这个目标 2026 年 9 月 22 日才提出，两个月后就被摆上调整桌面，说明出口管制已经在改资本开支路径。</p>
+    <p style="margin-top:14px"><span class="tag tp">第三方</span><b>投入高峰在 2027 年和 2028 年上半年</b>，公司预计 <b>2028 年下半年自由现金流转正</b>。这是本轮周期第一次给出明确转正时点。高峰不应写成“2027 年上半年至整个 2028 年”，否则会和转正时点打架。</p>
+  </div>
+  <p>2030 自然年云外部收入 <span class="k">1,000 亿美元</span>、利润率超过 <span class="k">20%</span>，是官方准备稿重申的长期目标。官方没有把这个利润率限定为 EBITDA。按本季外部云收入约 470 亿元/季估算，年化大约 260 亿美元；要在约 4 年到 1,000 亿美元，隐含大约 37%–40% 的年复合增速。目标不是不可能，但路径是“先降档、再加速”，对 2028 年国产算力放量依赖很高。</p>
+  <p>市场当天的反应温和偏负。港股 9988 绩前收 <span class="k">80.55</span> 港元，跌约 5.5%。美股 BABA 在 11 月 19 日盘前有大约下跌 1.5%–2.1% 的报道；截至当晚 21:25（香港时间）美股尚未开盘，那不是收盘价。指定跟踪的英文市场账号，在当时检索窗口里没有写出有分量的阿里财报点评，不宜把社媒情绪当成定价结论。</p>
+
+  <h2 id="c6"><span class="n">06</span>芯片与平头哥</h2>
+  <p>芯片路线图是会后最具体的增量，但大部分仍是“计划”，不是已经兑现的产能。</p>
+  <div class="card">
+    <p><span class="tag off">官方</span>真武 M890 超节点 8 月上线后已进入规模化销售。V900 算力约为 M890 的 3 倍，计划 2027 年一季度量产，基于 V900 的超节点集群计划 2027 年二季度规模化上市。2028 年推进 J900。Qwen4-Max 主干参数 2.4 万亿。</p>
+    <p style="margin-top:14px"><span class="tag tp">第三方</span>2027 年后，新增 AI 芯片算力大部分以自研为主，其他国产芯片主要用于推理；自研旗舰优先保障自身基座模型训练，其次才是紧密合作伙伴。海外云为 32 个地域、109 个可用区，荷兰、法国、巴西在爬坡；自研芯片若将来出口，须先满足国内需求。</p>
+  </div>
+  <p>平头哥分拆不是传闻。公司 2026 年 11 月 10 日公告：平头哥已于 2026 年 9 月 11 日以保密形式向香港联交所递交 A1 上市申请，拟分拆到 H 股主板。电话会称，因上市合规暂不披露平头哥财务数据。</p>
+  <p>管理层被转述为：2027 年和 2028 年将是中国算力最紧缺的两年。更谨慎的逐字整理加了“国内市场”和“可能”。这是“紧缺—定价权—利润率”这条逻辑的来源，但不宜把去掉限定词的标题，当成管理层原话。</p>
+
+  <h2 id="c7"><span class="n">07</span>口径提醒</h2>
+  <p>会后很快出现多份中文整理稿。框架和多数官方数字可用，但不能当官方实录直接引用。下面几条最容易读错。</p>
+  <div class="card">
+    <p><b>经调整 EBITA 不是 EBITDA。</b>官方集团经调整 EBITA 是 326.36 亿元（+260%），经调整 EBITDA 是 460.55 亿元（+167%），中间差 134.19 亿元，主要是折旧，以及作为经营租赁核算的土地使用权成本。有的整理稿把 EBITA 的数字套上了 EBITDA 的标签。云业务资本开支这么大，这两个口径不能混。</p>
+    <p style="margin-top:14px"><b>100 亿美元和 300 亿元不是同一个 ARR。</b>官方超过 100 亿美元，指的是 AI 相关产品整体已实现年化跑率。第三方转录里还有一个模型即服务（MaaS）子集目标：从约 200 亿元走向财年底 300 亿元。300 亿元按官方汇率粗算约 45 亿美元，但“45 亿美元”是换算，不是管理层原话。两套数字不能拿来比较，更不能读成“目标从 100 亿美元降到 45 亿美元”。</p>
+    <p style="margin-top:14px"><b>云利润率以官方 14.5% 为准。</b>有的整理稿一度写成 14.9%。官方云分部经调整 EBITA 88.38 亿元除以收入 609.73 亿元，等于 14.49%，演示稿也写的是 14.5%。</p>
+  </div>
+
+  <h2 id="c8"><span class="n">08</span>参考源</h2>
+  <ul class="srcs">
+    <li><a href="https://www.alibabagroup.com/zh-CN/document-2060147792046718976" target="_blank" rel="noopener">阿里巴巴 2026 年 9 月季度中文新闻稿</a><span>官方 · 2026-11-19</span></li>
+    <li><a href="https://www.alibabagroup.com/en-US/document-2060147792046718976" target="_blank" rel="noopener">Alibaba September Quarter 2026 press release</a><span>官方英文稿 · 2026-11-19</span></li>
+    <li><a href="https://data.alibabagroup.com/ecms-files/1567773279/72cd036e-23ef-47fe-a49a-12053cfb7ec1/September%20Quarter%202026%20Results.pdf" target="_blank" rel="noopener">September Quarter 2026 业绩演示稿</a><span>官方 PDF</span></li>
+    <li><a href="https://www.alibabanews.com/%E9%98%BF%E9%87%8C%E9%A6%96%E5%B8%AD%E5%9F%B7%E8%A1%8C%E5%AE%98%E5%90%B3%E6%B3%B3%E9%8A%98%E6%A5%AD%E7%B8%BE%E9%9B%BB%E8%A9%B1%E6%9C%83%E8%AD%B0%E7%99%BC%E8%A8%80-fy2027q2/" target="_blank" rel="noopener">吴泳铭业绩电话会准备稿</a><span>阿里足迹 · 2026-11-19</span></li>
+    <li><a href="https://www.alibabagroup.com/en-US/ir-financial-reports-quarterly-results" target="_blank" rel="noopener">官方投资者关系季度页</a><span>2026-11-19 23:51 核验时，本季仍无逐字稿</span></li>
+    <li><a href="https://www.sohu.com/a/1103785361_130887" target="_blank" rel="noopener">电话会问答第三方实录转载</a><span>用于核对 FY2028 增速、20GW 和自由现金流时点，不是官方逐字稿</span></li>
+  </ul>
+
+  <h2 id="c9"><span class="n">09</span>未能完全核实</h2>
+  <div class="card">
+    <ul class="miss">
+      <li>截至 2026-11-19 23:55，官方投资者关系页仍未挂出本季英文或中文完整问答逐字稿。FY2028 云增速 30%–45%、20GW 可能下调、2028 下半年自由现金流转正、MaaS 300 亿元目标、海外云 32/109、2027 年后芯片分配，均有待官方逐字稿确认。</li>
+      <li>苹果智能 12 月面向中国用户推出，只见于公司准备稿，未见苹果方面独立确认。</li>
+      <li>即时零售季度亏损额公司未单独披露；“持续盈利”只见于第三方转录。</li>
+      <li>20GW 若下调，新的功率和资本开支数字当时都没有给出。</li>
+      <li>本文没有更新 11 月 19 日之后的股价，美股当天盘前报价也不是收盘价。</li>
+    </ul>
+  </div>
+
+  <p class="foot">整理截止：2026-11-19 23:55（北京时间）。数字以官方新闻稿和演示稿为准；会后指引凡未见于官方准备稿的，均按第三方转录标注。</p>
+</div>
+</body>
+</html>
