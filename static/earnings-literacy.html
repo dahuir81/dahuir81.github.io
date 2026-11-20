@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0a0c10">
+<title>怎么读财报：用阿里和腾讯刚发布的季报当例题</title>
+<meta name="description" content="面向完全新手的财报入门。以阿里巴巴2026年9月季度（2026-11-19发布）和腾讯2026年第三季（2026-11-18发布）官方公告为教材。不是投资建议。">
+<style>
+:root{
+  --bg:#0a0c10; --paper:#12151c; --ink:#e6eaf2; --muted:#9aa5b8; --soft:#697487;
+  --line:#242a36; --brand:#4ea1ff; --brand-soft:#152033;
+  --ali:#ff8a4c; --ali-soft:#2a1810; --tx:#4dd8e0; --tx-soft:#102426;
+  --ok:#35d07f; --ok-soft:#10281c; --warn:#ffb340; --warn-soft:#2a1f0c; --bad:#ff5f6d; --bad-soft:#2a1216;
+  --shadow:0 1px 2px rgba(0,0,0,.35),0 8px 24px rgba(0,0,0,.25);
+  --font:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Noto Sans SC","Heiti SC","Microsoft YaHei",sans-serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+::selection{background:rgba(78,161,255,.32);color:#fff}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);line-height:1.7;font-size:17px;-webkit-font-smoothing:antialiased}
+a{color:var(--brand)}
+.wrap{max-width:840px;margin:0 auto;padding:28px 18px 96px}
+nav.toc{position:sticky;top:0;z-index:20;background:rgba(10,12,16,.92);backdrop-filter:blur(10px);margin:0 -18px 28px;padding:10px 18px;border-bottom:1px solid var(--line);display:flex;flex-wrap:wrap;gap:8px}
+nav.toc a{font-size:13px;text-decoration:none;color:var(--muted);border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:4px 10px}
+nav.toc a:hover{color:var(--brand);border-color:#3a5068}
+.kicker{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--brand);font-weight:650;margin:0 0 10px}
+h1{font-size:clamp(26px,5vw,36px);line-height:1.28;margin:0 0 12px;letter-spacing:-.02em}
+.lead{font-size:18px;color:var(--muted);margin:0 0 16px}
+.meta{font-size:13px;color:var(--muted);margin:0 0 16px}
+.disclaimer{background:var(--warn-soft);border:1px solid #3d2e10;border-radius:14px;padding:12px 14px;font-size:14px;color:#ffd089;margin:0 0 28px}
+h2{font-size:24px;margin:48px 0 8px;letter-spacing:-.02em}
+h3{font-size:18px;margin:22px 0 8px}
+p{margin:0 0 12px;color:var(--ink)}
+.sub{color:var(--muted);margin:0 0 18px;font-size:15px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin:16px 0 8px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:16px 16px 14px;box-shadow:var(--shadow)}
+.card h3{margin:0 0 6px;font-size:16px}
+.card p{margin:0;font-size:15px;color:var(--muted)}
+.steps{counter-reset:s;display:flex;flex-direction:column;gap:10px;margin:14px 0}
+.step{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:14px 16px 14px 54px;position:relative}
+.step:before{counter-increment:s;content:counter(s);position:absolute;left:14px;top:14px;width:28px;height:28px;border-radius:50%;background:var(--brand);color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.step b{display:block;margin-bottom:2px}
+.pill{display:inline-block;font-size:12px;font-weight:650;border-radius:999px;padding:2px 8px;margin-right:6px}
+.pill.ali{background:var(--ali-soft);color:var(--ali)}
+.pill.tx{background:var(--tx-soft);color:var(--tx)}
+.metric-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:10px;margin:14px 0}
+.metric{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:12px}
+.metric .lbl{font-size:12px;color:var(--muted)}
+.metric .num{font-size:22px;font-weight:750;letter-spacing:-.03em;line-height:1.2;margin:4px 0}
+.metric .chg{font-size:13px;font-weight:650}
+.up{color:var(--ok)} .down{color:var(--bad)} .flat{color:var(--warn)}
+.callout{border-radius:16px;padding:14px 16px;margin:14px 0;border:1px solid}
+.callout.warn{background:var(--warn-soft);border-color:#3d2e10}
+.callout.ok{background:var(--ok-soft);border-color:#1d4a32}
+.callout.note{background:var(--brand-soft);border-color:#23415f}
+.callout strong{display:block;margin-bottom:4px;color:#fff}
+.bars{display:flex;flex-direction:column;gap:8px;margin:12px 0 4px}
+.bar-row{display:grid;grid-template-columns:118px 1fr 86px;gap:8px;align-items:center;font-size:13px}
+.bar-track{height:16px;background:#1a2030;border-radius:99px;overflow:hidden}
+.bar-fill{height:100%;border-radius:99px;background:var(--brand)}
+.bar-fill.ali{background:var(--ali)}
+.bar-fill.dim{background:#4a5d75}
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+@media(max-width:680px){.cmp{grid-template-columns:1fr}}
+.panel{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:var(--shadow)}
+.panel h3{margin-top:0}
+table{width:100%;border-collapse:collapse;font-size:14px;margin:10px 0 4px;background:var(--paper)}
+th,td{border-bottom:1px solid var(--line);padding:8px 6px;text-align:left;vertical-align:top}
+th{color:var(--muted);font-weight:650;font-size:12px}
+td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.tip{display:inline;border-bottom:1px dashed var(--brand);color:var(--brand);cursor:help;font-weight:650}
+.tipbox{display:none;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:8px 0 12px;font-size:14px;color:var(--muted);box-shadow:var(--shadow)}
+.tipbox.on{display:block}
+button.term,button.quiz,button.linkish{font:inherit}
+button.term{border:0;background:none;padding:0;display:inline;border-bottom:1px dashed var(--brand);color:var(--brand);cursor:pointer;font-weight:650}
+.quiz{border:1px solid var(--line);background:var(--paper);border-radius:16px;padding:16px;margin:0 0 12px}
+.quiz h3{margin:0 0 8px;font-size:16px}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opts button{text-align:left;border:1px solid var(--line);background:#0f1219;color:var(--ink);border-radius:12px;padding:10px 12px;cursor:pointer}
+.opts button:hover{border-color:var(--brand)}
+.opts button.correct{background:var(--ok-soft);border-color:#9fd4b8}
+.opts button.wrong{background:var(--bad-soft);border-color:#f3b4b4}
+.feedback{display:none;margin-top:10px;font-size:14px}
+.feedback.show{display:block}
+footer{margin-top:48px;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+footer li{margin:0 0 6px}
+.small{font-size:13px;color:var(--muted)}
+@media print{
+  nav.toc,.opts button{display:none !important}
+  .tipbox,.feedback{display:block !important}
+  body{background:#fff;color:#1c1917;font-size:12pt}
+  .wrap{padding:0;max-width:none}
+  .card,.panel,.quiz{box-shadow:none;break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="toc" aria-label="章节">
+  <a href="#basics">先看懂这几个数</a>
+  <a href="#method">15分钟读法</a>
+  <a href="#alibaba">阿里这一份</a>
+  <a href="#tencent">腾讯这一份</a>
+  <a href="#compare">对照着看</a>
+  <a href="#traps">常见坑</a>
+  <a href="#quiz">小测验</a>
+</nav>
+
+<p class="kicker">财报入门 · 例题课</p>
+<h1>怎么读财报：用阿里和腾讯刚发布的季报当例题</h1>
+<p class="lead">把你当成完全的新手。先学会成绩单上哪几个数最要紧，再用这两天刚公布的官方公告走一遍。</p>
+<p class="meta">教材期间都是截至 2026 年 9 月 30 日的一个季度。腾讯于 2026 年 11 月 18 日发布 2026 年第三季业绩；阿里巴巴于 2026 年 11 月 19 日发布 2026 年 9 月份季度（FY2027 第二季）业绩。数字均来自两家官方公告，本页整理于 2026 年 11 月 20 日。</p>
+<div class="disclaimer">本页只教你怎么读公告，不评价该不该买股票，也不预测股价。看到「利润大增」或「现金流为负」，先问口径，再下判断。</div>
+
+<section id="basics">
+<h2>先看懂这几个数</h2>
+<p class="sub">财报可以看成公司给股东交的成绩单。厚厚一本里，第一次读不必全看懂，先抓住下面六件事。</p>
+<div class="cards">
+  <div class="card"><h3>收入</h3><p>这段时间一共卖了多少货、收了多少服务费。它说明生意规模，不直接等于「赚了多少」。</p></div>
+  <div class="card"><h3>经营利润</h3><p>主业做完、扣掉日常成本费用后，还剩多少。相对更接近「这门生意本身好不好」。</p></div>
+  <div class="card"><h3>净利润</h3><p>最后账上记下的利润。里面还可能有投资浮盈浮亏、利息和税，所以有时会和经营利润差一截。</p></div>
+  <div class="card"><h3>自由现金流</h3><p>生意回笼的现金，再减去为了维持和扩张业务花出去的大额投入后，还剩多少现金。利润是记账结果，现金是口袋里的钱。</p></div>
+  <div class="card"><h3>同比、环比</h3><p>同比是跟去年同一时期比，环比是跟刚刚过去的上一季比。看增长时，先确认比的是哪一段。</p></div>
+  <div class="card"><h3>分部</h3><p>一家大公司往往有好几门生意。总收入看起来「还可以」，可能是一块很快、一块在掉，必须拆开看。</p></div>
+</div>
+<div class="callout note">
+  <strong>还要多问一句：这是哪一种利润？</strong>
+  公告里常同时出现法定口径（阿里这边是美国公认会计原则，腾讯这边是国际财务报告准则）和「调整后 / 非公认会计准则 / 非国际财务报告准则」数字。后者通常会拿掉一些一次性或非现金项目，方便看主业，但怎么调、调掉什么，是公司自己定义的。两种都要看，不要只看更好看的那一个。
+</div>
+</section>
+
+<section id="method">
+<h2>一份季报，建议按这个顺序读 15 分钟</h2>
+<div class="steps">
+  <div class="step"><b>先看封面信息</b>这是哪家公司、哪一段时间、哪一天发布的，用的是哪套会计准则。今天这两份，时间窗口相同，口径并不完全相同。</div>
+  <div class="step"><b>看收入，再看是谁在长</b>先看总收入和同比，立刻去分部：是老业务在长，还是新业务在长？有没有「看起来掉了、换个口径又没掉」的说明。</div>
+  <div class="step"><b>看三种利润</b>经营利润 → 净利润 → 调整后利润。如果三个数字方向不一致，一定有故事，通常出在投资收益或调整项。</div>
+  <div class="step"><b>看现金</b>经营活动现金流，以及自由现金流。利润很好但自由现金流大额流出，常见原因是正在大举投入资产。</div>
+  <div class="step"><b>对照管理层怎么说</b>把董事长、CEO、CFO 的表态，逐句对着数字看：他们强调的增长，有没有同时披露另一个较暗的口径。</div>
+  <div class="step"><b>记下没看懂的调整</b>「同口径」「剔除某项后」「非国际财务报告准则」都不是错，但你得知道被拿掉的是什么，才能决定信哪一个。</div>
+</div>
+</section>
+
+<section id="alibaba">
+<p class="pill ali">阿里巴巴 · 2026-11-19 发布</p>
+<h2>阿里这一份怎么读</h2>
+<p class="sub">报告期：截至 2026 年 9 月 30 日止季度，也就是 FY2027 第二季。下面数字来自官方中文新闻稿和业绩演示。</p>
+<div class="metric-row">
+  <div class="metric"><div class="lbl">收入</div><div class="num">2,715.19亿</div><div class="chg up">同比 +10%</div></div>
+  <div class="metric"><div class="lbl">经营利润</div><div class="num">291.16亿</div><div class="chg up">同比 +443%</div></div>
+  <div class="metric"><div class="lbl">净利润</div><div class="num">644.20亿</div><div class="chg up">同比 +213%</div></div>
+  <div class="metric"><div class="lbl">非公认会计准则净利润</div><div class="num">199.09亿</div><div class="chg up">同比 +92%</div></div>
+</div>
+<p>人话是：生意规模还在长，主业利润也明显改善；但如果你只记住「净利润 644 亿、增长两倍多」，很容易把投资收益也当成店里卖货赚来的钱。</p>
+
+<h3>收入拆开看，比只看 +10% 有用</h3>
+<table>
+  <thead><tr><th>项目</th><th class="r">本季（亿元）</th><th class="r">同比</th></tr></thead>
+  <tbody>
+    <tr><td>合并收入</td><td class="r">2,715.19</td><td class="r up">+10%</td></tr>
+    <tr><td>阿里电商集团</td><td class="r">1,972.37</td><td class="r up">+2%</td></tr>
+    <tr><td>其中：中国电商</td><td class="r">984.97</td><td class="r down">-5%</td></tr>
+    <tr><td>其中：客户管理收入</td><td class="r">750.33</td><td class="r down">-5%</td></tr>
+    <tr><td>其中：中国即时零售</td><td class="r">587.57</td><td class="r up">+22%</td></tr>
+    <tr><td>AI 云与算力服务</td><td class="r">609.73</td><td class="r up">+53%</td></tr>
+    <tr><td>AI 实验室与应用</td><td class="r">44.35</td><td class="r up">+51%</td></tr>
+  </tbody>
+</table>
+<p class="small">中国即时零售包含淘宝闪购、盒马，以及天猫超市即时配送业务。分部之间有内部抵销，所以把各块简单相加，不会恰好等于合并收入。</p>
+<div class="callout warn">
+  <strong>小心这里：客户管理收入的两个口径</strong>
+  官方写：客户管理收入同比下降 5%；若不考虑新营销发展计划产生的「视作收入冲减项」，同口径同比增长将为 1%。也就是说，有一种算法是「掉了」，换一种公司认为更可比的算法是「还在微增」。两种都要记下，不要只转述其中一个。
+</div>
+
+<h3>三种「利润」差很远，这正是这堂课的要点</h3>
+<div class="bars" aria-label="三种利润示意">
+  <div class="bar-row"><span>净利润</span><div class="bar-track"><div class="bar-fill ali" style="width:100%"></div></div><span>644.20亿</span></div>
+  <div class="bar-row"><span>经营利润</span><div class="bar-track"><div class="bar-fill ali" style="width:45%"></div></div><span>291.16亿</span></div>
+  <div class="bar-row"><span>经调整 EBITA</span><div class="bar-track"><div class="bar-fill ali" style="width:51%"></div></div><span>326.36亿</span></div>
+  <div class="bar-row"><span>非公认会计净利润</span><div class="bar-track"><div class="bar-fill dim" style="width:31%"></div></div><span>199.09亿</span></div>
+</div>
+<p>官方把净利润同比大增 213%，主要归因于「投资净收益及经营利润的增加」。业绩演示里的调节表写得很清楚：本季「视同处置 / 处置 / 重估投资」收益为 870.68 亿元，而去年同期这项是 161.92 亿元。把这类投资收益等项目调整后，非公认会计准则净利润是 199.09 亿元，同比增 92%，不是 213%。</p>
+<div class="callout warn">
+  <strong>人话：644 亿是记账结果，199 亿更接近在问「拿掉投资账之后，主业还剩多少」</strong>
+  不是说 644 亿是假的，而是它和「电商、云业务这季好不好」不是同一个问题。经调整 EBITA 同比增 260% 至 326.36 亿元，官方归因于淘宝闪购和云业务改善、运营效率提升，部分被科技投入增加抵销。云分部经调整 EBITA 利润率升至 14.5%（去年同期 10.0%）；阿里电商集团经调整 EBITA 同比增 243%，主要得益于中国即时零售大幅减亏。
+</div>
+
+<h3>利润改善了，自由现金流仍是净流出</h3>
+<p>本季经营活动产生的现金流量净额为 156.90 亿元，同比增 55%。但自由现金流为净流出 344.72 亿元，去年同期净流出 218.40 亿元。官方解释：主要是云基础设施支出增加，部分被淘宝闪购减亏、云服务客户预付款增加所抵销。</p>
+<p>同期资本性支出 504.77 亿元，同比增 60%。截至 2026 年 9 月 30 日，现金及其他流动投资为 4,879.29 亿元。所以「现金流为负」并不等于「账上没钱」，而更像是：口袋里还有不少现金，但这季为了扩建云和 AI 基础设施，花出去的比主业回笼的更多。CFO 也在公告里说，致力于尽早实现自由现金流转正。</p>
+</section>
+
+<section id="tencent">
+<p class="pill tx">腾讯 · 2026-11-18 发布</p>
+<h2>腾讯这一份怎么读</h2>
+<p class="sub">报告期：截至 2026 年 9 月 30 日止第三季。下面数字来自官方英文业绩新闻稿；新闻稿摘要多用亿元取整，细表精确到百万元，本页在关键处保留细表精度。</p>
+<div class="metric-row">
+  <div class="metric"><div class="lbl">收入</div><div class="num">2,073.36亿</div><div class="chg up">同比 +8%</div></div>
+  <div class="metric"><div class="lbl">毛利</div><div class="num">1,159.11亿</div><div class="chg up">同比 +7%</div></div>
+  <div class="metric"><div class="lbl">国际准则经营盈利</div><div class="num">591.47亿</div><div class="chg down">同比 -7%</div></div>
+  <div class="metric"><div class="lbl">国际准则净利润</div><div class="num">651.39亿</div><div class="chg flat">同比 +0.3%</div></div>
+</div>
+<p>人话是：收入还在长，毛利也还在长，但经营层面的盈利在下降；净利润几乎持平，靠的并不只是主业变赚钱。</p>
+
+<h3>增长主要来自哪里</h3>
+<table>
+  <thead><tr><th>分部收入</th><th class="r">本季（亿元）</th><th class="r">同比</th></tr></thead>
+  <tbody>
+    <tr><td>增值服务</td><td class="r">983.26</td><td class="r up">+3%</td></tr>
+    <tr><td>其中：本土游戏</td><td class="r">476</td><td class="r up">+11%</td></tr>
+    <tr><td>其中：国际游戏</td><td class="r">189</td><td class="r down">-9%</td></tr>
+    <tr><td>其中：社交网络</td><td class="r">318</td><td class="r down">-1%</td></tr>
+    <tr><td>营销服务</td><td class="r">430.49</td><td class="r up">+19%</td></tr>
+    <tr><td>金融科技及企业服务</td><td class="r">636.55</td><td class="r up">+9%</td></tr>
+    <tr><td>其中：云服务</td><td class="r">—</td><td class="r up">+35%</td></tr>
+  </tbody>
+</table>
+<p class="small">本土游戏、国际游戏、社交网络和云服务增速，来自管理层讨论中的亿元取整披露；云服务官方只给了同比增速，没有在这段摘要里单列绝对额。国际游戏按固定汇率计算同比下降 4%。</p>
+
+<h3>同一份经营盈利，官方给了三种说法</h3>
+<div class="bars">
+  <div class="bar-row"><span>国际准则</span><div class="bar-track"><div class="bar-fill" style="width:71%;background:#2aa8b0"></div></div><span>591.47亿</span></div>
+  <div class="bar-row"><span>非国际准则</span><div class="bar-track"><div class="bar-fill" style="width:82%;background:#2aa8b0"></div></div><span>680.73亿</span></div>
+  <div class="bar-row"><span>再剔除新AI产品</span><div class="bar-track"><div class="bar-fill" style="width:100%;background:#4dd8e0"></div></div><span>833亿</span></div>
+</div>
+<p>按国际财务报告准则，经营盈利 591.47 亿元，同比下降 7%，经营利润率从 33% 降至 29%。按非国际财务报告准则，经营盈利 680.73 亿元，同比下降 6%，利润率从 38% 降至 33%。若再「剔除新 AI 产品」后，经营盈利为 833 亿元，同比增长 8%，利润率 40%，同比保持稳定。官方注明，新 AI 产品主要包括混元、元宝、CodeBuddy、WorkBuddy 和小微。</p>
+<div class="callout warn">
+  <strong>小心这里：不是三个数字里「选一个好看的」</strong>
+  国际准则是规则更统一的法定口径；非国际准则会排除某些一次性或非现金项目，用来看核心业务；「再剔除新 AI 产品」则是把公司认为仍在投入期的新业务单独拿掉。三个口径讲的是三个问题。本季国际准则净利润 651.39 亿元，仅增长 0.3%，同期投资收益净额为 100.57 亿元，高于去年同期的 28.20 亿元——这也是「经营盈利在掉、净利润几乎没掉」时要一起看的一笔账。
+</div>
+
+<h3>自由现金流：一个负数，和一个「若剔除后」的正数</h3>
+<p>本季自由现金流为净流出 691 亿元。拆开看：经营活动产生现金净额只有 26 亿元，资本开支付款 651 亿元（同比增加 225%），再加上媒体内容付款 46 亿元、租赁负债付款 20 亿元。官方同时写：经营现金流里包含大额算力采购预付款；若剔除这些预付款，自由现金流则为净流入 169 亿元。</p>
+<div class="callout warn">
+  <strong>人话：钱主要不是「亏光了」，而是提前为算力付了款</strong>
+  截至季度末，总现金 5,257 亿元，同比增 7%；净债务为 137 亿元。和阿里类似：先看流出原因，再看账上还剩多少现金，不要看见「自由现金流为负」就直接下结论。
+</div>
+</section>
+
+<section id="compare">
+<h2>对照着看：可以比什么，不要比什么</h2>
+<p class="sub">两家都是截至 2026 年 9 月 30 日的一个季度，时间窗口碰巧对齐，但并不等于可以拿净利润或利润率直接决出「谁更好」。</p>
+<div class="cmp">
+  <div class="panel">
+    <h3>适合放在一起观察的</h3>
+    <p>都在加码 AI 和云，收入仍在增长。阿里云与算力服务收入同比 +53%，腾讯云服务收入同比 +35%。</p>
+    <p>主业利润的改善速度，和自由现金流的方向并不一样：两家这季自由现金流都是净流出，官方都把原因指向算力和基础设施投入。</p>
+    <p>两边都同时给出了「法定口径」和「调整后口径」，而且都有一个很容易被标题忽略的补充口径：阿里有「同口径客户管理收入」，腾讯有「剔除新 AI 产品后」和「剔除算力预付款后」。</p>
+  </div>
+  <div class="panel">
+    <h3>不要直接横比的</h3>
+    <p>阿里用美国公认会计原则，腾讯用国际财务报告准则；「经调整 EBITA」「非公认会计准则净利润」和「非国际财务报告准则经营盈利」不是同一把尺。</p>
+    <p>不要用阿里净利润 644.20 亿去对比腾讯净利润 651.39 亿，然后说谁更赚钱。阿里这份净利润里含有大额投资重估或处置收益；腾讯的净利润则几乎走平，经营盈利其实在下降。</p>
+    <p>业务结构也不同：一个更重电商与云，一个更重社交、游戏、广告和金融科技。分部利润率没有统一的「正常值」。</p>
+  </div>
+</div>
+</section>
+
+<section id="traps">
+<h2>常见坑，用今天这两份就能记住</h2>
+<div class="cards">
+  <div class="card"><h3>利润不等于现金</h3><p>阿里净利润 644.20 亿，自由现金流却净流出 344.72 亿；腾讯净利润 651.39 亿，自由现金流净流出 691 亿。先问钱是不是还在公司账上，以及花到哪里去了。</p></div>
+  <div class="card"><h3>净利润可能含投资账</h3><p>投资收益、重估、处置，都能让净利润看起来很亮。阿里这份是活教材：法定净利润和调整后净利润差了一大截。</p></div>
+  <div class="card"><h3>调整后数字要看「调掉了什么」</h3><p>调整本身不一定有问题。问题是你只看调整后增长、不看被剔除项。腾讯「剔除新 AI 产品后」增长 8%，和「未剔除时下降 6%」，要一起读。</p></div>
+  <div class="card"><h3>同一个科目可以有两个增速</h3><p>阿里客户管理收入：报表口径 -5%，同口径 +1%。遇到「视作冲减」「剔除预付款」「按固定汇率」这类短语，说明公司在提供另一种比较方法，不是笔误。</p></div>
+  <div class="card"><h3>总收入会掩盖结构</h3><p>阿里总收入 +10%，但中国电商 -5%、即时零售 +22%、云 +53%。腾讯总收入 +8%，营销 +19%，国际游戏却在下降。先拆再评。</p></div>
+  <div class="card"><h3>现金流为负，先看库存现金和原因</h3><p>两家这季都还坐着数千亿元级现金或流动投资。负的自由现金流，更常见的问题是：投入会不会如期变成以后的收入和利润，而不是「明天就没钱了」。</p></div>
+</div>
+</section>
+
+<section id="quiz">
+<h2>小测验：用刚刚的数字练一遍</h2>
+<p class="sub">点选即可。做完会告诉你对不对，并回到官方口径。</p>
+
+<div class="quiz" data-q="1">
+  <h3>1. 阿里本季净利润 644.20 亿元、同比 +213%。若更关心「拿掉投资账之后主业还剩多少」，官方更直接的对照数字是？</h3>
+  <div class="opts">
+    <button data-ok="0">经营利润 291.16 亿元</button>
+    <button data-ok="1">非公认会计准则净利润 199.09 亿元</button>
+    <button data-ok="0">收入 2,715.19 亿元</button>
+  </div>
+  <div class="feedback">官方把非公认会计准则净利润报为 199.09 亿元，同比 +92%。经营利润也很重要，但它回答的是「主业经营结果」，和「从净利润里拿掉投资重估等项目」不是同一张调节表。</div>
+</div>
+
+<div class="quiz" data-q="2">
+  <h3>2. 阿里客户管理收入同比下降 5%。官方说的「同口径」增速是？</h3>
+  <div class="opts">
+    <button data-ok="0">同比再降到 -10%</button>
+    <button data-ok="1">同比增长 1%</button>
+    <button data-ok="0">同比增长 22%</button>
+  </div>
+  <div class="feedback">若不考虑新营销发展计划产生的视作收入冲减项，同口径客户管理收入同比增长将为 1%。+22% 是中国即时零售收入的增速，不要串台。</div>
+</div>
+
+<div class="quiz" data-q="3">
+  <h3>3. 腾讯本季按国际准则经营盈利同比下降，但净利润几乎持平（+0.3%）。读到这里，最该补看的是？</h3>
+  <div class="opts">
+    <button data-ok="0">只用总收入判断，因为收入还在增长</button>
+    <button data-ok="1">投资收益等经营利润以下的项目，以及非国际准则口径</button>
+    <button data-ok="0">直接认定利润质量比上季更好</button>
+  </div>
+  <div class="feedback">本季投资收益净额 100.57 亿元，高于去年同期 28.20 亿元。同时非国际准则经营盈利同比下降 6%。收入增长只能说明规模，不能单独证明利润质量。</div>
+</div>
+
+<div class="quiz" data-q="4">
+  <h3>4. 腾讯本季自由现金流为净流出 691 亿元。官方还给了一个「若剔除算力采购预付款」的数字，是？</h3>
+  <div class="opts">
+    <button data-ok="0">仍然净流出，只是少一点</button>
+    <button data-ok="1">净流入 169 亿元</button>
+    <button data-ok="0">恰好为零</button>
+  </div>
+  <div class="feedback">官方原文是：Excluding the prepayments for compute procurement, our free cash flow would have been positive RMB16.9 billion。两个数字都要记：实际流出了 691 亿，剔除预付款后则是流入 169 亿。</div>
+</div>
+
+<div class="quiz" data-q="5">
+  <h3>5. 能不能用阿里净利润 644.20 亿和腾讯净利润 651.39 亿，直接判断谁这季更赚钱？</h3>
+  <div class="opts">
+    <button data-ok="0">能，因为都是截至 9 月 30 日的季度，时间对齐了</button>
+    <button data-ok="1">不能。会计准则、调整项和利润构成都不同</button>
+    <button data-ok="0">能，谁数字大谁更好</button>
+  </div>
+  <div class="feedback">时间窗口相同，只说明可以放在同一课里当例题。阿里净利润含大额投资收益，腾讯则是经营盈利下降、净利润走平。直接比大小，会把不同问题混成一个答案。</div>
+</div>
+
+<div class="quiz" data-q="6">
+  <h3>6. 腾讯非国际准则经营盈利同比下降 6%。若按官方「剔除新 AI 产品后」的口径，结果是？</h3>
+  <div class="opts">
+    <button data-ok="1">经营盈利 833 亿元，同比 +8%</button>
+    <button data-ok="0">经营盈利仍下降，只是降幅收窄到 2%</button>
+    <button data-ok="0">官方没有给这个口径</button>
+  </div>
+  <div class="feedback">官方写明：Operating profit excluding New AI Products was RMB83.3 billion, increased by 8% YoY，利润率 40%、同比稳定。这不自动等同于「实际更好」，只说明新 AI 产品对当期利润有明显拖累。</div>
+</div>
+
+<div class="quiz" data-q="7">
+  <h3>7. 下列哪一句更接近「自由现金流为负」的正确读法？</h3>
+  <div class="opts">
+    <button data-ok="0">公司一定已经亏损，而且快没钱了</button>
+    <button data-ok="1">要先看是不是大额资本开支或预付款，以及账上还有多少现金</button>
+    <button data-ok="0">自由现金流为负时，净利润数字可以忽略</button>
+  </div>
+  <div class="feedback">两家这季都是利润为正、自由现金流为负，同时账上仍有数千亿元级现金或流动投资。负值需要解释，但不能直接翻译成破产预警，也不能反过来只信利润。</div>
+</div>
+</section>
+
+<footer>
+  <p><strong>官方来源</strong></p>
+  <ul>
+    <li>阿里巴巴集团：2026 年 11 月 19 日《公布 2026 年 9 月份季度业绩及截至 2026 年 9 月 30 日止六个月中期业绩》中文新闻稿；以及官方业绩演示 <em>September Quarter 2026 Results</em>。</li>
+    <li>腾讯控股：2026 年 11 月 18 日官方英文新闻稿 <em>Tencent Announces 2026 Third Quarter Results</em>（<a href="https://static.www.tencent.com/website-2026-upload/Tencent-Announces-2026-Third-Quarter-Results-1800-6d9a2a.pdf">PDF</a>）。中文稿因本机访问限制未能同步引用，关键数字以这份官方英文稿为准。</li>
+  </ul>
+  <p>本页仅用于学习如何阅读上市公司定期报告，不构成任何投资建议。数字如与公告原文有出入，以公告为准。</p>
+</footer>
+</div>
+<script>
+document.querySelectorAll('button.term').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    var box=document.getElementById(btn.getAttribute('data-tip'));
+    if(box) box.classList.toggle('on');
+  });
+});
+document.querySelectorAll('.quiz').forEach(function(q){
+  var feedback=q.querySelector('.feedback');
+  q.querySelectorAll('.opts button').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      if(q.classList.contains('done')) return;
+      q.classList.add('done');
+      var ok=btn.getAttribute('data-ok')==='1';
+      btn.classList.add(ok?'correct':'wrong');
+      q.querySelectorAll('.opts button').forEach(function(b){
+        if(b.getAttribute('data-ok')==='1') b.classList.add('correct');
+      });
+      feedback.classList.add('show');
+      feedback.style.color=ok?'#35d07f':'#ffb340';
+      feedback.innerHTML=(ok?'对。 ':'还差一点。 ')+feedback.innerHTML;
+    });
+  });
+});
+</script>
+</body>
+</html>
